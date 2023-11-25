@@ -27,14 +27,22 @@
   function handleSubmit() {
     dispatch('submit');
   }
+
+  function handleKeyDown(event: CustomEvent | KeyboardEvent) {
+    event = event as KeyboardEvent;
+    if (event.key === 'Enter') {
+      handleSubmit();
+    }
+  }
 </script>
 
-<div class="app">
+<form>
   <Textfield
     type={inputType}
     bind:dirty
     bind:invalid
     updateInvalid
+    on:keydown={handleKeyDown}
     bind:value={inputValue}
     {label}
     style="min-width: 250px;"
@@ -53,7 +61,7 @@
     </svelte:fragment>
     <HelperText validationMsg slot="helper">{validationMessage}</HelperText>
   </Textfield>
-</div>
+</form>
 
 <style>
 </style>

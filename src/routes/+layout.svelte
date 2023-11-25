@@ -4,6 +4,7 @@
   import { onDestroy } from 'svelte';
   import InputBox from '../components/InputBox.svelte';
   import NavBar from '../components/NavBar.svelte';
+  import PasswordHandler from '../util/PasswordHandler';
 
   let passwordIsCorrect = false;
   let typedPassword = '';
@@ -11,7 +12,9 @@
   const unsubscribers: Array<Unsubscriber> = [];
   unsubscribers.push(
     password.subscribe((updatedPassword) => {
-      passwordIsCorrect = updatedPassword === 'test';
+      PasswordHandler.verifyPassword(updatedPassword).then((result) => {
+        passwordIsCorrect = result;
+      });
     })
   );
 
