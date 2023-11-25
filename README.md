@@ -1,17 +1,18 @@
-# create-svelte
+# Personal Dashboard
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+Left off building a simple authentication system with the Digital Ocean Functions
 
 ## Developing
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+To start working on the project simply run:
 
-```bash
-yarn dev
+- `yarn dev` then navigate to the URL it shows in the terminal
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
+### Adding new Material UI Components
+
+To use new Material UI components, add the package needed from [the documentation here](https://sveltematerialui.com/demo/accordion/). Then restart the dev server.
+
+Restarting the dev server is needed whenever the theme is updated in `src/globalStyles/_smui-theme.scss` or a new component is added because it generates the base CSS file (`static/smui.css`) it looks like and makes sure only the CSS needed is compiled.
 
 ## Building
 
