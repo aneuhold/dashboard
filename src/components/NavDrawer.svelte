@@ -1,15 +1,46 @@
 <script lang="ts">
-  import Drawer, { Content, Header, Title, Subtitle } from '@smui/drawer';
-  import List, { Item, Text, Graphic, Separator, Subheader } from '@smui/list';
+  import Drawer, { Content } from '@smui/drawer';
+  import List, { Item, Text, Graphic } from '@smui/list';
   import { clickOutside } from '../actions/clickOutside';
+  import { page } from '$app/stores';
+  import { goto } from '$app/navigation';
 
   export let open = false;
-  export let active = 'Inbox';
+  export let activeRoute: RoutePath | '/' = '/';
 
-  function setActive(value: string) {
-    active = value;
+  type RouteInfo = {
+    title: string;
+    icon: string;
+  };
+
+  /**
+   * Details on each route that should show up in the NavDrawer.
+   *
+   * Icons can be found here: https://fonts.google.com/icons
+   */
+  const routesInfo = {
+    '/dev': {
+      title: 'Development',
+      icon: 'code'
+    }
+  } satisfies Record<string, RouteInfo>;
+  // This type stuff is a bit complicated, but can be refactored if more
+  // specificity is wanted with the layout of the NavDrawer.
+  type RoutePath = keyof typeof routesInfo;
+  const routePaths = Object.keys(routesInfo) as Array<RoutePath>;
+
+  function setRoute(newRoute: RoutePath) {
     open = false;
+    goto(newRoute);
   }
+
+  function getRouteIcon(routePath: RoutePath) {
+    return routesInfo[routePath].icon;
+  }
+
+  page.subscribe((pageData) => {
+    activeRoute = pageData.route.id as RoutePath;
+  });
 </script>
 
 <Drawer variant="modal" fixed={false} bind:open>
@@ -18,71 +49,22 @@
       open = false;
     }}
   >
-    <Header>
+    <!-- <Header>
       <Title>Super Mail</Title>
       <Subtitle>It's the best fake mail app drawer.</Subtitle>
-    </Header>
+    </Header> -->
     <Content>
       <List>
-        <Item
-          href="javascript:void(0)"
-          on:click={() => setActive('Inbox')}
-          activated={active === 'Inbox'}
-        >
-          <Graphic class="material-icons" aria-hidden="true">inbox</Graphic>
-          <Text>Inbox</Text>
-        </Item>
-        <Item
-          href="javascript:void(0)"
-          on:click={() => setActive('Star')}
-          activated={active === 'Star'}
-        >
-          <Graphic class="material-icons" aria-hidden="true">star</Graphic>
-          <Text>Star</Text>
-        </Item>
-        <Item
-          href="javascript:void(0)"
-          on:click={() => setActive('Sent Mail')}
-          activated={active === 'Sent Mail'}
-        >
-          <Graphic class="material-icons" aria-hidden="true">send</Graphic>
-          <Text>Sent Mail</Text>
-        </Item>
-        <Item
-          href="javascript:void(0)"
-          on:click={() => setActive('Drafts')}
-          activated={active === 'Drafts'}
-        >
-          <Graphic class="material-icons" aria-hidden="true">drafts</Graphic>
-          <Text>Drafts</Text>
-        </Item>
+        {#each routePaths as routePath}
+          <Item on:click={() => setRoute(routePath)} activated={activeRoute === routePath}>
+            <Graphic class="material-icons" aria-hidden="true">
+              {routesInfo[routePath].icon}
+            </Graphic>
+            <Text>{routesInfo[routePath].title}</Text>
+          </Item>
+        {/each}
 
-        <Separator />
-        <Subheader tag="h6">Labels</Subheader>
-        <Item
-          href="javascript:void(0)"
-          on:click={() => setActive('Family')}
-          activated={active === 'Family'}
-        >
-          <Graphic class="material-icons" aria-hidden="true">bookmark</Graphic>
-          <Text>Family</Text>
-        </Item>
-        <Item
-          href="javascript:void(0)"
-          on:click={() => setActive('Friends')}
-          activated={active === 'Friends'}
-        >
-          <Graphic class="material-icons" aria-hidden="true">bookmark</Graphic>
-          <Text>Friends</Text>
-        </Item>
-        <Item
-          href="javascript:void(0)"
-          on:click={() => setActive('Work')}
-          activated={active === 'Work'}
-        >
-          <Graphic class="material-icons" aria-hidden="true">bookmark</Graphic>
-          <Text>Work</Text>
-        </Item>
+        <!-- <Separator /> -->
       </List>
     </Content>
   </div>
