@@ -1,7 +1,5 @@
 # Personal Dashboard
 
-Left off building a simple authentication system with the Digital Ocean Functions
-
 ## Developing
 
 To start working on the project simply run:
