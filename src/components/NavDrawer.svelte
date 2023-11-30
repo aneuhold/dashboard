@@ -1,11 +1,12 @@
 <script lang="ts">
-  import Drawer, { Content } from '@smui/drawer';
+  import Drawer, { Content, Header, Subtitle } from '@smui/drawer';
   import List, { Item, Text, Graphic } from '@smui/list';
   import { clickOutside } from '../actions/clickOutside';
   import { page } from '$app/stores';
   import { goto } from '$app/navigation';
+  import { Title } from '@smui/top-app-bar';
+  import { navDrawerOpen } from '../stores/navDrawerOpen';
 
-  export let open = false;
   export let activeRoute: RoutePath | '/' = '/';
 
   type RouteInfo = {
@@ -30,12 +31,8 @@
   const routePaths = Object.keys(routesInfo) as Array<RoutePath>;
 
   function setRoute(newRoute: RoutePath) {
-    open = false;
+    $navDrawerOpen = false;
     goto(newRoute);
-  }
-
-  function getRouteIcon(routePath: RoutePath) {
-    return routesInfo[routePath].icon;
   }
 
   page.subscribe((pageData) => {
@@ -43,16 +40,12 @@
   });
 </script>
 
-<Drawer variant="modal" fixed={false} bind:open>
-  <div
-    use:clickOutside={() => {
-      open = false;
-    }}
-  >
-    <!-- <Header>
-      <Title>Super Mail</Title>
-      <Subtitle>It's the best fake mail app drawer.</Subtitle>
-    </Header> -->
+<div
+  use:clickOutside={() => {
+    $navDrawerOpen = false;
+  }}
+>
+  <Drawer variant="modal" bind:open={$navDrawerOpen}>
     <Content>
       <List>
         {#each routePaths as routePath}
@@ -67,5 +60,5 @@
         <!-- <Separator /> -->
       </List>
     </Content>
-  </div>
-</Drawer>
+  </Drawer>
+</div>

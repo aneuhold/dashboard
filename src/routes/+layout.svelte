@@ -5,9 +5,11 @@
   import InputBox from '../components/InputBox.svelte';
   import NavBar from '../components/NavBar.svelte';
   import PasswordHandler from '../util/PasswordHandler';
+  import NavDrawer from '../components/NavDrawer.svelte';
 
   let passwordIsCorrect = false;
   let typedPassword = '';
+  let navBar: NavBar;
 
   const unsubscribers: Array<Unsubscriber> = [];
   unsubscribers.push(
@@ -32,8 +34,9 @@
 <div class="app">
   {#if passwordIsCorrect}
     <main>
-      <NavBar />
-      <slot />
+      <NavBar bind:this={navBar}>
+        <slot />
+      </NavBar>
     </main>
   {:else}
     <InputBox

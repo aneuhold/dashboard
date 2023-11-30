@@ -6,7 +6,7 @@
   <meta name="description" content="Home page for dashboard" />
 </svelte:head>
 
-<section>
+<div>
   <h1>Personal Dashboard</h1>
   <h1>Personal Dashboard</h1>
   <h1>Personal Dashboard</h1>
@@ -17,4 +17,4 @@
   <h1>Personal Dashboard</h1>
   <h1>Personal Dashboard</h1>
   <h1>Personal Dashboard</h1>
-</section>
+</div>
