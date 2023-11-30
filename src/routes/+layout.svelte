@@ -35,7 +35,9 @@
   {#if passwordIsCorrect}
     <main>
       <NavBar bind:this={navBar}>
-        <slot />
+        <div class="content">
+          <slot />
+        </div>
       </NavBar>
     </main>
   {:else}
@@ -50,4 +52,7 @@
 </div>
 
 <style>
+  .content {
+    padding: 1rem;
+  }
 </style>

@@ -1,10 +1,16 @@
+<!--
+  @component
+
+  A navigation drawer that slides in from the left side of the screen.
+
+  Documentation on SMUI's NavDrawer and possible options can be found [here](https://sveltematerialui.com/demo/drawer/).
+-->
 <script lang="ts">
-  import Drawer, { Content, Header, Subtitle } from '@smui/drawer';
+  import Drawer, { Content } from '@smui/drawer';
   import List, { Item, Text, Graphic } from '@smui/list';
   import { clickOutside } from '../actions/clickOutside';
   import { page } from '$app/stores';
   import { goto } from '$app/navigation';
-  import { Title } from '@smui/top-app-bar';
   import { navDrawerOpen } from '../stores/navDrawerOpen';
 
   export let activeRoute: RoutePath | '/' = '/';
