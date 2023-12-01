@@ -1,6 +1,6 @@
 <!--Pulled from https://github.com/sveltejs/branding-->
 <script>
-  export let size = 24;
+  export let size = 48;
   $: sizePx = `${size}px`;
 </script>
 

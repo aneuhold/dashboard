@@ -5,7 +5,7 @@
   import InputBox from '../components/InputBox.svelte';
   import NavBar from '../components/NavBar.svelte';
   import PasswordHandler from '../util/PasswordHandler';
-  import NavDrawer from '../components/NavDrawer.svelte';
+  import '../globalStyles/global.css';
 
   let passwordIsCorrect = false;
   let typedPassword = '';
