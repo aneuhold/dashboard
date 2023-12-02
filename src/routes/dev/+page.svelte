@@ -12,6 +12,9 @@
   import ArchitectureItemCard from './ArchitectureItemCard.svelte';
   import TypeScriptIcon from '$lib/svgs/TypeScriptIcon.svelte';
   import ArchitectureGrouping from './ArchitectureGrouping.svelte';
+  import HtmlIcon from '$lib/svgs/HTMLIcon.svelte';
+  import CssIcon from '$lib/svgs/CSSIcon.svelte';
+  import JavaScriptIcon from '$lib/svgs/JavaScriptIcon.svelte';
 </script>
 
 <svelte:head>
@@ -39,7 +42,12 @@
           subtitle="The framework over Svelte that provides routing and other things"
           docsUrl="https://kit.svelte.dev/docs/introduction"
           iconComponent={SvelteIcon}
-        />
+        >
+          Things related to the backend in SvelteKit such as server-side rendering is not being
+          used. This is because a separate backend would be required to be bundled with the
+          frontend, which would make the project more complicated. Instead, the backend is contacted
+          via HTTP requests to Digital Ocean functions.
+        </ArchitectureItemCard>
         <ArchitectureItemCard
           title="Svelte"
           subtitle="The underlying frontend framework of choice"
@@ -49,13 +57,14 @@
         <ArchitectureGrouping borderBottom>
           <ArchitectureItemCard
             title="HTML"
-            docsUrl="https://www.typescriptlang.org/docs/handbook/intro.html"
-            iconComponent={TypeScriptIcon}
+            docsUrl="https://developer.mozilla.org/en-US/docs/Web/HTML"
+            iconComponent={HtmlIcon}
           />
           <ArchitectureItemCard
             title="CSS"
-            docsUrl="https://www.typescriptlang.org/docs/handbook/intro.html"
-            iconComponent={TypeScriptIcon}
+            subtitle="A CSS preprocessor is not currently being used, but if needed, SASS is used"
+            docsUrl="https://developer.mozilla.org/en-US/docs/Web/CSS"
+            iconComponent={CssIcon}
           />
           <ArchitectureGrouping borderTop={false} borderLeft>
             <ArchitectureItemCard
@@ -66,8 +75,8 @@
             />
             <ArchitectureItemCard
               title="JavaScript"
-              docsUrl="https://www.typescriptlang.org/docs/handbook/intro.html"
-              iconComponent={TypeScriptIcon}
+              docsUrl="https://developer.mozilla.org/en-US/docs/Web/JavaScript"
+              iconComponent={JavaScriptIcon}
             />
           </ArchitectureGrouping>
         </ArchitectureGrouping>

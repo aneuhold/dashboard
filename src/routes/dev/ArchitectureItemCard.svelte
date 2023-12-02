@@ -1,7 +1,8 @@
 <!--
   @component
 
-  An Architecture card that is made to look like a list item.
+  An Architecture card that is made to look like a list item. The contents
+  will be put into a dialog if contents are provided.
 
   Implementation notes:
 
@@ -10,10 +11,12 @@
 -->
 <script lang="ts">
   import List, { Graphic, Item, Text } from '@smui/list';
-  import Card, { Content } from '@smui/card';
+  import Card, { Content as CardContent } from '@smui/card';
   import type { ComponentType } from 'svelte';
   import MenuSurface from '@smui/menu-surface';
   import IconButton, { Icon } from '@smui/icon-button';
+  import Dialog, { Title, Content as DialogContent, Actions } from '@smui/dialog';
+  import Button, { Label } from '@smui/button';
 
   export let title: string;
   export let subtitle: string | null = null;
@@ -22,16 +25,18 @@
   export let iconComponent: ComponentType | null = null;
 
   function openUrl(url: string | null) {
+    menu.setOpen(false);
     if (url) window.open(url, '_blank');
   }
 
   let menu: MenuSurface;
   let anchor: HTMLDivElement;
+  let dialogOpen = false;
 </script>
 
 <div class="container">
   <Card variant="outlined">
-    <Content>
+    <CardContent>
       <div class="card-content">
         <div class="left-side">
           {#if iconComponent}
@@ -51,6 +56,17 @@
             >
             <MenuSurface bind:this={menu} anchorElement={anchor} anchorCorner="BOTTOM_RIGHT">
               <List>
+                {#if $$slots.default}
+                  <Item
+                    on:SMUI:action={() => {
+                      menu.setOpen(false);
+                      dialogOpen = true;
+                    }}
+                  >
+                    <Graphic class="material-icons">info</Graphic>
+                    <Text>Detailed Info</Text>
+                  </Item>
+                {/if}
                 {#if docsUrl}
                   <Item on:SMUI:action={() => openUrl(docsUrl)}>
                     <Graphic class="material-icons">article</Graphic>
@@ -68,9 +84,23 @@
           </div>
         {/if}
       </div>
-    </Content>
+    </CardContent>
   </Card>
 </div>
+<Dialog bind:open={dialogOpen} surface$style="width: 850px; max-width: calc(100vw - 32px);">
+  <Title>
+    <Icon class="material-icons"><svelte:component this={iconComponent} size={26} /></Icon>
+    {title} Detailed Info
+  </Title>
+  <DialogContent>
+    <slot />
+  </DialogContent>
+  <Actions>
+    <Button action="accept">
+      <Label>Done</Label>
+    </Button>
+  </Actions>
+</Dialog>
 
 <style>
   .container {
