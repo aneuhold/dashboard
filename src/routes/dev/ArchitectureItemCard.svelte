@@ -29,8 +29,8 @@
   let anchor: HTMLDivElement;
 </script>
 
-<div>
-  <Card>
+<div class="container">
+  <Card variant="outlined">
     <Content>
       <div class="card-content">
         <div class="left-side">
@@ -73,6 +73,9 @@
 </div>
 
 <style>
+  .container {
+    padding: 2px;
+  }
   .title {
     margin-top: 0px;
     margin-bottom: -5px;

@@ -1,7 +1,17 @@
+<!--
+  @component
+  
+  A page for Development info.
+
+  Implementation notes:
+  - SVG icons: https://worldvectorlogo.com/
+-->
 <script lang="ts">
   import SvelteIcon from '$lib/svgs/SvelteIcon.svelte';
   import Paper, { Title, Subtitle, Content as PaperContent } from '@smui/paper';
   import ArchitectureItemCard from './ArchitectureItemCard.svelte';
+  import TypeScriptIcon from '$lib/svgs/TypeScriptIcon.svelte';
+  import ArchitectureGrouping from './ArchitectureGrouping.svelte';
 </script>
 
 <svelte:head>
@@ -36,6 +46,31 @@
           docsUrl="https://svelte.dev/docs/introduction"
           iconComponent={SvelteIcon}
         />
+        <ArchitectureGrouping borderBottom>
+          <ArchitectureItemCard
+            title="HTML"
+            docsUrl="https://www.typescriptlang.org/docs/handbook/intro.html"
+            iconComponent={TypeScriptIcon}
+          />
+          <ArchitectureItemCard
+            title="CSS"
+            docsUrl="https://www.typescriptlang.org/docs/handbook/intro.html"
+            iconComponent={TypeScriptIcon}
+          />
+          <ArchitectureGrouping borderTop={false} borderLeft>
+            <ArchitectureItemCard
+              title="TypeScript"
+              subtitle="The superset of JavaScript"
+              docsUrl="https://www.typescriptlang.org/docs/handbook/intro.html"
+              iconComponent={TypeScriptIcon}
+            />
+            <ArchitectureItemCard
+              title="JavaScript"
+              docsUrl="https://www.typescriptlang.org/docs/handbook/intro.html"
+              iconComponent={TypeScriptIcon}
+            />
+          </ArchitectureGrouping>
+        </ArchitectureGrouping>
       </PaperContent>
     </Paper>
   </PaperContent>

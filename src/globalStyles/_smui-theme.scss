@@ -40,6 +40,10 @@
 // Import the mixins.
 @use '@material/typography/mixins' as typography;
 
+// Import the colors last. Order matters in this file. This allows usage
+// of vars from MDC
+@use '@material/theme/styles';
+
 html,
 body {
   background-color: #000;
