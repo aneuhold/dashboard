@@ -14,6 +14,10 @@ import VitestIcon from '$lib/svgs/VitestIcon.svelte';
 import GitHubIcon from '$lib/svgs/GitHubIcon.svelte';
 import GoogleDomainsIcon from '$lib/svgs/GoogleDomainsIcon.svelte';
 import NetlifyIcon from '$lib/svgs/NetlifyIcon.svelte';
+import NodeJsIcon from '$lib/svgs/NodeJSIcon.svelte';
+import JestIcon from '$lib/svgs/JestIcon.svelte';
+import DenoIcon from '$lib/svgs/DenoIcon.svelte';
+import DigitalOceanIcon from '$lib/svgs/DigitalOceanIcon.svelte';
 
 /**
  * A paritcular component that can be chosen within an architecture category.
@@ -126,7 +130,8 @@ export const frontendTestingComponents = {
       backendCategories.unitTesting,
       backendCategories.integrationTesting
     ],
-    docsUrl: 'https://jestjs.io/docs/getting-started'
+    docsUrl: 'https://jestjs.io/docs/getting-started',
+    icon: JestIcon
   },
   vitest: {
     title: 'Vitest',
@@ -154,7 +159,8 @@ export const backendComponents = {
     title: 'Node.js',
     type: ArchitectureComponentType.framework,
     categories: [backendCategories.runtime],
-    docsUrl: 'https://nodejs.org/en/docs/'
+    docsUrl: 'https://nodejs.org/en/docs/',
+    icon: NodeJsIcon
   },
   typescript: frontendComponents.typescript,
   javascript: frontendComponents.javascript,
@@ -162,7 +168,8 @@ export const backendComponents = {
     title: 'Deno',
     type: ArchitectureComponentType.framework,
     categories: [backendCategories.runtime],
-    docsUrl: 'https://deno.land/manual'
+    docsUrl: 'https://deno.land/manual',
+    icon: DenoIcon
   },
   rust: {
     title: 'Rust',
@@ -174,7 +181,8 @@ export const backendComponents = {
     title: 'DigitalOcean Functions',
     type: ArchitectureComponentType.tool,
     categories: [backendCategories.cloudFunctions],
-    docsUrl: 'https://www.digitalocean.com/docs/app-platform/how-to/use-functions/'
+    docsUrl: 'https://www.digitalocean.com/docs/app-platform/how-to/use-functions/',
+    icon: DigitalOceanIcon
   }
 } satisfies Record<string, ArchitectureComponent>;
 
