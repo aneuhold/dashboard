@@ -12,33 +12,25 @@
 <script lang="ts">
   import List, { Graphic, Item, Text } from '@smui/list';
   import Card, { Content as CardContent } from '@smui/card';
-  import type { ComponentType } from 'svelte';
   import MenuSurface from '@smui/menu-surface';
   import IconButton, { Icon } from '@smui/icon-button';
-  import { ArchitectureComponentType } from '../../../util/ArchitectureInfo/architectureComponents';
+  import Tooltip, { Wrapper } from '@smui/tooltip';
+  import ArchitectureInfo from '../../../util/ArchitectureInfo/ArchitectureInfo';
+  import type { ArchitectureComponent } from '../../../util/ArchitectureInfo/architectureComponents';
 
-  export let title: string;
-  export let docsUrl: string | null = null;
-  export let latestExampleProjectUrl: string | null = null;
-  export let archComponentType: ArchitectureComponentType | null = null;
-  export let iconComponent: ComponentType | null = null;
+  export let archComponent: ArchitectureComponent;
 
-  function openUrl(url: string | null) {
+  $: title = archComponent.title;
+  $: docsUrl = archComponent.docsUrl;
+  $: latestExampleProjectUrl = archComponent.latestExampleProjectUrl;
+  $: configurationUrl = archComponent.configurationUrl;
+  $: categories = archComponent.categories;
+  $: archComponentType = archComponent.type;
+  $: iconComponent = archComponent.icon;
+
+  function openUrl(url: string | undefined) {
     menu.setOpen(false);
     if (url) window.open(url, '_blank');
-  }
-
-  function getArchComponentTypeIconName() {
-    switch (archComponentType) {
-      case ArchitectureComponentType.language:
-        return 'code';
-      case ArchitectureComponentType.framework:
-        return 'foundation';
-      case ArchitectureComponentType.tool:
-        return 'construction';
-      default:
-        return null;
-    }
   }
 
   let menu: MenuSurface;
@@ -56,13 +48,23 @@
           <div>
             <h4 class="mdc-typography--body1 title">
               {title}
-              {#if archComponentType}
-                <!-- Add a tooltip here -->
+              <Wrapper>
                 <Icon class="material-icons dimmed-color small-icon">
-                  {getArchComponentTypeIconName()}
+                  {ArchitectureInfo.getComponentTypeIconName(archComponentType)}
                 </Icon>
-              {/if}
+                <Tooltip>{ArchitectureInfo.getComponentTypeTooltip(archComponentType)}</Tooltip>
+              </Wrapper>
             </h4>
+            {#if categories.length > 0}
+              <div class="mdc-typography--caption mdc-theme--text-hint-on-background">
+                {#each categories as category, index}
+                  <span><i>{category.title}</i></span>
+                  {#if index !== categories.length - 1}
+                    <span>, </span>
+                  {/if}
+                {/each}
+              </div>
+            {/if}
             {#if $$slots.default}
               <div class="mdc-deprecated-list-item__secondary-text subtitle"><slot /></div>
             {/if}
@@ -109,7 +111,7 @@
     gap: 4px;
   }
   .subtitle {
-    margin-top: 8px;
+    margin-top: 4px;
     margin-bottom: 0px;
     text-wrap: wrap;
   }

@@ -36,12 +36,12 @@ const architectureContextInfo = {
       { component: frontendComponents.javascript }
     ],
     frontendTestingComponents: [
-      { component: frontendTestingComponents.typescript },
       {
         contextSpecificDescription:
           'This is just being used with Svelte because it comes bundled. It might be good to switch to Jest at some point so it aligns with the backend.',
         component: frontendTestingComponents.vitest
-      }
+      },
+      { component: frontendTestingComponents.typescript }
     ],
     devOpsComponents: [
       { component: devOpsComponents.netlify },
@@ -56,8 +56,10 @@ const architectureContextInfo = {
     frontendComponents: [
       { component: frontendComponents.svelteKit },
       { component: frontendComponents.svelte },
+      { component: frontendComponents.html },
       { component: frontendComponents.css },
-      { component: frontendComponents.typescript }
+      { component: frontendComponents.typescript },
+      { component: frontendComponents.javascript }
     ],
     frontendTestingComponents: [
       { component: frontendTestingComponents.typescript },

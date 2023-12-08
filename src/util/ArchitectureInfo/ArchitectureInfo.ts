@@ -1,3 +1,4 @@
+import { ArchitectureComponentType } from './architectureComponents';
 import type { ArchitectureContext, ArchitectureContextName } from './architectureContextInfo';
 import architectureContextInfo from './architectureContextInfo';
 
@@ -14,5 +15,31 @@ export default class ArchitectureInfo {
       }
     }
     return null;
+  }
+
+  static getComponentTypeIconName(type: ArchitectureComponentType) {
+    switch (type) {
+      case ArchitectureComponentType.language:
+        return 'code';
+      case ArchitectureComponentType.framework:
+        return 'foundation';
+      case ArchitectureComponentType.tool:
+        return 'construction';
+      default:
+        return null;
+    }
+  }
+
+  static getComponentTypeTooltip(type: ArchitectureComponentType) {
+    switch (type) {
+      case ArchitectureComponentType.language:
+        return 'Language';
+      case ArchitectureComponentType.framework:
+        return 'Framework';
+      case ArchitectureComponentType.tool:
+        return 'Tool';
+      default:
+        return null;
+    }
   }
 }

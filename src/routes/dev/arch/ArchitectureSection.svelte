@@ -20,12 +20,7 @@
   {/if}
   <Content>
     {#each components as { component, contextSpecificDescription }}
-      <ArchitectureItemCard
-        title={component.title}
-        docsUrl={component.docsUrl}
-        iconComponent={component.icon}
-        archComponentType={component.type}
-      >
+      <ArchitectureItemCard archComponent={component}>
         {#if contextSpecificDescription}
           <span><b>Context Specific Description:</b> {contextSpecificDescription}</span>
         {/if}

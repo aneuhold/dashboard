@@ -10,6 +10,10 @@ import CssIcon from '$lib/svgs/CSSIcon.svelte';
 import TypeScriptIcon from '$lib/svgs/TypeScriptIcon.svelte';
 import JavaScriptIcon from '$lib/svgs/JavaScriptIcon.svelte';
 import HtmlIcon from '$lib/svgs/HTMLIcon.svelte';
+import VitestIcon from '$lib/svgs/VitestIcon.svelte';
+import GitHubIcon from '$lib/svgs/GitHubIcon.svelte';
+import GoogleDomainsIcon from '$lib/svgs/GoogleDomainsIcon.svelte';
+import NetlifyIcon from '$lib/svgs/NetlifyIcon.svelte';
 
 /**
  * A paritcular component that can be chosen within an architecture category.
@@ -22,6 +26,12 @@ export type ArchitectureComponent = {
   categories: ArchitectureCategoryInfo[];
   generalDescription?: string;
   docsUrl?: string;
+  latestExampleProjectUrl?: string;
+  /**
+   * An optional URL which navigates to the configuration for the architecture
+   * component.
+   */
+  configurationUrl?: string;
   icon?: ComponentType;
 };
 
@@ -124,7 +134,8 @@ export const frontendTestingComponents = {
       'A testing framework for Vite. This is not compatible with the backend as far as is known at the moment.',
     type: ArchitectureComponentType.tool,
     categories: [frontendCategories.unitTesting, frontendCategories.integrationTesting],
-    docsUrl: 'https://vitest.dev/guide/'
+    docsUrl: 'https://vitest.dev/guide/',
+    icon: VitestIcon
   },
   cypress: {
     title: 'Cypress',
@@ -177,13 +188,15 @@ export const devOpsComponents = {
     title: 'Netlify',
     type: ArchitectureComponentType.tool,
     categories: [devOpsCategories.staticSiteDeploymentTool],
-    docsUrl: 'https://docs.netlify.com/'
+    docsUrl: 'https://docs.netlify.com/',
+    icon: NetlifyIcon
   },
   githubActions: {
     title: 'GitHub Actions',
     type: ArchitectureComponentType.tool,
     categories: [devOpsCategories.continuousIntegration],
-    docsUrl: 'https://docs.github.com/en/actions'
+    docsUrl: 'https://docs.github.com/en/actions',
+    icon: GitHubIcon
   },
   googleDomains: {
     title: 'Google Domains',
@@ -191,6 +204,7 @@ export const devOpsComponents = {
       "Google's domain registration service. This is expiring soon though, so it might be good to switch at some point.",
     type: ArchitectureComponentType.tool,
     categories: [devOpsCategories.domainProvider],
-    docsUrl: 'https://support.google.com/domains'
+    docsUrl: 'https://support.google.com/domains',
+    icon: GoogleDomainsIcon
   }
 } satisfies Record<string, ArchitectureComponent>;
