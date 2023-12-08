@@ -18,6 +18,8 @@ import NodeJsIcon from '$lib/svgs/NodeJSIcon.svelte';
 import JestIcon from '$lib/svgs/JestIcon.svelte';
 import DenoIcon from '$lib/svgs/DenoIcon.svelte';
 import DigitalOceanIcon from '$lib/svgs/DigitalOceanIcon.svelte';
+import MongoDbIcon from '$lib/svgs/MongoDBIcon.svelte';
+import NpmIcon from '$lib/svgs/NPMIcon.svelte';
 
 /**
  * A paritcular component that can be chosen within an architecture category.
@@ -182,7 +184,44 @@ export const backendComponents = {
     type: ArchitectureComponentType.tool,
     categories: [backendCategories.cloudFunctions],
     docsUrl: 'https://www.digitalocean.com/docs/app-platform/how-to/use-functions/',
+    configurationUrl:
+      'https://cloud.digitalocean.com/functions/fn-66dd3ef6-c21d-46dc-b7ae-caf2ac8041ec?i=228288',
     icon: DigitalOceanIcon
+  },
+  digitalOceanFunctionsRepo: {
+    title: 'digital-ocean-functions Repo',
+    generalDescription:
+      'Contains all the DigitalOcean functions code used personally for every project.',
+    type: ArchitectureComponentType.tool,
+    categories: [backendCategories.repository],
+    docsUrl: 'https://github.com/aneuhold/digital-ocean-functions',
+    icon: GitHubIcon
+  },
+  personalDatabaseLibrary: {
+    title: '🚧 Personal Database Library',
+    generalDescription:
+      'This still needs to be built. A personal database library that can be used to interact with ideally, any other database. So it is abstracted. At first it will interact with MongoDB.',
+    icon: GitHubIcon,
+    type: ArchitectureComponentType.tool,
+    categories: [backendCategories.library]
+  },
+  mongoose: {
+    title: 'Mongoose',
+    generalDescription:
+      'Notes on this are in the wiki. Need to play with this again to see if it is still useful, or build a personal library that interacts with it.',
+    type: ArchitectureComponentType.tool,
+    categories: [backendCategories.orm, backendCategories.library],
+    docsUrl: 'https://mongoosejs.com/docs/guide.html',
+    icon: MongoDbIcon
+  },
+  mongoDb: {
+    title: 'MongoDB',
+    generalDescription: 'Currently using MongoDB Atlas to manage.',
+    type: ArchitectureComponentType.tool,
+    categories: [backendCategories.database],
+    docsUrl: 'https://docs.mongodb.com/',
+    configurationUrl: 'https://cloud.mongodb.com/v2/655933be7ffb754535fbb6af#/overview',
+    icon: MongoDbIcon
   }
 } satisfies Record<string, ArchitectureComponent>;
 
@@ -194,9 +233,14 @@ export const backendTestingComponents = {
 export const devOpsComponents = {
   netlify: {
     title: 'Netlify',
+    generalDescription:
+      'Use the same style of deployment as the portfolio using GitHub Actions. See the project reference for an example.',
     type: ArchitectureComponentType.tool,
     categories: [devOpsCategories.staticSiteDeploymentTool],
     docsUrl: 'https://docs.netlify.com/',
+    latestExampleProjectUrl:
+      'https://github.com/aneuhold/portfolio/blob/main/.github/workflows/main-branch.yml',
+    configurationUrl: 'https://app.netlify.com/teams/aneuhold/sites',
     icon: NetlifyIcon
   },
   githubActions: {
@@ -204,6 +248,7 @@ export const devOpsComponents = {
     type: ArchitectureComponentType.tool,
     categories: [devOpsCategories.continuousIntegration],
     docsUrl: 'https://docs.github.com/en/actions',
+    latestExampleProjectUrl: 'https://github.com/aneuhold/portfolio/tree/main/.github/workflows',
     icon: GitHubIcon
   },
   googleDomains: {
@@ -214,5 +259,12 @@ export const devOpsComponents = {
     categories: [devOpsCategories.domainProvider],
     docsUrl: 'https://support.google.com/domains',
     icon: GoogleDomainsIcon
+  },
+  npm: {
+    title: 'npm',
+    type: ArchitectureComponentType.tool,
+    categories: [devOpsCategories.packageManager],
+    docsUrl: 'https://docs.npmjs.com/',
+    icon: NpmIcon
   }
 } satisfies Record<string, ArchitectureComponent>;

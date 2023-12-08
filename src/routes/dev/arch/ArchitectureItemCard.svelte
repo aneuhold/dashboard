@@ -77,6 +77,12 @@
             </IconButton>
             <MenuSurface bind:this={menu} anchorElement={anchor} anchorCorner="BOTTOM_RIGHT">
               <List>
+                {#if configurationUrl}
+                  <Item on:SMUI:action={() => openUrl(configurationUrl)}>
+                    <Graphic class="material-icons">build</Graphic>
+                    <Text>Configure</Text>
+                  </Item>
+                {/if}
                 {#if docsUrl}
                   <Item on:SMUI:action={() => openUrl(docsUrl)}>
                     <Graphic class="material-icons">article</Graphic>

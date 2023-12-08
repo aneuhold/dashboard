@@ -32,6 +32,12 @@ export const frontendCategories = {
   },
   build: {
     title: 'Frontend Build Tool'
+  },
+  repository: {
+    title: 'Personal Frontend Repository'
+  },
+  library: {
+    title: 'Frontend Library'
   }
 } satisfies Record<string, ArchitectureCategoryInfo>;
 
@@ -62,6 +68,12 @@ export const backendCategories = {
   },
   cloudFunctions: {
     title: 'Cloud Function Provider'
+  },
+  repository: {
+    title: 'Personal Backend Repository'
+  },
+  library: {
+    title: 'Backend Library'
   }
 };
 
@@ -80,5 +92,8 @@ export const devOpsCategories = {
   },
   continuousIntegration: {
     title: 'Continuous Integration Tool'
+  },
+  packageManager: {
+    title: 'Package Manager'
   }
 };

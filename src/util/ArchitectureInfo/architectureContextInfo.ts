@@ -2,7 +2,9 @@ import {
   frontendComponents,
   type ArchitectureComponent,
   devOpsComponents,
-  frontendTestingComponents
+  frontendTestingComponents,
+  backendComponents,
+  backendTestingComponents
 } from './architectureComponents';
 
 export type ArchitectureContext = {
@@ -52,7 +54,7 @@ const architectureContextInfo = {
   frontendWithBackendAPI: {
     title: 'Frontend App with Backend API',
     description:
-      'A frontend app that needs a backend API for any reason. This is generalized at the moment.',
+      'A frontend app that needs a backend API for any reason. This is generalized at the moment, but it might be good to add specific things to this.',
     frontendComponents: [
       { component: frontendComponents.svelteKit },
       { component: frontendComponents.svelte },
@@ -69,19 +71,40 @@ const architectureContextInfo = {
         component: frontendTestingComponents.vitest
       }
     ],
+    backendComponents: [
+      { component: backendComponents.digitalOceanFunctions },
+      { component: backendComponents.digitalOceanFunctionsRepo },
+      { component: backendComponents.personalDatabaseLibrary },
+      { component: backendComponents.mongoose },
+      { component: backendComponents.typescript },
+      { component: backendComponents.javascript },
+      { component: backendComponents.nodeJs },
+      { component: backendComponents.mongoDb }
+    ],
+    backendTestingComponents: [
+      { component: backendTestingComponents.jest },
+      { component: backendTestingComponents.typescript }
+    ],
     devOpsComponents: [
       { component: devOpsComponents.netlify },
       { component: devOpsComponents.githubActions },
       { component: devOpsComponents.googleDomains }
     ]
   },
-  frontendLibrary: {
-    title: 'Frontend Library',
+  frontendUILibrary: {
+    title: 'Frontend UI Library',
     description:
       'A frontend library that can be used by other projects. This hasnt been built yet, so a tech stack hasnt been developed.'
   },
+  typeScriptLibrary: {
+    title: 'TypeScript Library',
+    description: 'A TypeScript library that can be pulled in to a backend or frontend project.',
+    backendComponents: [{ component: backendComponents.typescript }]
+  },
   cliTool: {
-    title: 'CLI Tool'
+    title: 'CLI Tool',
+    description:
+      'A CLI tool that can be used in ideally any environment. It might be interesting to look into if this can be done in Rust.'
   }
 } satisfies Record<string, ArchitectureContext>;
 
