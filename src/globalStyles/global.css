@@ -1,3 +1,7 @@
 .dimmed-color {
   color: var(--mdc-theme-text-hint-on-background, rgba(255, 255, 255, 0.5));
 }
+
+.small-icon {
+  font-size: 16px;
+}

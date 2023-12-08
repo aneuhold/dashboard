@@ -1,5 +1,7 @@
 # Personal Dashboard
 
+Left off working towards turning things into contexts as far as the project type, then adding in things there from the perspective of tools.
+
 ## Developing
 
 To start working on the project simply run:

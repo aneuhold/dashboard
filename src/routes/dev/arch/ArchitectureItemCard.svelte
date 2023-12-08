@@ -2,7 +2,7 @@
   @component
 
   An Architecture card that is made to look like a list item. The contents
-  will be put into a dialog if contents are provided.
+  will be put into the description if contents are provided.
 
   Implementation notes:
 
@@ -15,13 +15,12 @@
   import type { ComponentType } from 'svelte';
   import MenuSurface from '@smui/menu-surface';
   import IconButton, { Icon } from '@smui/icon-button';
-  import Dialog, { Title, Content as DialogContent, Actions } from '@smui/dialog';
-  import Button, { Label } from '@smui/button';
+  import { ArchitectureComponentType } from '../../../util/ArchitectureInfo/architectureComponents';
 
   export let title: string;
-  export let subtitle: string | null = null;
   export let docsUrl: string | null = null;
   export let latestExampleProjectUrl: string | null = null;
+  export let archComponentType: ArchitectureComponentType | null = null;
   export let iconComponent: ComponentType | null = null;
 
   function openUrl(url: string | null) {
@@ -29,9 +28,21 @@
     if (url) window.open(url, '_blank');
   }
 
+  function getArchComponentTypeIconName() {
+    switch (archComponentType) {
+      case ArchitectureComponentType.language:
+        return 'code';
+      case ArchitectureComponentType.framework:
+        return 'foundation';
+      case ArchitectureComponentType.tool:
+        return 'construction';
+      default:
+        return null;
+    }
+  }
+
   let menu: MenuSurface;
   let anchor: HTMLDivElement;
-  let dialogOpen = false;
 </script>
 
 <div class="container">
@@ -43,30 +54,27 @@
             <Icon class="material-icons"><svelte:component this={iconComponent} size={30} /></Icon>
           {/if}
           <div>
-            <h4 class="mdc-typography--body1 title">{title}</h4>
-            {#if subtitle}
-              <span class="mdc-deprecated-list-item__secondary-text subtitle">{subtitle}</span>
+            <h4 class="mdc-typography--body1 title">
+              {title}
+              {#if archComponentType}
+                <!-- Add a tooltip here -->
+                <Icon class="material-icons dimmed-color small-icon">
+                  {getArchComponentTypeIconName()}
+                </Icon>
+              {/if}
+            </h4>
+            {#if $$slots.default}
+              <div class="mdc-deprecated-list-item__secondary-text subtitle"><slot /></div>
             {/if}
           </div>
         </div>
         {#if docsUrl || latestExampleProjectUrl}
           <div bind:this={anchor}>
-            <IconButton class="material-icons dimmed-color" on:click={() => menu.setOpen(true)}
-              >menu</IconButton
-            >
+            <IconButton class="material-icons dimmed-color" on:click={() => menu.setOpen(true)}>
+              menu
+            </IconButton>
             <MenuSurface bind:this={menu} anchorElement={anchor} anchorCorner="BOTTOM_RIGHT">
               <List>
-                {#if $$slots.default}
-                  <Item
-                    on:SMUI:action={() => {
-                      menu.setOpen(false);
-                      dialogOpen = true;
-                    }}
-                  >
-                    <Graphic class="material-icons">info</Graphic>
-                    <Text>Detailed Info</Text>
-                  </Item>
-                {/if}
                 {#if docsUrl}
                   <Item on:SMUI:action={() => openUrl(docsUrl)}>
                     <Graphic class="material-icons">article</Graphic>
@@ -87,20 +95,6 @@
     </CardContent>
   </Card>
 </div>
-<Dialog bind:open={dialogOpen} surface$style="width: 850px; max-width: calc(100vw - 32px);">
-  <Title>
-    <Icon class="material-icons"><svelte:component this={iconComponent} size={26} /></Icon>
-    {title} Detailed Info
-  </Title>
-  <DialogContent>
-    <slot />
-  </DialogContent>
-  <Actions>
-    <Button action="accept">
-      <Label>Done</Label>
-    </Button>
-  </Actions>
-</Dialog>
 
 <style>
   .container {
@@ -109,11 +103,19 @@
   .title {
     margin-top: 0px;
     margin-bottom: -5px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 4px;
   }
   .subtitle {
-    margin-top: 0px;
+    margin-top: 8px;
     margin-bottom: 0px;
     text-wrap: wrap;
+  }
+  /* Fixes a weird issue with mdc-deprecated-list-item__secondary-text */
+  .subtitle::before {
+    display: none;
   }
   .card-content {
     display: flex;
