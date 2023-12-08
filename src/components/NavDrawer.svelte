@@ -12,37 +12,19 @@
   import { page } from '$app/stores';
   import { goto } from '$app/navigation';
   import { navDrawerOpen } from '../stores/navDrawerOpen';
+  import navInfo from '../util/navInfo';
 
-  export let activeRoute: RoutePath | '/' = '/';
+  export let activeRoute: string = '/';
 
-  type RouteInfo = {
-    title: string;
-    icon: string;
-  };
-
-  /**
-   * Details on each route that should show up in the NavDrawer.
-   *
-   * Icons can be found here: https://fonts.google.com/icons
-   */
-  const routesInfo = {
-    '/dev': {
-      title: 'Development',
-      icon: 'code'
-    }
-  } satisfies Record<string, RouteInfo>;
-  // This type stuff is a bit complicated, but can be refactored if more
-  // specificity is wanted with the layout of the NavDrawer.
-  type RoutePath = keyof typeof routesInfo;
-  const routePaths = Object.keys(routesInfo) as Array<RoutePath>;
-
-  function setRoute(newRoute: RoutePath) {
+  function setRoute(newRoute: string) {
     $navDrawerOpen = false;
     goto(newRoute);
   }
 
   page.subscribe((pageData) => {
-    activeRoute = pageData.route.id as RoutePath;
+    if (pageData.route.id) {
+      activeRoute = pageData.route.id;
+    }
   });
 </script>
 
@@ -54,12 +36,14 @@
   <Drawer variant="modal" bind:open={$navDrawerOpen}>
     <Content>
       <List>
-        {#each routePaths as routePath}
-          <Item on:click={() => setRoute(routePath)} activated={activeRoute === routePath}>
-            <Graphic class="material-icons" aria-hidden="true">
-              {routesInfo[routePath].icon}
-            </Graphic>
-            <Text>{routesInfo[routePath].title}</Text>
+        {#each Object.values(navInfo) as pageInfo}
+          <Item on:click={() => setRoute(pageInfo.url)} activated={activeRoute === pageInfo.url}>
+            {#if pageInfo.iconName}
+              <Graphic class="material-icons" aria-hidden="true">
+                {pageInfo.iconName}
+              </Graphic>
+            {/if}
+            <Text>{pageInfo.shortTitle}</Text>
           </Item>
         {/each}
 

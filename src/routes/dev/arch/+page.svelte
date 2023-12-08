@@ -8,13 +8,12 @@
 -->
 <script lang="ts">
   import Paper, { Title, Subtitle, Content as PaperContent } from '@smui/paper';
-  import ArchitectureItemCard from './ArchitectureItemCard.svelte';
   import { page } from '$app/stores';
   import type { ArchitectureContext } from '../../../util/ArchitectureInfo/architectureContextInfo';
   import ArchitectureInfo from '../../../util/ArchitectureInfo/ArchitectureInfo';
   import architectureContextInfo from '../../../util/ArchitectureInfo/architectureContextInfo';
   import { onDestroy } from 'svelte';
-  import List, { Graphic, Item, Meta, Text } from '@smui/list';
+  import List, { Graphic, Item, Meta, PrimaryText, SecondaryText, Text } from '@smui/list';
   import { goto } from '$app/navigation';
   import IconButton from '@smui/icon-button';
   import ArchitectureSection from './ArchitectureSection.svelte';
@@ -47,10 +46,13 @@
       <p>
         Architecture contexts are different types of projects that you have built or are building.
       </p>
-      <List>
+      <List twoLine={true}>
         {#each Object.entries(architectureContextInfo) as [contextName, contextInfo]}
           <Item on:SMUI:action={() => goto(`?context=${contextName}`)}>
-            <Text>{contextInfo.title}</Text>
+            <Text>
+              <PrimaryText>{contextInfo.title}</PrimaryText>
+              <SecondaryText>{contextInfo.description}</SecondaryText>
+            </Text>
           </Item>
         {/each}
       </List>

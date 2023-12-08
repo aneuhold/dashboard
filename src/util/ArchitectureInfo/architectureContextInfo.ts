@@ -26,7 +26,7 @@ export type ArchitectureContextName = keyof typeof architectureContextInfo;
 
 const architectureContextInfo = {
   frontendWithoutBackend: {
-    title: 'Frontend App with no Backend API',
+    title: '🎨 Frontend App with no Backend API',
     description:
       'A frontend app that does not need a backend API. It can be deployed to a static hosting service, such as Netlify.',
     frontendComponents: [
@@ -52,7 +52,7 @@ const architectureContextInfo = {
     ]
   },
   frontendWithBackendAPI: {
-    title: 'Frontend App with Backend API',
+    title: '🏢 Frontend App with Backend API',
     description:
       'A frontend app that needs a backend API for any reason. This is generalized at the moment, but it might be good to add specific things to this.',
     frontendComponents: [
@@ -64,12 +64,12 @@ const architectureContextInfo = {
       { component: frontendComponents.javascript }
     ],
     frontendTestingComponents: [
-      { component: frontendTestingComponents.typescript },
       {
         contextSpecificDescription:
           'This is just being used with Svelte because it comes bundled. It might be good to switch to Jest at some point so it aligns with the backend.',
         component: frontendTestingComponents.vitest
-      }
+      },
+      { component: frontendTestingComponents.typescript }
     ],
     backendComponents: [
       { component: backendComponents.digitalOceanFunctions },
@@ -92,17 +92,18 @@ const architectureContextInfo = {
     ]
   },
   frontendUILibrary: {
-    title: 'Frontend UI Library',
+    title: '🖌️ Frontend UI Library',
     description:
       'A frontend library that can be used by other projects. This hasnt been built yet, so a tech stack hasnt been developed.'
   },
   typeScriptLibrary: {
-    title: 'TypeScript Library',
+    title: '🛠️ TypeScript Library',
     description: 'A TypeScript library that can be pulled in to a backend or frontend project.',
-    backendComponents: [{ component: backendComponents.typescript }]
+    backendComponents: [{ component: backendComponents.typescript }],
+    devOpsComponents: [{ component: devOpsComponents.npm }]
   },
   cliTool: {
-    title: 'CLI Tool',
+    title: '🧑‍💻 CLI Tool',
     description:
       'A CLI tool that can be used in ideally any environment. It might be interesting to look into if this can be done in Rust.'
   }

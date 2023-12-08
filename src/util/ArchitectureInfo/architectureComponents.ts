@@ -198,7 +198,7 @@ export const backendComponents = {
     icon: GitHubIcon
   },
   personalDatabaseLibrary: {
-    title: '🚧 Personal Database Library',
+    title: '🚧❗️ Personal Database Library',
     generalDescription:
       'This still needs to be built. A personal database library that can be used to interact with ideally, any other database. So it is abstracted. At first it will interact with MongoDB.',
     icon: GitHubIcon,
