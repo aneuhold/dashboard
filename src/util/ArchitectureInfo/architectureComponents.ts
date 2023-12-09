@@ -234,7 +234,7 @@ export const devOpsComponents = {
   netlify: {
     title: 'Netlify',
     generalDescription:
-      'Use the same style of deployment as the portfolio using GitHub Actions. See the project reference for an example.',
+      'Use the same style of deployment as the portfolio using GitHub Actions. See the project reference for an example. Also, make sure to create new sites by deploying manually and just dropping the build folder into Netlify to get it started. Then update configuration at that point.',
     type: ArchitectureComponentType.tool,
     categories: [devOpsCategories.staticSiteDeploymentTool],
     docsUrl: 'https://docs.netlify.com/',

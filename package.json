@@ -19,11 +19,12 @@
     "@smui/icon-button": "^7.0.0-beta.15",
     "@smui/list": "^7.0.0-beta.15",
     "@smui/menu": "^7.0.0-beta.15",
+    "@smui/menu-surface": "^7.0.0-beta.15",
     "@smui/paper": "^7.0.0-beta.15",
     "@smui/textfield": "^7.0.0-beta.15",
     "@smui/tooltip": "^7.0.0-beta.15",
     "@smui/top-app-bar": "^7.0.0-beta.15",
-    "@sveltejs/adapter-auto": "^2.0.0",
+    "@sveltejs/adapter-static": "^2.0.3",
     "@sveltejs/kit": "^1.27.4",
     "@types/cookie": "^0.5.1",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
@@ -44,8 +45,5 @@
   },
   "devDependenciesComments": {
     "svelte": "Locked at 4.x because 5.x doesn't seem to work with @smui components as of 11/25/2023"
-  },
-  "dependencies": {
-    "@smui/menu-surface": "^7.0.0-beta.15"
   }
 }

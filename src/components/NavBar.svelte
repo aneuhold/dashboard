@@ -1,10 +1,11 @@
 <script lang="ts">
   import TopAppBar, { AutoAdjust, Row, Section, Title } from '@smui/top-app-bar';
-  import IconButton from '@smui/icon-button';
+  import IconButton, { Icon } from '@smui/icon-button';
   import { password } from '../stores/password';
   import { goto } from '$app/navigation';
   import { navDrawerOpen } from '../stores/navDrawerOpen';
   import NavDrawer from './NavDrawer.svelte';
+  import GitHubIcon from '$lib/svgs/GitHubIcon.svelte';
 
   let topAppBar: TopAppBar;
 
@@ -33,6 +34,15 @@
       </div>
     </Section>
     <Section align="end" toolbar>
+      <IconButton
+        class="material-icons"
+        aria-label="GitHub"
+        on:click={() => {
+          window.open('https://github.com/aneuhold?tab=repositories', '_blank');
+        }}
+      >
+        <Icon><svelte:component this={GitHubIcon} size={24} /></Icon>
+      </IconButton>
       <IconButton
         class="material-icons"
         aria-label="Wiki"
