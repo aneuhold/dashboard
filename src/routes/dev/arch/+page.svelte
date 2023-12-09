@@ -21,18 +21,18 @@
 </script>
 
 <script lang="ts">
-  import Paper, { Title, Subtitle, Content as PaperContent } from '@smui/paper';
-  import { page } from '$app/stores';
-  import { onDestroy } from 'svelte';
-  import List, { Item, PrimaryText, SecondaryText, Text } from '@smui/list';
   import { goto } from '$app/navigation';
+  import { page } from '$app/stores';
   import IconButton from '@smui/icon-button';
-  import ArchitectureSection from './ArchitectureSection.svelte';
-  import type { ArchitectureContext } from 'util/ArchitectureInfo/architectureContextInfo';
+  import List, { Item, PrimaryText, SecondaryText, Text } from '@smui/list';
+  import Paper, { Content as PaperContent, Subtitle, Title } from '@smui/paper';
+  import PageTitle from 'components/PageTitle.svelte';
+  import { onDestroy } from 'svelte';
   import ArchitectureInfo from 'util/ArchitectureInfo/ArchitectureInfo';
+  import type { ArchitectureContext } from 'util/ArchitectureInfo/architectureContextInfo';
   import architectureContextInfo from 'util/ArchitectureInfo/architectureContextInfo';
   import type { PageInfo } from 'util/navInfo';
-  import PageTitle from 'components/PageTitle.svelte';
+  import ArchitectureSection from './ArchitectureSection.svelte';
 
   let archContext: ArchitectureContext | null = null;
 
