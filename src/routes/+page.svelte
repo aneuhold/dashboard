@@ -6,7 +6,8 @@
     url: '/',
     clickAction: () => {
       goto(homePageInfo.url);
-    }
+    },
+    nestingLevel: 0
   };
 </script>
 

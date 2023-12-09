@@ -15,7 +15,8 @@
     iconName: 'domain',
     clickAction: () => {
       goto(archPageInfo.url);
-    }
+    },
+    nestingLevel: 1
   };
 </script>
 

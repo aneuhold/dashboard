@@ -12,13 +12,21 @@
   import { page } from '$app/stores';
   import { goto } from '$app/navigation';
   import { navDrawerOpen } from '../stores/navDrawerOpen';
-  import navInfo from '../util/navInfo';
+  import navInfo, { type PageInfo } from '../util/navInfo';
 
   export let activeRoute: string = '/';
 
   function setRoute(newRoute: string) {
     $navDrawerOpen = false;
     goto(newRoute);
+  }
+
+  function getNestingText(pageInfo: PageInfo) {
+    let nestingText = '';
+    for (let i = 0; i < pageInfo.nestingLevel; i++) {
+      nestingText += '-';
+    }
+    return nestingText;
   }
 
   page.subscribe((pageData) => {
@@ -38,6 +46,9 @@
       <List>
         {#each Object.values(navInfo) as pageInfo}
           <Item on:click={() => setRoute(pageInfo.url)} activated={activeRoute === pageInfo.url}>
+            {#if pageInfo.nestingLevel > 0}
+              <span class="nesting-text">{getNestingText(pageInfo)}</span>
+            {/if}
             {#if pageInfo.iconName}
               <Graphic class="material-icons" aria-hidden="true">
                 {pageInfo.iconName}
@@ -46,9 +57,14 @@
             <Text>{pageInfo.shortTitle}</Text>
           </Item>
         {/each}
-
         <!-- <Separator /> -->
       </List>
     </Content>
   </Drawer>
 </div>
+
+<style>
+  .nesting-text {
+    margin-right: 4px;
+  }
+</style>

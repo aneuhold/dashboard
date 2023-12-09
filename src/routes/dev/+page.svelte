@@ -14,7 +14,8 @@
     iconName: 'code',
     clickAction: () => {
       goto(devPageInfo.url);
-    }
+    },
+    nestingLevel: 0
   };
 </script>
 

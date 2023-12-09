@@ -21,6 +21,12 @@ export interface PageInfo extends LinkInfo {
    * An optional icon name for the page. This is used for the NavDrawer if needed.
    */
   iconName?: string;
+  /**
+   * The nesting level of the page. For example, the home page is at level 0,
+   * and any pages immediatly under the home page are also 0. But it increments
+   * by 1 after that.
+   */
+  nestingLevel: number;
 }
 
 /**
