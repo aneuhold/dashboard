@@ -15,21 +15,22 @@
     clickAction: () => {
       goto(devPageInfo.url);
     },
-    nestingLevel: 0
+    nestingLevel: 0,
+    isInternalLink: true
   };
 </script>
 
 <script lang="ts">
   import { goto } from '$app/navigation';
-  import Paper, { Title, Content as PaperContent } from '@smui/paper';
-  import NetlifyIcon from '$lib/svgs/NetlifyIcon.svelte';
   import DigitalOceanIcon from '$lib/svgs/DigitalOceanIcon.svelte';
   import MongoDbIcon from '$lib/svgs/MongoDBIcon.svelte';
-  import type { PageInfo } from 'util/navInfo';
-  import type { LinkInfo } from 'components/LinkListItem.svelte';
+  import NetlifyIcon from '$lib/svgs/NetlifyIcon.svelte';
+  import Paper, { Content as PaperContent, Title } from '@smui/paper';
   import LinkList from 'components/LinkList.svelte';
-  import navInfo from 'util/navInfo';
+  import type { LinkInfo } from 'components/LinkListItem.svelte';
   import PageTitle from 'components/PageTitle.svelte';
+  import type { PageInfo } from 'util/navInfo';
+  import navInfo from 'util/navInfo';
 
   const architectureLinks: Array<LinkInfo> = [
     navInfo.devArch,

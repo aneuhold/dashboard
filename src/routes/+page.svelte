@@ -7,17 +7,18 @@
     clickAction: () => {
       goto(homePageInfo.url);
     },
-    nestingLevel: 0
+    nestingLevel: 0,
+    isInternalLink: true
   };
 </script>
 
 <script lang="ts">
   import { goto } from '$app/navigation';
-  import navInfo, { type PageInfo } from '../util/navInfo';
+  import Paper, { Content, Title } from '@smui/paper';
   import LinkList from 'components/LinkList.svelte';
   import type { LinkInfo } from 'components/LinkListItem.svelte';
-  import Paper, { Content } from '@smui/paper';
   import PageTitle from 'components/PageTitle.svelte';
+  import navInfo, { type PageInfo } from '../util/navInfo';
 
   const links: Array<LinkInfo> = [navInfo.dev, navInfo.finance];
 </script>
@@ -30,6 +31,7 @@
 <PageTitle title={homePageInfo.title} />
 
 <Paper>
+  <Title>Table of Contents</Title>
   <Content>
     <LinkList {links} />
   </Content>

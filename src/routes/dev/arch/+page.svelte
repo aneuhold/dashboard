@@ -16,7 +16,8 @@
     clickAction: () => {
       goto(archPageInfo.url);
     },
-    nestingLevel: 1
+    nestingLevel: 1,
+    isInternalLink: true
   };
 </script>
 

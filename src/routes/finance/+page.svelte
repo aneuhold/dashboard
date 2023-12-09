@@ -16,7 +16,8 @@
     clickAction: () => {
       goto(financePageInfo.url);
     },
-    nestingLevel: 0
+    nestingLevel: 0,
+    isInternalLink: true
   };
 </script>
 

@@ -6,7 +6,7 @@
 -->
 <script lang="ts" context="module">
   import { Icon } from '@smui/icon-button';
-  import { Graphic, Item, PrimaryText, Text, SecondaryText } from '@smui/list';
+  import { Graphic, Item, PrimaryText, SecondaryText, Text } from '@smui/list';
   import type { ComponentType } from 'svelte';
 
   export interface LinkInfo {
@@ -15,6 +15,11 @@
     iconName?: string;
     icon?: ComponentType;
     clickAction: () => void;
+    /**
+     * Determines if the link is internal to the site or not. If it isn't,
+     * then a link icon will be next to the title.
+     */
+    isInternalLink?: boolean;
   }
 </script>
 
@@ -30,7 +35,12 @@
     <Graphic><svelte:component this={linkInfo.icon} /></Graphic>
   {/if}
   <Text>
-    <PrimaryText>{linkInfo.title}</PrimaryText>
+    <PrimaryText>
+      {linkInfo.title}
+      {#if !linkInfo.isInternalLink}
+        <Icon class="material-icons dimmed-color x-small-icon">open_in_new</Icon>
+      {/if}
+    </PrimaryText>
     <SecondaryText>{linkInfo.description ? linkInfo.description : '...'}</SecondaryText>
   </Text>
 </Item>
