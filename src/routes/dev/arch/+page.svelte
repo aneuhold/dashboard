@@ -6,6 +6,19 @@
   Implementation notes:
   - SVG icons: https://worldvectorlogo.com/
 -->
+<script lang="ts" context="module">
+  export const archPageInfo: PageInfo = {
+    shortTitle: 'Architecture',
+    title: 'Architecture Contexts',
+    description: 'If building something',
+    url: '/dev/arch',
+    iconName: 'domain',
+    clickAction: () => {
+      goto(archPageInfo.url);
+    }
+  };
+</script>
+
 <script lang="ts">
   import Paper, { Title, Subtitle, Content as PaperContent } from '@smui/paper';
   import { page } from '$app/stores';
@@ -17,6 +30,7 @@
   import type { ArchitectureContext } from 'util/ArchitectureInfo/architectureContextInfo';
   import ArchitectureInfo from 'util/ArchitectureInfo/ArchitectureInfo';
   import architectureContextInfo from 'util/ArchitectureInfo/architectureContextInfo';
+  import type { PageInfo } from 'util/navInfo';
 
   let archContext: ArchitectureContext | null = null;
 
@@ -30,12 +44,12 @@
 </script>
 
 <svelte:head>
-  <title>Architecture</title>
-  <meta name="description" content="Architecture info" />
+  <title>{archPageInfo.shortTitle}</title>
+  <meta name="description" content={archPageInfo.title} />
 </svelte:head>
 
 <div class="title-container">
-  <h4 class="title">Architecture Info</h4>
+  <h4 class="title">{archPageInfo.shortTitle}</h4>
   <span class="mdc-typography--subtitle1">Architecture for various project types</span>
 </div>
 

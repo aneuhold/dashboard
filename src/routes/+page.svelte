@@ -1,16 +1,23 @@
 <script lang="ts" context="module">
   export const homePageInfo: PageInfo = {
-    title: 'Personal Dashboard',
     shortTitle: 'Home',
+    title: 'Personal Dashboard',
     description: 'Home page for the personal dashboard',
-    url: '/'
+    url: '/',
+    clickAction: () => {
+      goto(homePageInfo.url);
+    }
   };
 </script>
 
 <script lang="ts">
   import { goto } from '$app/navigation';
-  import List, { Item, Text, PrimaryText, SecondaryText } from '@smui/list';
   import navInfo, { type PageInfo } from '../util/navInfo';
+  import LinkList from 'components/LinkList.svelte';
+  import type { LinkInfo } from 'components/LinkListItem.svelte';
+  import Paper, { Content } from '@smui/paper';
+
+  const links: Array<LinkInfo> = [navInfo.dev];
 </script>
 
 <svelte:head>
@@ -22,14 +29,11 @@
   <h4>{homePageInfo.title}</h4>
 </div>
 
-<List twoLine={true}>
-  <Item on:SMUI:action={() => goto(navInfo.dev.url)}>
-    <Text>
-      <PrimaryText>{navInfo.dev.shortTitle}</PrimaryText>
-      <SecondaryText>{navInfo.dev.title}</SecondaryText>
-    </Text>
-  </Item>
-</List>
+<Paper>
+  <Content>
+    <LinkList {links} />
+  </Content>
+</Paper>
 
 <style>
   .title {
