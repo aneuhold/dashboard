@@ -32,6 +32,7 @@
   import ArchitectureInfo from 'util/ArchitectureInfo/ArchitectureInfo';
   import architectureContextInfo from 'util/ArchitectureInfo/architectureContextInfo';
   import type { PageInfo } from 'util/navInfo';
+  import PageTitle from 'components/PageTitle.svelte';
 
   let archContext: ArchitectureContext | null = null;
 
@@ -49,10 +50,7 @@
   <meta name="description" content={archPageInfo.title} />
 </svelte:head>
 
-<div class="title-container">
-  <h4 class="title">{archPageInfo.shortTitle}</h4>
-  <span class="mdc-typography--subtitle1">Architecture for various project types</span>
-</div>
+<PageTitle title={archPageInfo.shortTitle} subtitle="Architecture for various project types" />
 
 {#if archContext === null}
   <Paper>
@@ -136,16 +134,6 @@
 {/if}
 
 <style>
-  .title-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 16px;
-    & .title {
-      margin-bottom: 0px;
-    }
-  }
   .arch-context-title {
     display: flex;
     flex-direction: row;

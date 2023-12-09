@@ -29,6 +29,7 @@
   import type { LinkInfo } from 'components/LinkListItem.svelte';
   import LinkList from 'components/LinkList.svelte';
   import navInfo from 'util/navInfo';
+  import PageTitle from 'components/PageTitle.svelte';
 
   const architectureLinks: Array<LinkInfo> = [
     navInfo.devArch,
@@ -78,9 +79,8 @@
   <meta name="description" content={devPageInfo.title} />
 </svelte:head>
 
-<div class="title">
-  <h4>{devPageInfo.title}</h4>
-</div>
+<PageTitle title={devPageInfo.title} />
+
 <div class="content">
   <Paper>
     <Title>Architecture</Title>
@@ -97,10 +97,6 @@
 </div>
 
 <style>
-  .title {
-    display: flex;
-    justify-content: center;
-  }
   .content {
     display: flex;
     flex-direction: column;

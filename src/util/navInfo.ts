@@ -2,6 +2,7 @@ import type { LinkInfo } from 'components/LinkListItem.svelte';
 import { homePageInfo } from '../routes/+page.svelte';
 import { devPageInfo } from '../routes/dev/+page.svelte';
 import { archPageInfo } from '../routes/dev/arch/+page.svelte';
+import { financePageInfo } from '../routes/finance/+page.svelte';
 
 export interface PageInfo extends LinkInfo {
   /**
@@ -35,7 +36,8 @@ export interface PageInfo extends LinkInfo {
 const navInfo = {
   home: homePageInfo,
   dev: devPageInfo,
-  devArch: archPageInfo
+  devArch: archPageInfo,
+  finance: financePageInfo
 } satisfies Record<string, PageInfo>;
 
 export default navInfo;

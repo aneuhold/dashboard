@@ -62,6 +62,3 @@
     <HelperText validationMsg slot="helper">{validationMessage}</HelperText>
   </Textfield>
 </form>
-
-<style>
-</style>

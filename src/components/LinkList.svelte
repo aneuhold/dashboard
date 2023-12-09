@@ -16,6 +16,3 @@
     <LinkListItem {linkInfo} />
   {/each}
 </List>
-
-<style>
-</style>

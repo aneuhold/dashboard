@@ -17,8 +17,9 @@
   import LinkList from 'components/LinkList.svelte';
   import type { LinkInfo } from 'components/LinkListItem.svelte';
   import Paper, { Content } from '@smui/paper';
+  import PageTitle from 'components/PageTitle.svelte';
 
-  const links: Array<LinkInfo> = [navInfo.dev];
+  const links: Array<LinkInfo> = [navInfo.dev, navInfo.finance];
 </script>
 
 <svelte:head>
@@ -26,19 +27,10 @@
   <meta name="description" content={homePageInfo.description} />
 </svelte:head>
 
-<div class="title">
-  <h4>{homePageInfo.title}</h4>
-</div>
+<PageTitle title={homePageInfo.title} />
 
 <Paper>
   <Content>
     <LinkList {links} />
   </Content>
 </Paper>
-
-<style>
-  .title {
-    display: flex;
-    justify-content: center;
-  }
-</style>

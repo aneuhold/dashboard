@@ -34,6 +34,3 @@
     <SecondaryText>{linkInfo.description ? linkInfo.description : '...'}</SecondaryText>
   </Text>
 </Item>
-
-<style>
-</style>
