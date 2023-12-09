@@ -31,7 +31,7 @@
   {/if}
   <Text>
     <PrimaryText>{linkInfo.title}</PrimaryText>
-    <SecondaryText>{linkInfo.description}</SecondaryText>
+    <SecondaryText>{linkInfo.description ? linkInfo.description : '...'}</SecondaryText>
   </Text>
 </Item>
 
