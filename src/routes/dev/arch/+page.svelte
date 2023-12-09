@@ -10,7 +10,7 @@
   export const archPageInfo: PageInfo = {
     shortTitle: 'Architecture',
     title: 'Architecture Contexts',
-    description: 'If building something',
+    description: 'Project types and the architecture used to build them.',
     url: '/dev/arch',
     iconName: 'domain',
     clickAction: () => {

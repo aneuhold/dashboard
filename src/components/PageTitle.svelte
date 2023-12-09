@@ -1,10 +1,13 @@
 <script lang="ts">
+  import BreadCrumb from './BreadCrumb.svelte';
+
   export let title: string;
   export let subtitle: string | null = null;
 </script>
 
+<BreadCrumb />
 <div class="title-container">
-  <h4 class={subtitle ? 'no-margin-bottom' : ''}>{title}</h4>
+  <h4 class={subtitle ? 'no-margin-bottom title' : 'title'}>{title}</h4>
   {#if subtitle}
     <div class="mdc-typography--caption mdc-theme--text-hint-on-background">{subtitle}</div>
   {/if}
@@ -19,6 +22,10 @@
     margin-bottom: 16px;
     & .no-margin-bottom {
       margin-bottom: 0px;
+    }
+
+    & .title {
+      margin-top: 8px;
     }
   }
 </style>
