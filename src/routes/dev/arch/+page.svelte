@@ -9,14 +9,14 @@
 <script lang="ts">
   import Paper, { Title, Subtitle, Content as PaperContent } from '@smui/paper';
   import { page } from '$app/stores';
-  import type { ArchitectureContext } from '../../../util/ArchitectureInfo/architectureContextInfo';
-  import ArchitectureInfo from '../../../util/ArchitectureInfo/ArchitectureInfo';
-  import architectureContextInfo from '../../../util/ArchitectureInfo/architectureContextInfo';
   import { onDestroy } from 'svelte';
-  import List, { Graphic, Item, Meta, PrimaryText, SecondaryText, Text } from '@smui/list';
+  import List, { Item, PrimaryText, SecondaryText, Text } from '@smui/list';
   import { goto } from '$app/navigation';
   import IconButton from '@smui/icon-button';
   import ArchitectureSection from './ArchitectureSection.svelte';
+  import type { ArchitectureContext } from 'util/ArchitectureInfo/architectureContextInfo';
+  import ArchitectureInfo from 'util/ArchitectureInfo/ArchitectureInfo';
+  import architectureContextInfo from 'util/ArchitectureInfo/architectureContextInfo';
 
   let archContext: ArchitectureContext | null = null;
 

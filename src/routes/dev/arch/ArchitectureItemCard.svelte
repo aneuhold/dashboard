@@ -15,8 +15,8 @@
   import MenuSurface from '@smui/menu-surface';
   import IconButton, { Icon } from '@smui/icon-button';
   import Tooltip, { Wrapper } from '@smui/tooltip';
-  import ArchitectureInfo from '../../../util/ArchitectureInfo/ArchitectureInfo';
-  import type { ArchitectureComponent } from '../../../util/ArchitectureInfo/architectureComponents';
+  import type { ArchitectureComponent } from 'util/ArchitectureInfo/architectureComponents';
+  import ArchitectureInfo from 'util/ArchitectureInfo/ArchitectureInfo';
 
   export let archComponent: ArchitectureComponent;
 

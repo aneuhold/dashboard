@@ -19,13 +19,13 @@
   import { goto } from '$app/navigation';
   import List, { Item, Text, PrimaryText, SecondaryText } from '@smui/list';
   import Paper, { Title, Content as PaperContent } from '@smui/paper';
-  import type { PageInfo } from '../../util/navInfo';
   import Graphic from '@smui/list/src/Graphic.svelte';
   import { Icon } from '@smui/icon-button';
   import type { ComponentType } from 'svelte';
   import NetlifyIcon from '$lib/svgs/NetlifyIcon.svelte';
   import DigitalOceanIcon from '$lib/svgs/DigitalOceanIcon.svelte';
   import MongoDbIcon from '$lib/svgs/MongoDBIcon.svelte';
+  import type { PageInfo } from 'util/navInfo';
 
   type LinkInfo = {
     title: string;

@@ -2,8 +2,6 @@
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/2e7125fe-8ccd-4abf-ac69-b4acae3e3483/deploy-status)](https://app.netlify.com/sites/celadon-kataifi-627143/deploys)
 
-Left off working towards turning things into contexts as far as the project type, then adding in things there from the perspective of tools.
-
 ## Developing
 
 To start working on the project simply run:
@@ -18,12 +16,8 @@ Restarting the dev server is needed whenever the theme is updated in `src/global
 
 ## Building
 
-To create a production version of your app:
+To create a production version of the app:
 
 ```bash
 yarn build
 ```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
