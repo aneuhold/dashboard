@@ -87,86 +87,44 @@
     }
   ];
 
-  const shoppingAndPurchasingLinks: Array<LinkInfo> = [
+  const shoppingLocationLinks: Array<LinkInfo> = [
     {
       title: 'Amazon',
-      description: 'Shopping',
+      description: 'For buying anything for the house, presents, or most other things.',
       clickAction: () => {
         window.open('https://www.amazon.com/', '_blank');
       },
       iconName: 'shopping_cart'
     },
     {
-      title: 'eBay',
-      description: 'Shopping',
+      title: 'All Star Health',
+      description: 'Supplements and vitamins.',
       clickAction: () => {
-        window.open('https://www.ebay.com/', '_blank');
+        window.open('https://www.allstarhealth.com/', '_blank');
+      },
+      iconName: 'fitness_center'
+    }
+  ];
+
+  const shoppingSupportLinks: Array<LinkInfo> = [
+    {
+      title: 'Google Shopping List',
+      description: 'Shopping list for the house. This is shared with Ashley.',
+      clickAction: () => {
+        window.open('https://shoppinglist.google.com/', '_blank');
       },
       iconName: 'shopping_cart'
     },
     {
-      title: 'Walmart',
-      description: 'Shopping',
+      title: 'Gift Cards',
+      description: 'Gift cards for various places.',
       clickAction: () => {
-        window.open('https://www.walmart.com/', '_blank');
+        window.open(
+          'https://docs.google.com/spreadsheets/d/1MG86022lCCH0fWj43b90CkzG6UU4rwxZwdn2qx5QgA0/edit#gid=0',
+          '_blank'
+        );
       },
-      iconName: 'shopping_cart'
-    },
-    {
-      title: 'Target',
-      description: 'Shopping',
-      clickAction: () => {
-        window.open('https://www.target.com/', '_blank');
-      },
-      iconName: 'shopping_cart'
-    },
-    {
-      title: 'Costco',
-      description: 'Shopping',
-      clickAction: () => {
-        window.open('https://www.costco.com/', '_blank');
-      },
-      iconName: 'shopping_cart'
-    },
-    {
-      title: 'Home Depot',
-      description: 'Shopping',
-      clickAction: () => {
-        window.open('https://www.homedepot.com/', '_blank');
-      },
-      iconName: 'shopping_cart'
-    },
-    {
-      title: "Lowe's",
-      description: 'Shopping',
-      clickAction: () => {
-        window.open('https://www.lowes.com/', '_blank');
-      },
-      iconName: 'shopping_cart'
-    },
-    {
-      title: 'Best Buy',
-      description: 'Shopping',
-      clickAction: () => {
-        window.open('https://www.bestbuy.com/', '_blank');
-      },
-      iconName: 'shopping_cart'
-    },
-    {
-      title: 'Newegg',
-      description: 'Shopping',
-      clickAction: () => {
-        window.open('https://www.newegg.com/', '_blank');
-      },
-      iconName: 'shopping_cart'
-    },
-    {
-      title: 'Micro Center',
-      description: 'Shopping',
-      clickAction: () => {
-        window.open('https://www.microcenter.com/', '_blank');
-      },
-      iconName: 'shopping_cart'
+      iconName: 'card_giftcard'
     }
   ];
 </script>
@@ -213,21 +171,20 @@
   <Paper>
     <Title>Shopping and Purchases</Title>
     <Content>
-      <Paper variant="outlined">
-        <Title>Something</Title>
-        <Content>Something</Content>
-      </Paper>
-      <p>Try to use gift cards here for any puchases.</p>
-      <LinkList links={shoppingAndPurchasingLinks} />
-      <h6 class="section-title">Mortgage Strategy</h6>
-      <p>
-        Most of the notes are in the <a
-          href="https://tiddlydrive.github.io/?state=%7B%22ids%22:%5B%221ujSre3E0f8HxLW4pqSTh5bFeztEB5zTx%22%5D,%22action%22:%22open%22,%22userId%22:%22112679225576170416987%22%7D#Carpets:Carpets%20Refrigerators%20Appliances%20%5B%5BWater%20Heaters%5D%5D%20%5B%5BHVAC%20Furnace%5D%5D%20%5B%5BHeat%20Exchangers%5D%5D%20%5B%5BHeating%20Ventilation%20and%20Cooling%20(HVAC)%5D%5D%20%5B%5BPlumbing%20Pipes%5D%5D%20%5B%5BPlumbing%20Vent%5D%5D%20%5B%5BPlumbing%20Trap%5D%5D%20Plumbing"
-          >home wiki</a
-        >, but generally the goal is to refinance. This can't happen right now though because the
-        interest rates are so bad. Once the interest rates get better it will be good to look into
-        this.
-      </p>
+      <div class="content">
+        <Paper variant="outlined">
+          <Title>Places to Buy Things</Title>
+          <Content>
+            <LinkList links={shoppingLocationLinks} />
+          </Content>
+        </Paper>
+        <Paper variant="outlined">
+          <Title>Purchase Support Links</Title>
+          <Content>
+            <LinkList links={shoppingSupportLinks} />
+          </Content>
+        </Paper>
+      </div>
     </Content>
   </Paper>
 </div>

@@ -12,6 +12,12 @@
 </script>
 
 <span class="breadcrumb-container">
+  {#if routeArray.length === 0}
+    <span>home</span>
+  {:else}
+    <a href="/">home</a>
+    <span>/</span>
+  {/if}
   {#each routeArray as route, index}
     {#if index > 0}
       <span>/</span>

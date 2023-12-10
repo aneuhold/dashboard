@@ -7,7 +7,7 @@
 
 <BreadCrumb />
 <div class="title-container">
-  <h4 class={subtitle ? 'no-margin-bottom title' : 'title'}>{title}</h4>
+  <h4 class="title">{title}</h4>
   {#if subtitle}
     <div class="mdc-typography--caption mdc-theme--text-hint-on-background">{subtitle}</div>
   {/if}
@@ -19,13 +19,11 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin-bottom: 16px;
-    & .no-margin-bottom {
-      margin-bottom: 0px;
-    }
+    margin-bottom: 40px;
 
     & .title {
       margin-top: 8px;
+      margin-bottom: 0px;
     }
   }
 </style>

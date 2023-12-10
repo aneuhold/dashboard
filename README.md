@@ -2,6 +2,10 @@
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/2e7125fe-8ccd-4abf-ac69-b4acae3e3483/deploy-status)](https://app.netlify.com/sites/celadon-kataifi-627143/deploys)
 
+Notes for improvement:
+
+- Maybe an `automation` route would be good? Probably.
+
 ## Developing
 
 To start working on the project simply run:
