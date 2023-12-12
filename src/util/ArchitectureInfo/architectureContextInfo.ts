@@ -1,10 +1,10 @@
 import {
-  frontendComponents,
-  type ArchitectureComponent,
-  devOpsComponents,
-  frontendTestingComponents,
   backendComponents,
-  backendTestingComponents
+  backendTestingComponents,
+  devOpsComponents,
+  frontendComponents,
+  frontendTestingComponents,
+  type ArchitectureComponent
 } from './architectureComponents';
 
 export type ArchitectureContext = {
@@ -60,6 +60,8 @@ const architectureContextInfo = {
       { component: frontendComponents.svelte },
       { component: frontendComponents.html },
       { component: frontendComponents.css },
+      { component: frontendComponents.personalAuthLibrary },
+      { component: frontendComponents.coreApiLibrary },
       { component: frontendComponents.typescript },
       { component: frontendComponents.javascript }
     ],
@@ -74,7 +76,9 @@ const architectureContextInfo = {
     backendComponents: [
       { component: backendComponents.digitalOceanFunctions },
       { component: backendComponents.digitalOceanFunctionsRepo },
-      { component: backendComponents.personalDatabaseLibrary },
+      { component: backendComponents.coreApiLibrary },
+      { component: backendComponents.backendDatabaseLibrary },
+      { component: backendComponents.coreDatabaseLibrary },
       { component: backendComponents.mongoose },
       { component: backendComponents.typescript },
       { component: backendComponents.javascript },

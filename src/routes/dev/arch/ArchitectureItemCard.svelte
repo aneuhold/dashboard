@@ -10,31 +10,48 @@
   in styles when using the menu component.
 -->
 <script lang="ts">
-  import List, { Graphic, Item, Text } from '@smui/list';
   import Card, { Content as CardContent } from '@smui/card';
-  import MenuSurface from '@smui/menu-surface';
-  import IconButton, { Icon } from '@smui/icon-button';
+  import { Icon } from '@smui/icon-button';
   import Tooltip, { Wrapper } from '@smui/tooltip';
-  import type { ArchitectureComponent } from 'util/ArchitectureInfo/architectureComponents';
+  import type { MenuButtonItem } from 'components/MenuButton.svelte';
+  import MenuButton from 'components/MenuButton.svelte';
   import ArchitectureInfo from 'util/ArchitectureInfo/ArchitectureInfo';
+  import type { ArchitectureComponent } from 'util/ArchitectureInfo/architectureComponents';
 
   export let archComponent: ArchitectureComponent;
 
   $: title = archComponent.title;
-  $: docsUrl = archComponent.docsUrl;
-  $: latestExampleProjectUrl = archComponent.latestExampleProjectUrl;
-  $: configurationUrl = archComponent.configurationUrl;
   $: categories = archComponent.categories;
   $: archComponentType = archComponent.type;
   $: iconComponent = archComponent.icon;
+  $: dependencyNames = archComponent.dependencies?.map((component) => component.title);
 
-  function openUrl(url: string | undefined) {
-    menu.setOpen(false);
-    if (url) window.open(url, '_blank');
+  let menuItems: MenuButtonItem[] = [];
+  $: if (archComponent.configurationUrl) {
+    menuItems.push({
+      title: 'Configure',
+      iconName: 'build',
+      clickAction: () => openUrl(archComponent.configurationUrl)
+    });
+  }
+  $: if (archComponent.docsUrl) {
+    menuItems.push({
+      title: 'Docs',
+      iconName: 'article',
+      clickAction: () => openUrl(archComponent.docsUrl)
+    });
+  }
+  $: if (archComponent.latestExampleProjectUrl) {
+    menuItems.push({
+      title: 'Latest Example Project or Code',
+      iconName: 'code',
+      clickAction: () => openUrl(archComponent.latestExampleProjectUrl)
+    });
   }
 
-  let menu: MenuSurface;
-  let anchor: HTMLDivElement;
+  function openUrl(url: string | undefined) {
+    if (url) window.open(url, '_blank');
+  }
 </script>
 
 <div class="container">
@@ -68,36 +85,20 @@
             {#if $$slots.default}
               <div class="mdc-deprecated-list-item__secondary-text subtitle"><slot /></div>
             {/if}
+            {#if dependencyNames}
+              <div class="mdc-typography--caption mdc-theme--text-hint-on-background dependencies">
+                <span>Dependencies: </span>
+                <ul class="dependencies-list">
+                  {#each dependencyNames as dependencyName}
+                    <li>{dependencyName}</li>
+                  {/each}
+                </ul>
+              </div>
+            {/if}
           </div>
         </div>
-        {#if docsUrl || latestExampleProjectUrl}
-          <div bind:this={anchor}>
-            <IconButton class="material-icons dimmed-color" on:click={() => menu.setOpen(true)}>
-              menu
-            </IconButton>
-            <MenuSurface bind:this={menu} anchorElement={anchor} anchorCorner="BOTTOM_RIGHT">
-              <List>
-                {#if configurationUrl}
-                  <Item on:SMUI:action={() => openUrl(configurationUrl)}>
-                    <Graphic class="material-icons">build</Graphic>
-                    <Text>Configure</Text>
-                  </Item>
-                {/if}
-                {#if docsUrl}
-                  <Item on:SMUI:action={() => openUrl(docsUrl)}>
-                    <Graphic class="material-icons">article</Graphic>
-                    <Text>Docs</Text>
-                  </Item>
-                {/if}
-                {#if latestExampleProjectUrl}
-                  <Item on:SMUI:action={() => openUrl(latestExampleProjectUrl)}>
-                    <Graphic class="material-icons">code</Graphic>
-                    <Text>Latest Example Project or Code</Text>
-                  </Item>
-                {/if}
-              </List>
-            </MenuSurface>
-          </div>
+        {#if menuItems.length > 0}
+          <MenuButton {menuItems} />
         {/if}
       </div>
     </CardContent>
@@ -135,5 +136,13 @@
     flex-direction: row;
     gap: 16px;
     align-items: center;
+  }
+  .dependencies {
+    margin-top: 4px;
+  }
+  .dependencies-list {
+    margin-top: 0px;
+    margin-bottom: 0px;
+    padding-inline-start: 20px;
   }
 </style>

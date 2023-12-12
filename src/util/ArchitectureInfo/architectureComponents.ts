@@ -1,3 +1,18 @@
+import CssIcon from '$lib/svgs/CSSIcon.svelte';
+import DenoIcon from '$lib/svgs/DenoIcon.svelte';
+import DigitalOceanIcon from '$lib/svgs/DigitalOceanIcon.svelte';
+import GitHubIcon from '$lib/svgs/GitHubIcon.svelte';
+import GoogleDomainsIcon from '$lib/svgs/GoogleDomainsIcon.svelte';
+import HtmlIcon from '$lib/svgs/HTMLIcon.svelte';
+import JavaScriptIcon from '$lib/svgs/JavaScriptIcon.svelte';
+import JestIcon from '$lib/svgs/JestIcon.svelte';
+import MongoDbIcon from '$lib/svgs/MongoDBIcon.svelte';
+import NpmIcon from '$lib/svgs/NPMIcon.svelte';
+import NetlifyIcon from '$lib/svgs/NetlifyIcon.svelte';
+import NodeJsIcon from '$lib/svgs/NodeJSIcon.svelte';
+import SvelteIcon from '$lib/svgs/SvelteIcon.svelte';
+import TypeScriptIcon from '$lib/svgs/TypeScriptIcon.svelte';
+import VitestIcon from '$lib/svgs/VitestIcon.svelte';
 import type { ComponentType } from 'svelte';
 import {
   backendCategories,
@@ -5,21 +20,6 @@ import {
   frontendCategories,
   type ArchitectureCategoryInfo
 } from './architectureCategories';
-import SvelteIcon from '$lib/svgs/SvelteIcon.svelte';
-import CssIcon from '$lib/svgs/CSSIcon.svelte';
-import TypeScriptIcon from '$lib/svgs/TypeScriptIcon.svelte';
-import JavaScriptIcon from '$lib/svgs/JavaScriptIcon.svelte';
-import HtmlIcon from '$lib/svgs/HTMLIcon.svelte';
-import VitestIcon from '$lib/svgs/VitestIcon.svelte';
-import GitHubIcon from '$lib/svgs/GitHubIcon.svelte';
-import GoogleDomainsIcon from '$lib/svgs/GoogleDomainsIcon.svelte';
-import NetlifyIcon from '$lib/svgs/NetlifyIcon.svelte';
-import NodeJsIcon from '$lib/svgs/NodeJSIcon.svelte';
-import JestIcon from '$lib/svgs/JestIcon.svelte';
-import DenoIcon from '$lib/svgs/DenoIcon.svelte';
-import DigitalOceanIcon from '$lib/svgs/DigitalOceanIcon.svelte';
-import MongoDbIcon from '$lib/svgs/MongoDBIcon.svelte';
-import NpmIcon from '$lib/svgs/NPMIcon.svelte';
 
 /**
  * A paritcular component that can be chosen within an architecture category.
@@ -39,6 +39,11 @@ export type ArchitectureComponent = {
    */
   configurationUrl?: string;
   icon?: ComponentType;
+  /**
+   * Optional dependencies listing. These should be the title of the dependency
+   * from the components here.
+   */
+  dependencies?: ArchitectureComponent[];
 };
 
 export const ArchitectureComponentType = {
@@ -49,15 +54,66 @@ export const ArchitectureComponentType = {
 export type ArchitectureComponentType =
   (typeof ArchitectureComponentType)[keyof typeof ArchitectureComponentType];
 
+/* --- Core Components --- */
+
+const svelte: ArchitectureComponent = {
+  title: 'Svelte',
+  type: ArchitectureComponentType.framework,
+  categories: [frontendCategories.framework],
+  generalDescription: 'A frontend framework that compiles to vanilla JavaScript.',
+  docsUrl: 'https://svelte.dev/docs',
+  icon: SvelteIcon
+};
+const coreDatabaseLibrary: ArchitectureComponent = {
+  title: '🚧❗️ Core Database Library (core-ts-db-lib)',
+  generalDescription:
+    'This still needs to be built. A personal database library that provides types for the database everywhere it is needed.',
+  icon: GitHubIcon,
+  type: ArchitectureComponentType.tool,
+  categories: [backendCategories.library, frontendCategories.library]
+};
+const coreApiLibrary: ArchitectureComponent = {
+  title: '🚧❗️ Core API Library (core-ts-api-lib)',
+  generalDescription:
+    'This still needs to be built. A core TypeScript API library that will provide the input and output types for any personal API, and methods to call the API which can be used on the backend or frontend. At first, this will just provide inputs and outputs to Digital Ocean Functions. In the future, it might be helpful to build a separate library, that uses this one, for common functionality on the backend specifically. Ideally this library should re-export types from the core database library.',
+  icon: GitHubIcon,
+  type: ArchitectureComponentType.tool,
+  categories: [frontendCategories.library, backendCategories.library],
+  dependencies: [coreDatabaseLibrary]
+};
+const backendDatabaseLibrary: ArchitectureComponent = {
+  title: '🚧❗️ Backend Database Library (be-ts-db-lib)',
+  generalDescription:
+    'This still needs to be built. A personal backend database library that can be used to interact with ideally, any other database. So it is abstracted. At first it will interact with MongoDB. This should only be pulled in to backend code. This is pulled in to digital-ocean-functions and the frontend auth library. For the frontend, it should export types.',
+  icon: GitHubIcon,
+  type: ArchitectureComponentType.tool,
+  categories: [backendCategories.library],
+  dependencies: [coreDatabaseLibrary]
+};
+const mongoDb: ArchitectureComponent = {
+  title: 'MongoDB',
+  generalDescription: 'Currently using MongoDB Atlas to manage.',
+  type: ArchitectureComponentType.tool,
+  categories: [backendCategories.database],
+  docsUrl: 'https://docs.mongodb.com/',
+  configurationUrl: 'https://cloud.mongodb.com/v2/655933be7ffb754535fbb6af#/overview',
+  icon: MongoDbIcon
+};
+
+/* --- End Core Components --- */
+
 export const frontendComponents = {
-  svelte: {
-    title: 'Svelte',
+  svelteKit: {
+    title: 'SvelteKit',
     type: ArchitectureComponentType.framework,
-    categories: [frontendCategories.framework],
-    generalDescription: 'A frontend framework that compiles to vanilla JavaScript.',
-    docsUrl: 'https://svelte.dev/docs',
-    icon: SvelteIcon
+    generalDescription:
+      'Things related to the backend in SvelteKit such as server-side rendering is not being used. This is because a separate backend would be required to be bundled with the frontend, which would make the project more complicated. Instead, the backend is contacted via HTTP requests to Digital Ocean functions.',
+    categories: [frontendCategories.framework, frontendCategories.build],
+    docsUrl: 'https://kit.svelte.dev/docs',
+    icon: SvelteIcon,
+    dependencies: [svelte]
   },
+  svelte,
   react: {
     title: 'React',
     type: ArchitectureComponentType.framework,
@@ -75,15 +131,6 @@ export const frontendComponents = {
     type: ArchitectureComponentType.framework,
     categories: [frontendCategories.framework],
     docsUrl: 'https://angular.io/docs'
-  },
-  svelteKit: {
-    title: 'SvelteKit',
-    type: ArchitectureComponentType.framework,
-    generalDescription:
-      'Things related to the backend in SvelteKit such as server-side rendering is not being used. This is because a separate backend would be required to be bundled with the frontend, which would make the project more complicated. Instead, the backend is contacted via HTTP requests to Digital Ocean functions.',
-    categories: [frontendCategories.framework, frontendCategories.build],
-    docsUrl: 'https://kit.svelte.dev/docs',
-    icon: SvelteIcon
   },
   html: {
     title: 'HTML',
@@ -105,6 +152,16 @@ export const frontendComponents = {
     categories: [frontendCategories.language],
     docsUrl: 'https://sass-lang.com/documentation'
   },
+  personalAuthLibrary: {
+    title: '🚧❗️ Frontend Auth Library (fe-ts-auth-lib)',
+    generalDescription:
+      'A frontend authentication library that has yet to be built. The main objective of this library is to use the backend APIs to authenticate users on the frontend. If the situation arises that types are needed on the backend as well for some reason, then a core auth lib can be created.',
+    type: ArchitectureComponentType.tool,
+    categories: [frontendCategories.library],
+    icon: GitHubIcon,
+    dependencies: [coreApiLibrary]
+  },
+  coreApiLibrary,
   typescript: {
     title: 'TypeScript',
     type: ArchitectureComponentType.language,
@@ -191,20 +248,16 @@ export const backendComponents = {
   digitalOceanFunctionsRepo: {
     title: 'digital-ocean-functions Repo',
     generalDescription:
-      'Contains all the DigitalOcean functions code used personally for every project.',
+      'Contains all the DigitalOcean functions code used personally for every project. This is where the backend API endpoints are built.',
     type: ArchitectureComponentType.tool,
     categories: [backendCategories.repository],
     docsUrl: 'https://github.com/aneuhold/digital-ocean-functions',
-    icon: GitHubIcon
-  },
-  personalDatabaseLibrary: {
-    title: '🚧❗️ Personal Database Library',
-    generalDescription:
-      'This still needs to be built. A personal database library that can be used to interact with ideally, any other database. So it is abstracted. At first it will interact with MongoDB.',
     icon: GitHubIcon,
-    type: ArchitectureComponentType.tool,
-    categories: [backendCategories.library]
+    dependencies: [coreApiLibrary, backendDatabaseLibrary]
   },
+  coreApiLibrary,
+  backendDatabaseLibrary,
+  coreDatabaseLibrary,
   mongoose: {
     title: 'Mongoose',
     generalDescription:
@@ -212,17 +265,10 @@ export const backendComponents = {
     type: ArchitectureComponentType.tool,
     categories: [backendCategories.orm, backendCategories.library],
     docsUrl: 'https://mongoosejs.com/docs/guide.html',
-    icon: MongoDbIcon
+    icon: MongoDbIcon,
+    dependencies: [mongoDb]
   },
-  mongoDb: {
-    title: 'MongoDB',
-    generalDescription: 'Currently using MongoDB Atlas to manage.',
-    type: ArchitectureComponentType.tool,
-    categories: [backendCategories.database],
-    docsUrl: 'https://docs.mongodb.com/',
-    configurationUrl: 'https://cloud.mongodb.com/v2/655933be7ffb754535fbb6af#/overview',
-    icon: MongoDbIcon
-  }
+  mongoDb
 } satisfies Record<string, ArchitectureComponent>;
 
 export const backendTestingComponents = {
