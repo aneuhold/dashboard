@@ -62,6 +62,7 @@ const architectureContextInfo = {
       { component: frontendComponents.css },
       { component: frontendComponents.personalAuthLibrary },
       { component: frontendComponents.coreApiLibrary },
+      { component: frontendComponents.coreTypeScriptLibrary },
       { component: frontendComponents.typescript },
       { component: frontendComponents.javascript }
     ],
@@ -71,6 +72,7 @@ const architectureContextInfo = {
           'This is just being used with Svelte because it comes bundled. It might be good to switch to Jest at some point so it aligns with the backend.',
         component: frontendTestingComponents.vitest
       },
+      { component: frontendTestingComponents.coreTypeScriptLibrary },
       { component: frontendTestingComponents.typescript }
     ],
     backendComponents: [
@@ -79,7 +81,8 @@ const architectureContextInfo = {
       { component: backendComponents.coreApiLibrary },
       { component: backendComponents.backendDatabaseLibrary },
       { component: backendComponents.coreDatabaseLibrary },
-      { component: backendComponents.mongoose },
+      { component: backendComponents.backendTypeScriptLibrary },
+      { component: backendComponents.coreTypeScriptLibrary },
       { component: backendComponents.typescript },
       { component: backendComponents.javascript },
       { component: backendComponents.nodeJs },
@@ -87,6 +90,7 @@ const architectureContextInfo = {
     ],
     backendTestingComponents: [
       { component: backendTestingComponents.jest },
+      { component: backendTestingComponents.coreTypeScriptLibrary },
       { component: backendTestingComponents.typescript }
     ],
     devOpsComponents: [
@@ -103,7 +107,13 @@ const architectureContextInfo = {
   typeScriptLibrary: {
     title: '🛠️ TypeScript Library',
     description: 'A TypeScript library that can be pulled in to a backend or frontend project.',
-    backendComponents: [{ component: backendComponents.typescript }],
+    backendComponents: [
+      {
+        component: backendComponents.typescript,
+        contextSpecificDescription:
+          'Use core-ts-lib as an example. Basically tsc just needs to be ran to build to a lib folder, which is then deployed with npm.'
+      }
+    ],
     devOpsComponents: [{ component: devOpsComponents.npm }]
   },
   cliTool: {

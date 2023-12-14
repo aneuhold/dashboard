@@ -56,13 +56,14 @@ export type ArchitectureComponentType =
 
 /* --- Core Components --- */
 
-const svelte: ArchitectureComponent = {
-  title: 'Svelte',
-  type: ArchitectureComponentType.framework,
-  categories: [frontendCategories.framework],
-  generalDescription: 'A frontend framework that compiles to vanilla JavaScript.',
-  docsUrl: 'https://svelte.dev/docs',
-  icon: SvelteIcon
+const coreTypeScriptLibrary: ArchitectureComponent = {
+  title: 'Core TypeScript Library (core-ts-lib)',
+  generalDescription:
+    'A personal TypeScript library that can be pulled in to any project. This is the main library used in all projects. It should only contain tools that are used in every project, backend or frontend.',
+  icon: GitHubIcon,
+  type: ArchitectureComponentType.tool,
+  docsUrl: 'https://github.com/aneuhold/core-ts-lib',
+  categories: [backendCategories.library, frontendCategories.library]
 };
 const coreDatabaseLibrary: ArchitectureComponent = {
   title: '🚧❗️ Core Database Library (core-ts-db-lib)',
@@ -79,16 +80,34 @@ const coreApiLibrary: ArchitectureComponent = {
   icon: GitHubIcon,
   type: ArchitectureComponentType.tool,
   categories: [frontendCategories.library, backendCategories.library],
-  dependencies: [coreDatabaseLibrary]
+  dependencies: [coreDatabaseLibrary, coreTypeScriptLibrary]
+};
+const backendTypeScriptLibrary: ArchitectureComponent = {
+  title: 'Backend TypeScript Library (be-ts-lib)',
+  generalDescription:
+    'A personal backend TypeScript library that can be pulled in to any backend project. This contains common functionality for any backend project, such as configuration.',
+  icon: GitHubIcon,
+  type: ArchitectureComponentType.tool,
+  docsUrl: 'https://github.com/aneuhold/be-ts-lib',
+  categories: [backendCategories.library, frontendCategories.library],
+  dependencies: [coreTypeScriptLibrary]
 };
 const backendDatabaseLibrary: ArchitectureComponent = {
   title: '🚧❗️ Backend Database Library (be-ts-db-lib)',
   generalDescription:
-    'This still needs to be built. A personal backend database library that can be used to interact with ideally, any other database. So it is abstracted. At first it will interact with MongoDB. This should only be pulled in to backend code. This is pulled in to digital-ocean-functions and the frontend auth library. For the frontend, it should export types.',
+    'This still needs to be built. A personal backend database library that can be used to interact with ideally, any other database. So it is abstracted. At first it will interact with MongoDB. This should only be pulled in to backend code.',
   icon: GitHubIcon,
   type: ArchitectureComponentType.tool,
   categories: [backendCategories.library],
-  dependencies: [coreDatabaseLibrary]
+  dependencies: [coreDatabaseLibrary, backendTypeScriptLibrary, coreTypeScriptLibrary]
+};
+const svelte: ArchitectureComponent = {
+  title: 'Svelte',
+  type: ArchitectureComponentType.framework,
+  categories: [frontendCategories.framework],
+  generalDescription: 'A frontend framework that compiles to vanilla JavaScript.',
+  docsUrl: 'https://svelte.dev/docs',
+  icon: SvelteIcon
 };
 const mongoDb: ArchitectureComponent = {
   title: 'MongoDB',
@@ -159,9 +178,10 @@ export const frontendComponents = {
     type: ArchitectureComponentType.tool,
     categories: [frontendCategories.library],
     icon: GitHubIcon,
-    dependencies: [coreApiLibrary]
+    dependencies: [coreApiLibrary, coreTypeScriptLibrary]
   },
   coreApiLibrary,
+  coreTypeScriptLibrary,
   typescript: {
     title: 'TypeScript',
     type: ArchitectureComponentType.language,
@@ -179,7 +199,12 @@ export const frontendComponents = {
 } satisfies Record<string, ArchitectureComponent>;
 
 export const frontendTestingComponents = {
-  typescript: frontendComponents.typescript,
+  cypress: {
+    title: 'Cypress',
+    type: ArchitectureComponentType.tool,
+    categories: [frontendCategories.e2eTesting],
+    docsUrl: 'https://docs.cypress.io/guides/overview/why-cypress'
+  },
   jest: {
     title: 'Jest',
     type: ArchitectureComponentType.tool,
@@ -201,12 +226,8 @@ export const frontendTestingComponents = {
     docsUrl: 'https://vitest.dev/guide/',
     icon: VitestIcon
   },
-  cypress: {
-    title: 'Cypress',
-    type: ArchitectureComponentType.tool,
-    categories: [frontendCategories.e2eTesting],
-    docsUrl: 'https://docs.cypress.io/guides/overview/why-cypress'
-  }
+  coreTypeScriptLibrary,
+  typescript: frontendComponents.typescript
 } satisfies Record<string, ArchitectureComponent>;
 
 /**
@@ -258,6 +279,8 @@ export const backendComponents = {
   coreApiLibrary,
   backendDatabaseLibrary,
   coreDatabaseLibrary,
+  backendTypeScriptLibrary,
+  coreTypeScriptLibrary,
   mongoose: {
     title: 'Mongoose',
     generalDescription:
@@ -272,8 +295,10 @@ export const backendComponents = {
 } satisfies Record<string, ArchitectureComponent>;
 
 export const backendTestingComponents = {
-  typescript: frontendComponents.typescript,
-  jest: frontendTestingComponents.jest
+  jest: frontendTestingComponents.jest,
+  backendTypeScriptLibrary,
+  coreTypeScriptLibrary,
+  typescript: frontendComponents.typescript
 } satisfies Record<string, ArchitectureComponent>;
 
 export const devOpsComponents = {

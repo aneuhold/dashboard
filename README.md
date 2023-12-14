@@ -12,6 +12,11 @@ To start working on the project simply run:
 
 - `yarn dev` then navigate to the URL it shows in the terminal
 
+Some nice pages to have up at the same time:
+
+- [Svelte Material UI](https://sveltematerialui.com/demo/accordion/)
+- [Material Symbols and Icons](https://fonts.google.com/icons?selected=Material+Symbols+Outlined:fitness_center:FILL@0;wght@400;GRAD@0;opsz@24&icon.query=workout)
+
 ### Adding new Material UI Components
 
 To use new Material UI components, add the package needed from [the documentation here](https://sveltematerialui.com/demo/accordion/). Then restart the dev server.
