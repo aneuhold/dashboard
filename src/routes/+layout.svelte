@@ -11,8 +11,8 @@
   import { apiKey } from '../stores/apiKey';
   import { password } from '../stores/password';
 
-  let typedUserName = LocalData.username;
-  let typedPassword = LocalData.password;
+  let typedUserName = '';
+  let typedPassword = '';
   let navBar: NavBar;
   let processingCredentials = false;
   let apiKeyExists = false;
@@ -28,6 +28,11 @@
       }
     })
   );
+
+  LocalData.initialize().then(() => {
+    typedUserName = LocalData.username;
+    typedPassword = LocalData.password;
+  });
 
   function handleSubmit() {
     processingCredentials = true;

@@ -4,6 +4,12 @@ import LocalData from '../util/LocalData';
 function createApiKeyStore() {
   const { subscribe, set, update } = writable<string>(LocalData.apiKey);
 
+  if (typeof window === 'undefined') {
+    LocalData.initialize().then(() => {
+      set(LocalData.apiKey);
+    });
+  }
+
   return {
     subscribe,
     set: (apiKey: string) => {

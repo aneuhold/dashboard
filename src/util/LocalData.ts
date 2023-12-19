@@ -1,3 +1,5 @@
+import { sleep } from '@aneuhold/core-ts-lib';
+
 export default class LocalData {
   /**
    * A prefix before all stored key names in case cache busting needs to happen
@@ -10,6 +12,19 @@ export default class LocalData {
     username: `${this.PREFIX}username`,
     apiKey: `${this.PREFIX}apiKey`
   };
+
+  /**
+   * An initialization function that should be called before any other
+   * functions in this class are called. This is because sometimes the JS
+   * loads before the window somehow.
+   *
+   * Most likely this should only be called in stores it seems.
+   */
+  static async initialize() {
+    while (typeof window === 'undefined') {
+      await sleep(5);
+    }
+  }
 
   private static storeValue(key: string, value: string) {
     window.localStorage.setItem(key, value);
