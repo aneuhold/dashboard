@@ -1,3 +1,7 @@
+/**
+ * Super simple password handler. This can potentially be used on the backend
+ * perhaps.
+ */
 export default class PasswordHandler {
   static async encryptPassword(password: string): Promise<string> {
     const encoder = new TextEncoder();

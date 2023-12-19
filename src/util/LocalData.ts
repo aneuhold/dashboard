@@ -6,7 +6,9 @@ export default class LocalData {
   private static PREFIX = 'v1-';
 
   private static storedKeyNames = {
-    password: `${this.PREFIX}password`
+    password: `${this.PREFIX}password`,
+    username: `${this.PREFIX}username`,
+    apiKey: `${this.PREFIX}apiKey`
   };
 
   private static storeValue(key: string, value: string) {
@@ -27,6 +29,30 @@ export default class LocalData {
 
   static get password(): string {
     const currentlyStoredValue = this.getValue(LocalData.storedKeyNames.password);
+    if (currentlyStoredValue && currentlyStoredValue !== '') {
+      return currentlyStoredValue;
+    }
+    return '';
+  }
+
+  static set username(newUsername: string) {
+    this.storeValue(LocalData.storedKeyNames.username, newUsername);
+  }
+
+  static get username(): string {
+    const currentlyStoredValue = this.getValue(LocalData.storedKeyNames.username);
+    if (currentlyStoredValue && currentlyStoredValue !== '') {
+      return currentlyStoredValue;
+    }
+    return '';
+  }
+
+  static set apiKey(newApiKey: string) {
+    this.storeValue(LocalData.storedKeyNames.apiKey, newApiKey);
+  }
+
+  static get apiKey(): string {
+    const currentlyStoredValue = this.getValue(LocalData.storedKeyNames.apiKey);
     if (currentlyStoredValue && currentlyStoredValue !== '') {
       return currentlyStoredValue;
     }

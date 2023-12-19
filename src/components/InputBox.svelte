@@ -1,7 +1,7 @@
 <script lang="ts">
   import Textfield from '@smui/textfield';
-  import Icon from '@smui/textfield/icon';
   import HelperText from '@smui/textfield/helper-text';
+  import Icon from '@smui/textfield/icon';
   import { createEventDispatcher } from 'svelte';
 
   /**
@@ -16,6 +16,7 @@
   export let inputValue: string = '';
   export let validationMessage: string = '';
   export let disable: boolean = false;
+  export let showSubmitButton: boolean = false;
 
   let focused = false;
   let dirty = false;
@@ -48,14 +49,14 @@
     style="min-width: 250px;"
     on:focus={() => (focused = true)}
     on:blur={() => (focused = false)}
-    withTrailingIcon={!disabled}
+    withTrailingIcon={showSubmitButton && !disabled}
   >
     <!--
     Since this icon is conditional, it needs to be wrapped
     in a fragment, and we need to provide withTrailingIcon.
   -->
     <svelte:fragment slot="trailingIcon">
-      {#if !disabled}
+      {#if showSubmitButton && !disabled}
         <Icon class="material-icons" role="button" on:click={handleSubmit}>send</Icon>
       {/if}
     </svelte:fragment>

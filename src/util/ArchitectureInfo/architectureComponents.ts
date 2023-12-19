@@ -66,18 +66,20 @@ const coreTypeScriptLibrary: ArchitectureComponent = {
   categories: [backendCategories.library, frontendCategories.library]
 };
 const coreDatabaseLibrary: ArchitectureComponent = {
-  title: '🚧❗️ Core Database Library (core-ts-db-lib)',
+  title: 'Core Database Library (core-ts-db-lib)',
   generalDescription:
-    'This still needs to be built. A personal database library that provides types for the database everywhere it is needed.',
+    'A personal database library that provides types for the database everywhere it is needed.',
   icon: GitHubIcon,
+  docsUrl: 'https://github.com/aneuhold/core-ts-db-lib',
   type: ArchitectureComponentType.tool,
   categories: [backendCategories.library, frontendCategories.library]
 };
 const coreApiLibrary: ArchitectureComponent = {
-  title: '🚧❗️ Core API Library (core-ts-api-lib)',
+  title: 'Core API Library (core-ts-api-lib)',
   generalDescription:
-    'This still needs to be built. A core TypeScript API library that will provide the input and output types for any personal API, and methods to call the API which can be used on the backend or frontend. At first, this will just provide inputs and outputs to Digital Ocean Functions. In the future, it might be helpful to build a separate library, that uses this one, for common functionality on the backend specifically. Ideally this library should re-export types from the core database library.',
+    'A core TypeScript API library that will provide the input and output types for any personal API, and methods to call the API which can be used on the backend or frontend. At first, this will just provide inputs and outputs to Digital Ocean Functions. In the future, it might be helpful to build a separate library, that uses this one, for common functionality on the backend specifically. Ideally this library should re-export types from the core database library.',
   icon: GitHubIcon,
+  docsUrl: 'https://github.com/aneuhold/core-ts-api-lib',
   type: ArchitectureComponentType.tool,
   categories: [frontendCategories.library, backendCategories.library],
   dependencies: [coreDatabaseLibrary, coreTypeScriptLibrary]
@@ -93,11 +95,12 @@ const backendTypeScriptLibrary: ArchitectureComponent = {
   dependencies: [coreTypeScriptLibrary]
 };
 const backendDatabaseLibrary: ArchitectureComponent = {
-  title: '🚧❗️ Backend Database Library (be-ts-db-lib)',
+  title: 'Backend Database Library (be-ts-db-lib)',
   generalDescription:
-    'This still needs to be built. A personal backend database library that can be used to interact with ideally, any other database. So it is abstracted. At first it will interact with MongoDB. This should only be pulled in to backend code.',
+    'A personal backend database library that can be used to interact with ideally, any other database. So it is abstracted. At first it will interact with MongoDB. This should only be pulled in to backend code.',
   icon: GitHubIcon,
   type: ArchitectureComponentType.tool,
+  docsUrl: 'https://github.com/aneuhold/be-ts-db-lib',
   categories: [backendCategories.library],
   dependencies: [coreDatabaseLibrary, backendTypeScriptLibrary, coreTypeScriptLibrary]
 };
@@ -111,7 +114,8 @@ const svelte: ArchitectureComponent = {
 };
 const mongoDb: ArchitectureComponent = {
   title: 'MongoDB',
-  generalDescription: 'Currently using MongoDB Atlas to manage.',
+  generalDescription:
+    'Currently using MongoDB Atlas to manage. Login with Google account. This is setup to allow access from anywhere at the moment (to allow DO Functions to use it). This is potentially a security issue, but in theory, someone would need to guess not only the URL, but the username and password as well.',
   type: ArchitectureComponentType.tool,
   categories: [backendCategories.database],
   docsUrl: 'https://docs.mongodb.com/',
@@ -261,7 +265,7 @@ export const backendComponents = {
     title: 'DigitalOcean Functions',
     type: ArchitectureComponentType.tool,
     categories: [backendCategories.cloudFunctions],
-    docsUrl: 'https://www.digitalocean.com/docs/app-platform/how-to/use-functions/',
+    docsUrl: 'https://docs.digitalocean.com/products/functions/',
     configurationUrl:
       'https://cloud.digitalocean.com/functions/fn-66dd3ef6-c21d-46dc-b7ae-caf2ac8041ec?i=228288',
     icon: DigitalOceanIcon

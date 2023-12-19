@@ -15,6 +15,26 @@
     "@jridgewell/gen-mapping" "^0.3.0"
     "@jridgewell/trace-mapping" "^0.3.9"
 
+"@aneuhold/core-ts-api-lib@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@aneuhold/core-ts-api-lib/-/core-ts-api-lib-1.0.3.tgz#0be622f22a860fed5b21d581f1bfa7a4e986d3b8"
+  integrity sha512-lMqwIP0ZAlImCV/S85gs1/qvuwipWb823VwgA2isjJ6cbJeDMmZArddkd70I28QuuZbmwTZKS4riZOMXS3uxXg==
+  dependencies:
+    "@aneuhold/core-ts-db-lib" "^1.0.3"
+    "@aneuhold/core-ts-lib" "^1.1.7"
+
+"@aneuhold/core-ts-db-lib@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@aneuhold/core-ts-db-lib/-/core-ts-db-lib-1.0.3.tgz#b43f3fb028baecf43766f9f48e1a02610d3b1e25"
+  integrity sha512-Pd/Zwg9Fw3YvSozxmui9B/QdkzzqIda2os0YkWOAq3JSew/p/cIt3EaJJCIMkNHTP/b6oiu4VdNYAroS4FHHOg==
+  dependencies:
+    bson "^6.2.0"
+
+"@aneuhold/core-ts-lib@^1.1.7":
+  version "1.1.7"
+  resolved "https://registry.yarnpkg.com/@aneuhold/core-ts-lib/-/core-ts-lib-1.1.7.tgz#fe041a59729d4952410ba5152c180f7ac17b347c"
+  integrity sha512-bZXXod0pqQiKpg6P3NCRy+FXm5J2LDwhEE2v5rgOgEXfARliBpXncd1hnveR2EVEgNlgTqyUkjqSlRj52Hl6BQ==
+
 "@esbuild/android-arm64@0.18.20":
   version "0.18.20"
   resolved "https://registry.yarnpkg.com/@esbuild/android-arm64/-/android-arm64-0.18.20.tgz#984b4f9c8d0377443cc2dfcef266d02244593622"
@@ -382,6 +402,19 @@
     "@material/theme" "^14.0.0"
     tslib "^2.1.0"
 
+"@material/circular-progress@^14.0.0":
+  version "14.0.0"
+  resolved "https://registry.yarnpkg.com/@material/circular-progress/-/circular-progress-14.0.0.tgz#95c2859900a0b7dba1f5acb68d6d08923c6c7d2d"
+  integrity sha512-7EdkP6ty54g6qs6zzlsw29vWlUyrcSWr9b4pGGx4D/iNJww+eyxXZ07iWoNOr4uLgguauWEft2axpQiFCwFD0g==
+  dependencies:
+    "@material/animation" "^14.0.0"
+    "@material/base" "^14.0.0"
+    "@material/feature-targeting" "^14.0.0"
+    "@material/progress-indicator" "^14.0.0"
+    "@material/rtl" "^14.0.0"
+    "@material/theme" "^14.0.0"
+    tslib "^2.1.0"
+
 "@material/density@^14.0.0":
   version "14.0.0"
   resolved "https://registry.yarnpkg.com/@material/density/-/density-14.0.0.tgz#584c4f3468c86c96e361ebe7ba6723f4aa6cd548"
@@ -563,6 +596,13 @@
     "@material/rtl" "^14.0.0"
     "@material/shape" "^14.0.0"
     "@material/theme" "^14.0.0"
+    tslib "^2.1.0"
+
+"@material/progress-indicator@^14.0.0":
+  version "14.0.0"
+  resolved "https://registry.yarnpkg.com/@material/progress-indicator/-/progress-indicator-14.0.0.tgz#638e46207746d24e87b7794c0492ee11764481db"
+  integrity sha512-09JRTuIySxs670Tcy4jVlqCUbyrO+Ad6z3nHnAi8pYl74duco4n/9jTROV0mlFdr9NIFifnd08lKbiFLDmfJGQ==
+  dependencies:
     tslib "^2.1.0"
 
 "@material/ripple@^14.0.0":
@@ -815,6 +855,15 @@
     "@smui/common" "^7.0.0-beta.15"
     "@smui/icon-button" "^7.0.0-beta.15"
     "@smui/ripple" "^7.0.0-beta.15"
+    svelte2tsx "^0.6.21"
+
+"@smui/circular-progress@^7.0.0-beta.15":
+  version "7.0.0-beta.15"
+  resolved "https://registry.yarnpkg.com/@smui/circular-progress/-/circular-progress-7.0.0-beta.15.tgz#f677c8c42691bb67e0f9ed7537e8e601b43d0df9"
+  integrity sha512-nqtVr8w1+x4nHkkzb+JK4yAt/DyJDjaFxg6cT/X58FV1r4SAEMSFSobqtQzw0KNT6KCEnhE/MliGNLBNro2ONA==
+  dependencies:
+    "@material/circular-progress" "^14.0.0"
+    "@smui/common" "^7.0.0-beta.15"
     svelte2tsx "^0.6.21"
 
 "@smui/common@^7.0.0-beta.15":
@@ -1321,6 +1370,11 @@ braces@^3.0.2, braces@~3.0.2:
   integrity sha512-b8um+L1RzM3WDSzvhm6gIz1yfTbBt6YTlcEKAvsmqCZZFw46z626lVj9j1yEPW33H5H+lBQpZMP1k8l+78Ha0A==
   dependencies:
     fill-range "^7.0.1"
+
+bson@^6.2.0:
+  version "6.2.0"
+  resolved "https://registry.yarnpkg.com/bson/-/bson-6.2.0.tgz#4b6acafc266ba18eeee111373c2699304a9ba0a3"
+  integrity sha512-ID1cI+7bazPDyL9wYy9GaQ8gEEohWvcUl/Yf0dIdutJxnmInEEyCsb4awy/OiBfall7zBA179Pahi3vCdFze3Q==
 
 buffer-crc32@^0.2.5:
   version "0.2.13"

@@ -6,14 +6,17 @@
     "build": "yarn theme && vite build",
     "preview": "yarn theme && vite preview",
     "theme": "smui-theme compile static/smui.css -i src/globalStyles",
-    "test": "vitest"
+    "test": "vitest",
+    "upgrade:core": "yarn upgrade --latest --pattern @aneuhold"
   },
   "type": "module",
   "devDependencies": {
+    "@aneuhold/core-ts-api-lib": "^1.0.3",
     "@fontsource/fira-mono": "^4.5.10",
     "@neoconfetti/svelte": "^1.0.0",
     "@smui/button": "^7.0.0-beta.15",
     "@smui/card": "^7.0.0-beta.15",
+    "@smui/circular-progress": "^7.0.0-beta.15",
     "@smui/dialog": "^7.0.0-beta.15",
     "@smui/drawer": "^7.0.0-beta.15",
     "@smui/icon-button": "^7.0.0-beta.15",

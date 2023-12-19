@@ -1,16 +1,16 @@
 <script lang="ts">
-  import TopAppBar, { AutoAdjust, Row, Section, Title } from '@smui/top-app-bar';
-  import IconButton, { Icon } from '@smui/icon-button';
-  import { password } from '../stores/password';
   import { goto } from '$app/navigation';
+  import GitHubIcon from '$lib/svgs/GitHubIcon.svelte';
+  import IconButton, { Icon } from '@smui/icon-button';
+  import TopAppBar, { AutoAdjust, Row, Section, Title } from '@smui/top-app-bar';
+  import { apiKey } from '../stores/apiKey';
   import { navDrawerOpen } from '../stores/navDrawerOpen';
   import NavDrawer from './NavDrawer.svelte';
-  import GitHubIcon from '$lib/svgs/GitHubIcon.svelte';
 
   let topAppBar: TopAppBar;
 
   function handleLogOut() {
-    password.set('');
+    apiKey.set('');
   }
 </script>
 

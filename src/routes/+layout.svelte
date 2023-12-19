@@ -1,27 +1,50 @@
 <script lang="ts">
-  import { password } from '../stores/password';
-  import type { Unsubscriber } from 'svelte/store';
+  import { APIService } from '@aneuhold/core-ts-api-lib';
+  import CircularProgress from '@smui/circular-progress';
+  import IconButton from '@smui/icon-button';
   import { onDestroy } from 'svelte';
+  import type { Unsubscriber } from 'svelte/store';
+  import LocalData from 'util/LocalData';
   import InputBox from '../components/InputBox.svelte';
   import NavBar from '../components/NavBar.svelte';
-  import PasswordHandler from '../util/PasswordHandler';
   import '../globalStyles/global.css';
+  import { apiKey } from '../stores/apiKey';
+  import { password } from '../stores/password';
 
-  let passwordIsCorrect = false;
-  let typedPassword = '';
+  let typedUserName = LocalData.username;
+  let typedPassword = LocalData.password;
   let navBar: NavBar;
+  let processingCredentials = false;
+  let apiKeyExists = false;
+  let invalidCredentials = false;
 
   const unsubscribers: Array<Unsubscriber> = [];
   unsubscribers.push(
-    password.subscribe((updatedPassword) => {
-      PasswordHandler.verifyPassword(updatedPassword).then((result) => {
-        passwordIsCorrect = result;
-      });
+    apiKey.subscribe((updatedApiKey) => {
+      if (updatedApiKey) {
+        apiKeyExists = true;
+      } else {
+        apiKeyExists = false;
+      }
     })
   );
 
   function handleSubmit() {
+    processingCredentials = true;
+    LocalData.username = typedUserName;
     password.set(typedPassword);
+    APIService.validateUser({
+      userName: typedUserName,
+      password: typedPassword
+    }).then((result) => {
+      if (result.success && result.userInfo?.apiKey) {
+        apiKey.set(result.userInfo.apiKey.key);
+        invalidCredentials = false;
+      } else {
+        invalidCredentials = true;
+      }
+      processingCredentials = false;
+    });
   }
 
   onDestroy(() => {
@@ -32,7 +55,7 @@
 </script>
 
 <div class="app">
-  {#if passwordIsCorrect}
+  {#if apiKeyExists}
     <main>
       <NavBar bind:this={navBar}>
         <div class="content">
@@ -41,18 +64,44 @@
       </NavBar>
     </main>
   {:else}
-    <InputBox
-      label="Password"
-      bind:inputValue={typedPassword}
-      on:submit={handleSubmit}
-      validationMessage="Invalid password"
-      inputType="password"
-    />
+    <div class="credentialsInputArea">
+      <InputBox
+        label="Username"
+        bind:inputValue={typedUserName}
+        validationMessage="Invalid username"
+        inputType="text"
+      />
+      <InputBox
+        label="Password"
+        bind:inputValue={typedPassword}
+        validationMessage="Invalid password"
+        inputType="password"
+      />
+      {#if processingCredentials}
+        <CircularProgress style="height: 32px; width: 32px;" indeterminate />
+      {:else}
+        <IconButton class="material-icons dimmed-color" on:click={() => handleSubmit()}>
+          send
+        </IconButton>
+      {/if}
+      {#if invalidCredentials}
+        <span class="errorMessage"> Invalid username or password </span>
+      {/if}
+    </div>
   {/if}
 </div>
 
 <style>
   .content {
     padding: 1rem;
+  }
+  .credentialsInputArea {
+    margin-top: 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .errorMessage {
+    color: var(--mdc-theme-error);
   }
 </style>
