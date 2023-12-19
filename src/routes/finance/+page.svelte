@@ -147,7 +147,7 @@
       </p>
       <ul>
         <li>Extra coverage on phones by paying phone bill through card</li>
-        <li>Airline miles (this one is easy to see the benefit of)</li>
+        <li>Airline miles (this is an easy-to-see benefit)</li>
       </ul>
     </Content>
   </Paper>

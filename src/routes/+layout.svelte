@@ -69,7 +69,7 @@
       </NavBar>
     </main>
   {:else}
-    <div class="credentialsInputArea">
+    <form class="credentialsInputArea">
       <InputBox
         label="Username"
         bind:inputValue={typedUserName}
@@ -92,7 +92,7 @@
       {#if invalidCredentials}
         <span class="errorMessage"> Invalid username or password </span>
       {/if}
-    </div>
+    </form>
   {/if}
 </div>
 

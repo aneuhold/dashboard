@@ -1,5 +1,6 @@
 import type { LinkInfo } from 'components/LinkListItem.svelte';
 import { homePageInfo } from '../routes/+page.svelte';
+import { automationPageInfo } from '../routes/automation/+page.svelte';
 import { devPageInfo } from '../routes/dev/+page.svelte';
 import { archPageInfo } from '../routes/dev/arch/+page.svelte';
 import { financePageInfo } from '../routes/finance/+page.svelte';
@@ -37,7 +38,8 @@ const navInfo = {
   home: homePageInfo,
   dev: devPageInfo,
   devArch: archPageInfo,
-  finance: financePageInfo
+  finance: financePageInfo,
+  automation: automationPageInfo
 } satisfies Record<string, PageInfo>;
 
 export default navInfo;

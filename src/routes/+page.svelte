@@ -20,7 +20,7 @@
   import PageTitle from 'components/PageTitle.svelte';
   import navInfo, { type PageInfo } from '../util/navInfo';
 
-  const tableOfContentsLinks: Array<LinkInfo> = [navInfo.dev, navInfo.finance];
+  const tableOfContentsLinks: Array<LinkInfo> = [navInfo.dev, navInfo.finance, navInfo.automation];
 
   const primaryLinks: Array<LinkInfo> = [
     {
