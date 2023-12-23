@@ -71,6 +71,14 @@
         window.open('https://www.gitignore.io/', '_blank');
       },
       iconName: 'code'
+    },
+    {
+      title: 'Simple Icon Generator',
+      description: 'A really simple icon / logo generator',
+      clickAction: () => {
+        window.open('https://prefinem.com/simple-icon-generator/', '_blank');
+      },
+      iconName: 'brush'
     }
   ];
 </script>

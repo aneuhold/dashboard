@@ -13,6 +13,8 @@
 // @use '@material/theme/styles';
 
 // Svelte Colors! (Dark Theme)
+// If this is updated, make sure to update the colors in the `manifest.json` file
+// as well.
 @use '@material/theme/index' as theme with (
   $primary: #098e1f,
   $secondary: color.scale(#676778, $whiteness: -10%),
