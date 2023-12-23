@@ -4,7 +4,11 @@
 
 Notes for improvement:
 
-- Maybe an `automation` route would be good? Probably.
+- Create a config type for the dashboard that applies to all users
+- Create a userConfig type for the dashboard that applies to just that user
+- Create a translations thing?
+- Task list things
+  - Before doing this, ensure that the app has the right phone manifest stuff so it acts like a mobile app and doesn't open a new page er time
 
 ## Developing
 

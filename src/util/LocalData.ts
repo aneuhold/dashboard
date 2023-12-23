@@ -1,3 +1,4 @@
+import type { DashboardConfig, Translations } from '@aneuhold/core-ts-api-lib';
 import { sleep } from '@aneuhold/core-ts-lib';
 
 export default class LocalData {
@@ -10,7 +11,9 @@ export default class LocalData {
   private static storedKeyNames = {
     password: `${this.PREFIX}password`,
     username: `${this.PREFIX}username`,
-    apiKey: `${this.PREFIX}apiKey`
+    apiKey: `${this.PREFIX}apiKey`,
+    dashboardConfig: `${this.PREFIX}dashboardConfig`,
+    translations: `${this.PREFIX}translations`
   };
 
   /**
@@ -72,5 +75,40 @@ export default class LocalData {
       return currentlyStoredValue;
     }
     return '';
+  }
+
+  static set dashboardConfig(newDashboardConfig: DashboardConfig) {
+    this.storeValue(LocalData.storedKeyNames.dashboardConfig, JSON.stringify(newDashboardConfig));
+  }
+
+  static get dashboardConfig(): DashboardConfig | null {
+    return this.getStoredObject<DashboardConfig>(LocalData.storedKeyNames.dashboardConfig);
+  }
+
+  static set translations(newTranslations: Translations) {
+    this.storeValue(LocalData.storedKeyNames.translations, JSON.stringify(newTranslations));
+  }
+
+  static get translations(): Translations | null {
+    return this.getStoredObject<Translations>(LocalData.storedKeyNames.translations);
+  }
+
+  /**
+   * Gets a stored object with some basic validation. This should be setup
+   * to use type guards.
+   */
+  private static getStoredObject<ObjectType>(key: string): ObjectType | null {
+    const currentlyStoredValue = this.getValue(key);
+    if (
+      currentlyStoredValue &&
+      currentlyStoredValue !== '' &&
+      typeof currentlyStoredValue === 'string'
+    ) {
+      const jsonObject = JSON.parse(currentlyStoredValue);
+      if (typeof jsonObject === 'object') {
+        return jsonObject as ObjectType;
+      }
+    }
+    return null;
   }
 }

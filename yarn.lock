@@ -15,10 +15,10 @@
     "@jridgewell/gen-mapping" "^0.3.0"
     "@jridgewell/trace-mapping" "^0.3.9"
 
-"@aneuhold/core-ts-api-lib@^1.0.3":
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/@aneuhold/core-ts-api-lib/-/core-ts-api-lib-1.0.3.tgz#0be622f22a860fed5b21d581f1bfa7a4e986d3b8"
-  integrity sha512-lMqwIP0ZAlImCV/S85gs1/qvuwipWb823VwgA2isjJ6cbJeDMmZArddkd70I28QuuZbmwTZKS4riZOMXS3uxXg==
+"@aneuhold/core-ts-api-lib@^1.0.9":
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/@aneuhold/core-ts-api-lib/-/core-ts-api-lib-1.0.9.tgz#f3ed16bea1c71d8ef541e5c443a56b42b45361ba"
+  integrity sha512-1at/uvR7qjElMyie7zFjJiPORRzXsF1UNKCQFC8nzy+2WLMhxMHTs3E/jTLzaXFeRcTmgG8sD87UhC6xfl+9ow==
   dependencies:
     "@aneuhold/core-ts-db-lib" "^1.0.3"
     "@aneuhold/core-ts-lib" "^1.1.7"
@@ -34,6 +34,11 @@
   version "1.1.7"
   resolved "https://registry.yarnpkg.com/@aneuhold/core-ts-lib/-/core-ts-lib-1.1.7.tgz#fe041a59729d4952410ba5152c180f7ac17b347c"
   integrity sha512-bZXXod0pqQiKpg6P3NCRy+FXm5J2LDwhEE2v5rgOgEXfARliBpXncd1hnveR2EVEgNlgTqyUkjqSlRj52Hl6BQ==
+
+"@aneuhold/core-ts-lib@^1.1.8":
+  version "1.1.8"
+  resolved "https://registry.yarnpkg.com/@aneuhold/core-ts-lib/-/core-ts-lib-1.1.8.tgz#6e74b9fa1666109802c915339f3d3e252f744972"
+  integrity sha512-pHCV/xV08kxbbtGhLVRW8UZ38Jeog5o4owmd8OCKr5pMOZDejER04qcfv+E/qkeDcK6fDtj1cCOk2BAif/WVOg==
 
 "@esbuild/android-arm64@0.18.20":
   version "0.18.20"

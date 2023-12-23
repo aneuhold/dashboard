@@ -26,16 +26,8 @@
   import LinkList from 'components/LinkList.svelte';
   import type { LinkInfo } from 'components/LinkListItem.svelte';
   import PageTitle from 'components/PageTitle.svelte';
-
-  const automationActions: Array<LinkInfo> = [
-    {
-      title: 'Bed time but still watching shows',
-      clickAction: () => {
-        console.log('Nothing yet');
-      },
-      iconName: 'dark_mode'
-    }
-  ];
+  import { dashboardConfig } from '../../stores/dashboardConfig';
+  import AutomationTrigger from './AutomationTrigger.svelte';
 
   const automationConfiguration: Array<LinkInfo> = [
     {
@@ -60,7 +52,36 @@
     <Title>Actions</Title>
     <Subtitle>All of these actually trigger a thing to happen</Subtitle>
     <Content>
-      <LinkList links={automationActions} />
+      <AutomationTrigger
+        title="Bed Time + Watching Shows"
+        description="Turns off all lights except the kitchen + garage. Also doesn't turn off the TV and blu-ray player."
+        iconName="bedtime"
+        automationTriggerUrl={$dashboardConfig?.automationUrls.bedTimeButStillWatchingShows}
+      />
+      <AutomationTrigger
+        title="Bed Time"
+        description="Turns off all lights, the TV and blu-ray player."
+        iconName="bedtime"
+        automationTriggerUrl={$dashboardConfig?.automationUrls.bedTime}
+      />
+      <AutomationTrigger
+        title="Sunrise"
+        description="Turns on everything for the most part except the bedroom light."
+        iconName="sunny"
+        automationTriggerUrl={$dashboardConfig?.automationUrls.sunrise}
+      />
+      <AutomationTrigger
+        title="Toggle Sunlight"
+        description="Toggles the sunlight upstairs off and on."
+        iconName="brightness_5"
+        automationTriggerUrl={$dashboardConfig?.automationUrls.sunLight}
+      />
+      <AutomationTrigger
+        title="Zoom Lights"
+        description="Turns off the sunlight + turns on upstairs lights 1 and 2."
+        iconName="videocam"
+        automationTriggerUrl={$dashboardConfig?.automationUrls.zoomLighting}
+      />
     </Content>
   </Paper>
   <Paper>
