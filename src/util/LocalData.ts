@@ -27,6 +27,7 @@ export default class LocalData {
     while (typeof window === 'undefined') {
       await sleep(5);
     }
+    console.info('LocalData successfully initialized');
   }
 
   private static storeValue(key: string, value: string) {

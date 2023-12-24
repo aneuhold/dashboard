@@ -18,6 +18,7 @@
   import LinkList from 'components/LinkList.svelte';
   import type { LinkInfo } from 'components/LinkListItem.svelte';
   import PageTitle from 'components/PageTitle.svelte';
+  import { translations } from '../stores/translations';
   import navInfo, { type PageInfo } from '../util/navInfo';
 
   const tableOfContentsLinks: Array<LinkInfo> = [navInfo.dev, navInfo.finance, navInfo.automation];
@@ -79,6 +80,8 @@
 </svelte:head>
 
 <PageTitle title={homePageInfo.title} />
+
+<p>{$translations}</p>
 
 <div class="content">
   <Paper>

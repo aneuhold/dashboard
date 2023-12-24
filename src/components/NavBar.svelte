@@ -4,6 +4,7 @@
   import IconButton, { Icon } from '@smui/icon-button';
   import TopAppBar, { AutoAdjust, Row, Section, Title } from '@smui/top-app-bar';
   import { apiKey } from '../stores/apiKey';
+  import { LoginState, loginState } from '../stores/loginState';
   import { navDrawerOpen } from '../stores/navDrawerOpen';
   import NavDrawer from './NavDrawer.svelte';
 
@@ -11,6 +12,7 @@
 
   function handleLogOut() {
     apiKey.set('');
+    loginState.set(LoginState.LoggedOut);
   }
 </script>
 

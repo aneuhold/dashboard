@@ -1,35 +1,33 @@
+<!--
+  @component
+  
+  The root of the application.
+-->
 <script lang="ts">
-  import { onDestroy } from 'svelte';
-  import type { Unsubscriber } from 'svelte/store';
+  import CircularProgress from '@smui/circular-progress';
+  import LocalData from 'util/LocalData';
+  import Login from '../components/Login/Login.svelte';
   import NavBar from '../components/NavBar.svelte';
   import '../globalStyles/global.css';
-  import { apiKey } from '../stores/apiKey';
-  import Login from './Login.svelte';
+  import { localDataReady } from '../stores/localDataReady';
+  import { LoginState, loginState } from '../stores/loginState';
 
   let navBar: NavBar;
 
-  let apiKeyExists = false;
-
-  const unsubscribers: Array<Unsubscriber> = [];
-  unsubscribers.push(
-    apiKey.subscribe((updatedApiKey) => {
-      if (updatedApiKey) {
-        apiKeyExists = true;
-      } else {
-        apiKeyExists = false;
-      }
-    })
-  );
-
-  onDestroy(() => {
-    unsubscribers.forEach((unsubscriber) => {
-      unsubscriber();
-    });
+  // Top-level initialization of local data. This should only be done here.
+  LocalData.initialize().then(() => {
+    localDataReady.set(true);
   });
 </script>
 
 <div class="app">
-  {#if apiKeyExists}
+  {#if !$localDataReady}
+    <div class="loading">
+      <CircularProgress />
+    </div>
+  {:else if $loginState !== LoginState.LoggedIn}
+    <Login />
+  {:else}
     <main>
       <NavBar bind:this={navBar}>
         <div class="content">
@@ -37,8 +35,6 @@
         </div>
       </NavBar>
     </main>
-  {:else}
-    <Login />
   {/if}
 </div>
 

@@ -4,11 +4,9 @@
 
 Notes for improvement:
 
-- Create a config type for the dashboard that applies to all users
 - Create a userConfig type for the dashboard that applies to just that user
-- Create a translations thing?
+- Create a translations thing? - Next step is to make the call to the backend for translations
 - Task list things
-  - Before doing this, ensure that the app has the right phone manifest stuff so it acts like a mobile app and doesn't open a new page er time
 
 ## Developing
 

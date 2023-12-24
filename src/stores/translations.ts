@@ -1,15 +1,16 @@
 import type { Translations } from '@aneuhold/core-ts-api-lib';
 import { writable } from 'svelte/store';
 import LocalData from '../util/LocalData';
+import { localDataReady } from './localDataReady';
 
 function createTranslationsStore() {
-  const { subscribe, set, update } = writable<Translations | null>(LocalData.translations);
+  const { subscribe, set, update } = writable<Translations | null>(null);
 
-  if (typeof window === 'undefined') {
-    LocalData.initialize().then(() => {
+  localDataReady.subscribe((ready) => {
+    if (ready) {
       set(LocalData.translations);
-    });
-  }
+    }
+  });
 
   return {
     subscribe,
