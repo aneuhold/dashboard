@@ -4,10 +4,10 @@ import LocalData from '../util/LocalData';
 import { localDataReady } from './localDataReady';
 
 function createTranslationsStore() {
-  const { subscribe, set, update } = writable<Translations | null>(null);
+  const { subscribe, set, update } = writable<Translations>({});
 
   localDataReady.subscribe((ready) => {
-    if (ready) {
+    if (ready && LocalData.translations) {
       set(LocalData.translations);
     }
   });

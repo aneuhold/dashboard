@@ -26,20 +26,20 @@
   import LinkList from 'components/LinkList.svelte';
   import type { LinkInfo } from 'components/LinkListItem.svelte';
   import PageTitle from 'components/PageTitle.svelte';
+  import { translations as tr } from '../../stores/translations';
 
   const bankingAndFinanceStorageLinks: Array<LinkInfo> = [
     {
-      title: 'OnPoint Credit Union',
-      description:
-        'Where all the money be. Nothing else special going on here, or opportunities as far as I know.',
+      title: $tr['finance.banking-links.onpoint.title'].value,
+      description: $tr['finance.banking-links.onpoint.description'].value,
       clickAction: () => {
         window.open('https://www.onpointcu.com/', '_blank');
       },
       iconName: 'account_balance'
     },
     {
-      title: 'American Express Credit Card Account',
-      description: 'Credit card, which is automatically paid back every month. Used for rewards.',
+      title: $tr['finance.banking-links.amex.title'].value,
+      description: $tr['finance.banking-links.amex.description'].value,
       clickAction: () => {
         window.open('https://www.americanexpress.com/', '_blank');
       },
@@ -54,9 +54,8 @@
       iconName: 'savings'
     },
     {
-      title: 'Stocks - RobinHood',
-      description:
-        'Stocks and investments. $100 is automatically paid every month, but trading is manual.',
+      title: $tr['finance.banking-links.robinhood.title'].value,
+      description: $tr['finance.banking-links.robinhood.description'].value,
       clickAction: () => {
         window.open('https://robinhood.com/', '_blank');
       },
@@ -66,22 +65,18 @@
 
   const debtAndLoansLinks: Array<LinkInfo> = [
     {
-      title: 'Student Loan Account - Nelnet',
-      description:
-        'Student loan account, which is automatically paid back every month. This was moved from Great Lakes to Nelnet.',
+      title: $tr['finance.debt-links.student-loan.title'].value,
+      description: $tr['finance.debt-links.student-loan.description'].value,
       clickAction: () => {
-        window.open(
-          'https://auth.nelnet.com/Account/Login?ReturnUrl=%2Fconnect%2Fauthorize%2Fcallback%3Fresponse_type%3Dcode%26client_id%3Dmma%26state%3DQWl3di1wYmpnUzlUZW1xeUI2d2xjNDFGSF82YTdGTGhRZFJ6Z2tJZklSSGw3semicolon%25252Fdashboard%26redirect_uri%3Dhttps%253A%252F%252Fsecure.nelnet.com%26scope%3Dopenid%2520offline_access%2520mma.api.read%2520mma.api.write%26code_challenge%3DwFi77rF7RBbo5h-pwGev-ei4cMkHBugEw4PT26gyKeo%26code_challenge_method%3DS256%26nonce%3DQWl3di1wYmpnUzlUZW1xeUI2d2xjNDFGSF82YTdGTGhRZFJ6Z2tJZklSSGw3%26nds_client_id%3D1%26nds_application_id%3D1%26pid%3D_PENDO_T_cbGBDlJ6Fc8',
-          '_blank'
-        );
+        window.open($tr['finance.debt-links.student-loan.link'].value, '_blank');
       },
       iconName: 'school'
     },
     {
-      title: 'Mortgage - Lakeview / Change Management Servicing',
-      description: `What this goes through is a tad confusing. They seem to keep changing their name. This is paid automatically though.`,
+      title: $tr['finance.debt-links.mortgage.title'].value,
+      description: $tr['finance.debt-links.mortgage.description'].value,
       clickAction: () => {
-        window.open('https://changemtgservicing.com/portal/dashboard', '_blank');
+        window.open($tr['finance.debt-links.mortgage.link'].value, '_blank');
       },
       iconName: 'house'
     }
