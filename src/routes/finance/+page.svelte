@@ -135,14 +135,13 @@
     <Title>Banking and Financial Storage</Title>
     <Content>
       <LinkList links={bankingAndFinanceStorageLinks} />
-      <h6 class="section-title">Credit Card Rewards Strategy</h6>
+      <h6 class="section-title">{$tr['finance.banking-info.credit-card-strategy.title'].value}</h6>
       <p>
-        It would be good to look into this a bit more. Right now there are a few things being done,
-        but more could be done. Also notes are needed on the current benefits:
+        {$tr['finance.banking-info.credit-card-strategy.p1'].value}
       </p>
       <ul>
-        <li>Extra coverage on phones by paying phone bill through card</li>
-        <li>Airline miles (this is an easy-to-see benefit)</li>
+        <li>{$tr['finance.banking-info.credit-card-strategy.li1'].value}</li>
+        <li>{$tr['finance.banking-info.credit-card-strategy.li2'].value}</li>
       </ul>
     </Content>
   </Paper>
