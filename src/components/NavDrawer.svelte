@@ -6,11 +6,12 @@
   Documentation on SMUI's NavDrawer and possible options can be found [here](https://sveltematerialui.com/demo/drawer/).
 -->
 <script lang="ts">
-  import Drawer, { Content } from '@smui/drawer';
-  import List, { Item, Text, Graphic } from '@smui/list';
-  import { clickOutside } from '../actions/clickOutside';
-  import { page } from '$app/stores';
   import { goto } from '$app/navigation';
+  import { page } from '$app/stores';
+  import Drawer, { Content } from '@smui/drawer';
+  import List, { Graphic, Item, Separator, Text } from '@smui/list';
+  import { clickOutside } from '../actions/clickOutside';
+  import { settingsPageInfo } from '../routes/settings/+page.svelte';
   import { navDrawerOpen } from '../stores/navDrawerOpen';
   import navInfo, { type PageInfo } from '../util/navInfo';
 
@@ -45,6 +46,9 @@
     <Content>
       <List>
         {#each Object.values(navInfo) as pageInfo}
+          {#if pageInfo.title === settingsPageInfo.title}
+            <Separator />
+          {/if}
           <Item on:click={() => setRoute(pageInfo.url)} activated={activeRoute === pageInfo.url}>
             {#if pageInfo.nestingLevel > 0}
               <span class="nesting-text">{getNestingText(pageInfo)}</span>
@@ -57,7 +61,6 @@
             <Text>{pageInfo.shortTitle}</Text>
           </Item>
         {/each}
-        <!-- <Separator /> -->
       </List>
     </Content>
   </Drawer>

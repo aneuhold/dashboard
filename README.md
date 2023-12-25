@@ -5,7 +5,7 @@
 Notes for improvement:
 
 - Create a userConfig type for the dashboard that applies to just that user
-- Create a translations thing? - Next step is to make the call to the backend for translations
+  - Involves creating a settings page
 - Task list things
 
 ## Developing

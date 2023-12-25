@@ -13,6 +13,7 @@
   import { LoginState, loginState } from '../../stores/loginState';
   import { password } from '../../stores/password';
   import { translations } from '../../stores/translations';
+  import { userSettings } from '../../stores/userSettings';
 
   let typedUserName = LocalData.username;
   let typedPassword = LocalData.password;
@@ -64,9 +65,13 @@
     backendResponse: ProjectDashboardOutput,
     apiKeyValue: string
   ) {
-    if (backendResponse.success && backendResponse.data?.translations) {
-      const translationsContent = backendResponse.data.translations;
-      translations.set(translationsContent);
+    if (
+      backendResponse.success &&
+      backendResponse.data?.translations &&
+      backendResponse.data.userConfig
+    ) {
+      translations.set(backendResponse.data.translations);
+      userSettings.set({ pendingSettingsUpdate: false, config: backendResponse.data.userConfig });
       apiKey.set(apiKeyValue);
     } else {
       console.error('Error getting initial backend data, but got past login', backendResponse);

@@ -4,6 +4,7 @@ import { automationPageInfo } from '../routes/automation/+page.svelte';
 import { devPageInfo } from '../routes/dev/+page.svelte';
 import { archPageInfo } from '../routes/dev/arch/+page.svelte';
 import { financePageInfo } from '../routes/finance/+page.svelte';
+import { settingsPageInfo } from '../routes/settings/+page.svelte';
 
 export interface PageInfo extends LinkInfo {
   /**
@@ -39,7 +40,8 @@ const navInfo = {
   dev: devPageInfo,
   devArch: archPageInfo,
   finance: financePageInfo,
-  automation: automationPageInfo
+  automation: automationPageInfo,
+  settings: settingsPageInfo
 } satisfies Record<string, PageInfo>;
 
 export default navInfo;

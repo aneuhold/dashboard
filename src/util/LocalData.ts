@@ -1,5 +1,6 @@
 import type { DashboardConfig, Translations } from '@aneuhold/core-ts-api-lib';
 import { sleep } from '@aneuhold/core-ts-lib';
+import type { UserSettings } from '../stores/userSettings';
 
 export default class LocalData {
   /**
@@ -13,7 +14,8 @@ export default class LocalData {
     username: `${this.PREFIX}username`,
     apiKey: `${this.PREFIX}apiKey`,
     dashboardConfig: `${this.PREFIX}dashboardConfig`,
-    translations: `${this.PREFIX}translations`
+    translations: `${this.PREFIX}translations`,
+    userSettings: `${this.PREFIX}userSettings`
   };
 
   /**
@@ -92,6 +94,14 @@ export default class LocalData {
 
   static get translations(): Translations | null {
     return this.getStoredObject<Translations>(LocalData.storedKeyNames.translations);
+  }
+
+  static set userSettings(newSettings: UserSettings) {
+    this.storeValue(LocalData.storedKeyNames.userSettings, JSON.stringify(newSettings));
+  }
+
+  static get userSettings(): UserSettings | null {
+    return this.getStoredObject<UserSettings>(LocalData.storedKeyNames.userSettings);
   }
 
   /**
