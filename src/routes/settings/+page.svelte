@@ -5,15 +5,14 @@
 -->
 <script lang="ts" context="module">
   import { goto } from '$app/navigation';
-  import { APIService } from '@aneuhold/core-ts-api-lib';
   import Button from '@smui/button';
   import Checkbox from '@smui/checkbox';
   import CircularProgress from '@smui/circular-progress';
   import FormField from '@smui/form-field';
   import Paper, { Content } from '@smui/paper';
   import PageTitle from 'components/PageTitle.svelte';
+  import DashboardAPIService from 'util/DashboardAPIService';
   import type { PageInfo } from 'util/navInfo';
-  import { apiKey } from '../../stores/apiKey';
   import { userSettings } from '../../stores/userSettings';
 
   export const settingsPageInfo: PageInfo = {
@@ -39,25 +38,12 @@
 
   function saveSettings() {
     updatingSettings = true;
-    // Working on the below first. Updates need to be able to happen on the
-    // backend though.
-
-    if (!$apiKey) {
-      console.error('No API key found while trying to save settings');
+    if (!$userSettings.config) {
+      console.error('No user settings found');
+      updatingSettings = false;
       return;
     }
-
-    APIService.callDashboardAPI({
-      apiKey: $apiKey,
-      options: {
-        update: {
-          userConfig: $userSettings.config
-        }
-      }
-    }).then((response) => {
-      if (response.success) {
-        $userSettings.pendingSettingsUpdate = false;
-      }
+    DashboardAPIService.updateSettings($userSettings.config).then(() => {
       updatingSettings = false;
     });
   }
@@ -82,27 +68,14 @@
           />
           <span slot="label">
             Enable dev mode
-            <span class="mdc-theme--text-hint-on-background">
-              Enables some development features on the site.
-            </span>
-          </span>
-        </FormField>
-        <FormField>
-          <Checkbox
-            bind:checked={$userSettings.config.enableDevMode}
-            touch
-            on:click={triggerSettingsChanged}
-          />
-          <span slot="label">
-            Enable dev mode
-            <span class="mdc-theme--text-hint-on-background">
+            <span class="mdc-theme--text-hint-on-background checkBoxText">
               Enables some development features on the site.
             </span>
           </span>
         </FormField>
         <Button disabled={!$userSettings.pendingSettingsUpdate} on:click={saveSettings}>
           {#if updatingSettings}
-            <CircularProgress />
+            <CircularProgress style="height: 32px; width: 32px;" indeterminate={true} />
           {:else}
             Save Settings
           {/if}
@@ -117,5 +90,8 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+  }
+  .checkBoxText {
+    margin-left: 8px;
   }
 </style>

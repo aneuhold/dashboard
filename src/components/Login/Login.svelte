@@ -1,19 +1,13 @@
 <script lang="ts">
-  import {
-    APIService,
-    type AuthValidateUserOutput,
-    type ProjectDashboardOutput
-  } from '@aneuhold/core-ts-api-lib';
+  import { APIService, type AuthValidateUserOutput } from '@aneuhold/core-ts-api-lib';
   import CircularProgress from '@smui/circular-progress';
   import IconButton from '@smui/icon-button';
   import InputBox from 'components/InputBox.svelte';
+  import DashboardAPIService from 'util/DashboardAPIService';
   import LocalData from 'util/LocalData';
   import { apiKey } from '../../stores/apiKey';
   import { dashboardConfig } from '../../stores/dashboardConfig';
-  import { LoginState, loginState } from '../../stores/loginState';
   import { password } from '../../stores/password';
-  import { translations } from '../../stores/translations';
-  import { userSettings } from '../../stores/userSettings';
 
   let typedUserName = LocalData.username;
   let typedPassword = LocalData.password;
@@ -44,37 +38,10 @@
         console.error('No dashboard function URL found in config');
         return;
       }
-      APIService.setDashboardAPIUrl($dashboardConfig.projectDashboardFunctionUrl);
-      APIService.callDashboardAPI({
-        apiKey: apiKeyValue,
-        options: {
-          get: {
-            translations: true,
-            userConfig: true
-          }
-        }
-      }).then((backendResponse) => {
-        handleIntialBackendCallResult(backendResponse);
+      DashboardAPIService.getInitialData().then(() => {
+        processingCredentials = false;
       });
-    } else {
-      invalidCredentials = true;
-      processingCredentials = false;
     }
-  }
-
-  function handleIntialBackendCallResult(backendResponse: ProjectDashboardOutput) {
-    if (
-      backendResponse.success &&
-      backendResponse.data?.translations &&
-      backendResponse.data.userConfig
-    ) {
-      translations.set(backendResponse.data.translations);
-      userSettings.set({ pendingSettingsUpdate: false, config: backendResponse.data.userConfig });
-    } else {
-      console.error('Error getting initial backend data, but got past login', backendResponse);
-    }
-    processingCredentials = false;
-    loginState.set(LoginState.LoggedIn);
   }
 </script>
 

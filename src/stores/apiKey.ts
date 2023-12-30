@@ -4,21 +4,25 @@ import LocalData from '../util/LocalData';
 import { localDataReady } from './localDataReady';
 
 function createApiKeyStore() {
-  const { subscribe, set, update } = writable<UUID | null>(null);
+  const { subscribe, set } = writable<UUID | null>(null);
+
+  let apiKey: UUID | null = null;
 
   localDataReady.subscribe((ready) => {
     if (ready && LocalData.apiKey !== '') {
       set(LocalData.apiKey as UUID);
+      apiKey = LocalData.apiKey as UUID;
     }
   });
 
   return {
     subscribe,
-    set: (apiKey: UUID) => {
-      set(apiKey);
-      LocalData.apiKey = apiKey;
+    set: (newApiKey: UUID) => {
+      set(newApiKey);
+      LocalData.apiKey = apiKey as string;
+      apiKey = newApiKey;
     },
-    update
+    get: () => apiKey
   };
 }
 

@@ -23,7 +23,7 @@
 <div class="app">
   {#if !$localDataReady}
     <div class="loading">
-      <CircularProgress />
+      <CircularProgress style="height: 32px; width: 32px;" indeterminate={true} />
     </div>
   {:else if $loginState !== LoginState.LoggedIn}
     <Login />
@@ -41,5 +41,11 @@
 <style>
   .content {
     padding: 1rem;
+  }
+  .loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
   }
 </style>
