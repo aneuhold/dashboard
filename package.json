@@ -11,7 +11,7 @@
   },
   "type": "module",
   "devDependencies": {
-    "@aneuhold/core-ts-api-lib": "^1.0.10",
+    "@aneuhold/core-ts-api-lib": "^1.0.11",
     "@aneuhold/core-ts-db-lib": "^1.0.8",
     "@aneuhold/core-ts-lib": "^1.1.9",
     "@fontsource/fira-mono": "^4.5.10",

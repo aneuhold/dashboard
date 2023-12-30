@@ -5,6 +5,7 @@
 -->
 <script lang="ts" context="module">
   import { goto } from '$app/navigation';
+  import { APIService } from '@aneuhold/core-ts-api-lib';
   import Button from '@smui/button';
   import Checkbox from '@smui/checkbox';
   import CircularProgress from '@smui/circular-progress';
@@ -12,6 +13,7 @@
   import Paper, { Content } from '@smui/paper';
   import PageTitle from 'components/PageTitle.svelte';
   import type { PageInfo } from 'util/navInfo';
+  import { apiKey } from '../../stores/apiKey';
   import { userSettings } from '../../stores/userSettings';
 
   export const settingsPageInfo: PageInfo = {
@@ -39,7 +41,25 @@
     updatingSettings = true;
     // Working on the below first. Updates need to be able to happen on the
     // backend though.
-    // APIService.callDashboardAPI({})
+
+    if (!$apiKey) {
+      console.error('No API key found while trying to save settings');
+      return;
+    }
+
+    APIService.callDashboardAPI({
+      apiKey: $apiKey,
+      options: {
+        update: {
+          userConfig: $userSettings.config
+        }
+      }
+    }).then((response) => {
+      if (response.success) {
+        $userSettings.pendingSettingsUpdate = false;
+      }
+      updatingSettings = false;
+    });
   }
 </script>
 
@@ -54,6 +74,19 @@
   <Content>
     <div class="content">
       {#if $userSettings.config}
+        <FormField>
+          <Checkbox
+            bind:checked={$userSettings.config.enableDevMode}
+            touch
+            on:click={triggerSettingsChanged}
+          />
+          <span slot="label">
+            Enable dev mode
+            <span class="mdc-theme--text-hint-on-background">
+              Enables some development features on the site.
+            </span>
+          </span>
+        </FormField>
         <FormField>
           <Checkbox
             bind:checked={$userSettings.config.enableDevMode}

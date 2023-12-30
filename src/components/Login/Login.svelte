@@ -39,6 +39,7 @@
       dashboardConfig.set(validationResponse.config.dashboard);
       invalidCredentials = false;
       const apiKeyValue = validationResponse.userInfo.apiKey.key;
+      apiKey.set(apiKeyValue);
       if (!$dashboardConfig?.projectDashboardFunctionUrl) {
         console.error('No dashboard function URL found in config');
         return;
@@ -53,7 +54,7 @@
           }
         }
       }).then((backendResponse) => {
-        handleIntialBackendCallResult(backendResponse, apiKeyValue);
+        handleIntialBackendCallResult(backendResponse);
       });
     } else {
       invalidCredentials = true;
@@ -61,10 +62,7 @@
     }
   }
 
-  function handleIntialBackendCallResult(
-    backendResponse: ProjectDashboardOutput,
-    apiKeyValue: string
-  ) {
+  function handleIntialBackendCallResult(backendResponse: ProjectDashboardOutput) {
     if (
       backendResponse.success &&
       backendResponse.data?.translations &&
@@ -72,7 +70,6 @@
     ) {
       translations.set(backendResponse.data.translations);
       userSettings.set({ pendingSettingsUpdate: false, config: backendResponse.data.userConfig });
-      apiKey.set(apiKeyValue);
     } else {
       console.error('Error getting initial backend data, but got past login', backendResponse);
     }

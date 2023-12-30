@@ -1,4 +1,4 @@
-import type { DashboardConfig } from '@aneuhold/core-ts-api-lib';
+import { APIService, type DashboardConfig } from '@aneuhold/core-ts-api-lib';
 import { writable } from 'svelte/store';
 import LocalData from '../util/LocalData';
 import { localDataReady } from './localDataReady';
@@ -15,6 +15,9 @@ function createDashboardConfigStore() {
   return {
     subscribe,
     set: (newConfig: DashboardConfig) => {
+      if (newConfig.projectDashboardFunctionUrl) {
+        APIService.setDashboardAPIUrl(newConfig.projectDashboardFunctionUrl);
+      }
       set(newConfig);
       LocalData.dashboardConfig = newConfig;
     },
