@@ -38,11 +38,6 @@
 
   function saveSettings() {
     updatingSettings = true;
-    if (!$userSettings.config) {
-      console.error('No user settings found');
-      updatingSettings = false;
-      return;
-    }
     DashboardAPIService.updateSettings($userSettings.config).then(() => {
       updatingSettings = false;
     });
@@ -59,28 +54,26 @@
 <Paper>
   <Content>
     <div class="content">
-      {#if $userSettings.config}
-        <FormField>
-          <Checkbox
-            bind:checked={$userSettings.config.enableDevMode}
-            touch
-            on:click={triggerSettingsChanged}
-          />
-          <span slot="label">
-            Enable dev mode
-            <span class="mdc-theme--text-hint-on-background checkBoxText">
-              Enables some development features on the site.
-            </span>
+      <FormField>
+        <Checkbox
+          bind:checked={$userSettings.config.enableDevMode}
+          touch
+          on:click={triggerSettingsChanged}
+        />
+        <span slot="label">
+          Enable dev mode
+          <span class="mdc-theme--text-hint-on-background checkBoxText">
+            Enables some development features on the site.
           </span>
-        </FormField>
-        <Button disabled={!$userSettings.pendingSettingsUpdate} on:click={saveSettings}>
-          {#if updatingSettings}
-            <CircularProgress style="height: 32px; width: 32px;" indeterminate={true} />
-          {:else}
-            Save Settings
-          {/if}
-        </Button>
-      {/if}
+        </span>
+      </FormField>
+      <Button disabled={!$userSettings.pendingSettingsUpdate} on:click={saveSettings}>
+        {#if updatingSettings}
+          <CircularProgress style="height: 32px; width: 32px;" indeterminate={true} />
+        {:else}
+          Save Settings
+        {/if}
+      </Button>
     </div>
   </Content>
 </Paper>

@@ -10,6 +10,10 @@ const viteConfig: UserConfig = {
   resolve: {
     dedupe: ['svelte']
   },
+  // Added so that top-level await works.
+  build: {
+    target: 'esnext'
+  },
   css: {
     postcss: {}
   }
