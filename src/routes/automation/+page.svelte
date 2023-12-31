@@ -29,6 +29,17 @@
   import { dashboardConfig } from '../../stores/dashboardConfig';
   import AutomationTrigger from './AutomationTrigger.svelte';
 
+  const monitoringLinks: Array<LinkInfo> = [
+    {
+      title: 'Wyze',
+      description: 'Wyze Cameras',
+      clickAction: () => {
+        window.open('https://my.wyze.com/live', '_blank');
+      },
+      iconName: 'videocam'
+    }
+  ];
+
   const automationConfiguration: Array<LinkInfo> = [
     {
       title: 'Voice Monkey',
@@ -82,6 +93,12 @@
         iconName="videocam"
         automationTriggerUrl={$dashboardConfig?.automationUrls.zoomLighting}
       />
+    </Content>
+  </Paper>
+  <Paper>
+    <Title>Monitoring</Title>
+    <Content>
+      <LinkList links={monitoringLinks} />
     </Content>
   </Paper>
   <Paper>

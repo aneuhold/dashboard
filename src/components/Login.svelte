@@ -5,9 +5,9 @@
   import InputBox from 'components/InputBox.svelte';
   import DashboardAPIService from 'util/DashboardAPIService';
   import LocalData from 'util/LocalData';
-  import { apiKey } from '../../stores/apiKey';
-  import { dashboardConfig } from '../../stores/dashboardConfig';
-  import { password } from '../../stores/password';
+  import { apiKey } from '../stores/apiKey';
+  import { dashboardConfig } from '../stores/dashboardConfig';
+  import { password } from '../stores/password';
 
   let typedUserName = LocalData.username;
   let typedPassword = LocalData.password;
