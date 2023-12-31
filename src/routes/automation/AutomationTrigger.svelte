@@ -2,6 +2,7 @@
   import Button, { Label } from '@smui/button';
   import Card, { Content } from '@smui/card';
   import { Icon } from '@smui/icon-button';
+  import { snackbar } from 'components/Snackbar.svelte';
 
   export let iconName: string;
   export let title: string;
@@ -10,7 +11,13 @@
 
   function handleButtonClick() {
     if (automationTriggerUrl) {
-      fetch(automationTriggerUrl);
+      fetch(automationTriggerUrl).then((response) => {
+        if (response.ok) {
+          snackbar.success('Automation Triggered', 4000);
+        } else {
+          snackbar.error('Failed to trigger automation');
+        }
+      });
     }
   }
 </script>

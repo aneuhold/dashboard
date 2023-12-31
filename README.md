@@ -7,7 +7,6 @@ Notes for improvement:
 - Create a userConfig type for the dashboard that applies to just that user
   - Involves creating a settings page
 - Task list things
-- Add a link to Wyze cam panel
 
 ## Developing
 

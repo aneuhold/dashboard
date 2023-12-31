@@ -6,11 +6,8 @@
 
 @use 'sass:color';
 
+// Import overall colors
 @use '@material/theme/color-palette';
-
-// The below allows for styles from MDC to be used in Svelte. For example:
-// var(--mdc-theme-primary)
-// @use '@material/theme/styles';
 
 // Svelte Colors! (Dark Theme)
 // If this is updated, make sure to update the colors in the `manifest.json` file
@@ -39,12 +36,41 @@
 //   mdc-typography--overline
 //   mdc-typography--body1
 @use '@material/typography/mdc-typography';
+@use '@smui/snackbar/style' as smui-snackabar;
+
 // Import the mixins.
 @use '@material/typography/mixins' as typography;
+@use '@material/snackbar/mixins' as snackbar;
 
 // Import the colors last. Order matters in this file. This allows usage
 // of vars from MDC
 @use '@material/theme/styles';
+@use '@material/theme/theme-color';
+
+// Customized MDC Components
+.mdc-snackbar.success {
+  @include snackbar.fill-color(color-palette.$green-500);
+  @include snackbar.label-ink-color(theme-color.accessible-ink-color(color-palette.$green-500));
+}
+.mdc-snackbar.warning {
+  @include snackbar.fill-color(color-palette.$orange-500);
+  @include snackbar.label-ink-color(theme-color.accessible-ink-color(color-palette.$orange-500));
+}
+.mdc-snackbar.error {
+  @include snackbar.fill-color(color-palette.$red-500);
+  @include snackbar.label-ink-color(theme-color.accessible-ink-color(color-palette.$red-500));
+}
+
+// Custom colors for use in components
+// These have to be defined as a variable first, then used in the :root
+$success: color-palette.$green-500;
+$text-on-success: theme-color.accessible-ink-color(color-palette.$green-500);
+:root {
+  --success: #{$success};
+  --text-on-success: #{$text-on-success};
+}
+
+// --- Global Styles ---
 
 html,
 body {

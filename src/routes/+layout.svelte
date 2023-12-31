@@ -5,6 +5,7 @@
 -->
 <script lang="ts">
   import CircularProgress from '@smui/circular-progress';
+  import Snackbar from 'components/Snackbar.svelte';
   import LocalData from 'util/LocalData';
   import Login from '../components/Login.svelte';
   import NavBar from '../components/NavBar.svelte';
@@ -34,6 +35,7 @@
           <slot />
         </div>
       </NavBar>
+      <Snackbar />
     </main>
   {/if}
 </div>
