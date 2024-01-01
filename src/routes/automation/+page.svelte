@@ -3,24 +3,6 @@
   
   A page for Automation tools.
 -->
-<script lang="ts" context="module">
-  import { goto } from '$app/navigation';
-  import type { PageInfo } from 'util/navInfo';
-
-  export const automationPageInfo: PageInfo = {
-    shortTitle: 'Automation',
-    title: 'Automation',
-    description: 'Automation actions and tools',
-    url: '/automation',
-    iconName: 'precision_manufacturing',
-    clickAction: () => {
-      goto(automationPageInfo.url);
-    },
-    nestingLevel: 0,
-    isInternalLink: true
-  };
-</script>
-
 <script lang="ts">
   import Paper, { Content, Subtitle, Title } from '@smui/paper';
   import LinkList from 'components/LinkList.svelte';
@@ -28,6 +10,7 @@
   import PageTitle from 'components/PageTitle.svelte';
   import { dashboardConfig } from '../../stores/dashboardConfig';
   import AutomationTrigger from './AutomationTrigger.svelte';
+  import { automationPageInfo } from './pageInfo';
 
   const monitoringLinks: Array<LinkInfo> = [
     {

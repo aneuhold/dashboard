@@ -1,8 +1,7 @@
 import { DashboardUserConfig } from '@aneuhold/core-ts-db-lib';
 import { ObjectId } from 'bson';
 import { writable } from 'svelte/store';
-import LocalData from '../util/LocalData';
-import { localDataReady } from './localDataReady';
+import LocalData, { localDataReady } from '../util/LocalData';
 
 export type UserSettings = {
   pendingSettingsUpdate: boolean;

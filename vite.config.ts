@@ -4,13 +4,16 @@ import { defineConfig, mergeConfig } from 'vitest/config';
 
 const viteConfig: UserConfig = {
   plugins: [sveltekit()],
+  /* This was disabled because it was causing a bunch of build output errors
+  It could potentially be turned back on if needed.
   ssr: {
     noExternal: [/^@material\//]
-  },
+  },*/
   resolve: {
     dedupe: ['svelte']
   },
   optimizeDeps: {
+    // Fixes an issue where it throws an error about top-level await
     exclude: ['bson']
   },
   css: {

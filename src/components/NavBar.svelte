@@ -5,13 +5,13 @@
   import TopAppBar, { AutoAdjust, Row, Section, Title } from '@smui/top-app-bar';
   import { apiKey } from '../stores/apiKey';
   import { LoginState, loginState } from '../stores/loginState';
-  import { navDrawerOpen } from '../stores/navDrawerOpen';
+  import { navDrawerOpen } from '../stores/visual/navDrawerOpen';
   import NavDrawer from './NavDrawer.svelte';
 
   let topAppBar: TopAppBar;
 
   function handleLogOut() {
-    apiKey.set('');
+    apiKey.set(null);
     loginState.set(LoginState.LoggedOut);
   }
 </script>

@@ -1,10 +1,9 @@
 import type { Translations } from '@aneuhold/core-ts-api-lib';
 import { writable } from 'svelte/store';
-import LocalData from '../util/LocalData';
-import { localDataReady } from './localDataReady';
+import LocalData, { localDataReady } from '../util/LocalData';
 
 function createTranslationsStore() {
-  const { subscribe, set, update } = writable<Translations>({});
+  const { subscribe, set } = writable<Translations>({});
 
   localDataReady.subscribe((ready) => {
     if (ready && LocalData.translations) {
@@ -17,9 +16,45 @@ function createTranslationsStore() {
     set: (newTranslations: Translations) => {
       set(newTranslations);
       LocalData.translations = newTranslations;
-    },
-    update
+    }
   };
 }
 
 export const translations = createTranslationsStore();
+
+/**
+ * A class that can be used to translate keys from the translations store.
+ *
+ * To use this class, import it into your component and instantiate it with
+ * the translations store:
+ *
+ * ```ts
+ * import { translations, TR } from '../stores/translations';
+ *
+ * $: tr = new TR($translations);
+ * ```
+ *
+ * If you want to use the `key` method in the TypeScript as well, not just in
+ * the markup, it needs to be declared first, because Svelte runs reactive
+ * declarations last before processing the markup. For example:
+ *
+ * ```ts
+ * let tr = new TR($translations);
+ * $: tr = new TR($translations);
+ * ```
+ */
+export class TR {
+  constructor(private translations: Translations) {
+    console.log('TR initialized');
+  }
+
+  key(keyName: string) {
+    console.log('it got here');
+    const translation = this.translations[keyName];
+    if (translation) {
+      return translation.value;
+    } else {
+      return `###${keyName}###`;
+    }
+  }
+}

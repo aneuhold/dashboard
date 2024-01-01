@@ -7,18 +7,6 @@
   - SVG icons: https://worldvectorlogo.com/
 -->
 <script lang="ts" context="module">
-  export const archPageInfo: PageInfo = {
-    shortTitle: 'Architecture',
-    title: 'Architecture Contexts',
-    description: 'Project types and the architecture used to build them.',
-    url: '/dev/arch',
-    iconName: 'domain',
-    clickAction: () => {
-      goto(archPageInfo.url);
-    },
-    nestingLevel: 1,
-    isInternalLink: true
-  };
 </script>
 
 <script lang="ts">
@@ -32,8 +20,8 @@
   import ArchitectureInfo from 'util/ArchitectureInfo/ArchitectureInfo';
   import type { ArchitectureContext } from 'util/ArchitectureInfo/architectureContextInfo';
   import architectureContextInfo from 'util/ArchitectureInfo/architectureContextInfo';
-  import type { PageInfo } from 'util/navInfo';
   import ArchitectureSection from './ArchitectureSection.svelte';
+  import { archPageInfo } from './pageInfo';
 
   let archContext: ArchitectureContext | null = null;
 

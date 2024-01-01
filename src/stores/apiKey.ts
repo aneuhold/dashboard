@@ -1,7 +1,6 @@
 import type { UUID } from 'crypto';
 import { writable } from 'svelte/store';
-import LocalData from '../util/LocalData';
-import { localDataReady } from './localDataReady';
+import LocalData, { localDataReady } from '../util/LocalData';
 
 function createApiKeyStore() {
   const { subscribe, set } = writable<UUID | null>(null);
@@ -17,9 +16,13 @@ function createApiKeyStore() {
 
   return {
     subscribe,
-    set: (newApiKey: UUID) => {
+    set: (newApiKey: UUID | null) => {
       set(newApiKey);
-      LocalData.apiKey = apiKey as string;
+      if (newApiKey === null) {
+        LocalData.apiKey = '';
+      } else {
+        LocalData.apiKey = newApiKey;
+      }
       apiKey = newApiKey;
     },
     get: () => apiKey

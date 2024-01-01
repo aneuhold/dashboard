@@ -1,6 +1,18 @@
 import type { DashboardConfig, Translations } from '@aneuhold/core-ts-api-lib';
 import { sleep } from '@aneuhold/core-ts-lib';
+import { writable } from 'svelte/store';
 import type { UserSettings } from '../stores/userSettings';
+
+function createLocalDataReadyStore() {
+  const { subscribe, set } = writable<boolean>(false);
+
+  return {
+    subscribe,
+    set
+  };
+}
+
+export const localDataReady = createLocalDataReadyStore();
 
 export default class LocalData {
   /**
@@ -8,6 +20,8 @@ export default class LocalData {
    * at some point.
    */
   private static PREFIX = 'v1-';
+
+  private static localStorageAvailable = false;
 
   private static storedKeyNames = {
     password: `${this.PREFIX}password`,
@@ -22,25 +36,35 @@ export default class LocalData {
    * An initialization function that should be called before any other
    * functions in this class are called. This is because sometimes the JS
    * loads before the window somehow.
-   *
-   * Most likely this should only be called in stores it seems.
    */
   static async initialize() {
-    while (typeof window === 'undefined') {
+    let attempts = 0;
+    while (typeof window === 'undefined' && attempts < 30) {
       await sleep(5);
+      attempts += 1;
     }
-    console.info('LocalData successfully initialized');
+    if (typeof window !== 'undefined') {
+      this.localStorageAvailable = true;
+      console.info(`LocalData successfully initialized after ${attempts} attempts.`);
+    } else {
+      console.info(
+        `LocalData could not be initialized after ${attempts} attempts. All usage of LocalData will be ignored. ` +
+          `This is probably because the JS is running on the server.`
+      );
+    }
+    localDataReady.set(true);
   }
 
   private static storeValue(key: string, value: string) {
-    window.localStorage.setItem(key, value);
+    if (this.localStorageAvailable) {
+      window.localStorage.setItem(key, value);
+    }
   }
 
   private static getValue(key: string) {
-    if (typeof window !== 'undefined') {
+    if (this.localStorageAvailable) {
       return window.localStorage.getItem(key);
     }
-    console.error('Window wasnt defined! Cant access localStorage.');
     return '';
   }
 

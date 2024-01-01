@@ -6,19 +6,16 @@
 <script lang="ts">
   import CircularProgress from '@smui/circular-progress';
   import Snackbar from 'components/Snackbar.svelte';
-  import LocalData from 'util/LocalData';
+  import LocalData, { localDataReady } from 'util/LocalData';
   import Login from '../components/Login.svelte';
   import NavBar from '../components/NavBar.svelte';
   import '../globalStyles/global.css';
-  import { localDataReady } from '../stores/localDataReady';
   import { LoginState, loginState } from '../stores/loginState';
 
   let navBar: NavBar;
 
   // Top-level initialization of local data. This should only be done here.
-  LocalData.initialize().then(() => {
-    localDataReady.set(true);
-  });
+  LocalData.initialize();
 </script>
 
 <div class="app">

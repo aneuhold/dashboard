@@ -1,24 +1,10 @@
-<script lang="ts" context="module">
-  export const homePageInfo: PageInfo = {
-    shortTitle: 'Home',
-    title: 'Personal Dashboard',
-    description: 'Home page for the personal dashboard',
-    url: '/',
-    clickAction: () => {
-      goto(homePageInfo.url);
-    },
-    nestingLevel: 0,
-    isInternalLink: true
-  };
-</script>
-
 <script lang="ts">
-  import { goto } from '$app/navigation';
   import Paper, { Content, Title } from '@smui/paper';
   import LinkList from 'components/LinkList.svelte';
   import type { LinkInfo } from 'components/LinkListItem.svelte';
   import PageTitle from 'components/PageTitle.svelte';
-  import navInfo, { type PageInfo } from '../util/navInfo';
+  import navInfo from '../util/navInfo';
+  import { homePageInfo } from './pageInfo';
 
   const tableOfContentsLinks: Array<LinkInfo> = [navInfo.dev, navInfo.finance, navInfo.automation];
 

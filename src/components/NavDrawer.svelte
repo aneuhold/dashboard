@@ -11,8 +11,8 @@
   import Drawer, { Content } from '@smui/drawer';
   import List, { Graphic, Item, Separator, Text } from '@smui/list';
   import { clickOutside } from '../actions/clickOutside';
-  import { settingsPageInfo } from '../routes/settings/+page.svelte';
-  import { navDrawerOpen } from '../stores/navDrawerOpen';
+  import { settingsPageInfo } from '../routes/settings/pageInfo';
+  import { navDrawerOpen } from '../stores/visual/navDrawerOpen';
   import navInfo, { type PageInfo } from '../util/navInfo';
 
   export let activeRoute: string = '/';

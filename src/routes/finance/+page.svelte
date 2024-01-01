@@ -3,43 +3,29 @@
   
   A page for Financial info.
 -->
-<script lang="ts" context="module">
-  import { goto } from '$app/navigation';
-  import type { PageInfo } from 'util/navInfo';
-
-  export const financePageInfo: PageInfo = {
-    shortTitle: 'Finance',
-    title: 'Financial Info and Links',
-    description: 'General financial information and links',
-    url: '/finance',
-    iconName: 'attach_money',
-    clickAction: () => {
-      goto(financePageInfo.url);
-    },
-    nestingLevel: 0,
-    isInternalLink: true
-  };
-</script>
-
 <script lang="ts">
   import Paper, { Content, Title } from '@smui/paper';
   import LinkList from 'components/LinkList.svelte';
   import type { LinkInfo } from 'components/LinkListItem.svelte';
   import PageTitle from 'components/PageTitle.svelte';
-  import { translations as tr } from '../../stores/translations';
+  import { TR, translations } from '../../stores/translations';
+  import { financePageInfo } from './pageInfo';
+
+  let tr = new TR($translations);
+  $: tr = new TR($translations);
 
   const bankingAndFinanceStorageLinks: Array<LinkInfo> = [
     {
-      title: $tr['finance.banking-links.onpoint.title'].value,
-      description: $tr['finance.banking-links.onpoint.description'].value,
+      title: tr.key('finance.banking-links.onpoint.title'),
+      description: tr.key('finance.banking-links.onpoint.description'),
       clickAction: () => {
         window.open('https://www.onpointcu.com/', '_blank');
       },
       iconName: 'account_balance'
     },
     {
-      title: $tr['finance.banking-links.amex.title'].value,
-      description: $tr['finance.banking-links.amex.description'].value,
+      title: tr.key('finance.banking-links.amex.title'),
+      description: tr.key('finance.banking-links.amex.description'),
       clickAction: () => {
         window.open('https://www.americanexpress.com/', '_blank');
       },
@@ -54,8 +40,8 @@
       iconName: 'savings'
     },
     {
-      title: $tr['finance.banking-links.robinhood.title'].value,
-      description: $tr['finance.banking-links.robinhood.description'].value,
+      title: tr.key('finance.banking-links.robinhood.title'),
+      description: tr.key('finance.banking-links.robinhood.description'),
       clickAction: () => {
         window.open('https://robinhood.com/', '_blank');
       },
@@ -65,18 +51,18 @@
 
   const debtAndLoansLinks: Array<LinkInfo> = [
     {
-      title: $tr['finance.debt-links.student-loan.title'].value,
-      description: $tr['finance.debt-links.student-loan.description'].value,
+      title: tr.key('finance.debt-links.student-loan.title'),
+      description: tr.key('finance.debt-links.student-loan.description'),
       clickAction: () => {
-        window.open($tr['finance.debt-links.student-loan.link'].value, '_blank');
+        window.open(tr.key('finance.debt-links.student-loan.link'), '_blank');
       },
       iconName: 'school'
     },
     {
-      title: $tr['finance.debt-links.mortgage.title'].value,
-      description: $tr['finance.debt-links.mortgage.description'].value,
+      title: tr.key('finance.debt-links.mortgage.title'),
+      description: tr.key('finance.debt-links.mortgage.description'),
       clickAction: () => {
-        window.open($tr['finance.debt-links.mortgage.link'].value, '_blank');
+        window.open(tr.key('finance.debt-links.mortgage.link'), '_blank');
       },
       iconName: 'house'
     }
@@ -135,13 +121,13 @@
     <Title>Banking and Financial Storage</Title>
     <Content>
       <LinkList links={bankingAndFinanceStorageLinks} />
-      <h6 class="section-title">{$tr['finance.banking-info.credit-card-strategy.title'].value}</h6>
+      <h6 class="section-title">{tr.key('finance.banking-info.credit-card-strategy.title')}</h6>
       <p>
-        {$tr['finance.banking-info.credit-card-strategy.p1'].value}
+        {tr.key('finance.banking-info.credit-card-strategy.p1')}
       </p>
       <ul>
-        <li>{$tr['finance.banking-info.credit-card-strategy.li1'].value}</li>
-        <li>{$tr['finance.banking-info.credit-card-strategy.li2'].value}</li>
+        <li>{tr.key('finance.banking-info.credit-card-strategy.li1')}</li>
+        <li>{tr.key('finance.banking-info.credit-card-strategy.li2')}</li>
       </ul>
     </Content>
   </Paper>

@@ -1,10 +1,10 @@
 import type { LinkInfo } from 'components/LinkListItem.svelte';
-import { homePageInfo } from '../routes/+page.svelte';
-import { automationPageInfo } from '../routes/automation/+page.svelte';
-import { devPageInfo } from '../routes/dev/+page.svelte';
-import { archPageInfo } from '../routes/dev/arch/+page.svelte';
-import { financePageInfo } from '../routes/finance/+page.svelte';
-import { settingsPageInfo } from '../routes/settings/+page.svelte';
+import { automationPageInfo } from '../routes/automation/pageInfo';
+import { archPageInfo } from '../routes/dev/arch/pageInfo';
+import { devPageInfo } from '../routes/dev/pageInfo';
+import { financePageInfo } from '../routes/finance/pageInfo';
+import { homePageInfo } from '../routes/pageInfo';
+import { settingsPageInfo } from '../routes/settings/pageInfo';
 
 export interface PageInfo extends LinkInfo {
   /**

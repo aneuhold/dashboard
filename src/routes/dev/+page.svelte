@@ -6,22 +6,7 @@
   Implementation notes:
   - SVG icons: https://worldvectorlogo.com/
 -->
-<script module lang="ts" context="module">
-  export const devPageInfo: PageInfo = {
-    shortTitle: 'Development',
-    title: 'Development Links and Info',
-    url: '/dev',
-    iconName: 'code',
-    clickAction: () => {
-      goto(devPageInfo.url);
-    },
-    nestingLevel: 0,
-    isInternalLink: true
-  };
-</script>
-
 <script lang="ts">
-  import { goto } from '$app/navigation';
   import DigitalOceanIcon from '$lib/svgs/DigitalOceanIcon.svelte';
   import MongoDbIcon from '$lib/svgs/MongoDBIcon.svelte';
   import NetlifyIcon from '$lib/svgs/NetlifyIcon.svelte';
@@ -29,8 +14,8 @@
   import LinkList from 'components/LinkList.svelte';
   import type { LinkInfo } from 'components/LinkListItem.svelte';
   import PageTitle from 'components/PageTitle.svelte';
-  import type { PageInfo } from 'util/navInfo';
   import navInfo from 'util/navInfo';
+  import { devPageInfo } from './pageInfo';
 
   const architectureLinks: Array<LinkInfo> = [
     navInfo.devArch,

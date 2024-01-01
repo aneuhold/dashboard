@@ -3,8 +3,7 @@
   
   A page for settings of the dashboard for the current user.
 -->
-<script lang="ts" context="module">
-  import { goto } from '$app/navigation';
+<script lang="ts">
   import Button from '@smui/button';
   import Checkbox from '@smui/checkbox';
   import CircularProgress from '@smui/circular-progress';
@@ -12,24 +11,8 @@
   import Paper, { Content } from '@smui/paper';
   import PageTitle from 'components/PageTitle.svelte';
   import DashboardAPIService from 'util/DashboardAPIService';
-  import type { PageInfo } from 'util/navInfo';
   import { userSettings } from '../../stores/userSettings';
-
-  export const settingsPageInfo: PageInfo = {
-    shortTitle: 'Settings',
-    title: 'Settings',
-    description: 'Settings for your account',
-    url: '/settings',
-    iconName: 'settings',
-    clickAction: () => {
-      goto(settingsPageInfo.url);
-    },
-    nestingLevel: 0,
-    isInternalLink: true
-  };
-</script>
-
-<script lang="ts">
+  import { settingsPageInfo } from './pageInfo';
   let updatingSettings = false;
 
   function triggerSettingsChanged() {

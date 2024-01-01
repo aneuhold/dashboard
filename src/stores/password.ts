@@ -1,6 +1,5 @@
 import { writable } from 'svelte/store';
-import LocalData from '../util/LocalData';
-import { localDataReady } from './localDataReady';
+import LocalData, { localDataReady } from '../util/LocalData';
 
 function createPasswordStore() {
   const { subscribe, set, update } = writable<string>('');
