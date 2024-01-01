@@ -6,28 +6,34 @@
 <script lang="ts">
   import CircularProgress from '@smui/circular-progress';
   import Snackbar from 'components/Snackbar.svelte';
-  import LocalData, { localDataReady } from 'util/LocalData';
+  import { onMount } from 'svelte';
+  import LocalData from 'util/LocalData';
   import Login from '../components/Login.svelte';
   import NavBar from '../components/NavBar.svelte';
   import '../globalStyles/global.css';
   import { LoginState, loginState } from '../stores/loginState';
 
-  let navBar: NavBar;
+  let mounted = false;
 
   // Top-level initialization of local data. This should only be done here.
   LocalData.initialize();
+
+  // Without this, the layout fluctuates a lot when the page is starting up.
+  onMount(() => {
+    mounted = true;
+  });
 </script>
 
 <div class="app">
-  {#if !$localDataReady}
+  {#if !mounted || $loginState === LoginState.Initializing}
     <div class="loading">
       <CircularProgress style="height: 32px; width: 32px;" indeterminate={true} />
     </div>
-  {:else if $loginState !== LoginState.LoggedIn}
+  {:else if $loginState === LoginState.ProcessingCredentials || $loginState === LoginState.LoggedOut}
     <Login />
   {:else}
     <main>
-      <NavBar bind:this={navBar}>
+      <NavBar>
         <div class="content">
           <slot />
         </div>
