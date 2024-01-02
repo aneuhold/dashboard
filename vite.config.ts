@@ -12,8 +12,13 @@ const viteConfig: UserConfig = {
   resolve: {
     dedupe: ['svelte']
   },
+  build: {
+    // Solves the top-level await issue when running `build`
+    target: 'esnext'
+  },
   optimizeDeps: {
-    // Fixes an issue where it throws an error about top-level await
+    // Fixes an issue where it throws an error about top-level await when
+    // running `dev`
     exclude: ['bson']
   },
   css: {
