@@ -1,6 +1,7 @@
 import type { DashboardConfig, Translations } from '@aneuhold/core-ts-api-lib';
 import { sleep } from '@aneuhold/core-ts-lib';
 import { writable } from 'svelte/store';
+import type { TaskMap } from '../stores/taskMap';
 import type { UserSettings } from '../stores/userSettings';
 
 function createLocalDataReadyStore() {
@@ -29,7 +30,8 @@ export default class LocalData {
     apiKey: `${this.PREFIX}apiKey`,
     dashboardConfig: `${this.PREFIX}dashboardConfig`,
     translations: `${this.PREFIX}translations`,
-    userSettings: `${this.PREFIX}userSettings`
+    userSettings: `${this.PREFIX}userSettings`,
+    taskMap: `${this.PREFIX}taskMap`
   };
 
   /**
@@ -126,6 +128,14 @@ export default class LocalData {
 
   static get userSettings(): UserSettings | null {
     return this.getStoredObject<UserSettings>(LocalData.storedKeyNames.userSettings);
+  }
+
+  static set taskMap(newTaskMap: TaskMap) {
+    this.storeValue(LocalData.storedKeyNames.taskMap, JSON.stringify(newTaskMap));
+  }
+
+  static get taskMap(): TaskMap | null {
+    return this.getStoredObject<TaskMap>(LocalData.storedKeyNames.taskMap);
   }
 
   /**

@@ -1,9 +1,10 @@
 import { APIService } from '@aneuhold/core-ts-api-lib';
-import type { DashboardUserConfig } from '@aneuhold/core-ts-db-lib';
+import type { DashboardTask, DashboardUserConfig } from '@aneuhold/core-ts-db-lib';
 import type { UUID } from 'crypto';
 import { apiKey } from '../stores/apiKey';
 import { dashboardConfig } from '../stores/dashboardConfig';
 import { LoginState, loginState } from '../stores/loginState';
+import { taskMap, type TaskMap } from '../stores/taskMap';
 import { translations } from '../stores/translations';
 import { userSettings } from '../stores/userSettings';
 
@@ -22,13 +23,20 @@ export default class DashboardAPIService {
       options: {
         get: {
           translations: true,
-          userConfig: true
+          userConfig: true,
+          tasks: true
         }
       }
     });
-    if (result.success && result.data?.translations && result.data.userConfig) {
+    if (
+      result.success &&
+      result.data?.translations &&
+      result.data.userConfig &&
+      result.data.tasks
+    ) {
       translations.set(result.data.translations);
       userSettings.set({ pendingSettingsUpdate: false, config: result.data.userConfig });
+      taskMap.set(this.convertTaskResultToMap(result.data.tasks));
       loginState.set(LoginState.LoggedIn);
       return true;
     } else {
@@ -55,6 +63,26 @@ export default class DashboardAPIService {
     }
   }
 
+  static async updateTasks(newTaskMap: TaskMap) {
+    const apiKeyValue = this.checkOrSetupDashboardAPI();
+    const result = await APIService.callDashboardAPI({
+      apiKey: apiKeyValue,
+      options: {
+        get: {
+          tasks: true
+        },
+        update: {
+          tasks: Object.values(newTaskMap)
+        }
+      }
+    });
+    if (result.success && result.data?.tasks) {
+      taskMap.set(this.convertTaskResultToMap(result.data.tasks));
+    } else {
+      console.error('Error updating tasks', result);
+    }
+  }
+
   private static checkOrSetupDashboardAPI(): UUID {
     if (!this.dashboardAPIUrlSet) {
       const url = dashboardConfig.get()?.projectDashboardFunctionUrl;
@@ -69,5 +97,12 @@ export default class DashboardAPIService {
       throw new Error('API Key not set!');
     }
     return apiKeyValue;
+  }
+
+  private static convertTaskResultToMap(tasks: DashboardTask[]): TaskMap {
+    return tasks.reduce((map, task) => {
+      map[task._id.toString()] = task;
+      return map;
+    }, {} as TaskMap);
   }
 }
