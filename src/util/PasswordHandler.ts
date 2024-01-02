@@ -1,6 +1,6 @@
 /**
  * Super simple password handler. This can potentially be used on the backend
- * perhaps.
+ * perhaps. It isn't being used at the moment.
  */
 export default class PasswordHandler {
   static async encryptPassword(password: string): Promise<string> {

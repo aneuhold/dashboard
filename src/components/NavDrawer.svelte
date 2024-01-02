@@ -10,10 +10,11 @@
   import { page } from '$app/stores';
   import Drawer, { Content } from '@smui/drawer';
   import List, { Graphic, Item, Separator, Text } from '@smui/list';
+  import type { PageInfo } from 'util/navInfo';
   import { clickOutside } from '../actions/clickOutside';
   import { settingsPageInfo } from '../routes/settings/pageInfo';
+  import { enabledPages } from '../stores/visual/enabledPages';
   import { navDrawerOpen } from '../stores/visual/navDrawerOpen';
-  import navInfo, { type PageInfo } from '../util/navInfo';
 
   export let activeRoute: string = '/';
 
@@ -45,7 +46,7 @@
   <Drawer variant="modal" bind:open={$navDrawerOpen}>
     <Content>
       <List>
-        {#each Object.values(navInfo) as pageInfo}
+        {#each $enabledPages as pageInfo}
           {#if pageInfo.title === settingsPageInfo.title}
             <Separator />
           {/if}

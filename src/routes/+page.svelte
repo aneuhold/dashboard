@@ -3,10 +3,12 @@
   import LinkList from 'components/LinkList.svelte';
   import type { LinkInfo } from 'components/LinkListItem.svelte';
   import PageTitle from 'components/PageTitle.svelte';
-  import navInfo from '../util/navInfo';
+  import { enabledPages } from '../stores/visual/enabledPages';
   import { homePageInfo } from './pageInfo';
 
-  const tableOfContentsLinks: Array<LinkInfo> = [navInfo.dev, navInfo.finance, navInfo.automation];
+  $: tableOfContentsLinks = $enabledPages.filter((pageInfo) => {
+    return pageInfo.nestingLevel === 0 && pageInfo.title !== homePageInfo.title;
+  });
 
   const primaryLinks: Array<LinkInfo> = [
     {
