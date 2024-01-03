@@ -1,15 +1,16 @@
 import { APIService } from '@aneuhold/core-ts-api-lib';
-import type { DashboardTask, DashboardUserConfig } from '@aneuhold/core-ts-db-lib';
+import type { DashboardUserConfig } from '@aneuhold/core-ts-db-lib';
 import type { UUID } from 'crypto';
-import { apiKey } from '../stores/apiKey';
-import { dashboardConfig } from '../stores/dashboardConfig';
-import { LoginState, loginState } from '../stores/loginState';
-import { taskMap, type TaskMap } from '../stores/taskMap';
-import { translations } from '../stores/translations';
-import { userSettings } from '../stores/userSettings';
+import { apiKey } from '../../stores/apiKey';
+import { dashboardConfig } from '../../stores/dashboardConfig';
+import { LoginState, loginState } from '../../stores/loginState';
+import { taskMap } from '../../stores/taskMap';
+import { translations } from '../../stores/translations';
+import { userSettings } from '../../stores/userSettings';
+import DashboardTaskAPIService from './DashboardTaskAPIService';
 
 export default class DashboardAPIService {
-  static dashboardAPIUrlSet = false;
+  private static dashboardAPIUrlSet = false;
 
   /**
    * Gets the initial data from the backend and sets the stores accordingly.
@@ -36,7 +37,7 @@ export default class DashboardAPIService {
     ) {
       translations.set(result.data.translations);
       userSettings.set({ pendingSettingsUpdate: false, config: result.data.userConfig });
-      taskMap.set(this.convertTaskResultToMap(result.data.tasks));
+      taskMap.set(DashboardTaskAPIService.convertTaskArrayToMap(result.data.tasks));
       loginState.set(LoginState.LoggedIn);
       return true;
     } else {
@@ -63,27 +64,7 @@ export default class DashboardAPIService {
     }
   }
 
-  static async updateTasks(newTaskMap: TaskMap) {
-    const apiKeyValue = this.checkOrSetupDashboardAPI();
-    const result = await APIService.callDashboardAPI({
-      apiKey: apiKeyValue,
-      options: {
-        get: {
-          tasks: true
-        },
-        update: {
-          tasks: Object.values(newTaskMap)
-        }
-      }
-    });
-    if (result.success && result.data?.tasks) {
-      taskMap.set(this.convertTaskResultToMap(result.data.tasks));
-    } else {
-      console.error('Error updating tasks', result);
-    }
-  }
-
-  private static checkOrSetupDashboardAPI(): UUID {
+  static checkOrSetupDashboardAPI(): UUID {
     if (!this.dashboardAPIUrlSet) {
       const url = dashboardConfig.get()?.projectDashboardFunctionUrl;
       if (!url) {
@@ -97,12 +78,5 @@ export default class DashboardAPIService {
       throw new Error('API Key not set!');
     }
     return apiKeyValue;
-  }
-
-  private static convertTaskResultToMap(tasks: DashboardTask[]): TaskMap {
-    return tasks.reduce((map, task) => {
-      map[task._id.toString()] = task;
-      return map;
-    }, {} as TaskMap);
   }
 }

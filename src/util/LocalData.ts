@@ -3,6 +3,7 @@ import { sleep } from '@aneuhold/core-ts-lib';
 import { writable } from 'svelte/store';
 import type { TaskMap } from '../stores/taskMap';
 import type { UserSettings } from '../stores/userSettings';
+import type { TaskInsertOrUpdateInfo } from './api/DashboardTaskAPIService';
 
 function createLocalDataReadyStore() {
   const { subscribe, set } = writable<boolean>(false);
@@ -31,7 +32,9 @@ export default class LocalData {
     dashboardConfig: `${this.PREFIX}dashboardConfig`,
     translations: `${this.PREFIX}translations`,
     userSettings: `${this.PREFIX}userSettings`,
-    taskMap: `${this.PREFIX}taskMap`
+    taskMap: `${this.PREFIX}taskMap`,
+    currentTaskQueueItem: `${this.PREFIX}currentTaskQueueItem`,
+    taskQueue: `${this.PREFIX}taskQueue`
   };
 
   /**
@@ -136,6 +139,37 @@ export default class LocalData {
 
   static get taskMap(): TaskMap | null {
     return this.getStoredObject<TaskMap>(LocalData.storedKeyNames.taskMap);
+  }
+
+  static set currentTaskQueueItem(newTaskQueueItem: TaskInsertOrUpdateInfo | undefined) {
+    this.storeValue(
+      LocalData.storedKeyNames.currentTaskQueueItem,
+      JSON.stringify(newTaskQueueItem)
+    );
+  }
+
+  static get currentTaskQueueItem(): TaskInsertOrUpdateInfo | undefined {
+    const result = this.getStoredObject<TaskInsertOrUpdateInfo>(
+      LocalData.storedKeyNames.currentTaskQueueItem
+    );
+    if (!result) {
+      return undefined;
+    }
+    return result;
+  }
+
+  static set taskQueue(newTaskQueue: TaskInsertOrUpdateInfo[]) {
+    this.storeValue(LocalData.storedKeyNames.taskQueue, JSON.stringify(newTaskQueue));
+  }
+
+  static get taskQueue(): TaskInsertOrUpdateInfo[] {
+    const result = this.getStoredObject<TaskInsertOrUpdateInfo[]>(
+      LocalData.storedKeyNames.taskQueue
+    );
+    if (!result) {
+      return [];
+    }
+    return result;
   }
 
   /**

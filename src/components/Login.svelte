@@ -3,8 +3,8 @@
   import CircularProgress from '@smui/circular-progress';
   import IconButton from '@smui/icon-button';
   import InputBox from 'components/InputBox.svelte';
-  import DashboardAPIService from 'util/DashboardAPIService';
   import LocalData from 'util/LocalData';
+  import DashboardAPIService from 'util/api/DashboardAPIService';
   import { apiKey } from '../stores/apiKey';
   import { dashboardConfig } from '../stores/dashboardConfig';
   import { password } from '../stores/password';
