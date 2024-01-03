@@ -10,7 +10,7 @@
   import FormField from '@smui/form-field';
   import Paper, { Content } from '@smui/paper';
   import PageTitle from 'components/PageTitle.svelte';
-  import DashboardAPIService from 'util/DashboardAPIService';
+  import DashboardAPIService from 'util/api/DashboardAPIService';
   import { userSettings } from '../../stores/userSettings';
   import { settingsPageInfo } from './pageInfo';
   let updatingSettings = false;

@@ -5,6 +5,7 @@ import { devPageInfo } from '../routes/dev/pageInfo';
 import { financePageInfo } from '../routes/finance/pageInfo';
 import { homePageInfo } from '../routes/pageInfo';
 import { settingsPageInfo } from '../routes/settings/pageInfo';
+import { tasksPageInfo } from '../routes/tasks/pageInfo';
 
 export interface PageInfo extends LinkInfo {
   /**
@@ -41,6 +42,7 @@ const navInfo = {
   devArch: archPageInfo,
   finance: financePageInfo,
   automation: automationPageInfo,
+  tasks: tasksPageInfo,
   settings: settingsPageInfo
 } satisfies Record<string, PageInfo>;
 
