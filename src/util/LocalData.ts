@@ -1,8 +1,8 @@
 import type { DashboardConfig, Translations } from '@aneuhold/core-ts-api-lib';
 import { sleep } from '@aneuhold/core-ts-lib';
 import { writable } from 'svelte/store';
-import type { TaskMap } from '../stores/taskMap';
 import type { UserSettings } from '../stores/userSettings';
+import type { TaskMap } from './TaskService';
 import type { TaskInsertOrUpdateInfo } from './api/DashboardTaskAPIService';
 
 function createLocalDataReadyStore() {
@@ -181,6 +181,7 @@ export default class LocalData {
     if (
       currentlyStoredValue &&
       currentlyStoredValue !== '' &&
+      currentlyStoredValue !== 'undefined' &&
       typeof currentlyStoredValue === 'string'
     ) {
       const jsonObject = JSON.parse(currentlyStoredValue);

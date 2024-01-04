@@ -1,10 +1,10 @@
 import { APIService } from '@aneuhold/core-ts-api-lib';
 import type { DashboardUserConfig } from '@aneuhold/core-ts-db-lib';
 import type { UUID } from 'crypto';
+import TaskService from 'util/TaskService';
 import { apiKey } from '../../stores/apiKey';
 import { dashboardConfig } from '../../stores/dashboardConfig';
 import { LoginState, loginState } from '../../stores/loginState';
-import { taskMap } from '../../stores/taskMap';
 import { translations } from '../../stores/translations';
 import { userSettings } from '../../stores/userSettings';
 import DashboardTaskAPIService from './DashboardTaskAPIService';
@@ -37,7 +37,7 @@ export default class DashboardAPIService {
     ) {
       translations.set(result.data.translations);
       userSettings.set({ pendingSettingsUpdate: false, config: result.data.userConfig });
-      taskMap.set(DashboardTaskAPIService.convertTaskArrayToMap(result.data.tasks));
+      TaskService.getStore().set(DashboardTaskAPIService.convertTaskArrayToMap(result.data.tasks));
       loginState.set(LoginState.LoggedIn);
       return true;
     } else {

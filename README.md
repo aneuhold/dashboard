@@ -4,9 +4,8 @@
 
 Notes for improvement:
 
-- Create a userConfig type for the dashboard that applies to just that user
-  - Involves creating a settings page
 - Task list things
+- See if it can be made to work offline with [this guide](https://developers.google.com/codelabs/pwa-training/pwa03--going-offline#1)
 
 ## Developing
 

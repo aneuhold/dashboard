@@ -2,7 +2,8 @@ import { APIService } from '@aneuhold/core-ts-api-lib';
 import type { DashboardTask } from '@aneuhold/core-ts-db-lib';
 import { snackbar } from 'components/Snackbar.svelte';
 import LocalData from 'util/LocalData';
-import { taskMap, type TaskMap } from '../../stores/taskMap';
+import type { TaskMap } from 'util/TaskService';
+import TaskService from 'util/TaskService';
 import DashboardAPIService from './DashboardAPIService';
 
 export type TaskInsertOrUpdateInfo = {
@@ -110,7 +111,7 @@ export default class DashboardTaskAPIService {
         // Only set the task map if there are no more tasks to process. This
         // should help prevent the task map from being set to an old value if
         // the user refreshes the page while the task queue is being processed.
-        taskMap.set(this.convertTaskArrayToMap(result.data.tasks));
+        TaskService.getStore().set(this.convertTaskArrayToMap(result.data.tasks));
         LocalData.currentTaskQueueItem = undefined;
       }
       console.log('Finished processing task queue item', currentTask);
