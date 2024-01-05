@@ -27,7 +27,7 @@
       title: 'Delete',
       iconName: 'delete',
       clickAction: () => {
-        console.log('delete');
+        TaskService.getStore().deleteTask(taskId);
       }
     }
   ];

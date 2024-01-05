@@ -21,6 +21,8 @@ export type TaskInsertOrUpdateInfo = {
  * processed.
  */
 export default class DashboardTaskAPIService {
+  private static processingTaskQueue = false;
+
   /**
    * Inserts, deletes, or updates tasks in the backend.
    *
@@ -32,7 +34,7 @@ export default class DashboardTaskAPIService {
     this.pushTaskQueueItem(updateInfo);
 
     // Start processing the queue if not already doing so
-    if (!LocalData.currentTaskQueueItem) {
+    if (!this.processingTaskQueue && LocalData.taskQueue.length > 0) {
       this.processTaskQueue();
     }
   }
@@ -64,57 +66,58 @@ export default class DashboardTaskAPIService {
   }
 
   private static async processTaskQueue() {
+    this.processingTaskQueue = true;
     while (LocalData.taskQueue.length > 0) {
       LocalData.currentTaskQueueItem = this.shiftTaskQueueItem();
       const currentTask = LocalData.currentTaskQueueItem;
       if (!currentTask) {
         console.error('No current task to process, something went wrong!!');
+        break;
       }
-      let numProcessingAttempts = 0;
-
-      const apiKeyValue = DashboardAPIService.checkOrSetupDashboardAPI();
-      console.log('Processing task queue item', currentTask);
-      const result = await APIService.callDashboardAPI({
-        apiKey: apiKeyValue,
-        options: {
-          delete: {
-            tasks: currentTask?.delete
-          },
-          insert: {
-            tasks: currentTask?.insert
-          },
-          update: {
-            tasks: currentTask?.update
-          },
-          get: {
-            tasks: true
-          }
-        }
-      });
-      if (!result.success || !result.data?.tasks) {
-        numProcessingAttempts += 1;
-        console.error(`Error updating tasks. Attempt number ${numProcessingAttempts}`, result);
-        if (numProcessingAttempts > 3) {
-          snackbar.error('Error updating tasks');
-          console.log(
-            'This should eventually check the network connection and stop attempting' +
-              ' until it is restored.'
-          );
-          break;
-        }
-        console.error('Error updating tasks', result);
-        snackbar.error('Error updating tasks');
-        numProcessingAttempts += 1;
-        // Add the task back to the queue
-        this.unshiftTaskQueueItem(LocalData.currentTaskQueueItem!);
-      } else if (result.data.tasks && LocalData.taskQueue.length === 0) {
+      const updatedTaskList = await this.callDashboardAPI(currentTask);
+      if (updatedTaskList && LocalData.taskQueue.length === 0) {
         // Only set the task map if there are no more tasks to process. This
         // should help prevent the task map from being set to an old value if
         // the user refreshes the page while the task queue is being processed.
-        TaskService.getStore().set(this.convertTaskArrayToMap(result.data.tasks));
-        LocalData.currentTaskQueueItem = undefined;
+        TaskService.getStore().set(this.convertTaskArrayToMap(updatedTaskList));
+      } else {
+        // If there was an error, add the task back to the queue and try again
+        // Save this for later to ensure there is no infinite loop
+        // this.unshiftTaskQueueItem(LocalData.currentTaskQueueItem!);
       }
-      console.log('Finished processing task queue item', currentTask);
+    }
+    this.processingTaskQueue = false;
+  }
+
+  private static async callDashboardAPI(
+    insertInfo: TaskInsertOrUpdateInfo
+  ): Promise<DashboardTask[] | null> {
+    const apiKeyValue = DashboardAPIService.checkOrSetupDashboardAPI();
+    console.log('Processing task queue item', insertInfo);
+    const result = await APIService.callDashboardAPI({
+      apiKey: apiKeyValue,
+      options: {
+        delete: {
+          tasks: insertInfo?.delete
+        },
+        insert: {
+          tasks: insertInfo?.insert
+        },
+        update: {
+          tasks: insertInfo?.update
+        },
+        get: {
+          tasks: true
+        }
+      }
+    });
+    if (!result.success || !result.data?.tasks) {
+      console.error('Error processing task queue item', insertInfo, result);
+      snackbar.error('Error updating tasks');
+      return null;
+    } else {
+      console.log('Successfully processed task queue item', insertInfo);
+      return result.data.tasks;
     }
   }
 }

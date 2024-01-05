@@ -1,5 +1,6 @@
 import type { DashboardConfig, Translations } from '@aneuhold/core-ts-api-lib';
 import { sleep } from '@aneuhold/core-ts-lib';
+import { EJSON } from 'bson';
 import { writable } from 'svelte/store';
 import type { UserSettings } from '../stores/userSettings';
 import type { TaskMap } from './TaskService';
@@ -110,7 +111,10 @@ export default class LocalData {
   }
 
   static set dashboardConfig(newDashboardConfig: DashboardConfig) {
-    this.storeValue(LocalData.storedKeyNames.dashboardConfig, JSON.stringify(newDashboardConfig));
+    this.storeValue(
+      LocalData.storedKeyNames.dashboardConfig,
+      EJSON.stringify(newDashboardConfig, { relaxed: false })
+    );
   }
 
   static get dashboardConfig(): DashboardConfig | null {
@@ -118,7 +122,10 @@ export default class LocalData {
   }
 
   static set translations(newTranslations: Translations) {
-    this.storeValue(LocalData.storedKeyNames.translations, JSON.stringify(newTranslations));
+    this.storeValue(
+      LocalData.storedKeyNames.translations,
+      EJSON.stringify(newTranslations, { relaxed: false })
+    );
   }
 
   static get translations(): Translations | null {
@@ -126,7 +133,10 @@ export default class LocalData {
   }
 
   static set userSettings(newSettings: UserSettings) {
-    this.storeValue(LocalData.storedKeyNames.userSettings, JSON.stringify(newSettings));
+    this.storeValue(
+      LocalData.storedKeyNames.userSettings,
+      EJSON.stringify(newSettings, { relaxed: false })
+    );
   }
 
   static get userSettings(): UserSettings | null {
@@ -134,7 +144,10 @@ export default class LocalData {
   }
 
   static set taskMap(newTaskMap: TaskMap) {
-    this.storeValue(LocalData.storedKeyNames.taskMap, JSON.stringify(newTaskMap));
+    this.storeValue(
+      LocalData.storedKeyNames.taskMap,
+      EJSON.stringify(newTaskMap, { relaxed: false })
+    );
   }
 
   static get taskMap(): TaskMap | null {
@@ -144,7 +157,7 @@ export default class LocalData {
   static set currentTaskQueueItem(newTaskQueueItem: TaskInsertOrUpdateInfo | undefined) {
     this.storeValue(
       LocalData.storedKeyNames.currentTaskQueueItem,
-      JSON.stringify(newTaskQueueItem)
+      EJSON.stringify(newTaskQueueItem)
     );
   }
 
@@ -159,7 +172,7 @@ export default class LocalData {
   }
 
   static set taskQueue(newTaskQueue: TaskInsertOrUpdateInfo[]) {
-    this.storeValue(LocalData.storedKeyNames.taskQueue, JSON.stringify(newTaskQueue));
+    this.storeValue(LocalData.storedKeyNames.taskQueue, EJSON.stringify(newTaskQueue));
   }
 
   static get taskQueue(): TaskInsertOrUpdateInfo[] {
@@ -184,7 +197,7 @@ export default class LocalData {
       currentlyStoredValue !== 'undefined' &&
       typeof currentlyStoredValue === 'string'
     ) {
-      const jsonObject = JSON.parse(currentlyStoredValue);
+      const jsonObject = EJSON.parse(currentlyStoredValue);
       if (typeof jsonObject === 'object') {
         return jsonObject as ObjectType;
       }

@@ -21,7 +21,9 @@
 
   function handleItemClick(clickAction: () => void) {
     menu.setOpen(false);
-    clickAction();
+    // Wait for the ripple to stop, this also prevents an error for events
+    // from SMUI if the component was deleted during the clickAction.
+    setTimeout(clickAction, 50);
   }
 
   let menu: MenuSurface;

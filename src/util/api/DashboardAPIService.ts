@@ -1,6 +1,7 @@
 import { APIService } from '@aneuhold/core-ts-api-lib';
 import type { DashboardUserConfig } from '@aneuhold/core-ts-db-lib';
 import type { UUID } from 'crypto';
+import LocalData from 'util/LocalData';
 import TaskService from 'util/TaskService';
 import { apiKey } from '../../stores/apiKey';
 import { dashboardConfig } from '../../stores/dashboardConfig';
@@ -38,6 +39,9 @@ export default class DashboardAPIService {
       translations.set(result.data.translations);
       userSettings.set({ pendingSettingsUpdate: false, config: result.data.userConfig });
       TaskService.getStore().set(DashboardTaskAPIService.convertTaskArrayToMap(result.data.tasks));
+      // Clear the task queue since we just got the initial data
+      LocalData.taskQueue = [];
+      LocalData.currentTaskQueueItem = undefined;
       loginState.set(LoginState.LoggedIn);
       return true;
     } else {

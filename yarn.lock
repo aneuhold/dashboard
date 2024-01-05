@@ -15,13 +15,14 @@
     "@jridgewell/gen-mapping" "^0.3.0"
     "@jridgewell/trace-mapping" "^0.3.9"
 
-"@aneuhold/core-ts-api-lib@^1.0.14":
-  version "1.0.14"
-  resolved "https://registry.yarnpkg.com/@aneuhold/core-ts-api-lib/-/core-ts-api-lib-1.0.14.tgz#2bf6b6447c23339c724e954950b69810709505c2"
-  integrity sha512-lLZ55m61rQ15TiQlSWXGxWkZFDbe+jFNRWAG/jF41/YQV0WtbWGUqQCB3zOq7Q6Jn3bgy3bLALM0EzVRXEkVWw==
+"@aneuhold/core-ts-api-lib@^1.0.20":
+  version "1.0.20"
+  resolved "https://registry.yarnpkg.com/@aneuhold/core-ts-api-lib/-/core-ts-api-lib-1.0.20.tgz#47a57e4add3323fbd93ad5b31501b604cf153bbd"
+  integrity sha512-yzlUsz02KLAWQIVhuT9TmIQyrV6hxQcbXZnohL8brUSJ2jABR7QwaZ77MkVUBIKK4CI+HABKr7K3JuGrmp8ZpA==
   dependencies:
     "@aneuhold/core-ts-db-lib" "^1.0.16"
     "@aneuhold/core-ts-lib" "^1.1.9"
+    bson "^6.2.0"
 
 "@aneuhold/core-ts-db-lib@^1.0.16":
   version "1.0.16"
@@ -495,6 +496,25 @@
     "@material/feature-targeting" "^14.0.0"
     "@material/rtl" "^14.0.0"
     "@material/theme" "^14.0.0"
+    tslib "^2.1.0"
+
+"@material/fab@^14.0.0":
+  version "14.0.0"
+  resolved "https://registry.yarnpkg.com/@material/fab/-/fab-14.0.0.tgz#9561178ff593157ad07a0841c6e213a06d6fe6ce"
+  integrity sha512-s4rrw2TLU8ITKopHSTEHuJEFsGEZsb+ijwW16pQt0h9GArxPGaALT+CCJIPjf75D3wPEEMW0vnLj7oMoII2VFg==
+  dependencies:
+    "@material/animation" "^14.0.0"
+    "@material/dom" "^14.0.0"
+    "@material/elevation" "^14.0.0"
+    "@material/feature-targeting" "^14.0.0"
+    "@material/focus-ring" "^14.0.0"
+    "@material/ripple" "^14.0.0"
+    "@material/rtl" "^14.0.0"
+    "@material/shape" "^14.0.0"
+    "@material/theme" "^14.0.0"
+    "@material/tokens" "^14.0.0"
+    "@material/touch-target" "^14.0.0"
+    "@material/typography" "^14.0.0"
     tslib "^2.1.0"
 
 "@material/feature-targeting@^14.0.0":
@@ -975,6 +995,17 @@
     "@material/drawer" "^14.0.0"
     "@smui/common" "^7.0.0-beta.15"
     svelte2tsx "^0.6.21"
+
+"@smui/fab@^7.0.0-beta.16":
+  version "7.0.0-beta.16"
+  resolved "https://registry.yarnpkg.com/@smui/fab/-/fab-7.0.0-beta.16.tgz#d3906b2ba12dde4b81f26c9589e699a924b74cc0"
+  integrity sha512-6cekRM7YFmThg8jMVLj+QKZbXWtLxFfb0W3cbk9WysmKojW6kDC1qOaSP+F4dlOyYBUJirWPylthJHO3+jjKRQ==
+  dependencies:
+    "@material/fab" "^14.0.0"
+    "@material/feature-targeting" "^14.0.0"
+    "@smui/common" "^7.0.0-beta.16"
+    "@smui/ripple" "^7.0.0-beta.16"
+    svelte2tsx "^0.6.27"
 
 "@smui/floating-label@^7.0.0-beta.15":
   version "7.0.0-beta.15"

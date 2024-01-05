@@ -95,11 +95,11 @@ export default class TaskService {
         });
       },
       deleteTask: (objectId: string) => {
+        DashboardTaskAPIService.updateTasks({
+          delete: [{ ...this._taskMap[objectId] }]
+        });
         delete this._taskMap[objectId];
         setTaskMap();
-        DashboardTaskAPIService.updateTasks({
-          delete: [this._taskMap[objectId]]
-        });
       }
     };
   }

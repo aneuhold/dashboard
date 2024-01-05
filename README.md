@@ -5,6 +5,9 @@
 Notes for improvement:
 
 - Task list things
+  - Add clicking into task
+  - Add refresh capability
+  - Add create icon for tasks?
 - See if it can be made to work offline with [this guide](https://developers.google.com/codelabs/pwa-training/pwa03--going-offline#1)
 
 ## Developing

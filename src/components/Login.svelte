@@ -1,5 +1,9 @@
 <script lang="ts">
-  import { APIService, type AuthValidateUserOutput } from '@aneuhold/core-ts-api-lib';
+  import {
+    APIService,
+    type AuthValidateUserOutput,
+    type DOFunctionCallOutput
+  } from '@aneuhold/core-ts-api-lib';
   import CircularProgress from '@smui/circular-progress';
   import IconButton from '@smui/icon-button';
   import InputBox from 'components/InputBox.svelte';
@@ -24,15 +28,15 @@
     }).then(handleLoginResult);
   }
 
-  function handleLoginResult(validationResponse: AuthValidateUserOutput) {
+  function handleLoginResult(validationResponse: DOFunctionCallOutput<AuthValidateUserOutput>) {
     if (
       validationResponse.success &&
-      validationResponse.userInfo?.apiKey &&
-      validationResponse.config?.dashboard
+      validationResponse.data.userInfo?.apiKey &&
+      validationResponse.data.config?.dashboard
     ) {
-      dashboardConfig.set(validationResponse.config.dashboard);
+      dashboardConfig.set(validationResponse.data.config.dashboard);
       invalidCredentials = false;
-      const apiKeyValue = validationResponse.userInfo.apiKey.key;
+      const apiKeyValue = validationResponse.data.userInfo.apiKey.key;
       apiKey.set(apiKeyValue);
       if (!$dashboardConfig?.projectDashboardFunctionUrl) {
         console.error('No dashboard function URL found in config');
