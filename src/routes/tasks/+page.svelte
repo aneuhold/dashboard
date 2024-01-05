@@ -1,7 +1,7 @@
 <!--
   @component
   
-  A page for settings of the dashboard for the current user.
+  A page for main tasks for the current user.
 -->
 <script lang="ts">
   import { DashboardTask } from '@aneuhold/core-ts-db-lib';
