@@ -5,7 +5,7 @@
 -->
 <script lang="ts">
   import { DashboardTask } from '@aneuhold/core-ts-db-lib';
-  import Fab, { Icon } from '@smui/fab';
+  import FabButton from 'components/FabButton.svelte';
   import PageTitle from 'components/PageTitle.svelte';
   import TaskRow from 'components/TaskRow.svelte';
   import TaskService from 'util/TaskService';
@@ -34,9 +34,7 @@
   {/each}
 </div>
 
-<Fab color="primary" on:click={addTask}>
-  <Icon class="material-icons">favorite</Icon>
-</Fab>
+<FabButton clickHandler={addTask} iconName="add" />
 
 <style>
   .content {

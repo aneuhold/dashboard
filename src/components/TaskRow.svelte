@@ -4,6 +4,7 @@
   A single task that can be displayed in a row format.
 -->
 <script lang="ts">
+  import { goto } from '$app/navigation';
   import Card, { Content as CardContent } from '@smui/card';
   import Checkbox from '@smui/checkbox';
   import FormField from '@smui/form-field';
@@ -20,7 +21,7 @@
       title: 'Edit',
       iconName: 'edit',
       clickAction: () => {
-        console.log('edit');
+        goto(`/tasks/${taskId}`);
       }
     },
     {

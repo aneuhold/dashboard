@@ -52,22 +52,20 @@
 <form class="credentialsInputArea">
   <InputBox
     label="Username"
+    autocompleteLabel="username"
     bind:inputValue={typedUserName}
-    validationMessage="Invalid username"
     inputType="text"
   />
   <InputBox
     label="Password"
+    autocompleteLabel="password"
     bind:inputValue={typedPassword}
-    validationMessage="Invalid password"
     inputType="password"
   />
   {#if processingCredentials}
     <CircularProgress style="height: 32px; width: 32px;" indeterminate />
   {:else}
-    <IconButton class="material-icons dimmed-color" on:click={() => handleSubmit()}>
-      send
-    </IconButton>
+    <IconButton class="material-icons dimmed-color" on:click={handleSubmit}>send</IconButton>
   {/if}
   {#if invalidCredentials}
     <span class="errorMessage"> Invalid username or password </span>

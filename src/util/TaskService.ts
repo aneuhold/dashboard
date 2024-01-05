@@ -34,8 +34,10 @@ export default class TaskService {
   /**
    * Returns the task store for the given task ID. This will create a new
    * store if one does not already exist. This can be directly modified.
+   *
+   * If no task exists with that ID, it will throw an error.
    */
-  static getTaskStore(taskId: string) {
+  static getTaskStore(taskId: string): Writable<DashboardTask> {
     if (!this.currentTaskStores[taskId]) {
       this.currentTaskStores[taskId] = this.createTaskStore(taskId);
     }
