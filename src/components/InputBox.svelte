@@ -4,12 +4,16 @@
   A basic input box component.
 
   - The `on:submit` can be bound to for when the user presses the "Enter" key.
-  - The `on:blur` can be bound to for when the user leaves the input box.
 
   Note that the `on:submit` event is not required if the InputBox is contained
   in a `form` element, as that automatically happens in that case. No event
   binding needed. The form will automatically trigger the on:click event of the
   nearest button.
+
+  ### Implmenetation Notes
+
+  There's also a global style added in the globalStyles folder for the text area
+  to adjust it's min height.
 -->
 <script lang="ts">
   import Textfield from '@smui/textfield';
@@ -47,6 +51,11 @@
    * set this.
    */
   export let autocompleteLabel: string | null = null;
+
+  /**
+   * Variant for when this is not a text area. If it is a text area, this will
+   * be ignored.
+   */
   export let variant: 'filled' | 'outlined' | 'standard' = 'standard';
 
   let focused = false;
@@ -88,8 +97,10 @@
   textarea={isTextArea}
   variant={isTextArea ? undefined : variant}
   {label}
-  style={`min-width: 250px;${isTextArea ? 'min-height:5lh;' : ''}}`}
   on:keydown={handleKeyDown}
   on:focus={() => (focused = true)}
   on:blur={handleBlur}
 />
+
+<style>
+</style>

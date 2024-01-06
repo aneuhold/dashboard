@@ -4,8 +4,8 @@
     type AuthValidateUserOutput,
     type DOFunctionCallOutput
   } from '@aneuhold/core-ts-api-lib';
+  import Button, { Label } from '@smui/button';
   import CircularProgress from '@smui/circular-progress';
-  import IconButton from '@smui/icon-button';
   import InputBox from 'components/InputBox.svelte';
   import LocalData from 'util/LocalData';
   import DashboardAPIService from 'util/api/DashboardAPIService';
@@ -49,35 +49,56 @@
   }
 </script>
 
-<form class="credentialsInputArea">
-  <InputBox
-    label="Username"
-    autocompleteLabel="username"
-    bind:inputValue={typedUserName}
-    inputType="text"
-  />
-  <InputBox
-    label="Password"
-    autocompleteLabel="password"
-    bind:inputValue={typedPassword}
-    inputType="password"
-  />
-  {#if processingCredentials}
-    <CircularProgress style="height: 32px; width: 32px;" indeterminate />
-  {:else}
-    <IconButton class="material-icons dimmed-color" on:click={handleSubmit}>send</IconButton>
-  {/if}
-  {#if invalidCredentials}
-    <span class="errorMessage"> Invalid username or password </span>
-  {/if}
-</form>
+<div class="container">
+  <form class="credentialsInputArea">
+    <InputBox
+      label="Username"
+      autocompleteLabel="username"
+      bind:inputValue={typedUserName}
+      inputType="text"
+    />
+    <InputBox
+      label="Password"
+      autocompleteLabel="password"
+      bind:inputValue={typedPassword}
+      inputType="password"
+    />
+    <div class="submitArea">
+      <Button
+        style="width: 100%;"
+        variant="raised"
+        class="material-icons dimmed-color"
+        on:click={handleSubmit}
+        disabled={processingCredentials}
+      >
+        {#if processingCredentials}
+          <CircularProgress style="height: 32px; width: 32px;" indeterminate />
+        {:else}
+          <Label>Submit</Label>
+        {/if}
+      </Button>
+      {#if invalidCredentials}
+        <span class="errorMessage"> Invalid username or password </span>
+      {/if}
+    </div>
+  </form>
+</div>
 
 <style>
-  .credentialsInputArea {
+  .container {
     margin-top: 32px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin: 16px;
+  }
+  .credentialsInputArea {
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+    max-width: 250px;
   }
   .errorMessage {
     color: var(--mdc-theme-error);

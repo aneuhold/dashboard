@@ -33,7 +33,7 @@
     <PageTitle title={$task.title} />
     <Paper>
       <Content>
-        <div class="content">
+        <div class="content paperContent">
           <div class="titleContainer">
             <FormField>
               <Checkbox bind:checked={$task.completed} touch />
@@ -60,7 +60,9 @@
   .content {
     display: flex;
     flex-direction: column;
-    gap: 8px;
     width: 100%;
+  }
+  .paperContent {
+    gap: 16px;
   }
 </style>
