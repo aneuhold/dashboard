@@ -88,7 +88,7 @@
   textarea={isTextArea}
   variant={isTextArea ? undefined : variant}
   {label}
-  style={`min-width: 250px;${isTextArea ? 'field-sizing:content;' : ''}}`}
+  style={`min-width: 250px;${isTextArea ? 'min-height:5lh;' : ''}}`}
   on:keydown={handleKeyDown}
   on:focus={() => (focused = true)}
   on:blur={handleBlur}

@@ -9,10 +9,15 @@
   import Checkbox from '@smui/checkbox';
   import FormField from '@smui/form-field';
   import TaskService from 'util/TaskService';
+  import ClickableDiv from './ClickableDiv.svelte';
   import type { MenuButtonItem } from './MenuButton.svelte';
   import MenuButton from './MenuButton.svelte';
 
   export let taskId: string;
+
+  function goToTask() {
+    goto(`/tasks/${taskId}`);
+  }
 
   let task = TaskService.getTaskStore(taskId);
 
@@ -20,9 +25,7 @@
     {
       title: 'Edit',
       iconName: 'edit',
-      clickAction: () => {
-        goto(`/tasks/${taskId}`);
-      }
+      clickAction: goToTask
     },
     {
       title: 'Delete',
@@ -38,34 +41,30 @@
   <Card>
     <CardContent>
       <div class="card-content">
-        <div class="left-side">
-          <FormField>
-            <Checkbox bind:checked={$task.completed} touch />
-          </FormField>
-          <div>
-            <h4 class="mdc-typography--body1 title">
-              {$task.title}
-            </h4>
-            {#if $task.tags.length > 0}
-              <div class="mdc-typography--caption mdc-theme--text-hint-on-background">
-                {#each $task.tags as tag, index}
-                  <span><i>{tag}</i></span>
-                  {#if index !== tag.length - 1}
-                    <span>, </span>
-                  {/if}
-                {/each}
-              </div>
-            {/if}
-            {#if $task.description}
-              <div class="mdc-deprecated-list-item__secondary-text subtitle">
-                {$task.description}
-              </div>
-            {/if}
-          </div>
-        </div>
-        {#if menuItems.length > 0}
-          <MenuButton {menuItems} />
-        {/if}
+        <FormField>
+          <Checkbox bind:checked={$task.completed} touch />
+        </FormField>
+        <ClickableDiv clickAction={goToTask}>
+          <h4 class="mdc-typography--body1 title">
+            {$task.title}
+          </h4>
+          {#if $task.tags.length > 0}
+            <div class="mdc-typography--caption mdc-theme--text-hint-on-background">
+              {#each $task.tags as tag, index}
+                <span><i>{tag}</i></span>
+                {#if index !== tag.length - 1}
+                  <span>, </span>
+                {/if}
+              {/each}
+            </div>
+          {/if}
+          {#if $task.description}
+            <div class="mdc-deprecated-list-item__secondary-text subtitle">
+              {$task.description}
+            </div>
+          {/if}
+        </ClickableDiv>
+        <MenuButton {menuItems} />
       </div>
     </CardContent>
   </Card>
@@ -92,14 +91,7 @@
     gap: 4px;
   }
   .card-content {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-  }
-  .left-side {
-    display: flex;
-    flex-direction: row;
-    gap: 16px;
-    align-items: center;
+    display: grid;
+    grid-template-columns: min-content 1fr min-content;
   }
 </style>
