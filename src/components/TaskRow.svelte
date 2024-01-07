@@ -16,7 +16,7 @@
   export let taskId: string;
 
   function goToTask() {
-    goto(`/tasks/${taskId}`);
+    goto(TaskService.getTaskRoute(taskId));
   }
 
   let task = TaskService.getTaskStore(taskId);

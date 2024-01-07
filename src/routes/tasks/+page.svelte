@@ -5,10 +5,12 @@
 -->
 <script lang="ts">
   import { goto } from '$app/navigation';
+  import { page } from '$app/stores';
   import { DashboardTask } from '@aneuhold/core-ts-db-lib';
   import FabButton from 'components/FabButton.svelte';
   import PageTitle from 'components/PageTitle.svelte';
-  import TaskRow from 'components/TaskRow.svelte';
+  import TaskDetails from 'components/TaskDetails.svelte';
+  import TaskList from 'components/TaskList.svelte';
   import TaskService from 'util/TaskService';
   import { userSettings } from '../../stores/userSettings';
   import { tasksPageInfo } from './pageInfo';
@@ -16,33 +18,26 @@
   const taskMap = TaskService.getStore();
 
   $: taskIds = Object.keys($taskMap).filter((taskId) => !$taskMap[taskId].parentTaskId);
+  $: taskId = $page.url.searchParams.get('taskId');
 
   function addTask() {
     const newTask = new DashboardTask($userSettings.config.userId);
     taskMap.addTask(newTask);
-    goto(`/tasks/${newTask._id.toString()}`);
+    goto(TaskService.getTaskRoute(newTask._id.toString()));
   }
 </script>
 
 <svelte:head>
-  <title>{tasksPageInfo.shortTitle}</title>
+  <title>{taskId && $taskMap[taskId] ? $taskMap[taskId].title : tasksPageInfo.shortTitle}</title>
   <meta name="description" content={tasksPageInfo.description} />
 </svelte:head>
 
-<PageTitle title={tasksPageInfo.shortTitle} subtitle={tasksPageInfo.description} />
+{#if taskId}
+  <TaskDetails {taskId} />
+{:else}
+  <PageTitle title={tasksPageInfo.shortTitle} subtitle={tasksPageInfo.description} />
 
-<div class="content">
-  {#each taskIds as taskId}
-    <TaskRow {taskId} />
-  {/each}
-</div>
+  <TaskList {taskIds} />
 
-<FabButton clickHandler={addTask} iconName="add" />
-
-<style>
-  .content {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-  }
-</style>
+  <FabButton clickHandler={addTask} iconName="add" />
+{/if}

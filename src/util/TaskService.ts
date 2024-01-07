@@ -51,6 +51,10 @@ export default class TaskService {
     return this.currentTaskStores[taskId];
   }
 
+  static getTaskRoute(taskId: string, includeFirstSlash = true) {
+    return `${includeFirstSlash ? '/' : ''}tasks?taskId=${taskId}`;
+  }
+
   private static createTaskStore(taskId: string): TaskStore {
     const { subscribe, set } = writable(this._taskMap[taskId]);
     const setTask = () => {

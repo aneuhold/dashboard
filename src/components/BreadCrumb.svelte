@@ -1,5 +1,11 @@
 <script lang="ts" context="module">
-  export type BreadCrumbArray = { name: string; link: string }[];
+  export type BreadCrumbArray = Array<{
+    name: string;
+    /**
+     * The link to the route, this should not include the first slash.
+     */
+    link: string;
+  }>;
 </script>
 
 <script lang="ts">

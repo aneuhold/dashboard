@@ -1,8 +1,7 @@
 <!--
   @component
   
-  A details page for a particular task for the user.
-
+  A details component for a particular task for the user.
 
   ### Implementation notes:
 
@@ -11,7 +10,6 @@
 -->
 <script lang="ts">
   import { goto } from '$app/navigation';
-  import { page } from '$app/stores';
   import { DashboardTask } from '@aneuhold/core-ts-db-lib';
   import Checkbox from '@smui/checkbox';
   import FormField from '@smui/form-field';
@@ -20,18 +18,20 @@
   import FabButton from 'components/FabButton.svelte';
   import InputBox from 'components/InputBox.svelte';
   import PageTitle from 'components/PageTitle.svelte';
-  import TaskRow from 'components/TaskRow.svelte';
   import TaskService from 'util/TaskService';
-  import { userSettings } from '../../../stores/userSettings';
+  import { userSettings } from '../stores/userSettings';
+  import TaskList from './TaskList.svelte';
 
-  let taskId = $page.params.taskId;
-  $: taskId = $page.params.taskId;
+  export let taskId: string;
+
   let taskMap = TaskService.getStore();
   $: taskMap = TaskService.getStore();
   let task = $taskMap[taskId] ? TaskService.getTaskStore(taskId) : null;
   $: task = $taskMap[taskId] ? TaskService.getTaskStore(taskId) : null;
-  $: subTasks = $taskMap[taskId]
-    ? Object.values($taskMap).filter((task) => task.parentTaskId?.toString() === taskId)
+  $: subTaskIds = $taskMap[taskId]
+    ? Object.values($taskMap)
+        .filter((task) => task.parentTaskId?.toString() === taskId)
+        .map((task) => task._id.toString())
     : [];
 
   $: breadCrumbArray = getBreadCrumbArray($task);
@@ -52,7 +52,7 @@
     while (currentTask) {
       parentTaskChain.unshift({
         name: currentTask.title,
-        link: `tasks/${currentTask._id.toString()}`
+        link: TaskService.getTaskRoute(currentTask._id.toString(), false)
       });
       if (!currentTask.parentTaskId) {
         break;
@@ -68,7 +68,7 @@
     const newTask = new DashboardTask($userSettings.config.userId);
     newTask.parentTaskId = $task._id;
     taskMap.addTask(newTask);
-    goto(`/tasks/${newTask._id.toString()}`);
+    goto(TaskService.getTaskRoute(newTask._id.toString()));
   }
 </script>
 
@@ -95,13 +95,12 @@
         </div>
       </Content>
     </Paper>
-    <h3 class="mdc-typography--headline5 subTasksTitle">Sub Tasks</h3>
-    {#if subTasks.length === 0}
+    {#if subTaskIds.length === 0}
       <div class="mdc-typography--body1 subTasksTitle dimmed-color"><i>No sub tasks</i></div>
+    {:else}
+      <h3 class="mdc-typography--headline5 subTasksTitle">Sub Tasks</h3>
+      <TaskList taskIds={subTaskIds} />
     {/if}
-    {#each subTasks as subTask}
-      <TaskRow taskId={subTask._id.toString()} />
-    {/each}
     <FabButton iconName="add" clickHandler={addSubTask} label="Add Subtask" />
   {/if}
 </div>
