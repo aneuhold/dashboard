@@ -11,7 +11,7 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
   import { DashboardTask, getDashboardTaskChildrenIds } from '@aneuhold/core-ts-db-lib';
-  import Button from '@smui/button';
+  import Button, { Icon } from '@smui/button';
   import Checkbox from '@smui/checkbox';
   import FormField from '@smui/form-field';
   import Paper, { Content } from '@smui/paper';
@@ -85,7 +85,10 @@
           </div>
           <InputBox label="Description" isTextArea={true} bind:onBlurValue={$task.description} />
           <div class="rightSide">
-            <Button variant="raised" color="secondary" on:click={handleDeleteClick}>Delete</Button>
+            <Button variant="outlined" class="danger-button" on:click={handleDeleteClick}>
+              <Icon class="material-icons">delete</Icon>
+              Delete
+            </Button>
           </div>
         </div>
       </Content>

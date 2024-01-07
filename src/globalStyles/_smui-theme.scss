@@ -41,6 +41,8 @@
 // Import the mixins.
 @use '@material/typography/mixins' as typography;
 @use '@material/snackbar/mixins' as snackbar;
+@use '@material/button/mixins' as button;
+@use '@material/icon-button/mixins' as icon-button;
 
 // Import the colors last. Order matters in this file. This allows usage
 // of vars from MDC
@@ -59,6 +61,22 @@
 .mdc-snackbar.error {
   @include snackbar.fill-color(color-palette.$red-500);
   @include snackbar.label-ink-color(theme-color.accessible-ink-color(color-palette.$red-500));
+}
+.danger-button {
+  &.mdc-button {
+    @include button.ink-color(color-palette.$red-500);
+  }
+  &.mdc-button--unelevated,
+  &.mdc-button--raised {
+    @include button.filled-accessible(color-palette.$red-500);
+  }
+  &.mdc-button--outlined {
+    @include button.outline-color(color-palette.$red-500);
+    @include button.ink-color(color-palette.$red-500);
+  }
+  @include button.ripple-states(color-palette.$red-500);
+  @include icon-button.ink-color(color-palette.$red-500);
+  @include icon-button.disabled-ink-color(color-palette.$red-500);
 }
 
 // Custom colors for use in components
