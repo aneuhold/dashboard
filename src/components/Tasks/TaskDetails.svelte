@@ -51,7 +51,11 @@
   function deleteTask() {
     if (!$task) return;
     const taskId = $task._id.toString();
-    goto(TaskService.getTaskCategoryRoute(taskId)).then(() => {
+    const parentTaskId = $taskMap[taskId].parentTaskId;
+    const routeToNavigateTo = parentTaskId
+      ? TaskService.getTaskRoute(parentTaskId.toString())
+      : TaskService.getTaskCategoryRoute(taskId);
+    goto(routeToNavigateTo).then(() => {
       taskMap.deleteTask(taskId);
     });
   }
