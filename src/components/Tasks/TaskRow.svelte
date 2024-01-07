@@ -72,10 +72,7 @@
                   <Icon class="material-icons dimmed-color small-icon">sell</Icon>
                   {#each $task.tags as tag, index}
                     <i class="mdc-typography--caption mdc-theme--text-hint-on-background">
-                      {tag}
-                      {#if index !== $task.tags.length - 1}
-                        {`, `}
-                      {/if}
+                      {`${tag}${index === $task.tags.length - 1 ? '' : ', '}`}
                     </i>
                   {/each}
                 </div>
