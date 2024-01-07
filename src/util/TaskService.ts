@@ -73,6 +73,31 @@ export default class TaskService {
     }
   }
 
+  static getBreadCrumbArray(taskId: string): BreadCrumbArray {
+    const task = this._taskMap[taskId];
+    const breadCrumbs: BreadCrumbArray = [];
+    if (!task)
+      return [
+        { name: 'tasks', link: 'tasks' },
+        { name: 'Task not found', link: `link not needed` }
+      ];
+    breadCrumbs.push(...this.getTaskCategoryBreadCrumbs(taskId));
+    let currentTask = task;
+    const parentTaskChain: BreadCrumbArray = [];
+    while (currentTask) {
+      parentTaskChain.unshift({
+        name: currentTask.title && currentTask.title !== '' ? currentTask.title : 'Untitled Task',
+        link: this.getTaskRoute(currentTask._id.toString(), false)
+      });
+      if (!currentTask.parentTaskId) {
+        break;
+      }
+      currentTask = this._taskMap[currentTask.parentTaskId.toString()];
+    }
+    breadCrumbs.push(...parentTaskChain);
+    return breadCrumbs;
+  }
+
   static getTaskCategoryRoute(taskId: string, includeFirstSlash = true) {
     const defaultRoute = `${includeFirstSlash ? '/' : ''}tasks`;
     const task = this._taskMap[taskId];
@@ -143,6 +168,7 @@ export default class TaskService {
         setTaskMap();
       },
       addTask: (newTask: DashboardTask) => {
+        newTask.description = '';
         this._taskMap[newTask._id.toString()] = newTask;
         setTaskMap();
         DashboardTaskAPIService.updateTasks({

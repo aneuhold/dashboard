@@ -19,7 +19,7 @@
     goto(TaskService.getTaskRoute(taskId));
   }
 
-  let task = TaskService.getTaskStore(taskId);
+  $: task = TaskService.getTaskStore(taskId);
 
   let menuItems: MenuButtonItem[] = [
     {

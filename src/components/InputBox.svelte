@@ -17,7 +17,7 @@
 -->
 <script lang="ts">
   import Textfield from '@smui/textfield';
-  import { createEventDispatcher, tick } from 'svelte';
+  import { createEventDispatcher } from 'svelte';
 
   export let disable: boolean = false;
   /**
@@ -87,18 +87,17 @@
     onBlurValue = inputValue;
   }
 
-  $: {
+  // Check if the onBlurValue is null or undefined and set it to an empty
+  // string if it is. This fixes graphical issues with the input box.
+  $: if (onBlurValue === null || onBlurValue === undefined) {
+    onBlurValue = '';
+    previousOnBlurValue = onBlurValue;
+    inputValue = onBlurValue;
     // Detect when the onBlurValue is changed outside the component.
-    if (onBlurValue !== previousOnBlurValue && onBlurValue !== inputValue) {
-      // Use tick so that the SMUI component updates correctly when it goes
-      // from having characters to not having characters.
-      // This still needs to be fixed up a bit.
-      tick().then(() => {
-        inputValue = onBlurValue;
-        previousOnBlurValue = onBlurValue;
-        focused = false;
-      });
-    }
+  } else if (onBlurValue !== previousOnBlurValue && onBlurValue !== inputValue) {
+    inputValue = onBlurValue;
+    previousOnBlurValue = onBlurValue;
+    focused = false;
   }
 </script>
 

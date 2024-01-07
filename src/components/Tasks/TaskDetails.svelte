@@ -15,7 +15,7 @@
   import Checkbox from '@smui/checkbox';
   import FormField from '@smui/form-field';
   import Paper, { Content } from '@smui/paper';
-  import BreadCrumb, { type BreadCrumbArray } from 'components/BreadCrumb.svelte';
+  import BreadCrumb from 'components/BreadCrumb.svelte';
   import FabButton from 'components/FabButton.svelte';
   import InputBox from 'components/InputBox.svelte';
   import PageTitle from 'components/PageTitle.svelte';
@@ -28,43 +28,17 @@
 
   let dialogOpen = false;
   let taskMap = TaskService.getStore();
-  $: taskMap = TaskService.getStore();
-  let task = $taskMap[taskId] ? TaskService.getTaskStore(taskId) : null;
   $: task = $taskMap[taskId] ? TaskService.getTaskStore(taskId) : null;
-  $: subTaskIds = $taskMap[taskId]
+  $: subTaskIds = $task
     ? Object.values($taskMap)
-        .filter((task) => task.parentTaskId?.toString() === taskId)
-        .map((task) => task._id.toString())
+        .filter((taskValue) => taskValue.parentTaskId?.toString() === taskId)
+        .map((taskValue) => taskValue._id.toString())
     : [];
   $: allChildrenIds = $task
     ? getDashboardTaskChildrenIds(Object.values($taskMap), [$task._id])
     : [];
-
-  $: breadCrumbArray = getBreadCrumbArray($task);
-
-  function getBreadCrumbArray(task: DashboardTask | null): BreadCrumbArray {
-    const breadCrumbs: BreadCrumbArray = [];
-    if (!task)
-      return [
-        { name: 'tasks', link: 'tasks' },
-        { name: $task?.title ?? 'Task not found', link: `link not needed` }
-      ];
-    breadCrumbs.push(...TaskService.getTaskCategoryBreadCrumbs(taskId));
-    let currentTask = task;
-    let parentTaskChain: BreadCrumbArray = [];
-    while (currentTask) {
-      parentTaskChain.unshift({
-        name: currentTask.title,
-        link: TaskService.getTaskRoute(currentTask._id.toString(), false)
-      });
-      if (!currentTask.parentTaskId) {
-        break;
-      }
-      currentTask = $taskMap[currentTask.parentTaskId.toString()];
-    }
-    breadCrumbs.push(...parentTaskChain);
-    return breadCrumbs;
-  }
+  // Explicitly include `task` so that it reactively updates
+  $: breadCrumbArray = TaskService.getBreadCrumbArray($task ? $task._id.toString() : taskId);
 
   function addSubTask() {
     if (!$task) return;
@@ -105,23 +79,25 @@
             </FormField>
             <InputBox variant="outlined" label="Title" bind:onBlurValue={$task.title} />
           </div>
-          <InputBox
-            label="Description"
-            inputType="textarea"
-            isTextArea={true}
-            bind:onBlurValue={$task.description}
-          />
+          <InputBox label="Description" isTextArea={true} bind:onBlurValue={$task.description} />
           <div class="rightSide">
             <Button variant="raised" color="secondary" on:click={handleDeleteClick}>Delete</Button>
           </div>
         </div>
       </Content>
     </Paper>
-    {#if subTaskIds.length === 0}
-      <div class="mdc-typography--body1 subTasksTitle dimmed-color"><i>No sub tasks</i></div>
-    {:else}
-      <h3 class="mdc-typography--headline5 subTasksTitle">Sub Tasks</h3>
+    {#if subTaskIds.length !== 0}
+      <div class="subTasksTitleContainer">
+        <h3 class="mdc-typography--headline5 subTasksTitle">Sub Tasks</h3>
+        {#if allChildrenIds.length > subTaskIds.length}
+          <i class="mdc-typography--body1 subTasksTitle dimmed-color">
+            {allChildrenIds.length} total child tasks
+          </i>
+        {/if}
+      </div>
       <TaskList taskIds={subTaskIds} />
+    {:else}
+      <div class="mdc-typography--body1 subTasksTitle dimmed-color"><i>No sub tasks</i></div>
     {/if}
     <FabButton iconName="add" clickHandler={addSubTask} label="Add Subtask" />
   {/if}
@@ -147,6 +123,10 @@
   }
   .paperContent {
     gap: 16px;
+  }
+  .subTasksTitleContainer {
+    display: flex;
+    flex-direction: column;
   }
   .subTasksTitle {
     margin: auto;
