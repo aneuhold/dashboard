@@ -109,8 +109,11 @@
   bind:focused
   bind:value={inputValue}
   input$autocomplete={autocompleteLabel}
+  input$resizable={isTextArea ? false : undefined}
+  input$rows={isTextArea ? inputValue.split(/\r\n|\r|\n/).length : undefined}
   textarea={isTextArea}
   variant={isTextArea ? undefined : variant}
+  style="width: 100%;"
   {label}
   on:keydown={handleKeyDown}
   on:focus={() => (focused = true)}

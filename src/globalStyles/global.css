@@ -12,5 +12,9 @@
 
 .mdc-text-field--textarea .mdc-text-field__input {
   min-height: 5lh;
-  height: auto;
+}
+
+/* For adjusting the width of text areas */
+span:has(> .mdc-text-field__input) {
+  width: 100%;
 }

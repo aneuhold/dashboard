@@ -69,14 +69,14 @@
               <span>{$task.title}</span>
               {#if $task.tags.length > 0}
                 <Icon class="material-icons dimmed-color small-icon">sell</Icon>
-                <i class="mdc-typography--caption mdc-theme--text-hint-on-background">
-                  {#each $task.tags as tag, index}
+                {#each $task.tags as tag, index}
+                  <i class="mdc-typography--caption mdc-theme--text-hint-on-background">
                     {tag}
                     {#if index !== $task.tags.length - 1}
                       {`, `}
                     {/if}
-                  {/each}
-                </i>
+                  </i>
+                {/each}
               {/if}
             </h4>
           {:else}
@@ -134,6 +134,7 @@
     margin-bottom: 0px;
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     align-items: center;
     gap: 4px;
   }
