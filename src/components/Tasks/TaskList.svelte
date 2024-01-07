@@ -4,7 +4,7 @@
   A list of tasks.
 -->
 <script lang="ts">
-  import TaskRow from 'components/TaskRow.svelte';
+  import TaskRow from 'components/Tasks/TaskRow.svelte';
 
   export let taskIds: string[];
 </script>

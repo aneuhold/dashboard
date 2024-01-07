@@ -9,8 +9,8 @@
   import { DashboardTask } from '@aneuhold/core-ts-db-lib';
   import FabButton from 'components/FabButton.svelte';
   import PageTitle from 'components/PageTitle.svelte';
-  import TaskDetails from 'components/TaskDetails.svelte';
-  import TaskList from 'components/TaskList.svelte';
+  import TaskDetails from 'components/Tasks/TaskDetails.svelte';
+  import TaskList from 'components/Tasks/TaskList.svelte';
   import TaskService from 'util/TaskService';
   import { userSettings } from '../../stores/userSettings';
   import { tasksPageInfo } from './pageInfo';

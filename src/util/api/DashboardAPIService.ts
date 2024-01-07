@@ -1,5 +1,6 @@
 import { APIService } from '@aneuhold/core-ts-api-lib';
 import type { DashboardUserConfig } from '@aneuhold/core-ts-db-lib';
+import { snackbar } from 'components/Snackbar.svelte';
 import type { UUID } from 'crypto';
 import LocalData from 'util/LocalData';
 import TaskService from 'util/TaskService';
@@ -75,10 +76,12 @@ export default class DashboardAPIService {
       LocalData.taskQueue = [];
       LocalData.currentTaskQueueItem = undefined;
       loginState.set(LoginState.LoggedIn);
-      console.log('Initial data retrieved successfully');
+      console.info('Successfully got initial data');
+      snackbar.success('Successfully synced 🎉');
       return true;
     } else {
-      console.error('Error getting initial backend data, but got past login', result);
+      console.error('Error getting initial data', result);
+      snackbar.error('Error syncing');
       loginState.set(LoginState.LoggedOut);
       return false;
     }

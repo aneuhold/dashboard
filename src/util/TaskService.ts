@@ -1,4 +1,5 @@
 import type { DashboardTask } from '@aneuhold/core-ts-db-lib';
+import type { BreadCrumbArray } from 'components/BreadCrumb.svelte';
 import { writable, type Updater, type Writable } from 'svelte/store';
 import LocalData, { localDataReady } from './LocalData';
 import DashboardTaskAPIService from './api/DashboardTaskAPIService';
@@ -53,6 +54,37 @@ export default class TaskService {
 
   static getTaskRoute(taskId: string, includeFirstSlash = true) {
     return `${includeFirstSlash ? '/' : ''}tasks?taskId=${taskId}`;
+  }
+
+  /**
+   * Gets the appropriate route for the task category page for the given task.
+   */
+  static getTaskCategoryBreadCrumbs(taskId: string): BreadCrumbArray {
+    const defaultBreadCrumbs = [{ name: 'tasks', link: 'tasks' }];
+    const task = this._taskMap[taskId];
+    if (!task) {
+      return defaultBreadCrumbs;
+    }
+    switch (task.category) {
+      case 'default':
+        return defaultBreadCrumbs;
+      default:
+        return defaultBreadCrumbs;
+    }
+  }
+
+  static getTaskCategoryRoute(taskId: string, includeFirstSlash = true) {
+    const defaultRoute = `${includeFirstSlash ? '/' : ''}tasks`;
+    const task = this._taskMap[taskId];
+    if (!task) {
+      return defaultRoute;
+    }
+    switch (task.category) {
+      case 'default':
+        return defaultRoute;
+      default:
+        return defaultRoute;
+    }
   }
 
   private static createTaskStore(taskId: string): TaskStore {

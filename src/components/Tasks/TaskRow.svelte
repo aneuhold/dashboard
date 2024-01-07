@@ -8,10 +8,10 @@
   import Card, { Content as CardContent } from '@smui/card';
   import Checkbox from '@smui/checkbox';
   import FormField from '@smui/form-field';
+  import ClickableDiv from 'components/ClickableDiv.svelte';
+  import type { MenuButtonItem } from 'components/MenuButton.svelte';
+  import MenuButton from 'components/MenuButton.svelte';
   import TaskService from 'util/TaskService';
-  import ClickableDiv from './ClickableDiv.svelte';
-  import type { MenuButtonItem } from './MenuButton.svelte';
-  import MenuButton from './MenuButton.svelte';
 
   export let taskId: string;
 
@@ -45,9 +45,15 @@
           <Checkbox bind:checked={$task.completed} touch />
         </FormField>
         <ClickableDiv clickAction={goToTask}>
-          <h4 class="mdc-typography--body1 title">
-            {$task.title}
-          </h4>
+          {#if $task.title !== ''}
+            <h4 class="mdc-typography--body1 title">
+              {$task.title}
+            </h4>
+          {:else}
+            <h4 class="mdc-typography--body1 title dimmed-color">
+              <i>Untitled</i>
+            </h4>
+          {/if}
           {#if $task.tags.length > 0}
             <div class="mdc-typography--caption mdc-theme--text-hint-on-background">
               {#each $task.tags as tag, index}
