@@ -10,20 +10,29 @@
   the task needs to be dynamic.
 -->
 <script lang="ts">
+  import { goto } from '$app/navigation';
   import { page } from '$app/stores';
-  import type { DashboardTask } from '@aneuhold/core-ts-db-lib';
+  import { DashboardTask } from '@aneuhold/core-ts-db-lib';
   import Checkbox from '@smui/checkbox';
   import FormField from '@smui/form-field';
   import Paper, { Content } from '@smui/paper';
   import BreadCrumb, { type BreadCrumbArray } from 'components/BreadCrumb.svelte';
+  import FabButton from 'components/FabButton.svelte';
   import InputBox from 'components/InputBox.svelte';
   import PageTitle from 'components/PageTitle.svelte';
+  import TaskRow from 'components/TaskRow.svelte';
   import TaskService from 'util/TaskService';
+  import { userSettings } from '../../../stores/userSettings';
 
   let taskId = $page.params.taskId;
   $: taskId = $page.params.taskId;
   let taskMap = TaskService.getStore();
+  $: taskMap = TaskService.getStore();
+  let task = $taskMap[taskId] ? TaskService.getTaskStore(taskId) : null;
   $: task = $taskMap[taskId] ? TaskService.getTaskStore(taskId) : null;
+  $: subTasks = $taskMap[taskId]
+    ? Object.values($taskMap).filter((task) => task.parentTaskId?.toString() === taskId)
+    : [];
 
   $: breadCrumbArray = getBreadCrumbArray($task);
 
@@ -39,8 +48,9 @@
       breadCrumbs.push({ name: 'tasks', link: 'tasks' });
     }
     let currentTask = task;
+    let parentTaskChain: BreadCrumbArray = [];
     while (currentTask) {
-      breadCrumbs.push({
+      parentTaskChain.unshift({
         name: currentTask.title,
         link: `tasks/${currentTask._id.toString()}`
       });
@@ -49,7 +59,16 @@
       }
       currentTask = $taskMap[currentTask.parentTaskId.toString()];
     }
+    breadCrumbs.push(...parentTaskChain);
     return breadCrumbs;
+  }
+
+  function addSubTask() {
+    if (!$task) return;
+    const newTask = new DashboardTask($userSettings.config.userId);
+    newTask.parentTaskId = $task._id;
+    taskMap.addTask(newTask);
+    goto(`/tasks/${newTask._id.toString()}`);
   }
 </script>
 
@@ -76,6 +95,14 @@
         </div>
       </Content>
     </Paper>
+    <h3 class="mdc-typography--headline5 subTasksTitle">Sub Tasks</h3>
+    {#if subTasks.length === 0}
+      <div class="mdc-typography--body1 subTasksTitle dimmed-color"><i>No sub tasks</i></div>
+    {/if}
+    {#each subTasks as subTask}
+      <TaskRow taskId={subTask._id.toString()} />
+    {/each}
+    <FabButton iconName="add" clickHandler={addSubTask} label="Add Subtask" />
   {/if}
 </div>
 
@@ -92,5 +119,10 @@
   }
   .paperContent {
     gap: 16px;
+  }
+  .subTasksTitle {
+    margin: auto;
+    margin-top: 0px;
+    margin-bottom: 0px;
   }
 </style>

@@ -4,6 +4,7 @@
   A page for main tasks for the current user.
 -->
 <script lang="ts">
+  import { goto } from '$app/navigation';
   import { DashboardTask } from '@aneuhold/core-ts-db-lib';
   import FabButton from 'components/FabButton.svelte';
   import PageTitle from 'components/PageTitle.svelte';
@@ -14,10 +15,12 @@
 
   const taskMap = TaskService.getStore();
 
-  $: taskIds = Object.keys($taskMap);
+  $: taskIds = Object.keys($taskMap).filter((taskId) => !$taskMap[taskId].parentTaskId);
 
   function addTask() {
-    taskMap.addTask(new DashboardTask($userSettings.config.userId));
+    const newTask = new DashboardTask($userSettings.config.userId);
+    taskMap.addTask(newTask);
+    goto(`/tasks/${newTask._id.toString()}`);
   }
 </script>
 

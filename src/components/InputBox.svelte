@@ -17,7 +17,7 @@
 -->
 <script lang="ts">
   import Textfield from '@smui/textfield';
-  import { createEventDispatcher } from 'svelte';
+  import { createEventDispatcher, tick } from 'svelte';
 
   export let disable: boolean = false;
   /**
@@ -58,6 +58,8 @@
    */
   export let variant: 'filled' | 'outlined' | 'standard' = 'standard';
 
+  let previousOnBlurValue = onBlurValue;
+
   let focused = false;
   /**
    * Indicates if the input has been touched and edited. Might be useful
@@ -83,6 +85,20 @@
   function handleBlur() {
     focused = false;
     onBlurValue = inputValue;
+  }
+
+  $: {
+    // Detect when the onBlurValue is changed outside the component.
+    if (onBlurValue !== previousOnBlurValue && onBlurValue !== inputValue) {
+      // Use tick so that the SMUI component updates correctly when it goes
+      // from having characters to not having characters.
+      // This still needs to be fixed up a bit.
+      tick().then(() => {
+        inputValue = onBlurValue;
+        previousOnBlurValue = onBlurValue;
+        focused = false;
+      });
+    }
   }
 </script>
 
