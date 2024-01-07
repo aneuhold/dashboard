@@ -18,6 +18,7 @@
   import MenuSurface from '@smui/menu-surface';
 
   export let menuItems: MenuButtonItem[];
+  export let alignCenterVertically = false;
 
   function handleItemClick(clickAction: () => void) {
     menu.setOpen(false);
@@ -31,7 +32,7 @@
 </script>
 
 <!--The extra div is required to keep the bounds of the menu contained -->
-<div>
+<div class={alignCenterVertically ? 'alignCenter' : ''}>
   <div bind:this={anchor}>
     <IconButton class="material-icons dimmed-color" on:click={() => menu.setOpen(true)}>
       menu
@@ -52,3 +53,10 @@
     </MenuSurface>
   </div>
 </div>
+
+<style>
+  .alignCenter {
+    display: flex;
+    align-items: center;
+  }
+</style>

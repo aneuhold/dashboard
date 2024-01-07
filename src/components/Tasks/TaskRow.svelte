@@ -5,21 +5,41 @@
 -->
 <script lang="ts">
   import { goto } from '$app/navigation';
+  import { getDashboardTaskChildrenIds } from '@aneuhold/core-ts-db-lib';
   import Card, { Content as CardContent } from '@smui/card';
   import Checkbox from '@smui/checkbox';
   import FormField from '@smui/form-field';
   import ClickableDiv from 'components/ClickableDiv.svelte';
+  import ConfirmationDialog from 'components/ConfirmationDialog.svelte';
   import type { MenuButtonItem } from 'components/MenuButton.svelte';
   import MenuButton from 'components/MenuButton.svelte';
   import TaskService from 'util/TaskService';
 
   export let taskId: string;
 
+  let dialogOpen = false;
+  $: task = TaskService.getTaskStore(taskId);
+  let taskMap = TaskService.getStore();
+  $: allChildrenIds = $task
+    ? getDashboardTaskChildrenIds(Object.values($taskMap), [$task._id])
+    : [];
+  $: hasExtraTaskInfo = allChildrenIds.length > 0;
+
   function goToTask() {
     goto(TaskService.getTaskRoute(taskId));
   }
 
-  $: task = TaskService.getTaskStore(taskId);
+  function deleteTask() {
+    taskMap.deleteTask(taskId);
+  }
+
+  function handleDeleteClick() {
+    if (allChildrenIds.length > 0) {
+      dialogOpen = true;
+      return;
+    }
+    deleteTask();
+  }
 
   let menuItems: MenuButtonItem[] = [
     {
@@ -30,9 +50,7 @@
     {
       title: 'Delete',
       iconName: 'delete',
-      clickAction: () => {
-        TaskService.getStore().deleteTask(taskId);
-      }
+      clickAction: handleDeleteClick
     }
   ];
 </script>
@@ -69,12 +87,28 @@
               {$task.description}
             </div>
           {/if}
+          {#if hasExtraTaskInfo}
+            <div class="mdc-typography--caption mdc-theme--text-hint-on-background extraTaskInfo">
+              {#if allChildrenIds.length > 0}
+                {allChildrenIds.length} child task{allChildrenIds.length > 1 ? 's' : ''}
+              {/if}
+            </div>
+          {/if}
         </ClickableDiv>
-        <MenuButton {menuItems} />
+        <MenuButton {menuItems} alignCenterVertically />
       </div>
     </CardContent>
   </Card>
 </div>
+
+<ConfirmationDialog
+  title="Delete Task"
+  message={`Are you sure you want to delete ${
+    $task.title === '' ? 'this task' : `"${$task.title}"`
+  }? It has ${allChildrenIds.length} sub task${allChildrenIds.length > 1 ? 's' : ''}.`}
+  bind:open={dialogOpen}
+  on:confirm={deleteTask}
+/>
 
 <style>
   .container {
@@ -87,6 +121,10 @@
   }
   .subtitle::before {
     display: none;
+  }
+  .extraTaskInfo {
+    margin-top: 2px;
+    margin-bottom: 0px;
   }
   .title {
     margin-top: 0px;
