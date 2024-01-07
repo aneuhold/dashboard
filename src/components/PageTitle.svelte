@@ -3,9 +3,12 @@
 
   export let title: string;
   export let subtitle: string | null = null;
+  export let includeBreadcrumb: boolean = true;
 </script>
 
-<BreadCrumb />
+{#if includeBreadcrumb}
+  <BreadCrumb />
+{/if}
 <div class="title-container">
   <h4 class="title">{title}</h4>
   {#if subtitle}

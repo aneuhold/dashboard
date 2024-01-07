@@ -1,8 +1,21 @@
+<script lang="ts" context="module">
+  export type BreadCrumbArray = { name: string; link: string }[];
+</script>
+
 <script lang="ts">
   import { page } from '$app/stores';
 
+  export let breadCrumbArray: BreadCrumbArray | null = null;
+
   let activeRoute: string = '/';
-  $: routeArray = activeRoute.split('/').filter((route) => route !== '');
+  $: routeArray = breadCrumbArray
+    ? breadCrumbArray
+    : activeRoute
+        .split('/')
+        .filter((route) => route !== '')
+        .map((route) => {
+          return { name: route, link: route };
+        });
 
   page.subscribe((pageData) => {
     if (pageData.route.id) {
@@ -23,9 +36,9 @@
       <span>/</span>
     {/if}
     {#if index === routeArray.length - 1}
-      <span>{route}</span>
+      <span>{route.name}</span>
     {:else}
-      <a href="/{route}">{route}</a>
+      <a href="/{route.link}">{route.name}</a>
     {/if}
   {/each}
 </span>
