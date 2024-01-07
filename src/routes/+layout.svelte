@@ -6,11 +6,12 @@
 <script lang="ts">
   import CircularProgress from '@smui/circular-progress';
   import Snackbar from 'components/Snackbar.svelte';
-  import { onMount } from 'svelte';
+  import { onDestroy, onMount } from 'svelte';
   import LocalData from 'util/LocalData';
   import Login from '../components/Login.svelte';
   import NavBar from '../components/NavBar.svelte';
   import '../globalStyles/global.css';
+  import { appIsVisible } from '../stores/appIsVisible';
   import { LoginState, loginState } from '../stores/loginState';
 
   let mounted = false;
@@ -21,6 +22,21 @@
   // Without this, the layout fluctuates a lot when the page is starting up.
   onMount(() => {
     mounted = true;
+  });
+
+  const handleVisibilityChange = () => {
+    appIsVisible.set(document.visibilityState === 'visible');
+  };
+
+  // Global app visibility change listener
+  if (typeof document !== 'undefined') {
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+  }
+
+  onDestroy(() => {
+    if (typeof document !== 'undefined') {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    }
   });
 </script>
 

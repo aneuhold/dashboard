@@ -4,7 +4,14 @@ import LocalData, { localDataReady } from './LocalData';
 import DashboardTaskAPIService from './api/DashboardTaskAPIService';
 
 export type TaskMap = { [objectId: string]: DashboardTask };
-export type TaskStores = { [objectId: string]: Writable<DashboardTask> };
+export interface TaskStore extends Writable<DashboardTask> {
+  /**
+   * Sets the task without propogating the change to the backend or the
+   * task map store. This should only be used from the task map store.
+   */
+  setWithoutPropogation: (newTask: DashboardTask) => void;
+}
+export type TaskStores = { [objectId: string]: TaskStore };
 
 export default class TaskService {
   /**
@@ -37,14 +44,14 @@ export default class TaskService {
    *
    * If no task exists with that ID, it will throw an error.
    */
-  static getTaskStore(taskId: string): Writable<DashboardTask> {
+  static getTaskStore(taskId: string): TaskStore {
     if (!this.currentTaskStores[taskId]) {
       this.currentTaskStores[taskId] = this.createTaskStore(taskId);
     }
     return this.currentTaskStores[taskId];
   }
 
-  private static createTaskStore(taskId: string): Writable<DashboardTask> {
+  private static createTaskStore(taskId: string): TaskStore {
     const { subscribe, set } = writable(this._taskMap[taskId]);
     const setTask = () => {
       set(this._taskMap[taskId]);
@@ -64,6 +71,9 @@ export default class TaskService {
         const updatedTask = updater(this._taskMap[taskId]);
         this._taskMap[taskId] = updatedTask;
         setTask();
+      },
+      setWithoutPropogation: (newTask: DashboardTask) => {
+        set(newTask);
       }
     };
   }
@@ -87,6 +97,13 @@ export default class TaskService {
       subscribe,
       set: (newTaskMap: TaskMap) => {
         this._taskMap = newTaskMap;
+        Object.entries(this.currentTaskStores).forEach(([taskId, store]) => {
+          if (!this._taskMap[taskId]) {
+            delete this.currentTaskStores[taskId];
+          } else {
+            store.setWithoutPropogation(this._taskMap[taskId]);
+          }
+        });
         setTaskMap();
       },
       addTask: (newTask: DashboardTask) => {

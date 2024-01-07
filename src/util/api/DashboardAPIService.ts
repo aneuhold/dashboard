@@ -10,8 +10,38 @@ import { translations } from '../../stores/translations';
 import { userSettings } from '../../stores/userSettings';
 import DashboardTaskAPIService from './DashboardTaskAPIService';
 
+const SECONDS_TO_WAIT_BEFORE_FETCHING_INITIAL_DATA = 10;
+
 export default class DashboardAPIService {
+  static lastInitialDataFetchTime: number | null = null;
+
   private static dashboardAPIUrlSet = false;
+
+  /**
+   * Fetches the initial data if
+   * - the app is visible and wasn't before
+   * - the user is logged in
+   * - there is no task queue item
+   * - the last initial data fetch was more than {@link SECONDS_TO_WAIT_BEFORE_FETCHING_INITIAL_DATA}
+   * ago or it hasn't been fetched yet.
+   */
+  static async getInitialDataIfNeeded() {
+    if (loginState.get() === LoginState.LoggedIn && !DashboardTaskAPIService.hasTaskQueueItem()) {
+      if (!this.lastInitialDataFetchTime) {
+        await this.getInitialData();
+      } else if (
+        this.lastInitialDataFetchTime <
+        Date.now() - SECONDS_TO_WAIT_BEFORE_FETCHING_INITIAL_DATA * 1000
+      ) {
+        console.info(
+          'Fetching initial data because it has been more than',
+          SECONDS_TO_WAIT_BEFORE_FETCHING_INITIAL_DATA,
+          'seconds since the last fetch and the user reopened the app.'
+        );
+        await this.getInitialData();
+      }
+    }
+  }
 
   /**
    * Gets the initial data from the backend and sets the stores accordingly.
@@ -19,6 +49,8 @@ export default class DashboardAPIService {
    * @returns true if the data was successfully retrieved, false otherwise
    */
   static async getInitialData(): Promise<boolean> {
+    console.log('Getting initial data...');
+    this.lastInitialDataFetchTime = Date.now();
     const apiKeyValue = this.checkOrSetupDashboardAPI();
     const result = await APIService.callDashboardAPI({
       apiKey: apiKeyValue,
@@ -43,6 +75,7 @@ export default class DashboardAPIService {
       LocalData.taskQueue = [];
       LocalData.currentTaskQueueItem = undefined;
       loginState.set(LoginState.LoggedIn);
+      console.log('Initial data retrieved successfully');
       return true;
     } else {
       console.error('Error getting initial backend data, but got past login', result);

@@ -45,7 +45,7 @@ export default class LocalData {
    */
   static async initialize() {
     let attempts = 0;
-    while (typeof window === 'undefined' && attempts < 30) {
+    while (typeof window === 'undefined' && attempts < 10) {
       await sleep(5);
       attempts += 1;
     }

@@ -46,6 +46,10 @@ export default class DashboardTaskAPIService {
     }, {} as TaskMap);
   }
 
+  static hasTaskQueueItem(): boolean {
+    return LocalData.taskQueue.length > 0;
+  }
+
   private static pushTaskQueueItem(updateInfo: TaskInsertOrUpdateInfo) {
     const taskQueue = LocalData.taskQueue;
     taskQueue.push(updateInfo);
