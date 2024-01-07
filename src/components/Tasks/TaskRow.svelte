@@ -68,15 +68,17 @@
             <h4 class="mdc-typography--body1 title">
               <span>{$task.title}</span>
               {#if $task.tags.length > 0}
-                <Icon class="material-icons dimmed-color small-icon">sell</Icon>
-                {#each $task.tags as tag, index}
-                  <i class="mdc-typography--caption mdc-theme--text-hint-on-background">
-                    {tag}
-                    {#if index !== $task.tags.length - 1}
-                      {`, `}
-                    {/if}
-                  </i>
-                {/each}
+                <div class="tagsContainer">
+                  <Icon class="material-icons dimmed-color small-icon">sell</Icon>
+                  {#each $task.tags as tag, index}
+                    <i class="mdc-typography--caption mdc-theme--text-hint-on-background">
+                      {tag}
+                      {#if index !== $task.tags.length - 1}
+                        {`, `}
+                      {/if}
+                    </i>
+                  {/each}
+                </div>
               {/if}
             </h4>
           {:else}
@@ -132,6 +134,13 @@
   .title {
     margin-top: 0px;
     margin-bottom: 0px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px;
+  }
+  .tagsContainer {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
