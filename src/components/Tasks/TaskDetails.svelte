@@ -155,6 +155,7 @@
   .taskButtons {
     display: flex;
     flex-direction: row;
+    gap: 8px;
     justify-content: space-between;
   }
 </style>

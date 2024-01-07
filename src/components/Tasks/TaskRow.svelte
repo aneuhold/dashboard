@@ -9,6 +9,7 @@
   import Card, { Content as CardContent } from '@smui/card';
   import Checkbox from '@smui/checkbox';
   import FormField from '@smui/form-field';
+  import { Icon } from '@smui/icon-button';
   import ClickableDiv from 'components/ClickableDiv.svelte';
   import ConfirmationDialog from 'components/ConfirmationDialog.svelte';
   import type { MenuButtonItem } from 'components/MenuButton.svelte';
@@ -65,23 +66,25 @@
         <ClickableDiv clickAction={goToTask}>
           {#if $task.title !== ''}
             <h4 class="mdc-typography--body1 title">
-              {$task.title}
+              <span>{$task.title}</span>
+              {#if $task.tags.length > 0}
+                <Icon class="material-icons dimmed-color small-icon">sell</Icon>
+                <i class="mdc-typography--caption mdc-theme--text-hint-on-background">
+                  {#each $task.tags as tag, index}
+                    {tag}
+                    {#if index !== $task.tags.length - 1}
+                      {`, `}
+                    {/if}
+                  {/each}
+                </i>
+              {/if}
             </h4>
           {:else}
             <h4 class="mdc-typography--body1 title dimmed-color">
               <i>Untitled</i>
             </h4>
           {/if}
-          {#if $task.tags.length > 0}
-            <div class="mdc-typography--caption mdc-theme--text-hint-on-background">
-              {#each $task.tags as tag, index}
-                <span><i>{tag}</i></span>
-                {#if index !== tag.length - 1}
-                  <span>, </span>
-                {/if}
-              {/each}
-            </div>
-          {/if}
+
           {#if $task.description && $task.description !== ''}
             <div class="mdc-deprecated-list-item__secondary-text subtitle">
               {$task.description}

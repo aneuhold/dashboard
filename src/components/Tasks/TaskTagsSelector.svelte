@@ -57,39 +57,52 @@
   }
 </script>
 
-<Set
-  style="display: inline-block;"
-  bind:chips={currentTags}
-  on:SMUIChip:removal={handleRemoval}
-  let:chip
->
-  <Chip {chip}>
-    <Text>{chip}</Text>
-    <TrailingAction icon$class="material-icons">cancel</TrailingAction>
-  </Chip>
-</Set>
-
-<Autocomplete
-  bind:this={selector}
-  options={unselectedTags}
-  bind:text={currentAutoCompleteValue}
-  on:keydown={handleKeyDown}
-  noMatchesActionDisabled={false}
-  selectOnExactMatch={false}
-  showMenuWithNoInput={false}
-  clearOnBlur={false}
-  label="Add Tag"
-  on:SMUIAutocomplete:noMatchesAction={handleNewSelection}
-  on:SMUIAutocomplete:selected={handleSelection}
->
-  <div slot="no-matches">
-    {#if $task.tags.includes(currentAutoCompleteValue)}
-      <Text>Tag "{currentAutoCompleteValue}" already added</Text>
-    {:else}
-      <Text>Add tag "{currentAutoCompleteValue}"</Text>
+<div class={`tagsSelectorContainer${$task.tags.length > 0 ? ' reducedTopMargin' : ''}`}>
+  <div class="tagChipsContainer">
+    {#if $task.tags.length === 0}
+      <i class="mdc-typography--body2 subTasksTitle dimmed-color">No tags</i>
     {/if}
+    <Set bind:chips={currentTags} on:SMUIChip:removal={handleRemoval} let:chip>
+      <Chip {chip}>
+        <Text>{chip}</Text>
+        <TrailingAction icon$class="material-icons">cancel</TrailingAction>
+      </Chip>
+    </Set>
   </div>
-</Autocomplete>
+
+  <Autocomplete
+    bind:this={selector}
+    options={unselectedTags}
+    bind:text={currentAutoCompleteValue}
+    on:keydown={handleKeyDown}
+    noMatchesActionDisabled={false}
+    selectOnExactMatch={false}
+    showMenuWithNoInput={false}
+    clearOnBlur={false}
+    label="Add Tag"
+    on:SMUIAutocomplete:noMatchesAction={handleNewSelection}
+    on:SMUIAutocomplete:selected={handleSelection}
+  >
+    <div slot="no-matches">
+      {#if $task.tags.includes(currentAutoCompleteValue)}
+        <Text>Tag "{currentAutoCompleteValue}" already added</Text>
+      {:else}
+        <Text>Add tag "{currentAutoCompleteValue}"</Text>
+      {/if}
+    </div>
+  </Autocomplete>
+</div>
 
 <style>
+  .tagsSelectorContainer {
+    display: flex;
+    flex-direction: column;
+  }
+  .tagChipsContainer {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .reducedTopMargin {
+    margin-top: -8px;
+  }
 </style>
