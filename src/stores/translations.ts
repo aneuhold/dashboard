@@ -44,12 +44,9 @@ export const translations = createTranslationsStore();
  * ```
  */
 export class TR {
-  constructor(private translations: Translations) {
-    console.log('TR initialized');
-  }
+  constructor(private translations: Translations) {}
 
   key(keyName: string) {
-    console.log('it got here');
     const translation = this.translations[keyName];
     if (translation) {
       return translation.value;

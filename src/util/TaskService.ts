@@ -27,6 +27,7 @@ export default class TaskService {
    * multiple stores for the same task.
    */
   private static currentTaskStores: TaskStores = {};
+  private static taskTagsStore: Writable<string[]> | undefined;
 
   /**
    * The store which contains all tasks in the app. This will only trigger an
@@ -50,6 +51,13 @@ export default class TaskService {
       this.currentTaskStores[taskId] = this.createTaskStore(taskId);
     }
     return this.currentTaskStores[taskId];
+  }
+
+  static getTaskTagsStore() {
+    if (!this.taskTagsStore) {
+      this.taskTagsStore = writable<string[]>(this.getAllTaskTags());
+    }
+    return this.taskTagsStore;
   }
 
   static getTaskRoute(taskId: string, includeFirstSlash = true) {
@@ -112,9 +120,36 @@ export default class TaskService {
     }
   }
 
+  private static getAllTaskTags() {
+    const allTaskTagsMap = Object.values(this._taskMap).reduce(
+      (tags, task) => {
+        task.tags.forEach((tag) => {
+          tags[tag] = true;
+        });
+        return tags;
+      },
+      {} as Record<string, boolean>
+    );
+    return Object.keys(allTaskTagsMap);
+  }
+
+  private static updateTaskTags() {
+    if (this.taskTagsStore) {
+      this.taskTagsStore.set(this.getAllTaskTags());
+    } else {
+      this.taskTagsStore = writable<string[]>(this.getAllTaskTags());
+    }
+  }
+
   private static createTaskStore(taskId: string): TaskStore {
     const { subscribe, set } = writable(this._taskMap[taskId]);
-    const setTask = () => {
+
+    const setTask = (newTask: DashboardTask) => {
+      const oldTaskTagsLength = this._taskMap[taskId].tags.length;
+      this._taskMap[taskId] = newTask;
+      if (oldTaskTagsLength !== newTask.tags.length) {
+        this.updateTaskTags();
+      }
       set(this._taskMap[taskId]);
       LocalData.taskMap = this._taskMap;
       DashboardTaskAPIService.updateTasks({
@@ -125,13 +160,11 @@ export default class TaskService {
     return {
       subscribe,
       set: (newTask: DashboardTask) => {
-        this._taskMap[taskId] = newTask;
-        setTask();
+        setTask(newTask);
       },
       update: (updater: Updater<DashboardTask>) => {
         const updatedTask = updater(this._taskMap[taskId]);
-        this._taskMap[taskId] = updatedTask;
-        setTask();
+        setTask(updatedTask);
       },
       setWithoutPropogation: (newTask: DashboardTask) => {
         set(newTask);
@@ -152,6 +185,7 @@ export default class TaskService {
     const setTaskMap = () => {
       set(this._taskMap);
       LocalData.taskMap = this._taskMap;
+      this.updateTaskTags();
     };
 
     return {

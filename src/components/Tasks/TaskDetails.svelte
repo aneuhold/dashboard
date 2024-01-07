@@ -19,10 +19,12 @@
   import FabButton from 'components/FabButton.svelte';
   import InputBox from 'components/InputBox.svelte';
   import PageTitle from 'components/PageTitle.svelte';
+  import { snackbar } from 'components/Snackbar.svelte';
   import TaskService from 'util/TaskService';
   import { userSettings } from '../../stores/userSettings';
   import ConfirmationDialog from '../ConfirmationDialog.svelte';
   import TaskList from './TaskList.svelte';
+  import TaskTagsSelector from './TaskTagsSelector.svelte';
 
   export let taskId: string;
 
@@ -84,7 +86,17 @@
             <InputBox variant="outlined" label="Title" bind:onBlurValue={$task.title} />
           </div>
           <InputBox label="Description" isTextArea={true} bind:onBlurValue={$task.description} />
-          <div class="rightSide">
+          <TaskTagsSelector {taskId} />
+          <div class="taskButtons">
+            <Button
+              variant="raised"
+              class="secondary-button"
+              color="secondary"
+              on:click={() => snackbar.success('This would do something, but isnt ready yet 😅')}
+            >
+              <Icon class="material-icons">share</Icon>
+              Share
+            </Button>
             <Button variant="outlined" class="danger-button" on:click={handleDeleteClick}>
               <Icon class="material-icons">delete</Icon>
               Delete
@@ -140,9 +152,9 @@
     margin-top: 0px;
     margin-bottom: 0px;
   }
-  .rightSide {
+  .taskButtons {
     display: flex;
     flex-direction: row;
-    justify-content: flex-end;
+    justify-content: space-between;
   }
 </style>
