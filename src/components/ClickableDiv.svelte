@@ -14,5 +14,9 @@
 <style>
   div {
     cursor: pointer;
+    /* The below styles will likely need to be changed */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 </style>

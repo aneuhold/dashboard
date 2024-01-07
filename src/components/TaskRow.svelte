@@ -58,7 +58,7 @@
               {/each}
             </div>
           {/if}
-          {#if $task.description}
+          {#if $task.description && $task.description !== ''}
             <div class="mdc-deprecated-list-item__secondary-text subtitle">
               {$task.description}
             </div>
