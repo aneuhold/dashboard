@@ -41,12 +41,7 @@
     searchingForUser = true;
     DashboardAPIService.checkIfUsernameIsValid(userNameSearchValue).then((userCto) => {
       if (userCto) {
-        userSettings.update((settings) => {
-          settings.config.collaborators.push(userCto._id);
-          settings.collaborators[userCto._id.toString()] = userCto;
-          settings.pendingSettingsUpdate = true;
-          return settings;
-        });
+        userSettings.addCollaborator(userCto);
         snackbar.success(`User ${userCto.userName} added to collaborators ✨`);
       } else {
         snackbar.error('User not found');
@@ -56,18 +51,7 @@
   }
 
   function handleCollaboratorRemoval(event: CustomEvent<{ chipId: string }>) {
-    const collaboratorId = Object.values($userSettings.collaborators).find(
-      (userCto) => userCto.userName === event.detail.chipId
-    )?._id;
-    if (!collaboratorId) return;
-    userSettings.update((settings) => {
-      settings.config.collaborators = settings.config.collaborators.filter(
-        (id) => id.toString() !== collaboratorId.toString()
-      );
-      delete settings.collaborators[collaboratorId.toString()];
-      settings.pendingSettingsUpdate = true;
-      return settings;
-    });
+    userSettings.removeCollaborator(event.detail.chipId);
   }
 </script>
 

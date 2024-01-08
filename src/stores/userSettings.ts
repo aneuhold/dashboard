@@ -29,7 +29,32 @@ function createUserSettingsStore() {
       set(newSettings);
       LocalData.userSettings = newSettings;
     },
-    update
+    update,
+    addCollaborator: (user: UserCTO) => {
+      update((settings) => {
+        settings.config.collaborators.push(user._id);
+        settings.collaborators[user._id.toString()] = user;
+        settings.pendingSettingsUpdate = true;
+        return settings;
+      });
+    },
+    removeCollaborator: (userName: string) => {
+      update((settings) => {
+        const collaboratorId = Object.values(settings.collaborators).find(
+          (userCto) => userCto.userName === userName
+        )?._id;
+        if (!collaboratorId) {
+          console.error(`Could not find collaborator with username ${userName}`);
+          return settings;
+        }
+        settings.config.collaborators = settings.config.collaborators.filter(
+          (id) => id.toString() !== collaboratorId.toString()
+        );
+        delete settings.collaborators[collaboratorId.toString()];
+        settings.pendingSettingsUpdate = true;
+        return settings;
+      });
+    }
   };
 }
 
