@@ -5,7 +5,7 @@
 -->
 <script lang="ts">
   import { goto } from '$app/navigation';
-  import { getDashboardTaskChildrenIds } from '@aneuhold/core-ts-db-lib';
+  import { DashboardTask, getDashboardTaskChildrenIds } from '@aneuhold/core-ts-db-lib';
   import Card, { Content as CardContent } from '@smui/card';
   import Checkbox from '@smui/checkbox';
   import FormField from '@smui/form-field';
@@ -15,16 +15,20 @@
   import type { MenuButtonItem } from 'components/MenuButton.svelte';
   import MenuButton from 'components/MenuButton.svelte';
   import TaskService from 'util/TaskService';
+  import { userSettings } from '../../stores/userSettings';
+  import TaskSharingDialog from './TaskSharingDialog.svelte';
 
   export let taskId: string;
 
-  let dialogOpen = false;
+  let deleteDialogOpen = false;
+  let shareDialogOpen = false;
   $: task = TaskService.getTaskStore(taskId);
   let taskMap = TaskService.getStore();
   $: allChildrenIds = $task
     ? getDashboardTaskChildrenIds(Object.values($taskMap), [$task._id])
     : [];
   $: hasExtraTaskInfo = allChildrenIds.length > 0;
+  $: menuItems = getMenuItems($task);
 
   function goToTask() {
     goto(TaskService.getTaskRoute(taskId));
@@ -36,24 +40,36 @@
 
   function handleDeleteClick() {
     if (allChildrenIds.length > 0) {
-      dialogOpen = true;
+      deleteDialogOpen = true;
       return;
     }
     deleteTask();
   }
 
-  let menuItems: MenuButtonItem[] = [
-    {
-      title: 'Edit',
-      iconName: 'edit',
-      clickAction: goToTask
-    },
-    {
+  function getMenuItems(task: DashboardTask) {
+    let menuItems: MenuButtonItem[] = [
+      {
+        title: 'Edit',
+        iconName: 'edit',
+        clickAction: goToTask
+      }
+    ];
+    if (task.userId.toString() === $userSettings.config.userId.toString()) {
+      menuItems.push({
+        title: 'Share',
+        iconName: 'share',
+        clickAction: () => {
+          shareDialogOpen = true;
+        }
+      });
+    }
+    menuItems.push({
       title: 'Delete',
       iconName: 'delete',
       clickAction: handleDeleteClick
-    }
-  ];
+    });
+    return menuItems;
+  }
 </script>
 
 <div class="container">
@@ -64,25 +80,26 @@
           <Checkbox bind:checked={$task.completed} touch />
         </FormField>
         <ClickableDiv clickAction={goToTask}>
-          {#if $task.title !== ''}
-            <h4 class="mdc-typography--body1 title">
+          <h4 class="mdc-typography--body1 title">
+            {#if $task.title !== ''}
               <span>{$task.title}</span>
-              {#if $task.tags.length > 0}
-                <div class="tagsContainer">
-                  <Icon class="material-icons dimmed-color small-icon">sell</Icon>
-                  {#each $task.tags as tag, index}
-                    <i class="mdc-typography--caption mdc-theme--text-hint-on-background">
-                      {`${tag}${index === $task.tags.length - 1 ? '' : ', '}`}
-                    </i>
-                  {/each}
-                </div>
-              {/if}
-            </h4>
-          {:else}
-            <h4 class="mdc-typography--body1 title dimmed-color">
-              <i>Untitled</i>
-            </h4>
-          {/if}
+            {:else}
+              <i class="dimmed-color">Untitled</i>
+            {/if}
+            {#if $task.sharedWith.length > 0}
+              <Icon class="material-icons dimmed-color small-icon">group</Icon>
+            {/if}
+            {#if $task.tags.length > 0}
+              <div class="tagsContainer">
+                <Icon class="material-icons dimmed-color small-icon">sell</Icon>
+                {#each $task.tags as tag, index}
+                  <i class="mdc-typography--caption mdc-theme--text-hint-on-background">
+                    {`${tag}${index === $task.tags.length - 1 ? '' : ', '}`}
+                  </i>
+                {/each}
+              </div>
+            {/if}
+          </h4>
 
           {#if $task.description && $task.description !== ''}
             <div class="mdc-deprecated-list-item__secondary-text subtitle">
@@ -108,9 +125,11 @@
   message={`Are you sure you want to delete ${
     $task.title === '' ? 'this task' : `"${$task.title}"`
   }? It has ${allChildrenIds.length} sub task${allChildrenIds.length > 1 ? 's' : ''}.`}
-  bind:open={dialogOpen}
+  bind:open={deleteDialogOpen}
   on:confirm={deleteTask}
 />
+
+<TaskSharingDialog {taskId} bind:open={shareDialogOpen} />
 
 <style>
   .container {

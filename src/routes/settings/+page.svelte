@@ -6,14 +6,23 @@
 <script lang="ts">
   import Button from '@smui/button';
   import Checkbox from '@smui/checkbox';
+  import Chip, { Set, Text, TrailingAction } from '@smui/chips';
   import CircularProgress from '@smui/circular-progress';
   import FormField from '@smui/form-field';
   import Paper, { Content } from '@smui/paper';
+  import InputBox from 'components/InputBox.svelte';
   import PageTitle from 'components/PageTitle.svelte';
+  import { snackbar } from 'components/Snackbar.svelte';
   import DashboardAPIService from 'util/api/DashboardAPIService';
   import { userSettings } from '../../stores/userSettings';
   import { settingsPageInfo } from './pageInfo';
+
   let updatingSettings = false;
+  let searchingForUser = false;
+  let userNameSearchValue = '';
+  $: collaboratorUserNames = Object.values($userSettings.collaborators).map(
+    (userCto) => userCto.userName
+  );
 
   function triggerSettingsChanged() {
     $userSettings.pendingSettingsUpdate = true;
@@ -23,6 +32,41 @@
     updatingSettings = true;
     DashboardAPIService.updateSettings($userSettings.config).then(() => {
       updatingSettings = false;
+      snackbar.success('Settings successfully saved ❤️');
+    });
+  }
+
+  function handleSearchForUser() {
+    if (userNameSearchValue === '') return;
+    searchingForUser = true;
+    DashboardAPIService.checkIfUsernameIsValid(userNameSearchValue).then((userCto) => {
+      if (userCto) {
+        userSettings.update((settings) => {
+          settings.config.collaborators.push(userCto._id);
+          settings.collaborators[userCto._id.toString()] = userCto;
+          settings.pendingSettingsUpdate = true;
+          return settings;
+        });
+        snackbar.success(`User ${userCto.userName} added to collaborators ✨`);
+      } else {
+        snackbar.error('User not found');
+      }
+      searchingForUser = false;
+    });
+  }
+
+  function handleCollaboratorRemoval(event: CustomEvent<{ chipId: string }>) {
+    const collaboratorId = Object.values($userSettings.collaborators).find(
+      (userCto) => userCto.userName === event.detail.chipId
+    )?._id;
+    if (!collaboratorId) return;
+    userSettings.update((settings) => {
+      settings.config.collaborators = settings.config.collaborators.filter(
+        (id) => id !== collaboratorId
+      );
+      delete settings.collaborators[collaboratorId.toString()];
+      settings.pendingSettingsUpdate = true;
+      return settings;
     });
   }
 </script>
@@ -34,38 +78,108 @@
 
 <PageTitle title={settingsPageInfo.shortTitle} subtitle={settingsPageInfo.description} />
 
-<Paper>
-  <Content>
-    <div class="content">
-      <FormField>
-        <Checkbox
-          bind:checked={$userSettings.config.enableDevMode}
-          touch
-          on:click={triggerSettingsChanged}
-        />
-        <span slot="label">
-          Enable dev mode
-          <span class="mdc-theme--text-hint-on-background checkBoxText">
-            Enables some development features on the site.
+<div class="container">
+  <Paper>
+    <Content>
+      <div class="content">
+        <h6 class="sectionTitle mdc-typography--subtitle1">General Settings</h6>
+        <FormField>
+          <Checkbox
+            bind:checked={$userSettings.config.enableDevMode}
+            touch
+            on:click={triggerSettingsChanged}
+          />
+          <span slot="label">
+            Enable dev mode
+            <span class="mdc-theme--text-hint-on-background checkBoxText">
+              Enables some development features on the site.
+            </span>
           </span>
-        </span>
-      </FormField>
-      <Button disabled={!$userSettings.pendingSettingsUpdate} on:click={saveSettings}>
-        {#if updatingSettings}
-          <CircularProgress style="height: 32px; width: 32px;" indeterminate={true} />
-        {:else}
-          Save Settings
-        {/if}
-      </Button>
-    </div>
-  </Content>
-</Paper>
+        </FormField>
+        <hr class="sectionSeparator" />
+        <h6 class="sectionTitle mdc-typography--subtitle1">Collaborators</h6>
+        <div class="collaboratorsContainer">
+          <Set
+            chips={collaboratorUserNames}
+            let:chip
+            input
+            on:SMUIChip:removal={handleCollaboratorRemoval}
+          >
+            <Chip {chip}>
+              <Text>{chip}</Text>
+              <TrailingAction icon$class="material-icons">cancel</TrailingAction>
+            </Chip>
+          </Set>
+
+          <div class="userNameSearch">
+            <div>
+              <InputBox
+                bind:inputValue={userNameSearchValue}
+                disable={searchingForUser}
+                helperText="Enter a username to search"
+                label="Username"
+                on:submit={handleSearchForUser}
+              />
+            </div>
+            <Button
+              variant="raised"
+              disabled={searchingForUser || userNameSearchValue === ''}
+              on:click={handleSearchForUser}
+            >
+              {#if searchingForUser}
+                <CircularProgress style="height: 32px; width: 32px;" indeterminate={true} />
+              {:else}
+                Search for User
+              {/if}
+            </Button>
+          </div>
+        </div>
+        <hr class="sectionSeparator" />
+        <Button disabled={!$userSettings.pendingSettingsUpdate} on:click={saveSettings}>
+          {#if updatingSettings}
+            <CircularProgress style="height: 32px; width: 32px;" indeterminate={true} />
+          {:else}
+            Save Settings
+          {/if}
+        </Button>
+      </div>
+    </Content>
+  </Paper>
+</div>
 
 <style>
   .content {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+  }
+  .sectionTitle {
+    margin-bottom: 0px;
+    margin-top: 0px;
+    margin-left: 8px;
+  }
+  .sectionSeparator {
+    width: 100%;
+    border-color: darkgray;
+  }
+  .collaboratorsContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+  }
+  .userNameSearch {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-left: 8px;
+  }
+  .container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
   }
   .checkBoxText {
     margin-left: 8px;

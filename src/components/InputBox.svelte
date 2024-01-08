@@ -17,6 +17,7 @@
 -->
 <script lang="ts">
   import Textfield from '@smui/textfield';
+  import HelperText from '@smui/textfield/helper-text';
   import { createEventDispatcher } from 'svelte';
 
   export let disable: boolean = false;
@@ -51,6 +52,11 @@
    * set this.
    */
   export let autocompleteLabel: string | null = null;
+  /**
+   * The helper text to show below the input box. If null, no helper text will
+   * be shown.
+   */
+  export let helperText: string | null = null;
 
   /**
    * Variant for when this is not a text area. If it is a text area, this will
@@ -60,7 +66,6 @@
 
   let previousOnBlurValue = onBlurValue;
 
-  let focused = false;
   /**
    * Indicates if the input has been touched and edited. Might be useful
    * later.
@@ -76,14 +81,12 @@
   function handleKeyDown(event: CustomEvent | KeyboardEvent) {
     event = event as KeyboardEvent;
     if (event.key === 'Enter' && !isTextArea) {
-      focused = false;
       onBlurValue = inputValue;
       dispatch('submit');
     }
   }
 
   function handleBlur() {
-    focused = false;
     onBlurValue = inputValue;
   }
 
@@ -97,7 +100,6 @@
   } else if (onBlurValue !== previousOnBlurValue && onBlurValue !== inputValue) {
     inputValue = onBlurValue;
     previousOnBlurValue = onBlurValue;
-    focused = false;
   }
 </script>
 
@@ -105,20 +107,23 @@
   type={inputType}
   bind:dirty
   bind:invalid
-  bind:disable
-  bind:focused
+  bind:disabled={disable}
   bind:value={inputValue}
   input$autocomplete={autocompleteLabel}
   input$resizable={isTextArea ? false : undefined}
   input$rows={isTextArea ? inputValue.split(/\r\n|\r|\n/).length : undefined}
   textarea={isTextArea}
   variant={isTextArea ? undefined : variant}
-  style="width: 100%;"
   {label}
   on:keydown={handleKeyDown}
-  on:focus={() => (focused = true)}
   on:blur={handleBlur}
-/>
+>
+  <svelte:fragment slot="helper">
+    {#if helperText}
+      <HelperText persistent>{helperText}</HelperText>
+    {/if}
+  </svelte:fragment>
+</Textfield>
 
 <style>
 </style>

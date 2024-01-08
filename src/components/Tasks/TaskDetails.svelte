@@ -15,20 +15,23 @@
   import Checkbox from '@smui/checkbox';
   import FormField from '@smui/form-field';
   import Paper, { Content } from '@smui/paper';
+  import Tooltip, { Wrapper } from '@smui/tooltip';
   import BreadCrumb from 'components/BreadCrumb.svelte';
   import FabButton from 'components/FabButton.svelte';
   import InputBox from 'components/InputBox.svelte';
   import PageTitle from 'components/PageTitle.svelte';
-  import { snackbar } from 'components/Snackbar.svelte';
   import TaskService from 'util/TaskService';
   import { userSettings } from '../../stores/userSettings';
   import ConfirmationDialog from '../ConfirmationDialog.svelte';
   import TaskList from './TaskList.svelte';
+  import TaskSharingDialog from './TaskSharingDialog.svelte';
+  import TaskSharingInfo from './TaskSharingInfo.svelte';
   import TaskTagsSelector from './TaskTagsSelector.svelte';
 
   export let taskId: string;
 
-  let dialogOpen = false;
+  let deleteDialogOpen = false;
+  let sharingDialogOpen = false;
   let taskMap = TaskService.getStore();
   $: task = $taskMap[taskId] ? TaskService.getTaskStore(taskId) : null;
   $: subTaskIds = $task
@@ -41,6 +44,7 @@
     : [];
   // Explicitly include `task` so that it reactively updates
   $: breadCrumbArray = TaskService.getBreadCrumbArray($task ? $task._id.toString() : taskId);
+  $: sharingDisabled = $task?.userId.toString() !== $userSettings.config.userId.toString();
 
   function addSubTask() {
     if (!$task) return;
@@ -64,7 +68,7 @@
 
   function handleDeleteClick() {
     if (allChildrenIds.length > 0) {
-      dialogOpen = true;
+      deleteDialogOpen = true;
       return;
     }
     deleteTask();
@@ -86,17 +90,30 @@
             <InputBox variant="outlined" label="Title" bind:onBlurValue={$task.title} />
           </div>
           <InputBox label="Description" isTextArea={true} bind:onBlurValue={$task.description} />
-          <TaskTagsSelector {taskId} />
+          <div class="extraTaskInfo">
+            <TaskTagsSelector {taskId} />
+            <TaskSharingInfo {taskId} />
+          </div>
+
           <div class="taskButtons">
-            <Button
-              variant="raised"
-              class="secondary-button"
-              color="secondary"
-              on:click={() => snackbar.success('This would do something, but isnt ready yet 😅')}
-            >
-              <Icon class="material-icons">share</Icon>
-              Share
-            </Button>
+            <Wrapper>
+              <!--Extra div is needed for tooltip to show up when disabled-->
+              <div>
+                <Button
+                  variant="raised"
+                  class="secondary-button"
+                  color="secondary"
+                  disabled={sharingDisabled}
+                  on:click={() => (sharingDialogOpen = true)}
+                >
+                  <Icon class="material-icons">share</Icon>
+                  Share
+                </Button>
+              </div>
+              {#if sharingDisabled}
+                <Tooltip>Cannot share tasks you do not own</Tooltip>
+              {/if}
+            </Wrapper>
             <Button variant="outlined" class="danger-button" on:click={handleDeleteClick}>
               <Icon class="material-icons">delete</Icon>
               Delete
@@ -125,9 +142,11 @@
 <ConfirmationDialog
   title="Delete Task"
   message={`Are you sure you want to delete this task? It has ${allChildrenIds.length} sub tasks.`}
-  bind:open={dialogOpen}
+  bind:open={deleteDialogOpen}
   on:confirm={deleteTask}
 />
+
+<TaskSharingDialog {taskId} bind:open={sharingDialogOpen} />
 
 <style>
   .titleContainer {
@@ -139,6 +158,14 @@
     flex-direction: column;
     width: 100%;
     gap: 16px;
+  }
+  .extraTaskInfo {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-top: -8px;
   }
   .paperContent {
     gap: 16px;

@@ -1,5 +1,5 @@
-import { APIService } from '@aneuhold/core-ts-api-lib';
-import type { DashboardUserConfig } from '@aneuhold/core-ts-db-lib';
+import { APIService, type ProjectDashboardOutput } from '@aneuhold/core-ts-api-lib';
+import type { DashboardUserConfig, UserCTO } from '@aneuhold/core-ts-db-lib';
 import { snackbar } from 'components/Snackbar.svelte';
 import type { UUID } from 'crypto';
 import LocalData from 'util/LocalData';
@@ -70,7 +70,11 @@ export default class DashboardAPIService {
       result.data.tasks
     ) {
       translations.set(result.data.translations);
-      userSettings.set({ pendingSettingsUpdate: false, config: result.data.userConfig });
+      userSettings.set({
+        pendingSettingsUpdate: false,
+        config: result.data.userConfig,
+        collaborators: this.getCollaboratorsFromResult(result.data)
+      });
       TaskService.getStore().set(DashboardTaskAPIService.convertTaskArrayToMap(result.data.tasks));
       // Clear the task queue since we just got the initial data
       LocalData.taskQueue = [];
@@ -92,15 +96,38 @@ export default class DashboardAPIService {
     const result = await APIService.callDashboardAPI({
       apiKey: apiKeyValue,
       options: {
+        get: { userConfig: true },
         update: {
           userConfig: updatedConfig
         }
       }
     });
     if (result.success && result.data?.userConfig) {
-      userSettings.set({ pendingSettingsUpdate: false, config: result.data.userConfig });
+      userSettings.set({
+        pendingSettingsUpdate: false,
+        config: result.data.userConfig,
+        collaborators: this.getCollaboratorsFromResult(result.data)
+      });
     } else {
       console.error('Error updating settings', result);
+    }
+  }
+
+  static async checkIfUsernameIsValid(username: string): Promise<UserCTO | null> {
+    const apiKeyValue = this.checkOrSetupDashboardAPI();
+    const result = await APIService.callDashboardAPI({
+      apiKey: apiKeyValue,
+      options: {
+        get: {
+          userNameIsValid: username
+        }
+      }
+    });
+    if (result.success && result.data?.userFromUserName) {
+      return result.data.userFromUserName;
+    } else {
+      console.info('Invalid username', result);
+      return null;
     }
   }
 
@@ -118,5 +145,19 @@ export default class DashboardAPIService {
       throw new Error('API Key not set!');
     }
     return apiKeyValue;
+  }
+
+  static getCollaboratorsFromResult(data: ProjectDashboardOutput): Record<string, UserCTO> {
+    if (data.collaborators) {
+      return data.collaborators.reduce(
+        (collaboratorsMap, userCto) => {
+          collaboratorsMap[userCto._id.toString()] = userCto;
+          return collaboratorsMap;
+        },
+        {} as Record<string, UserCTO>
+      );
+    } else {
+      return {};
+    }
   }
 }
