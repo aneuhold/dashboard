@@ -62,7 +62,7 @@
     if (!collaboratorId) return;
     userSettings.update((settings) => {
       settings.config.collaborators = settings.config.collaborators.filter(
-        (id) => id !== collaboratorId
+        (id) => id.toString() !== collaboratorId.toString()
       );
       delete settings.collaborators[collaboratorId.toString()];
       settings.pendingSettingsUpdate = true;
