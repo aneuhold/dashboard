@@ -53,12 +53,14 @@
   <form class="credentialsInputArea">
     <InputBox
       label="Username"
+      spellCheck={false}
       autocompleteLabel="username"
       bind:inputValue={typedUserName}
       inputType="text"
     />
     <InputBox
       label="Password"
+      spellCheck={false}
       autocompleteLabel="password"
       bind:inputValue={typedPassword}
       inputType="password"

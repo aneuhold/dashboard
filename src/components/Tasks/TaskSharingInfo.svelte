@@ -10,7 +10,13 @@
   export let taskId: string;
 
   $: task = TaskService.getTaskStore(taskId);
-  $: sharedWithIds = $task.sharedWith.map((id) => id.toString());
+  /**
+   * Only inlcudes the ids of the users that the current user is a collaborator
+   * with.
+   */
+  $: sharedWithIds = $task.sharedWith
+    .map((id) => id.toString())
+    .filter((id) => $userSettings.collaborators[id]);
   $: collaborators = $userSettings.collaborators;
   $: userIsNotOwner = $task?.userId.toString() !== $userSettings.config.userId.toString();
 </script>

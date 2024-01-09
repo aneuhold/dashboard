@@ -1,4 +1,4 @@
-import type { DashboardTask } from '@aneuhold/core-ts-db-lib';
+import { getDashboardTaskChildrenIds, type DashboardTask } from '@aneuhold/core-ts-db-lib';
 import type { BreadCrumbArray } from 'components/BreadCrumb.svelte';
 import { writable, type Updater, type Writable } from 'svelte/store';
 import LocalData, { localDataReady } from './LocalData';
@@ -106,6 +106,35 @@ export default class TaskService {
     return breadCrumbs;
   }
 
+  /**
+   * Recursively finds the parent ID of the given task that has the same
+   * sharedWith array.
+   */
+  static findParentIdWithSameSharedWith(task: DashboardTask): string {
+    if (!task.parentTaskId) {
+      return task._id.toString();
+    }
+    const parentTask = this._taskMap[task.parentTaskId.toString()];
+    if (!parentTask) {
+      return task._id.toString();
+    }
+    // Fancy array comparison logic
+    if (
+      parentTask.sharedWith.length === task.sharedWith.length &&
+      parentTask.sharedWith
+        .map((id) => id.toString())
+        .sort()
+        .join() ===
+        task.sharedWith
+          .map((id) => id.toString())
+          .sort()
+          .join()
+    ) {
+      return this.findParentIdWithSameSharedWith(parentTask);
+    }
+    return task._id.toString();
+  }
+
   static getTaskCategoryRoute(taskId: string, includeFirstSlash = true) {
     const defaultRoute = `${includeFirstSlash ? '/' : ''}tasks`;
     const task = this._taskMap[taskId];
@@ -203,6 +232,14 @@ export default class TaskService {
       },
       addTask: (newTask: DashboardTask) => {
         newTask.description = '';
+        // Check for properties that must be shared with the parent and propogate.
+        const parentTask = newTask.parentTaskId
+          ? this._taskMap[newTask.parentTaskId.toString()]
+          : null;
+        if (parentTask) {
+          newTask.sharedWith = [...parentTask.sharedWith];
+          newTask.userId = parentTask.userId;
+        }
         this._taskMap[newTask._id.toString()] = newTask;
         setTaskMap();
         DashboardTaskAPIService.updateTasks({
@@ -215,6 +252,29 @@ export default class TaskService {
         });
         delete this._taskMap[objectId];
         setTaskMap();
+      },
+      updateTaskAndAllChildren: (taskId: string, updater: Updater<DashboardTask>) => {
+        const parentTask = this._taskMap[taskId];
+        const allTaskIdsToUpdate = getDashboardTaskChildrenIds(Object.values(this._taskMap), [
+          parentTask._id
+        ]);
+        allTaskIdsToUpdate.push(parentTask._id);
+        const updateArray: DashboardTask[] = [];
+        allTaskIdsToUpdate.forEach((taskId) => {
+          const task = this._taskMap[taskId.toString()];
+          const updatedTask = updater(task);
+          this._taskMap[taskId.toString()] = updatedTask;
+          updateArray.push(task);
+          // Check and update the store if needed
+          const taskStore = this.currentTaskStores[taskId.toString()];
+          if (taskStore) {
+            taskStore.setWithoutPropogation(task);
+          }
+        });
+        setTaskMap();
+        DashboardTaskAPIService.updateTasks({
+          update: updateArray
+        });
       }
     };
   }

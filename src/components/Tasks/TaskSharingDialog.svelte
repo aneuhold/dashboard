@@ -14,19 +14,25 @@
 
   export let open = false;
   export let taskId: string;
+
+  let taskMap = TaskService.getStore();
   $: task = TaskService.getTaskStore(taskId);
   $: sharedWithIds = $task.sharedWith.map((id) => id.toString());
   $: collaborators = $userSettings.collaborators;
 
   function toggleSharedWith(id: ObjectId) {
     if (sharedWithIds.includes(id.toString())) {
-      task.update((task) => {
-        task.sharedWith.splice(sharedWithIds.indexOf(id.toString()), 1);
+      taskMap.updateTaskAndAllChildren(taskId, (task) => {
+        task.sharedWith = task.sharedWith.filter((sharedWithId) => {
+          return sharedWithId.toString() !== id.toString();
+        });
         return task;
       });
     } else {
-      task.update((task) => {
-        task.sharedWith.push(id);
+      taskMap.updateTaskAndAllChildren(taskId, (task) => {
+        if (!task.sharedWith.some((objectId) => objectId.toString() === id.toString())) {
+          task.sharedWith.push(id);
+        }
         return task;
       });
     }
@@ -46,6 +52,9 @@
         <i class="mdc-typography--body1 dimmed-color">No collaborators</i>
         <a href="/settings">Add one in settings here!</a>
       {:else}
+        <p>
+          Note that sharing settings automatically applly to all sub-tasks on this task if enabled.
+        </p>
         {#each Object.values(collaborators) as collaborator}
           <FormField>
             <Checkbox

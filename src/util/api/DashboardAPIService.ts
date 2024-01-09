@@ -96,18 +96,20 @@ export default class DashboardAPIService {
     const result = await APIService.callDashboardAPI({
       apiKey: apiKeyValue,
       options: {
-        get: { userConfig: true },
+        // Get tasks as well because the collaborators might have changed
+        get: { userConfig: true, tasks: true },
         update: {
           userConfig: updatedConfig
         }
       }
     });
-    if (result.success && result.data?.userConfig) {
+    if (result.success && result.data?.userConfig && result.data.tasks) {
       userSettings.set({
         pendingSettingsUpdate: false,
         config: result.data.userConfig,
         collaborators: this.getCollaboratorsFromResult(result.data)
       });
+      TaskService.getStore().set(DashboardTaskAPIService.convertTaskArrayToMap(result.data.tasks));
     } else {
       console.error('Error updating settings', result);
     }

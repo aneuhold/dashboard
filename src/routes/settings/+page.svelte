@@ -100,6 +100,7 @@
               <InputBox
                 bind:inputValue={userNameSearchValue}
                 disable={searchingForUser}
+                spellCheck={false}
                 helperText="Enter a username to search"
                 label="Username"
                 on:submit={handleSearchForUser}

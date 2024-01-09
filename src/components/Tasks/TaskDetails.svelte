@@ -15,7 +15,6 @@
   import Checkbox from '@smui/checkbox';
   import FormField from '@smui/form-field';
   import Paper, { Content } from '@smui/paper';
-  import Tooltip, { Wrapper } from '@smui/tooltip';
   import BreadCrumb from 'components/BreadCrumb.svelte';
   import FabButton from 'components/FabButton.svelte';
   import InputBox from 'components/InputBox.svelte';
@@ -24,14 +23,13 @@
   import { userSettings } from '../../stores/userSettings';
   import ConfirmationDialog from '../ConfirmationDialog.svelte';
   import TaskList from './TaskList.svelte';
-  import TaskSharingDialog from './TaskSharingDialog.svelte';
+  import TaskShareButton from './TaskShareButton.svelte';
   import TaskSharingInfo from './TaskSharingInfo.svelte';
   import TaskTagsSelector from './TaskTagsSelector.svelte';
 
   export let taskId: string;
 
   let deleteDialogOpen = false;
-  let sharingDialogOpen = false;
   let taskMap = TaskService.getStore();
   $: task = $taskMap[taskId] ? TaskService.getTaskStore(taskId) : null;
   $: subTaskIds = $task
@@ -94,26 +92,8 @@
             <TaskTagsSelector {taskId} />
             <TaskSharingInfo {taskId} />
           </div>
-
           <div class="taskButtons">
-            <Wrapper>
-              <!--Extra div is needed for tooltip to show up when disabled-->
-              <div>
-                <Button
-                  variant="raised"
-                  class="secondary-button"
-                  color="secondary"
-                  disabled={sharingDisabled}
-                  on:click={() => (sharingDialogOpen = true)}
-                >
-                  <Icon class="material-icons">share</Icon>
-                  Share
-                </Button>
-              </div>
-              {#if sharingDisabled}
-                <Tooltip>Cannot share tasks you do not own</Tooltip>
-              {/if}
-            </Wrapper>
+            <TaskShareButton {taskId} />
             <Button variant="outlined" class="danger-button" on:click={handleDeleteClick}>
               <Icon class="material-icons">delete</Icon>
               Delete
@@ -145,8 +125,6 @@
   bind:open={deleteDialogOpen}
   on:confirm={deleteTask}
 />
-
-<TaskSharingDialog {taskId} bind:open={sharingDialogOpen} />
 
 <style>
   .titleContainer {
@@ -182,7 +160,8 @@
   .taskButtons {
     display: flex;
     flex-direction: row;
-    gap: 8px;
+    flex-wrap: wrap;
+    gap: 16px;
     justify-content: space-between;
   }
 </style>

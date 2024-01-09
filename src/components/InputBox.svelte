@@ -57,12 +57,15 @@
    * be shown.
    */
   export let helperText: string | null = null;
-
   /**
    * Variant for when this is not a text area. If it is a text area, this will
    * be ignored.
    */
   export let variant: 'filled' | 'outlined' | 'standard' = 'standard';
+  /**
+   * If false spell check will be disabled. Defaults to true.
+   */
+  export let spellCheck: boolean = true;
 
   let previousOnBlurValue = onBlurValue;
 
@@ -112,6 +115,7 @@
   input$autocomplete={autocompleteLabel}
   input$resizable={isTextArea ? false : undefined}
   input$rows={isTextArea ? inputValue.split(/\r\n|\r|\n/).length : undefined}
+  input$spellcheck={spellCheck ? 'true' : 'false'}
   textarea={isTextArea}
   variant={isTextArea ? undefined : variant}
   {label}
