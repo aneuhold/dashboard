@@ -28,6 +28,7 @@
     ? getDashboardTaskChildrenIds(Object.values($taskMap), [$task._id])
     : [];
   $: hasExtraTaskInfo = allChildrenIds.length > 0;
+  $: finalParentId = TaskService.findParentIdWithSameSharedWith($task);
   $: menuItems = getMenuItems($task);
 
   function goToTask() {
@@ -54,7 +55,10 @@
         clickAction: goToTask
       }
     ];
-    if (task.userId.toString() === $userSettings.config.userId.toString()) {
+    if (
+      task.userId.toString() === $userSettings.config.userId.toString() &&
+      finalParentId === taskId
+    ) {
       menuItems.push({
         title: 'Share',
         iconName: 'share',
