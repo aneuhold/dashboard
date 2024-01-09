@@ -111,7 +111,7 @@ export default class TaskService {
    * sharedWith array.
    */
   static findParentIdWithSameSharedWith(task: DashboardTask): string {
-    if (!task.parentTaskId) {
+    if (!task.parentTaskId || task.sharedWith.length === 0) {
       return task._id.toString();
     }
     const parentTask = this._taskMap[task.parentTaskId.toString()];
