@@ -26,6 +26,14 @@
    */
   export let inputType = 'text';
   /**
+   * The minimum value if the input type is a number.
+   */
+  export let min: number | undefined = undefined;
+  /**
+   * The maximum value if the input type is a number.
+   */
+  export let max: number | undefined = undefined;
+  /**
    * Determines if the input is a text area instead of just a single line.
    */
   export let isTextArea = false;
@@ -33,19 +41,19 @@
    * This will show in the input box as a label when the text is empty,
    * and move to the top when the user starts typing.
    */
-  export let label = 'Label';
+  export let label: string | undefined = undefined;
   /**
    * The value of the input box when the user blurs the input. This also acts
    * as the initial value. It will only be updated when the user leaves the
    * input box.
    */
-  export let onBlurValue: string = '';
+  export let onBlurValue: string | number = '';
   /**
    * The value of the `InputBox`. This will update automatically and can be
    * bound to. Alternatively, the onBlurValue can be bound to to only get
    * updates when the user blurs the input.
    */
-  export let inputValue: string = onBlurValue;
+  export let inputValue: string | number = onBlurValue;
   /**
    * If set, it will use the browser auto-complete features for the specified
    * label. For example `password`. If auto-complete is not desired, do not
@@ -67,6 +75,12 @@
    */
   export let spellCheck: boolean = true;
 
+  /**
+   * If the input box should be small. This only applies to non-textarea
+   * input boxes.
+   */
+  export let isSmall = false;
+
   let previousOnBlurValue = onBlurValue;
 
   /**
@@ -75,9 +89,15 @@
    */
   let dirty = false;
   /**
-   * Not currently being used. But could be used later.
+   * Only used for number validation at the moment, but it's built to block
+   * the onBlurValue from being updated if the input is invalid so could be
+   * quite useful in the future.
    */
-  let invalid = false;
+  $: invalid =
+    typeof inputValue === 'number' &&
+    (isNaN(inputValue) ||
+      (min !== undefined && inputValue < min) ||
+      (max !== undefined && inputValue > max));
 
   const dispatch = createEventDispatcher();
 
@@ -90,7 +110,9 @@
   }
 
   function handleBlur() {
-    onBlurValue = inputValue;
+    if (!invalid) {
+      onBlurValue = inputValue;
+    }
   }
 
   // Check if the onBlurValue is null or undefined and set it to an empty
@@ -114,11 +136,17 @@
   bind:value={inputValue}
   input$autocomplete={autocompleteLabel}
   input$resizable={isTextArea ? false : undefined}
-  input$rows={isTextArea ? inputValue.split(/\r\n|\r|\n/).length : undefined}
+  input$rows={isTextArea && typeof inputValue === 'string'
+    ? inputValue.split(/\r\n|\r|\n/).length
+    : undefined}
+  input$min={min}
+  input$max={max}
   input$spellcheck={spellCheck ? 'true' : 'false'}
+  helperLine$class={helperText ? '' : 'display-none'}
   textarea={isTextArea}
   variant={isTextArea ? undefined : variant}
   {label}
+  class={isSmall ? 'textField-small' : undefined}
   on:keydown={handleKeyDown}
   on:blur={handleBlur}
 >
@@ -130,4 +158,7 @@
 </Textfield>
 
 <style>
+  :global(.textField-small) {
+    width: 60px;
+  }
 </style>

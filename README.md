@@ -4,11 +4,22 @@
 
 Notes for improvement:
 
+- Making it so the user can see shared sub-tasks from other users on main view
+- Auto-focus the task title when creating a new one
 - Task list things
-  - Add clicking into task
-  - Add refresh capability
-  - Add create icon for tasks?
+  - Date picker, which leads to recurring tasks and due dates / start dates. Requirements are:
+    - Picking a particular individual date and time, with restrictions on which date range can be picked (forward or backward)
+      - Svelty-picker
+      - Normal input with type datetime (Maybe just for Android if that looks nice?)
+    - Make it so that when a task is
+- Maybe a progress bar for sub-task completion?
+- Design for completed tasks
 - See if it can be made to work offline with [this guide](https://developers.google.com/codelabs/pwa-training/pwa03--going-offline#1)
+
+## General Decisions + Info for Usage
+
+- Recurring Tasks
+  - A user can make a task recurring if one of the subtasks is shared. The UI will determine that it can't find the parent recurring task and display that in the recurring info. Because recurring info is shared to all children, each child task will have enough information to display when the next recursion date will happen.
 
 ## Developing
 
@@ -20,6 +31,7 @@ Some nice pages to have up at the same time:
 
 - [Svelte Material UI](https://sveltematerialui.com/demo/accordion/)
 - [Material Symbols and Icons](https://fonts.google.com/icons?selected=Material+Symbols+Outlined:fitness_center:FILL@0;wght@400;GRAD@0;opsz@24&icon.query=workout)
+- [Svelty-Picker](https://mskocik.github.io/svelty-picker) if working with that
 
 ### Adding new Material UI Components
 

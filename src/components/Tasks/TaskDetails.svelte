@@ -23,6 +23,7 @@
   import { userSettings } from '../../stores/userSettings';
   import ConfirmationDialog from '../ConfirmationDialog.svelte';
   import TaskList from './TaskList.svelte';
+  import TaskRecurrenceInfo from './TaskRecurrence/TaskRecurrenceInfo.svelte';
   import TaskShareButton from './TaskShareButton.svelte';
   import TaskSharingInfo from './TaskSharingInfo.svelte';
   import TaskTagsSelector from './TaskTagsSelector.svelte';
@@ -88,6 +89,7 @@
             <InputBox variant="outlined" label="Title" bind:onBlurValue={$task.title} />
           </div>
           <InputBox label="Description" isTextArea={true} bind:onBlurValue={$task.description} />
+          <TaskRecurrenceInfo {taskId} />
           <div class="extraTaskInfo">
             <TaskTagsSelector {taskId} />
             <TaskSharingInfo {taskId} />
@@ -143,7 +145,6 @@
     gap: 16px;
     justify-content: space-between;
     flex-wrap: wrap;
-    margin-top: -8px;
   }
   .paperContent {
     gap: 16px;

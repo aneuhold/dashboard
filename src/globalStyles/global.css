@@ -10,6 +10,11 @@
   font-size: 14px;
 }
 
+/* For weird cases where hiding is important through CSS */
+.display-none {
+  display: none;
+}
+
 .mdc-text-field--textarea .mdc-text-field__input {
   min-height: 5lh;
 }

@@ -17,7 +17,13 @@
 
   const taskMap = TaskService.getStore();
 
-  $: taskIds = Object.keys($taskMap).filter((taskId) => !$taskMap[taskId].parentTaskId);
+  $: taskIds = Object.keys($taskMap).filter((taskId) => {
+    const parentTaskId = $taskMap[taskId].parentTaskId;
+    if (!parentTaskId) return true;
+    // Conditional for shared subtasks
+    if (!$taskMap[parentTaskId.toString()]) return true;
+    return false;
+  });
   $: taskId = $page.url.searchParams.get('taskId');
 
   function addTask() {

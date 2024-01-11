@@ -15,26 +15,19 @@
     "@jridgewell/gen-mapping" "^0.3.0"
     "@jridgewell/trace-mapping" "^0.3.9"
 
-"@aneuhold/core-ts-api-lib@^1.0.23":
-  version "1.0.23"
-  resolved "https://registry.yarnpkg.com/@aneuhold/core-ts-api-lib/-/core-ts-api-lib-1.0.23.tgz#35b9dfc09e44848e5cca32c0872cdcc17d444dd7"
-  integrity sha512-o559OkN8aP+JRTPT6U8Wjr+z1EhjmmHHRJch3Psi0SQPKqqFQmxWWhPOClYDtkVv6Br7JxvLc7Yx070AM6PgxA==
+"@aneuhold/core-ts-api-lib@^1.0.25":
+  version "1.0.25"
+  resolved "https://registry.yarnpkg.com/@aneuhold/core-ts-api-lib/-/core-ts-api-lib-1.0.25.tgz#5ea4e7ef9b801689e14a8badfc14cf59db40b76c"
+  integrity sha512-UU5zNqFANoxEguvVgv2AxltKzYkcUXipqwobQUleh3/nQ7o1dljghppuoUBRMHXUJgFvWXfnJ1A4L5A+JKdsrg==
   dependencies:
-    "@aneuhold/core-ts-db-lib" "^1.0.18"
+    "@aneuhold/core-ts-db-lib" "^1.0.22"
     "@aneuhold/core-ts-lib" "^1.1.9"
     bson "^6.2.0"
 
-"@aneuhold/core-ts-db-lib@^1.0.18":
-  version "1.0.18"
-  resolved "https://registry.yarnpkg.com/@aneuhold/core-ts-db-lib/-/core-ts-db-lib-1.0.18.tgz#d9728bc2398eef44e4772c1bad7a507ee6ce958b"
-  integrity sha512-UL6gVpW6W3jjVgm28KcQ90zEF4AnRORWm5mkULew77CGIjcUtPkA7JlvfghAhZYsQFCdM0zbxit4rq96Hg25Dw==
-  dependencies:
-    bson "^6.2.0"
-
-"@aneuhold/core-ts-db-lib@^1.0.20":
-  version "1.0.20"
-  resolved "https://registry.yarnpkg.com/@aneuhold/core-ts-db-lib/-/core-ts-db-lib-1.0.20.tgz#4f5192bf4629ff4b6d13af6b438182d83d3dd4d4"
-  integrity sha512-NiYld0H3T9UJVCRsV8iNTkaWocdM8yKpPugNwjrDITVEH2JIeZ1RZulgZmbcYxl9JUES+q1b4F0jUvdf71lc1Q==
+"@aneuhold/core-ts-db-lib@^1.0.22":
+  version "1.0.22"
+  resolved "https://registry.yarnpkg.com/@aneuhold/core-ts-db-lib/-/core-ts-db-lib-1.0.22.tgz#4ac16fcc64362d772d6990a3f6882e41f7e05534"
+  integrity sha512-NMwaOCzgxWUTdrBg+yHF/7YjTG4WXL1VqfUKwuQIYWihHwWyL8EjDh8/G8PUZOgjIdoulh/+tWW095q8eHJo8Q==
   dependencies:
     bson "^6.2.0"
 
@@ -704,6 +697,31 @@
     "@material/theme" "^14.0.0"
     tslib "^2.1.0"
 
+"@material/select@^14.0.0":
+  version "14.0.0"
+  resolved "https://registry.yarnpkg.com/@material/select/-/select-14.0.0.tgz#31879f78779740400354282b41bba6d87fb2bb2e"
+  integrity sha512-4aY1kUHEnbOCRG3Tkuuk8yFfyNYSvOstBbjiYE/Z1ZGF3P1z+ON35iLatP84LvNteX4F1EMO2QAta2QbLRMAkw==
+  dependencies:
+    "@material/animation" "^14.0.0"
+    "@material/base" "^14.0.0"
+    "@material/density" "^14.0.0"
+    "@material/dom" "^14.0.0"
+    "@material/elevation" "^14.0.0"
+    "@material/feature-targeting" "^14.0.0"
+    "@material/floating-label" "^14.0.0"
+    "@material/line-ripple" "^14.0.0"
+    "@material/list" "^14.0.0"
+    "@material/menu" "^14.0.0"
+    "@material/menu-surface" "^14.0.0"
+    "@material/notched-outline" "^14.0.0"
+    "@material/ripple" "^14.0.0"
+    "@material/rtl" "^14.0.0"
+    "@material/shape" "^14.0.0"
+    "@material/theme" "^14.0.0"
+    "@material/tokens" "^14.0.0"
+    "@material/typography" "^14.0.0"
+    tslib "^2.1.0"
+
 "@material/shape@^14.0.0":
   version "14.0.0"
   resolved "https://registry.yarnpkg.com/@material/shape/-/shape-14.0.0.tgz#b58f39d743394c2ff7c57f0f004f0aabade2779e"
@@ -927,6 +945,22 @@
   resolved "https://registry.yarnpkg.com/@sinclair/typebox/-/typebox-0.27.8.tgz#6667fac16c436b5434a387a34dedb013198f6e6e"
   integrity sha512-+Fj43pSMwJs4KRrH/938Uf+uAELIgVBmQzg/q1YG10djyfA3TnrU8N8XzqCh/okZdszqBQTZf96idMfE5lnwTA==
 
+"@smui-extra/accordion@^7.0.0-beta.16":
+  version "7.0.0-beta.16"
+  resolved "https://registry.yarnpkg.com/@smui-extra/accordion/-/accordion-7.0.0-beta.16.tgz#a978a1ea32fe0fede82f4ec1da2257ab1e8ddccb"
+  integrity sha512-Y0oYzhjcMjx471Bp44tDK5w2MZB7IovNIiwkkPX7Bieuuwucvt3kuiMzAGWsWx9JZINRkfYK4FtuO92CEElzFQ==
+  dependencies:
+    "@material/animation" "^14.0.0"
+    "@material/elevation" "^14.0.0"
+    "@material/feature-targeting" "^14.0.0"
+    "@material/ripple" "^14.0.0"
+    "@material/theme" "^14.0.0"
+    "@material/typography" "^14.0.0"
+    "@smui/common" "^7.0.0-beta.16"
+    "@smui/paper" "^7.0.0-beta.16"
+    "@smui/ripple" "^7.0.0-beta.16"
+    svelte2tsx "^0.6.27"
+
 "@smui-extra/autocomplete@^7.0.0-beta.16":
   version "7.0.0-beta.16"
   resolved "https://registry.yarnpkg.com/@smui-extra/autocomplete/-/autocomplete-7.0.0-beta.16.tgz#0fadebecf7dfd93080d6c5450112f36e2b942ce7"
@@ -1142,6 +1176,26 @@
     "@material/dom" "^14.0.0"
     "@material/ripple" "^14.0.0"
     "@smui/common" "^7.0.0-beta.16"
+    svelte2tsx "^0.6.27"
+
+"@smui/select@^7.0.0-beta.16":
+  version "7.0.0-beta.16"
+  resolved "https://registry.yarnpkg.com/@smui/select/-/select-7.0.0-beta.16.tgz#9402725702e470504ef1b6bbe4b6b0da5e996b99"
+  integrity sha512-6JVd26olavAdF+MoMKch0/Q+gJiqeAYnxSp6Ur488WaGHvI8Rzy4CdLgm+Vo0AfDOQtVXziYF8wgnLJtV/5fqQ==
+  dependencies:
+    "@material/feature-targeting" "^14.0.0"
+    "@material/ripple" "^14.0.0"
+    "@material/rtl" "^14.0.0"
+    "@material/select" "^14.0.0"
+    "@material/theme" "^14.0.0"
+    "@smui/common" "^7.0.0-beta.16"
+    "@smui/floating-label" "^7.0.0-beta.16"
+    "@smui/line-ripple" "^7.0.0-beta.16"
+    "@smui/list" "^7.0.0-beta.16"
+    "@smui/menu" "^7.0.0-beta.16"
+    "@smui/menu-surface" "^7.0.0-beta.16"
+    "@smui/notched-outline" "^7.0.0-beta.16"
+    "@smui/ripple" "^7.0.0-beta.16"
     svelte2tsx "^0.6.27"
 
 "@smui/snackbar@^7.0.0-beta.16":
