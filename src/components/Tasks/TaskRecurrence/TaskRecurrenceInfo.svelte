@@ -71,12 +71,11 @@
 </script>
 
 <!-- Only use the accordion when there is an option to set recurrence, other
-wise set this up to just show a link to the parent and when the parent 
-will recur next-->
+wise set this up to just show a link to the parent and when the parent will recur next -->
 <div class="container">
   {#if !hasParentRecurringTask}
     <Accordion>
-      <Panel variant="outlined" color="secondary" bind:open={recurringInfoOpen}>
+      <Panel class="panel-fix" variant="outlined" bind:open={recurringInfoOpen}>
         <div class={`headerContainer${isRecurring ? '' : ' dimmed-color'}`}>
           <div class="header">
             <Checkbox checked={isRecurring} on:click={handleRecurringClick} />

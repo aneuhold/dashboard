@@ -23,3 +23,11 @@
 span:has(> .mdc-text-field__input) {
   width: 100%;
 }
+
+/* A fix that took a long time to find. This was causing the panel to constrain
+any dialogs contained within it, and only happend on `variant="outlined"` or
+`variant="raised"`, but this fixes it for all the panels. It was only tied
+to the `smui-accordion__panel--raised class` originally. */
+.smui-accordion .smui-accordion__panel {
+  will-change: auto;
+}

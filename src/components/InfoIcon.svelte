@@ -1,36 +1,45 @@
 <!--
-  An info icon with a tooltip.
+  An info icon that opens a dialog with the given title and content when clicked. 
+
+  The content is passed as the default slot.
+
+  ### Implementation Note
+
+  This purposefully wasn't built as a tooltip because the UI is so dense in
+  this application, that a tooltip could promote accidental clicking. Also
+  the tooltip had some strange overflow issues. Those could have been resolved,
+  but a Dialog seemed better.
 -->
 <script lang="ts">
-  import { Icon } from '@smui/icon-button';
-  import Tooltip, { Content, Title, Wrapper } from '@smui/tooltip';
+  import Button, { Label } from '@smui/button';
+  import Dialog, { Actions, Content, Title } from '@smui/dialog';
+  import IconButton, { Icon } from '@smui/icon-button';
 
   export let title: string;
-  export let content: string;
+
+  let open = false;
 </script>
 
-<div>
-  <Wrapper class="infoIconWrapper" rich>
-    <Icon class="material-icons dimmed-color">help_outline</Icon>
-    <Tooltip persistent class="infoIconTooltip">
-      <Title>{title}</Title>
-      <Content>
-        {content}
-      </Content>
-    </Tooltip>
-  </Wrapper>
-</div>
+<IconButton
+  on:click={() => {
+    open = true;
+  }}
+  size="button"
+>
+  <Icon class="material-icons dimmed-color">help_outline</Icon>
+</IconButton>
 
-<style>
-  /* Required so that it fits the icon for some reason */
-  * :global(.infoIconWrapper) {
-    height: 24px;
-    cursor: pointer;
-  }
-  /* For some reason the auto width isn't working quite right so it's
-      set to 200px for now. */
-  * :global(.infoIconTooltip) {
-    width: 300px;
-    max-width: 100vw;
-  }
-</style>
+<Dialog bind:open>
+  <!-- Title cannot contain leading whitespace due to mdc-typography-baseline-top() -->
+  <Title>{title}</Title>
+  <Content><slot /></Content>
+  <Actions>
+    <Button
+      on:click={() => {
+        open = false;
+      }}
+    >
+      <Label>Cool!</Label>
+    </Button>
+  </Actions>
+</Dialog>

@@ -7,10 +7,10 @@
 <script lang="ts">
   import { RecurrenceFrequencyType, type RecurrenceInfo } from '@aneuhold/core-ts-db-lib';
   import Select, { Option } from '@smui/select';
-  import InfoIcon from 'components/InfoIcon.svelte';
   import InputBox from 'components/InputBox.svelte';
   import { createEventDispatcher } from 'svelte';
   import { writable, type Updater } from 'svelte/store';
+  import TaskRecurrenceInfoIcon from './TaskRecurrenceInfoIcon.svelte';
 
   export let disabled = true;
   export let recurrenceInfo: RecurrenceInfo;
@@ -82,12 +82,8 @@
   <div class="content">
     <div class="flexRowWrap">
       <b>Frequency</b>
-      <InfoIcon
-        title="Recurrence Frequency"
-        content="Something Something Something SomethingSomethingSomethingSomethingSomethingSomethingSomethingSomethingSomethingSomethingSomethingSomethingSomethingSomething"
-      />
+      <TaskRecurrenceInfoIcon />
     </div>
-
     <Select bind:disabled bind:value={$rInfo.frequency.type}>
       <Option value={RecurrenceFrequencyType.everyXTimeUnit}>Every X Time Unit</Option>
       <Option value={RecurrenceFrequencyType.weekDaySet}>Every Set of Weekdays</Option>

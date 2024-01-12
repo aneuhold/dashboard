@@ -52,9 +52,7 @@
         <i class="mdc-typography--body1 dimmed-color">No collaborators</i>
         <a href="/settings">Add one in settings here!</a>
       {:else}
-        <p>
-          Note that sharing settings automatically applly to all sub-tasks on this task if enabled.
-        </p>
+        <p>Note that sharing automatically applies to all sub-tasks if enabled.</p>
         {#each Object.values(collaborators) as collaborator}
           <FormField>
             <Checkbox
