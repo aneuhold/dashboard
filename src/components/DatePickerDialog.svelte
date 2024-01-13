@@ -11,9 +11,15 @@
   import FormField from '@smui/form-field';
   import { createEventDispatcher } from 'svelte';
   import SveltyPicker from 'svelty-picker';
+  import DateService from 'util/DateService';
 
   export let title: string = 'Pick a date';
   export let open: boolean;
+  /**
+   * Determines if the date is an end date. If it is, and time is not
+   * specified by the user, the time will automatically be set to 23:59:59.
+   */
+  export let dateIsEndDate: boolean = false;
   export let initialDate: Date | undefined = undefined;
   /**
    * The first date that should be available for selection. This can be setup
@@ -26,34 +32,29 @@
    */
   export let endDate: Date | undefined = undefined;
 
-  let useTimeCheckboxChecked = false;
-  let mode: 'datetime' | 'date' = 'date';
-
+  let mode: 'date' | 'datetime' = 'date';
+  $: mode = initialDate ? (DateService.dateHasTime(initialDate) ? 'datetime' : 'date') : 'date';
   let currentlySelectedDate: Date | null = null;
+  $: currentlySelectedDate = initialDate ? initialDate : null;
 
   const dispatch = createEventDispatcher<{
-    selected: {
-      date: Date | null;
-      mode: 'date' | 'datetime';
-    };
+    selected: Date | null;
   }>();
 
-  const toggleTimeCheckbox = () => {
-    useTimeCheckboxChecked = !useTimeCheckboxChecked;
-    mode = useTimeCheckboxChecked ? 'datetime' : 'date';
+  const handleTimeBoxClicked = () => {
+    mode = mode === 'date' ? 'datetime' : 'date';
   };
 
   const handleDone = () => {
-    dispatch('selected', {
-      date: currentlySelectedDate,
-      mode
-    });
+    if (dateIsEndDate && currentlySelectedDate && mode === 'date') {
+      currentlySelectedDate.setHours(23, 59, 59, 999);
+    }
+    dispatch('selected', currentlySelectedDate);
     open = false;
   };
 
   const handleChange = (event: CustomEvent<{ dateValue: Date | null }>) => {
     currentlySelectedDate = event.detail.dateValue;
-    console.log('currentlySelectedDate', currentlySelectedDate);
   };
 </script>
 
@@ -69,7 +70,7 @@
       on:dateChange={handleChange}
     />
     <FormField>
-      <Checkbox bind:checked={useTimeCheckboxChecked} on:click={toggleTimeCheckbox} touch />
+      <Checkbox checked={mode === 'datetime'} on:click={handleTimeBoxClicked} touch />
       <span slot="label">Use Time</span>
     </FormField>
   </Content>

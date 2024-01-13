@@ -61,13 +61,15 @@
   <div class="tagChipsContainer">
     {#if $task.tags.length === 0}
       <i class="mdc-typography--body2 subTasksTitle dimmed-color">No tags</i>
+    {:else}
+      <span>Tags</span>
+      <Set bind:chips={currentTags} on:SMUIChip:removal={handleRemoval} let:chip>
+        <Chip {chip}>
+          <Text>{chip}</Text>
+          <TrailingAction icon$class="material-icons">cancel</TrailingAction>
+        </Chip>
+      </Set>
     {/if}
-    <Set bind:chips={currentTags} on:SMUIChip:removal={handleRemoval} let:chip>
-      <Chip {chip}>
-        <Text>{chip}</Text>
-        <TrailingAction icon$class="material-icons">cancel</TrailingAction>
-      </Chip>
-    </Set>
   </div>
 
   <Autocomplete
@@ -101,6 +103,7 @@
   .tagChipsContainer {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
   }
   .reducedTopMargin {
     margin-top: -8px;

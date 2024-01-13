@@ -22,6 +22,7 @@
   import TaskService from 'util/TaskService';
   import { userSettings } from '../../stores/userSettings';
   import ConfirmationDialog from '../ConfirmationDialog.svelte';
+  import TaskDateInfo from './TaskDate/TaskDateInfo.svelte';
   import TaskList from './TaskList.svelte';
   import TaskRecurrenceInfo from './TaskRecurrence/TaskRecurrenceInfo.svelte';
   import TaskShareButton from './TaskShareButton.svelte';
@@ -88,6 +89,7 @@
             <InputBox variant="outlined" label="Title" bind:onBlurValue={$task.title} />
           </div>
           <InputBox label="Description" isTextArea={true} bind:onBlurValue={$task.description} />
+          <TaskDateInfo {taskId} />
           <TaskRecurrenceInfo {taskId} />
           <div class="extraTaskInfo">
             <TaskTagsSelector {taskId} />
