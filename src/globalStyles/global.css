@@ -17,6 +17,7 @@
   display: none;
 }
 
+/* Min-height for text areas */
 .mdc-text-field--textarea .mdc-text-field__input {
   min-height: 5lh;
 }
@@ -24,6 +25,12 @@
 /* For adjusting the width of text areas */
 span:has(> .mdc-text-field__input) {
   width: 100%;
+}
+
+/* For making it so accordions will show Select menu's correctly over other
+content. */
+.smui-accordion {
+  z-index: 1;
 }
 
 /* A fix that took a long time to find. This was causing the panel to constrain

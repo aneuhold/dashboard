@@ -15,19 +15,19 @@
     "@jridgewell/gen-mapping" "^0.3.0"
     "@jridgewell/trace-mapping" "^0.3.9"
 
-"@aneuhold/core-ts-api-lib@^1.0.26":
-  version "1.0.26"
-  resolved "https://registry.yarnpkg.com/@aneuhold/core-ts-api-lib/-/core-ts-api-lib-1.0.26.tgz#6b4a8cb0ff10986b2fa0ad68e511f1b36b7f6018"
-  integrity sha512-ecT5QHK/UyaPXHN9O196HIOfdhDHRyd3K54VVKQmGpKEPRJOjrk1MC77B2FGSaQdDo7YHYxV5/GqJPLPIMnF+Q==
+"@aneuhold/core-ts-api-lib@^1.0.27":
+  version "1.0.27"
+  resolved "https://registry.yarnpkg.com/@aneuhold/core-ts-api-lib/-/core-ts-api-lib-1.0.27.tgz#df285d961efcda029a2537d85956d5be3e748142"
+  integrity sha512-JcX67lvQVpuk/LPZsWp5ZjO0i4FDf/P54KaS2ydxGOj2mtPcNqtYjhoZkA1ETCSLc3/uPyGaBoh/sxbxrJPNfg==
   dependencies:
-    "@aneuhold/core-ts-db-lib" "^1.0.23"
+    "@aneuhold/core-ts-db-lib" "^1.0.24"
     "@aneuhold/core-ts-lib" "^1.1.9"
     bson "^6.2.0"
 
-"@aneuhold/core-ts-db-lib@^1.0.23":
-  version "1.0.23"
-  resolved "https://registry.yarnpkg.com/@aneuhold/core-ts-db-lib/-/core-ts-db-lib-1.0.23.tgz#0f170955334951bd122b0c7045f4870758f91ed5"
-  integrity sha512-qi/n5ROei6QORSJci1oT/kNl+AiX88KLJ9sedmXQtmcpNXFymEkmwdt6m4cGTZy0EfH2iEefNCvFHFCSx+tsrA==
+"@aneuhold/core-ts-db-lib@^1.0.24":
+  version "1.0.24"
+  resolved "https://registry.yarnpkg.com/@aneuhold/core-ts-db-lib/-/core-ts-db-lib-1.0.24.tgz#d6272348a7a5e95c68a593675ec2cad4dd443b0a"
+  integrity sha512-YpXWWy6toECn1hCIiTF6ZzY9YH2cdwCVYU21HDx7PwmdaIRDJbSLtWBh4DjEgoktjEkoUI+j7Em6p4m4Z99U2g==
   dependencies:
     bson "^6.2.0"
 
@@ -717,6 +717,20 @@
     "@material/theme" "^14.0.0"
     tslib "^2.1.0"
 
+"@material/segmented-button@^14.0.0":
+  version "14.0.0"
+  resolved "https://registry.yarnpkg.com/@material/segmented-button/-/segmented-button-14.0.0.tgz#607140faa6ede2690624ffe8a3e4a25c8e1c8d02"
+  integrity sha512-6es7PPNX3T3h7bOLyb8L38hMoTXqBs5XX8XCKycKZG2Dm4stac/yYMKKO/q3MOn36t37s+JAVTjyRB8HnJu5Gg==
+  dependencies:
+    "@material/base" "^14.0.0"
+    "@material/elevation" "^14.0.0"
+    "@material/feature-targeting" "^14.0.0"
+    "@material/ripple" "^14.0.0"
+    "@material/theme" "^14.0.0"
+    "@material/touch-target" "^14.0.0"
+    "@material/typography" "^14.0.0"
+    tslib "^2.1.0"
+
 "@material/select@^14.0.0":
   version "14.0.0"
   resolved "https://registry.yarnpkg.com/@material/select/-/select-14.0.0.tgz#31879f78779740400354282b41bba6d87fb2bb2e"
@@ -1196,6 +1210,18 @@
     "@material/dom" "^14.0.0"
     "@material/ripple" "^14.0.0"
     "@smui/common" "^7.0.0-beta.16"
+    svelte2tsx "^0.6.27"
+
+"@smui/segmented-button@^7.0.0-beta.16":
+  version "7.0.0-beta.16"
+  resolved "https://registry.yarnpkg.com/@smui/segmented-button/-/segmented-button-7.0.0-beta.16.tgz#5f910c0f6f8b932b23d1558d0a4f03445d3d5536"
+  integrity sha512-EwJTRnTC8YQ5IltPMI6axl2CkyOXNRaZzly7+QCqYLBDvx4lV3QeIzBoO1ha119NQL2tqXtVCmt2tiEyHiiFfA==
+  dependencies:
+    "@material/base" "^14.0.0"
+    "@material/ripple" "^14.0.0"
+    "@material/segmented-button" "^14.0.0"
+    "@smui/common" "^7.0.0-beta.16"
+    "@smui/ripple" "^7.0.0-beta.16"
     svelte2tsx "^0.6.27"
 
 "@smui/select@^7.0.0-beta.16":

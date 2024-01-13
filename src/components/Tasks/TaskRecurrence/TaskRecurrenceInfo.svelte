@@ -57,9 +57,14 @@
       });
       recurringInfoOpen = false;
     } else {
+      // Create a clone. This is okay because none of the properties are
+      // special objects, they are all simple JSON values.
+      // The clone is helpful because it makes it so changes across tasks do
+      // not reflect to each other.
+      const defaultRecurrenceInfoClone = JSON.parse(JSON.stringify(defaultRecurrenceInfo));
       taskMap.updateTaskAndAllChildren(taskId, (task) => {
         if (task._id.toString() === taskId) {
-          task.recurrenceInfo = defaultRecurrenceInfo;
+          task.recurrenceInfo = defaultRecurrenceInfoClone;
         } else {
           task.parentRecurringTaskId = $task._id;
         }

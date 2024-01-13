@@ -7,14 +7,17 @@
 <script lang="ts">
   import {
     RecurrenceBasis,
+    RecurrenceEffect,
     RecurrenceFrequencyType,
     type RecurrenceInfo
   } from '@aneuhold/core-ts-db-lib';
   import Select, { Option } from '@smui/select';
   import InputBox from 'components/InputBox.svelte';
+  import WeekdaySegmentedButton from 'components/WeekdaySegmentedButton.svelte';
   import { createEventDispatcher } from 'svelte';
   import { writable, type Updater } from 'svelte/store';
   import TaskRecurrenceInfoIcon from './TaskRecurrenceInfoIcon.svelte';
+  import TaskRecurrenceWeekdayOfMonth from './TaskRecurrenceWeekdayOfMonth.svelte';
 
   export let disabled = true;
   export let recurrenceInfo: RecurrenceInfo;
@@ -60,7 +63,7 @@
         };
         break;
       case RecurrenceFrequencyType.weekDaySet:
-        newRInfo.frequency.weekDaySet = new Set<number>([0, 3]);
+        newRInfo.frequency.weekDaySet = [];
         break;
       case RecurrenceFrequencyType.everyXWeekdayOfMonth:
         newRInfo.frequency.everyXWeekdayOfMonth = {
@@ -113,6 +116,13 @@
           <Option value="year">Years</Option>
         </Select>
       </div>
+    {:else if $rInfo.frequency.weekDaySet}
+      <WeekdaySegmentedButton {disabled} bind:weekDaySetOrChoice={$rInfo.frequency.weekDaySet} />
+    {:else if $rInfo.frequency.everyXWeekdayOfMonth}
+      <TaskRecurrenceWeekdayOfMonth
+        bind:weekDay={$rInfo.frequency.everyXWeekdayOfMonth.weekDay}
+        bind:weekOfMonth={$rInfo.frequency.everyXWeekdayOfMonth.weekOfMonth}
+      />
     {/if}
   </div>
   <hr />
@@ -141,6 +151,11 @@
       <b>Effect</b>
       <TaskRecurrenceInfoIcon />
     </div>
+    <Select {disabled} bind:value={$rInfo.recurrenceEffect}>
+      <Option value={RecurrenceEffect.rollOnBasis}>Roll on Basis</Option>
+      <Option value={RecurrenceEffect.rollOnCompletion}>Roll on Completion</Option>
+      <Option value={RecurrenceEffect.stack}>Stack</Option>
+    </Select>
   </div>
 </div>
 
