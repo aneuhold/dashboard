@@ -9,15 +9,22 @@
 // Import overall colors
 @use '@material/theme/color-palette';
 
+$background-color: #000;
+$surface-color: color.adjust(color-palette.$grey-900, $blue: +4);
+
+$success-color: color-palette.$green-500;
+$warning-color: color-palette.$orange-500;
+$error-color: color-palette.$red-500;
+
 // Svelte Colors! (Dark Theme)
 // If this is updated, make sure to update the colors in the `manifest.json` file
 // as well.
 @use '@material/theme/index' as theme with (
   $primary: #098e1f,
   $secondary: color.scale(#676778, $whiteness: -10%),
-  $surface: color.adjust(color-palette.$grey-900, $blue: +4),
-  $background: #000,
-  $error: color-palette.$red-700
+  $surface: $surface-color,
+  $background: $background-color,
+  $error: $error-color
 );
 
 // Adds all the typogoraphy classes to the global styles. Those are:
@@ -51,41 +58,45 @@
 
 // Customized MDC Components
 .mdc-snackbar.success {
-  @include snackbar.fill-color(color-palette.$green-500);
-  @include snackbar.label-ink-color(theme-color.accessible-ink-color(color-palette.$green-500));
+  @include snackbar.fill-color($success-color);
+  @include snackbar.label-ink-color(theme-color.accessible-ink-color($success-color));
 }
 .mdc-snackbar.warning {
-  @include snackbar.fill-color(color-palette.$orange-500);
-  @include snackbar.label-ink-color(theme-color.accessible-ink-color(color-palette.$orange-500));
+  @include snackbar.fill-color($warning-color);
+  @include snackbar.label-ink-color(theme-color.accessible-ink-color($warning-color));
 }
 .mdc-snackbar.error {
-  @include snackbar.fill-color(color-palette.$red-500);
-  @include snackbar.label-ink-color(theme-color.accessible-ink-color(color-palette.$red-500));
+  @include snackbar.fill-color($error-color);
+  @include snackbar.label-ink-color(theme-color.accessible-ink-color($error-color));
 }
 .danger-button {
   &.mdc-button {
-    @include button.ink-color(color-palette.$red-500);
+    @include button.ink-color($error-color);
   }
   &.mdc-button--unelevated,
   &.mdc-button--raised {
-    @include button.filled-accessible(color-palette.$red-500);
+    @include button.filled-accessible($error-color);
   }
   &.mdc-button--outlined {
-    @include button.outline-color(color-palette.$red-500);
-    @include button.ink-color(color-palette.$red-500);
+    @include button.outline-color($error-color);
+    @include button.ink-color($error-color);
   }
-  @include button.ripple-states(color-palette.$red-500);
-  @include icon-button.ink-color(color-palette.$red-500);
-  @include icon-button.disabled-ink-color(color-palette.$red-500);
+  @include button.ripple-states($error-color);
+  @include icon-button.ink-color($error-color);
+  @include icon-button.disabled-ink-color($error-color);
 }
 
 // Custom colors for use in components
 // These have to be defined as a variable first, then used in the :root
-$success: color-palette.$green-500;
-$text-on-success: theme-color.accessible-ink-color(color-palette.$green-500);
+//
+// bg-color-on-surface is something to use that isn't totally black, but
+// isn't the same as the surface color. This is the chip BG color.
+$text-on-success: theme-color.accessible-ink-color($success-color);
+$bg-color-on-surface: color.scale($surface-color, $whiteness: +10%);
 :root {
-  --success: #{$success};
+  --success: #{$success-color};
   --text-on-success: #{$text-on-success};
+  --bg-color-on-surface: #{$bg-color-on-surface};
 }
 
 // --- Global Styles ---

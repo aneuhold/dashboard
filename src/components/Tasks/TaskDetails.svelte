@@ -43,7 +43,6 @@
     : [];
   // Explicitly include `task` so that it reactively updates
   $: breadCrumbArray = TaskService.getBreadCrumbArray($task ? $task._id.toString() : taskId);
-  $: sharingDisabled = $task?.userId.toString() !== $userSettings.config.userId.toString();
 
   function addSubTask() {
     if (!$task) return;
