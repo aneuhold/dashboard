@@ -5,7 +5,11 @@
   the `TaskRecurrenceInfo` component.
 -->
 <script lang="ts">
-  import { RecurrenceFrequencyType, type RecurrenceInfo } from '@aneuhold/core-ts-db-lib';
+  import {
+    RecurrenceBasis,
+    RecurrenceFrequencyType,
+    type RecurrenceInfo
+  } from '@aneuhold/core-ts-db-lib';
   import Select, { Option } from '@smui/select';
   import InputBox from 'components/InputBox.svelte';
   import { createEventDispatcher } from 'svelte';
@@ -14,6 +18,8 @@
 
   export let disabled = true;
   export let recurrenceInfo: RecurrenceInfo;
+  export let hasStartDate: boolean;
+  export let hasDueDate: boolean;
 
   $: rInfo = createRInfoStore(recurrenceInfo);
 
@@ -84,7 +90,7 @@
       <b>Frequency</b>
       <TaskRecurrenceInfoIcon />
     </div>
-    <Select bind:disabled bind:value={$rInfo.frequency.type}>
+    <Select {disabled} bind:value={$rInfo.frequency.type}>
       <Option value={RecurrenceFrequencyType.everyXTimeUnit}>Every X Time Unit</Option>
       <Option value={RecurrenceFrequencyType.weekDaySet}>Every Set of Weekdays</Option>
       <Option value={RecurrenceFrequencyType.everyXWeekdayOfMonth}>Every X Weekday of Month</Option>
@@ -97,10 +103,10 @@
           inputType="number"
           min={1}
           isSmall
-          bind:disable={disabled}
+          disable={disabled}
           bind:onBlurValue={$rInfo.frequency.everyXTimeUnit.x}
         />
-        <Select bind:disabled bind:value={$rInfo.frequency.everyXTimeUnit.timeUnit}>
+        <Select {disabled} bind:value={$rInfo.frequency.everyXTimeUnit.timeUnit}>
           <Option value="day">Days</Option>
           <Option value="week">Weeks</Option>
           <Option value="month">Months</Option>
@@ -111,11 +117,30 @@
   </div>
   <hr />
   <div class="content">
-    <b>Basis</b>
+    <div class="flexRowWrap">
+      <b>Basis</b>
+      <TaskRecurrenceInfoIcon />
+    </div>
+    {#if !hasStartDate && !hasDueDate}
+      <span class="mdc-typography--body2 dimmed-color">
+        A start date or a due date must be set to pick a basis
+      </span>
+    {:else}
+      <Select
+        disabled={disabled || !hasStartDate || !hasDueDate}
+        bind:value={$rInfo.recurrenceBasis}
+      >
+        <Option value={RecurrenceBasis.startDate}>Start Date</Option>
+        <Option value={RecurrenceBasis.dueDate}>Due Date</Option>
+      </Select>
+    {/if}
   </div>
   <hr />
   <div class="content extraMarginBottom">
-    <b>Effect</b>
+    <div class="flexRowWrap">
+      <b>Effect</b>
+      <TaskRecurrenceInfoIcon />
+    </div>
   </div>
 </div>
 

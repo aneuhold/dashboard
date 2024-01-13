@@ -1,43 +1,164 @@
 <script lang="ts">
+  import { RecurrenceBasis } from '@aneuhold/core-ts-db-lib';
+  import ConfirmationDialog from 'components/ConfirmationDialog.svelte';
   import DatePickerDialog from 'components/DatePickerDialog.svelte';
+  import DateService from 'util/DateService';
   import TaskService from 'util/TaskService';
   import TaskDateButton from './TaskDateButton.svelte';
 
   export let taskId: string;
   $: task = TaskService.getTaskStore(taskId);
 
+  let taskMap = TaskService.getStore();
   let currentlyChosenDateType: 'start' | 'due' = 'start';
-  let dialogOpen = false;
+  let datePickerOpen = false;
+  let confirmationDialogOpen = false;
+  let confirmationDialogTitle = '';
+  let confirmationDialogMessage = '';
   $: dialogTitle = currentlyChosenDateType === 'start' ? 'Start Date' : 'Due Date';
   $: currentlyChosenDate = currentlyChosenDateType === 'start' ? $task.startDate : $task.dueDate;
 
   function handleStartDateClick() {
     currentlyChosenDateType = 'start';
-    dialogOpen = true;
+    datePickerOpen = true;
   }
   function handleDueDateClick() {
     currentlyChosenDateType = 'due';
-    dialogOpen = true;
+    datePickerOpen = true;
   }
 
   function handleSelectedDate(event: CustomEvent<Date | null>) {
     const newDate = event.detail ? event.detail : undefined;
-    if (currentlyChosenDateType === 'start' && !datesAreEqual($task.startDate, newDate)) {
+    datePickerOpen = false;
+    if (
+      currentlyChosenDateType === 'start' &&
+      !DateService.datesAreEqual($task.startDate, newDate)
+    ) {
+      if (!newDate) {
+        handleStartDateDeletion();
+        return;
+      }
       $task.startDate = newDate;
-    } else if (currentlyChosenDateType === 'due' && !datesAreEqual($task.dueDate, newDate)) {
+    } else if (
+      currentlyChosenDateType === 'due' &&
+      !DateService.datesAreEqual($task.dueDate, newDate)
+    ) {
+      if (!newDate) {
+        handleDueDateDeletion();
+        return;
+      }
       $task.dueDate = newDate;
     }
-    dialogOpen = false;
   }
 
-  function datesAreEqual(date1: Date | undefined | null, date2: Date | undefined | null) {
-    if (!date1 && !date2) {
-      return true;
-    } else if (!date1 || !date2) {
-      return false;
+  function handleStartDateDeletion() {
+    // If the task is a recurring task, and the basis is the start date
+    if (
+      !$task.parentRecurringTaskId &&
+      $task.recurrenceInfo?.recurrenceBasis === RecurrenceBasis.startDate
+    ) {
+      // If the task has a due date, the basis can be switched to the due date.
+      if ($task.dueDate) {
+        confirmationDialogTitle = 'Update recurrence basis to Due Date?';
+        confirmationDialogMessage =
+          'This task is recurring and the basis is currently set to the Start Date. Would you like to switch the basis to the Due Date?';
+      } else {
+        confirmationDialogTitle = 'Disable recurring on this task?';
+        confirmationDialogMessage = `This task is currently recurring, the basis is set to Start Date and there isn't a Due Date to switch to. Do you want to disable recurring on this task?`;
+      }
+      confirmationDialogOpen = true;
     } else {
-      return date1.getTime() === date2.getTime();
+      $task.startDate = undefined;
     }
+  }
+
+  function handleDueDateDeletion() {
+    // If the task is a recurring task, and the basis is the due date
+    if (
+      !$task.parentRecurringTaskId &&
+      $task.recurrenceInfo?.recurrenceBasis === RecurrenceBasis.dueDate
+    ) {
+      // If the task has a start date, the basis can be switched to the start date.
+      if ($task.startDate) {
+        confirmationDialogTitle = 'Update recurrence basis to Start Date?';
+        confirmationDialogMessage =
+          'This task is recurring and the basis is currently set to the Due Date. Would you like to switch the basis to the Start Date?';
+      } else {
+        confirmationDialogTitle = 'Disable recurring on this task?';
+        confirmationDialogMessage = `This task is currently recurring, the basis is set to Due Date and there isn't a Start Date to switch to. Do you want to disable recurring on this task?`;
+      }
+      confirmationDialogOpen = true;
+    } else {
+      $task.dueDate = undefined;
+    }
+  }
+
+  /**
+   * Handles the situation where Confirm was pressed in the confirmation dialog.
+   *
+   * This should only happen in the edge cases where a start or due date is
+   * being deleted and there is a recurring task with a recurrence basis that
+   * matches the date being deleted.
+   *
+   * This is pretty lengthy, but each scenario is slightly different, and the
+   * below is very performant.
+   */
+  function handleDialogConfirm() {
+    if (currentlyChosenDateType === 'start') {
+      if ($task.dueDate) {
+        taskMap.updateTaskAndAllChildren(taskId, (task) => {
+          if (task._id.toString() === taskId) {
+            task.startDate = undefined;
+          }
+          if (task.recurrenceInfo) {
+            task.recurrenceInfo.recurrenceBasis = RecurrenceBasis.dueDate;
+          } else {
+            console.error(
+              'Task had no recurrence info while trying to update recurrence basis to due date!'
+            );
+          }
+          return task;
+        });
+      } else {
+        taskMap.updateTaskAndAllChildren(taskId, (task) => {
+          if (task._id.toString() === taskId) {
+            task.startDate = undefined;
+          }
+          task.parentRecurringTaskId = undefined;
+          task.recurrenceInfo = undefined;
+          return task;
+        });
+      }
+    } else {
+      if ($task.startDate) {
+        taskMap.updateTaskAndAllChildren(taskId, (task) => {
+          if (task._id.toString() === taskId) {
+            task.dueDate = undefined;
+          }
+          if (task.recurrenceInfo) {
+            task.recurrenceInfo.recurrenceBasis = RecurrenceBasis.startDate;
+          } else {
+            console.error(
+              'Task had no recurrence info while trying to update recurrence basis to start date!'
+            );
+          }
+          return task;
+        });
+      } else {
+        taskMap.updateTaskAndAllChildren(taskId, (task) => {
+          if (task._id.toString() === taskId) {
+            task.dueDate = undefined;
+          }
+          task.parentRecurringTaskId = undefined;
+          task.recurrenceInfo = undefined;
+          return task;
+        });
+      }
+    }
+  }
+
+  function handleDialogCancel() {
+    confirmationDialogOpen = false;
   }
 </script>
 
@@ -47,13 +168,21 @@
 </div>
 
 <DatePickerDialog
-  bind:open={dialogOpen}
+  bind:open={datePickerOpen}
   title={dialogTitle}
   startDate={currentlyChosenDateType === 'due' ? $task.startDate : undefined}
   endDate={currentlyChosenDateType === 'start' ? $task.dueDate : undefined}
   dateIsEndDate={currentlyChosenDateType === 'due'}
   on:selected={handleSelectedDate}
   initialDate={currentlyChosenDate}
+/>
+
+<ConfirmationDialog
+  bind:open={confirmationDialogOpen}
+  title={confirmationDialogTitle}
+  message={confirmationDialogMessage}
+  on:cancel={handleDialogCancel}
+  on:confirm={handleDialogConfirm}
 />
 
 <style>

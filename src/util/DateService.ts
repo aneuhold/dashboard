@@ -43,6 +43,16 @@ export default class DateService {
     return this.dateTimeFormatter.format(date);
   }
 
+  static datesAreEqual(date1: Date | undefined | null, date2: Date | undefined | null) {
+    if (!date1 && !date2) {
+      return true;
+    } else if (!date1 || !date2) {
+      return false;
+    } else {
+      return date1.getTime() === date2.getTime();
+    }
+  }
+
   private static dateIsMidnight(date: Date) {
     return (
       (date.getHours() === 0 && date.getMinutes() === 0) ||

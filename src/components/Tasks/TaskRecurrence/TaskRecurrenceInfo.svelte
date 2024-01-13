@@ -20,6 +20,7 @@
 
   let recurringInfoOpen = false;
   let taskMap = TaskService.getStore();
+  let previousTaskId = taskId;
   $: task = TaskService.getTaskStore(taskId);
   $: isRecurring = !!$task.recurrenceInfo;
   $: hasParentRecurringTask = !!$task.parentRecurringTaskId;
@@ -28,6 +29,12 @@
    * can happen separately.
    */
   $: currentRecurrenceInfo = $task.recurrenceInfo ?? defaultRecurrenceInfo;
+
+  // Auto-close the accordion when switching tasks
+  $: if (previousTaskId !== taskId) {
+    previousTaskId = taskId;
+    recurringInfoOpen = false;
+  }
 
   let defaultRecurrenceInfo: RecurrenceInfo = {
     frequency: {
@@ -95,6 +102,8 @@ wise set this up to just show a link to the parent and when the parent will recu
             disabled={!isRecurring}
             recurrenceInfo={currentRecurrenceInfo}
             on:change={updateRecurrenceInfo}
+            hasDueDate={!!$task.dueDate}
+            hasStartDate={!!$task.startDate}
           />
         </Content>
       </Panel>

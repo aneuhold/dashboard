@@ -9,7 +9,7 @@
   import Checkbox from '@smui/checkbox';
   import Dialog, { Actions, Content, Title } from '@smui/dialog';
   import FormField from '@smui/form-field';
-  import { createEventDispatcher } from 'svelte';
+  import { createEventDispatcher, tick } from 'svelte';
   import SveltyPicker from 'svelty-picker';
   import DateService from 'util/DateService';
 
@@ -32,10 +32,37 @@
    */
   export let endDate: Date | undefined = undefined;
 
-  let mode: 'date' | 'datetime' = 'date';
+  /**
+   * This is the actual dialog open state. This is needed so that svelty-picker
+   * can regenerate each time, because of quite a lot of reactivity
+   * problems with the component.
+   *
+   * Setting the svelty-picker value explicitly was already tried, so was
+   * manually updating or clearing the value as well as restting the
+   * initialDate. None of these worked.
+   */
+  let dialogOpen = false;
+  let sveltyPickerVisible = false;
+  let previousOpen = false;
+  let mode: 'date' | 'datetime';
   $: mode = initialDate ? (DateService.dateHasTime(initialDate) ? 'datetime' : 'date') : 'date';
-  let currentlySelectedDate: Date | null = null;
-  $: currentlySelectedDate = initialDate ? initialDate : null;
+  $: currentlySelectedDate = initialDate;
+
+  // Main reactivity logic for opening and closing the dialog
+  $: if (open && previousOpen !== open) {
+    previousOpen = open;
+    sveltyPickerVisible = true;
+    tick().then(() => {
+      dialogOpen = true;
+    });
+  } else if (!open && previousOpen !== open) {
+    previousOpen = open;
+    dialogOpen = false;
+    // 200ms seemed like a good amount of time for the dialog to go away.
+    setTimeout(() => {
+      sveltyPickerVisible = false;
+    }, 200);
+  }
 
   const dispatch = createEventDispatcher<{
     selected: Date | null;
@@ -47,34 +74,43 @@
 
   const handleDone = () => {
     if (dateIsEndDate && currentlySelectedDate && mode === 'date') {
-      currentlySelectedDate.setHours(23, 59, 59, 999);
+      currentlySelectedDate.setHours(23, 59, 59);
     }
     dispatch('selected', currentlySelectedDate);
     open = false;
   };
 
+  const handleCancel = () => {
+    open = false;
+  };
+
   const handleChange = (event: CustomEvent<{ dateValue: Date | null }>) => {
-    currentlySelectedDate = event.detail.dateValue;
+    currentlySelectedDate = event.detail.dateValue ? event.detail.dateValue : undefined;
   };
 </script>
 
-<Dialog bind:open>
+<Dialog bind:open={dialogOpen}>
   <Title>{title}</Title>
   <Content>
-    <SveltyPicker
-      {startDate}
-      {endDate}
-      {initialDate}
-      {mode}
-      pickerOnly={true}
-      on:dateChange={handleChange}
-    />
+    {#if sveltyPickerVisible}
+      <SveltyPicker
+        {startDate}
+        {endDate}
+        {initialDate}
+        {mode}
+        pickerOnly={true}
+        on:dateChange={handleChange}
+      />
+    {/if}
     <FormField>
       <Checkbox checked={mode === 'datetime'} on:click={handleTimeBoxClicked} touch />
       <span slot="label">Use Time</span>
     </FormField>
   </Content>
   <Actions>
+    <Button on:click={handleCancel}>
+      <Label>Cancel</Label>
+    </Button>
     <Button on:click={handleDone}>
       <Label>Done</Label>
     </Button>
