@@ -11,7 +11,7 @@ Notes for improvement:
     - Picking a particular individual date and time, with restrictions on which date range can be picked (forward or backward)
       - Svelty-picker
       - Normal input with type datetime (Maybe just for Android if that looks nice?)
-    - Make it so that when a task is
+    - Make it so that defaultRecurrenceInfo is a deep copy when assigned. Otherwise it will propogate across the UI.
 - Maybe a progress bar for sub-task completion?
 - Design for completed tasks
 - See if it can be made to work offline with [this guide](https://developers.google.com/codelabs/pwa-training/pwa03--going-offline#1)

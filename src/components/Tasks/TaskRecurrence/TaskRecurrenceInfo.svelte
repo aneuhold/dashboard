@@ -22,7 +22,7 @@
   let taskMap = TaskService.getStore();
   $: task = TaskService.getTaskStore(taskId);
   $: isRecurring = !!$task.recurrenceInfo;
-  $: hasParentRecurringTask = !!$task.parentRecurringTask;
+  $: hasParentRecurringTask = !!$task.parentRecurringTaskId;
   /**
    * This is purposefully not synced to the task store, so that updates
    * can happen separately.
@@ -45,7 +45,7 @@
     if (isRecurring) {
       taskMap.updateTaskAndAllChildren(taskId, (task) => {
         task.recurrenceInfo = undefined;
-        task.parentRecurringTask = undefined;
+        task.parentRecurringTaskId = undefined;
         return task;
       });
       recurringInfoOpen = false;
@@ -54,7 +54,7 @@
         if (task._id.toString() === taskId) {
           task.recurrenceInfo = defaultRecurrenceInfo;
         } else {
-          task.parentRecurringTask = $task._id;
+          task.parentRecurringTaskId = $task._id;
         }
         return task;
       });
@@ -71,11 +71,12 @@
 </script>
 
 <!-- Only use the accordion when there is an option to set recurrence, other
-wise set this up to just show a link to the parent and when the parent will recur next -->
+wise set this up to just show a link to the parent and when the parent will recur next.
+-->
 <div class="container">
   {#if !hasParentRecurringTask}
     <Accordion>
-      <Panel class="panel-fix" variant="outlined" bind:open={recurringInfoOpen}>
+      <Panel variant="outlined" color="secondary" bind:open={recurringInfoOpen}>
         <div class={`headerContainer${isRecurring ? '' : ' dimmed-color'}`}>
           <div class="header">
             <Checkbox checked={isRecurring} on:click={handleRecurringClick} />

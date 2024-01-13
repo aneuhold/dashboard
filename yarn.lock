@@ -15,19 +15,19 @@
     "@jridgewell/gen-mapping" "^0.3.0"
     "@jridgewell/trace-mapping" "^0.3.9"
 
-"@aneuhold/core-ts-api-lib@^1.0.25":
-  version "1.0.25"
-  resolved "https://registry.yarnpkg.com/@aneuhold/core-ts-api-lib/-/core-ts-api-lib-1.0.25.tgz#5ea4e7ef9b801689e14a8badfc14cf59db40b76c"
-  integrity sha512-UU5zNqFANoxEguvVgv2AxltKzYkcUXipqwobQUleh3/nQ7o1dljghppuoUBRMHXUJgFvWXfnJ1A4L5A+JKdsrg==
+"@aneuhold/core-ts-api-lib@^1.0.26":
+  version "1.0.26"
+  resolved "https://registry.yarnpkg.com/@aneuhold/core-ts-api-lib/-/core-ts-api-lib-1.0.26.tgz#6b4a8cb0ff10986b2fa0ad68e511f1b36b7f6018"
+  integrity sha512-ecT5QHK/UyaPXHN9O196HIOfdhDHRyd3K54VVKQmGpKEPRJOjrk1MC77B2FGSaQdDo7YHYxV5/GqJPLPIMnF+Q==
   dependencies:
-    "@aneuhold/core-ts-db-lib" "^1.0.22"
+    "@aneuhold/core-ts-db-lib" "^1.0.23"
     "@aneuhold/core-ts-lib" "^1.1.9"
     bson "^6.2.0"
 
-"@aneuhold/core-ts-db-lib@^1.0.22":
-  version "1.0.22"
-  resolved "https://registry.yarnpkg.com/@aneuhold/core-ts-db-lib/-/core-ts-db-lib-1.0.22.tgz#4ac16fcc64362d772d6990a3f6882e41f7e05534"
-  integrity sha512-NMwaOCzgxWUTdrBg+yHF/7YjTG4WXL1VqfUKwuQIYWihHwWyL8EjDh8/G8PUZOgjIdoulh/+tWW095q8eHJo8Q==
+"@aneuhold/core-ts-db-lib@^1.0.23":
+  version "1.0.23"
+  resolved "https://registry.yarnpkg.com/@aneuhold/core-ts-db-lib/-/core-ts-db-lib-1.0.23.tgz#0f170955334951bd122b0c7045f4870758f91ed5"
+  integrity sha512-qi/n5ROei6QORSJci1oT/kNl+AiX88KLJ9sedmXQtmcpNXFymEkmwdt6m4cGTZy0EfH2iEefNCvFHFCSx+tsrA==
   dependencies:
     bson "^6.2.0"
 
@@ -292,6 +292,26 @@
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/@fastify/busboy/-/busboy-2.1.0.tgz#0709e9f4cb252351c609c6e6d8d6779a8d25edff"
   integrity sha512-+KpH+QxZU7O4675t3mnkQKcZZg56u+K/Ct2K+N2AZYNVK8kyeo/bI18tI8aPm3tvNNRyTWfj6s5tnGNlcbQRsA==
+
+"@floating-ui/core@^1.5.3":
+  version "1.5.3"
+  resolved "https://registry.yarnpkg.com/@floating-ui/core/-/core-1.5.3.tgz#b6aa0827708d70971c8679a16cf680a515b8a52a"
+  integrity sha512-O0WKDOo0yhJuugCx6trZQj5jVJ9yR0ystG2JaNAemYUWce+pmM6WUEFIibnWyEJKdrDxhm75NoSRME35FNaM/Q==
+  dependencies:
+    "@floating-ui/utils" "^0.2.0"
+
+"@floating-ui/dom@^1.4.5":
+  version "1.5.4"
+  resolved "https://registry.yarnpkg.com/@floating-ui/dom/-/dom-1.5.4.tgz#28df1e1cb373884224a463235c218dcbd81a16bb"
+  integrity sha512-jByEsHIY+eEdCjnTVu+E3ephzTOzkQ8hgUfGwos+bg7NlH33Zc5uO+QHz1mrQUOgIKKDD1RtS201P9NvAfq3XQ==
+  dependencies:
+    "@floating-ui/core" "^1.5.3"
+    "@floating-ui/utils" "^0.2.0"
+
+"@floating-ui/utils@^0.2.0":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@floating-ui/utils/-/utils-0.2.1.tgz#16308cea045f0fc777b6ff20a9f25474dd8293d2"
+  integrity sha512-9TANp6GPoMtYzQdt54kfAyMmz1+osLlXdg2ENroU7zzrtflTLrrC/lgrIfaSe+Wu0b89GKccT7vxXA0MoAIO+Q==
 
 "@fontsource/fira-mono@^4.5.10":
   version "4.5.10"
@@ -3127,6 +3147,13 @@ svelte@^4:
     locate-character "^3.0.0"
     magic-string "^0.30.4"
     periscopic "^3.1.0"
+
+svelty-picker@^5.2.0:
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/svelty-picker/-/svelty-picker-5.2.0.tgz#79eb298c1d3f829d5b9c31db493445359ac159e8"
+  integrity sha512-pqGAM3H4Eizt9D9SWs+sWYepMsJRE1CtyIjliv9wezUkUH6Spyh7G/0ozBSowdYH8Dtp5I8oDrtVUnZ7IEmhXA==
+  dependencies:
+    "@floating-ui/dom" "^1.4.5"
 
 synckit@^0.8.5:
   version "0.8.5"
