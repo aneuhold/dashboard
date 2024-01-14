@@ -22,6 +22,7 @@
 
 <style>
   .fabButton {
+    z-index: 2;
     position: fixed;
     bottom: 32px;
     right: 32px;

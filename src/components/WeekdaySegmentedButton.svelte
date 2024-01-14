@@ -12,37 +12,37 @@
 
   let defaultChoices: Array<WeekDaySegment> = [
     {
-      name: 'Sun',
+      name: 'Su',
       selected: false,
       value: 0
     },
     {
-      name: 'Mon',
+      name: 'Mo',
       selected: false,
       value: 1
     },
     {
-      name: 'Tue',
+      name: 'Tu',
       selected: false,
       value: 2
     },
     {
-      name: 'Wed',
+      name: 'We',
       selected: false,
       value: 3
     },
     {
-      name: 'Thu',
+      name: 'Th',
       selected: false,
       value: 4
     },
     {
-      name: 'Fri',
+      name: 'Fr',
       selected: false,
       value: 5
     },
     {
-      name: 'Sat',
+      name: 'Sa',
       selected: false,
       value: 6
     }

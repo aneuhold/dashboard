@@ -20,7 +20,5 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    /* Some extra margin to allow scrolling */
-    margin-bottom: 80px;
   }
 </style>

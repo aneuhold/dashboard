@@ -38,12 +38,21 @@
   <meta name="description" content={tasksPageInfo.description} />
 </svelte:head>
 
-{#if taskId}
-  <TaskDetails {taskId} />
-{:else}
-  <PageTitle title={tasksPageInfo.shortTitle} subtitle={tasksPageInfo.description} />
+<div class="content">
+  {#if taskId}
+    <TaskDetails {taskId} />
+  {:else}
+    <PageTitle title={tasksPageInfo.shortTitle} subtitle={tasksPageInfo.description} />
 
-  <TaskList {taskIds} />
+    <TaskList {taskIds} />
 
-  <FabButton clickHandler={addTask} iconName="add" />
-{/if}
+    <FabButton clickHandler={addTask} iconName="add" />
+  {/if}
+</div>
+
+<style>
+  .content {
+    /* Some extra margin to allow scrolling */
+    margin-bottom: 80px;
+  }
+</style>
