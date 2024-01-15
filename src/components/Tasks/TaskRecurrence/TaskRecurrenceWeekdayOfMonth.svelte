@@ -11,10 +11,10 @@
   <div class="container">
     <span>Every</span>
     <Select {disabled} bind:value={weekOfMonth}>
-      <Option value={0}>1st</Option>
-      <Option value={1}>2nd</Option>
-      <Option value={2}>3rd</Option>
-      <Option value={3}>4th</Option>
+      <Option value={1}>1st</Option>
+      <Option value={2}>2nd</Option>
+      <Option value={3}>3rd</Option>
+      <Option value={4}>4th</Option>
       <Option value={'last'}>Last</Option>
     </Select>
   </div>

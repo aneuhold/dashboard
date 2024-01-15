@@ -5,13 +5,13 @@
   component. Quite a bit of override CSS is in `globalStyles/sveltyPicker.css`
 -->
 <script lang="ts">
+  import { DateService } from '@aneuhold/core-ts-lib';
   import Button, { Label } from '@smui/button';
   import Checkbox from '@smui/checkbox';
   import Dialog, { Actions, Content, Title } from '@smui/dialog';
   import FormField from '@smui/form-field';
   import { createEventDispatcher, tick } from 'svelte';
   import SveltyPicker from 'svelty-picker';
-  import DateService from 'util/DateService';
 
   export let title: string = 'Pick a date';
   export let open: boolean;

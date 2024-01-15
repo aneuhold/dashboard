@@ -1,7 +1,7 @@
 <script lang="ts">
+  import { DateService } from '@aneuhold/core-ts-lib';
   import Chip, { LeadingIcon, Set, Text } from '@smui/chips';
   import { createEventDispatcher } from 'svelte';
-  import DateService from 'util/DateService';
 
   export let dateType: 'due' | 'start';
   export let date: Date | undefined = undefined;

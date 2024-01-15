@@ -5,11 +5,13 @@
 -->
 <script lang="ts">
   import {
+    DashboardTaskService,
     RecurrenceBasis,
     RecurrenceEffect,
     RecurrenceFrequencyType,
     type RecurrenceInfo
   } from '@aneuhold/core-ts-db-lib';
+  import { DateService } from '@aneuhold/core-ts-lib';
   import Accordion, { Content, Panel } from '@smui-extra/accordion';
   import Button, { Label } from '@smui/button';
   import Checkbox from '@smui/checkbox';
@@ -99,6 +101,19 @@
       return task;
     });
   };
+
+  const getNextRecurrenceDate = (recurrenceInfo: RecurrenceInfo) => {
+    let date: Date | null = null;
+    if (recurrenceInfo.recurrenceBasis === RecurrenceBasis.dueDate && $task.dueDate) {
+      date = $task.dueDate;
+    } else if (recurrenceInfo.recurrenceBasis === RecurrenceBasis.startDate && $task.startDate) {
+      date = DashboardTaskService.getNextFrequencyDate($task.startDate, recurrenceInfo.frequency);
+    }
+    if (!date) {
+      return 'Error: please tell Tony aboot this';
+    }
+    return DateService.getDateTimeString(date);
+  };
 </script>
 
 <!-- Only use the accordion when there is an option to set recurrence, other
@@ -115,7 +130,15 @@ wise set this up to just show a link to the parent and when the parent will recu
             </ClickableDiv>
             <div class="headerText">
               <Icon class="material-icons">autorenew</Icon>
-              <span>Recurring</span>
+              {#if $task.recurrenceInfo && $task.recurrenceInfo.recurrenceEffect === RecurrenceEffect.rollOnCompletion}
+                <span>Recurs: On Completion</span>
+              {:else if $task.recurrenceInfo}
+                <span>
+                  Recurs: {getNextRecurrenceDate($task.recurrenceInfo)}
+                </span>
+              {:else}
+                <span>Recurring</span>
+              {/if}
             </div>
           </div>
           <IconButton toggle bind:pressed={recurringInfoOpen}>
@@ -128,8 +151,9 @@ wise set this up to just show a link to the parent and when the parent will recu
             disabled={!isRecurring}
             recurrenceInfo={currentRecurrenceInfo}
             on:change={updateRecurrenceInfo}
-            hasDueDate={!!$task.dueDate}
-            hasStartDate={!!$task.startDate}
+            dueDate={$task.dueDate}
+            startDate={$task.startDate}
+            taskIsCompleted={$task.completed}
           />
         </Content>
       </Panel>
@@ -177,7 +201,9 @@ wise set this up to just show a link to the parent and when the parent will recu
     display: flex;
     flex-direction: row;
     align-items: center;
-    flex-wrap: wrap;
+    text-wrap: wrap;
     gap: 4px;
+    margin-top: 4px;
+    margin-bottom: 4px;
   }
 </style>

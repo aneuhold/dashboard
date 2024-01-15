@@ -6,24 +6,30 @@
 -->
 <script lang="ts">
   import {
+    DashboardTask,
+    DashboardTaskService,
     RecurrenceBasis,
     RecurrenceEffect,
     RecurrenceFrequencyType,
     type RecurrenceInfo
   } from '@aneuhold/core-ts-db-lib';
   import Select, { Option } from '@smui/select';
+  import { ObjectId } from 'bson';
   import InputBox from 'components/InputBox.svelte';
   import WeekdaySegmentedButton from 'components/WeekdaySegmentedButton.svelte';
   import { createEventDispatcher } from 'svelte';
   import { writable, type Updater } from 'svelte/store';
   import TaskRecurrenceInfoIcon from './TaskRecurrenceInfoIcon.svelte';
+  import TaskRecurrenceUpdateExample from './TaskRecurrenceUpdateExample.svelte';
   import TaskRecurrenceWeekdayOfMonth from './TaskRecurrenceWeekdayOfMonth.svelte';
 
   export let disabled = true;
   export let recurrenceInfo: RecurrenceInfo;
-  export let hasStartDate: boolean;
-  export let hasDueDate: boolean;
+  export let taskIsCompleted: boolean;
+  export let startDate: Date | undefined;
+  export let dueDate: Date | undefined;
 
+  $: exampleOfRecurrence = createExampleOfRecurrence(startDate, dueDate, recurrenceInfo);
   $: rInfo = createRInfoStore(recurrenceInfo);
 
   const dispatch = createEventDispatcher<{
@@ -75,6 +81,31 @@
         break;
     }
     clearOtherTypes(newRInfo);
+  };
+
+  const createExampleOfRecurrence = (
+    startDate: Date | undefined,
+    dueDate: Date | undefined,
+    recurrenceInfo: RecurrenceInfo
+  ): DashboardTask => {
+    const newTask = new DashboardTask(new ObjectId());
+    newTask.startDate = startDate;
+    newTask.dueDate = dueDate;
+    newTask.recurrenceInfo = recurrenceInfo;
+    DashboardTaskService.updateDatesForRecurrence(newTask);
+    if (recurrenceInfo.recurrenceEffect === RecurrenceEffect.rollOnCompletion) {
+      const currentDate = new Date();
+      if (recurrenceInfo.recurrenceBasis === RecurrenceBasis.startDate) {
+        while (newTask.startDate && newTask.startDate < currentDate) {
+          DashboardTaskService.updateDatesForRecurrence(newTask);
+        }
+      } else {
+        while (newTask.dueDate && newTask.dueDate < currentDate) {
+          DashboardTaskService.updateDatesForRecurrence(newTask);
+        }
+      }
+    }
+    return newTask;
   };
 
   const clearOtherTypes = (newRInfo: RecurrenceInfo) => {
@@ -131,15 +162,12 @@
       <b>Basis</b>
       <TaskRecurrenceInfoIcon />
     </div>
-    {#if !hasStartDate && !hasDueDate}
+    {#if !startDate && !dueDate}
       <span class="mdc-typography--body2 dimmed-color">
         A start date or a due date must be set to pick a basis
       </span>
     {:else}
-      <Select
-        disabled={disabled || !hasStartDate || !hasDueDate}
-        bind:value={$rInfo.recurrenceBasis}
-      >
+      <Select disabled={disabled || !startDate || !dueDate} bind:value={$rInfo.recurrenceBasis}>
         <Option value={RecurrenceBasis.startDate}>Start Date</Option>
         <Option value={RecurrenceBasis.dueDate}>Due Date</Option>
       </Select>
@@ -156,6 +184,34 @@
       <Option value={RecurrenceEffect.rollOnCompletion}>Roll on Completion</Option>
       <Option value={RecurrenceEffect.stack}>Stack</Option>
     </Select>
+    <div>
+      <span>Updates on next task recurrence:</span>
+      {#if $rInfo.recurrenceEffect === RecurrenceEffect.stack && !taskIsCompleted}
+        <ul>
+          <li>This task</li>
+          <ul>
+            <TaskRecurrenceUpdateExample recurrenceIsRemoved={true} />
+          </ul>
+          <li>New Task</li>
+          <ul>
+            <TaskRecurrenceUpdateExample
+              recurrenceIsAdded={true}
+              newStartDate={exampleOfRecurrence.startDate}
+              newDueDate={exampleOfRecurrence.dueDate}
+            />
+          </ul>
+        </ul>
+      {:else}
+        <ul>
+          <TaskRecurrenceUpdateExample
+            originalStartDate={startDate}
+            newStartDate={exampleOfRecurrence.startDate}
+            originalDueDate={dueDate}
+            newDueDate={exampleOfRecurrence.dueDate}
+          />
+        </ul>
+      {/if}
+    </div>
   </div>
 </div>
 
