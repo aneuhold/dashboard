@@ -11,19 +11,30 @@
     type RecurrenceInfo
   } from '@aneuhold/core-ts-db-lib';
   import Accordion, { Content, Panel } from '@smui-extra/accordion';
+  import Button, { Label } from '@smui/button';
   import Checkbox from '@smui/checkbox';
+  import Dialog, { Actions, Content as DialogContent, Title } from '@smui/dialog';
   import IconButton, { Icon } from '@smui/icon-button';
+  import ClickableDiv from 'components/ClickableDiv.svelte';
   import TaskService from 'util/TaskService';
   import TaskRecurrenceDetails from './TaskRecurrenceDetails.svelte';
 
   export let taskId: string;
+  export let childTaskIds: string[];
 
   let recurringInfoOpen = false;
   let taskMap = TaskService.getStore();
   let previousTaskId = taskId;
+  let errorInfoDialogOpen = false;
+  let errorInfoDialogTitle = '';
+  let errorInfoDialogContent = '';
   $: task = TaskService.getTaskStore(taskId);
   $: isRecurring = !!$task.recurrenceInfo;
   $: hasParentRecurringTask = !!$task.parentRecurringTaskId;
+  $: hasChildRecurringTask = childTaskIds.some(
+    (childTaskId) => !!$taskMap[childTaskId].recurrenceInfo
+  );
+
   /**
    * This is purposefully not synced to the task store, so that updates
    * can happen separately.
@@ -56,6 +67,14 @@
         return task;
       });
       recurringInfoOpen = false;
+    } else if (hasChildRecurringTask) {
+      errorInfoDialogTitle = 'Task has recurring subtasks';
+      errorInfoDialogContent = 'Cannot set a task to recurring when it has recurring subtasks.';
+      errorInfoDialogOpen = true;
+    } else if (!$task.startDate && !$task.dueDate) {
+      errorInfoDialogTitle = 'Task is missing start date or due date';
+      errorInfoDialogContent = 'Tasks must have a start date or due date to be set to recurring.';
+      errorInfoDialogOpen = true;
     } else {
       // Create a clone. This is okay because none of the properties are
       // special objects, they are all simple JSON values.
@@ -91,7 +110,9 @@ wise set this up to just show a link to the parent and when the parent will recu
       <Panel variant="outlined" color="secondary" bind:open={recurringInfoOpen}>
         <div class={`headerContainer${isRecurring ? '' : ' dimmed-color'}`}>
           <div class="header">
-            <Checkbox checked={isRecurring} on:click={handleRecurringClick} />
+            <ClickableDiv clickAction={handleRecurringClick}>
+              <Checkbox disabled={!$task.startDate && !$task.dueDate} checked={isRecurring} />
+            </ClickableDiv>
             <div class="headerText">
               <Icon class="material-icons">autorenew</Icon>
               <span>Recurring</span>
@@ -115,6 +136,20 @@ wise set this up to just show a link to the parent and when the parent will recu
     </Accordion>
   {/if}
 </div>
+
+<Dialog bind:open={errorInfoDialogOpen}>
+  <Title>{errorInfoDialogTitle}</Title>
+  <DialogContent>{errorInfoDialogContent}</DialogContent>
+  <Actions>
+    <Button
+      on:click={() => {
+        errorInfoDialogOpen = false;
+      }}
+    >
+      <Label>Done</Label>
+    </Button>
+  </Actions>
+</Dialog>
 
 <style>
   /* To make it so that the separator lines go all the way across */

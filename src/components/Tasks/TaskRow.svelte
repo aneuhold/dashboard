@@ -5,7 +5,7 @@
 -->
 <script lang="ts">
   import { goto } from '$app/navigation';
-  import { DashboardTask, getDashboardTaskChildrenIds } from '@aneuhold/core-ts-db-lib';
+  import { DashboardTask, DashboardTaskService } from '@aneuhold/core-ts-db-lib';
   import Card, { Content as CardContent } from '@smui/card';
   import Checkbox from '@smui/checkbox';
   import FormField from '@smui/form-field';
@@ -25,7 +25,7 @@
   $: task = TaskService.getTaskStore(taskId);
   let taskMap = TaskService.getStore();
   $: allChildrenIds = $task
-    ? getDashboardTaskChildrenIds(Object.values($taskMap), [$task._id])
+    ? DashboardTaskService.getChildrenIds(Object.values($taskMap), [$task._id])
     : [];
   $: hasExtraTaskInfo = allChildrenIds.length > 0;
   $: finalParentId = TaskService.findParentIdWithSameSharedWith($task);
@@ -92,6 +92,9 @@
             {/if}
             {#if $task.sharedWith.length > 0}
               <Icon class="material-icons dimmed-color small-icon">group</Icon>
+            {/if}
+            {#if $task.recurrenceInfo}
+              <Icon class="material-icons dimmed-color small-icon">autorenew</Icon>
             {/if}
             {#if $task.tags.length > 0}
               <div class="tagsContainer">

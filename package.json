@@ -12,9 +12,9 @@
   },
   "type": "module",
   "devDependencies": {
-    "@aneuhold/core-ts-api-lib": "^1.0.27",
-    "@aneuhold/core-ts-db-lib": "^1.0.24",
-    "@aneuhold/core-ts-lib": "^1.1.9",
+    "@aneuhold/core-ts-api-lib": "^1.0.28",
+    "@aneuhold/core-ts-db-lib": "^1.0.25",
+    "@aneuhold/core-ts-lib": "^1.1.10",
     "@fontsource/fira-mono": "^4.5.10",
     "@neoconfetti/svelte": "^1.0.0",
     "@smui-extra/accordion": "^7.0.0-beta.16",

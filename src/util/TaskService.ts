@@ -1,4 +1,4 @@
-import { getDashboardTaskChildrenIds, type DashboardTask } from '@aneuhold/core-ts-db-lib';
+import { DashboardTask, DashboardTaskService } from '@aneuhold/core-ts-db-lib';
 import type { BreadCrumbArray } from 'components/BreadCrumb.svelte';
 import { writable, type Updater, type Writable } from 'svelte/store';
 import LocalData, { localDataReady } from './LocalData';
@@ -255,9 +255,10 @@ export default class TaskService {
       },
       updateTaskAndAllChildren: (taskId: string, updater: Updater<DashboardTask>) => {
         const parentTask = this._taskMap[taskId];
-        const allTaskIdsToUpdate = getDashboardTaskChildrenIds(Object.values(this._taskMap), [
-          parentTask._id
-        ]);
+        const allTaskIdsToUpdate = DashboardTaskService.getChildrenIds(
+          Object.values(this._taskMap),
+          [parentTask._id]
+        );
         allTaskIdsToUpdate.push(parentTask._id);
         const updateArray: DashboardTask[] = [];
         allTaskIdsToUpdate.forEach((taskId) => {

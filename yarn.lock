@@ -15,26 +15,27 @@
     "@jridgewell/gen-mapping" "^0.3.0"
     "@jridgewell/trace-mapping" "^0.3.9"
 
-"@aneuhold/core-ts-api-lib@^1.0.27":
-  version "1.0.27"
-  resolved "https://registry.yarnpkg.com/@aneuhold/core-ts-api-lib/-/core-ts-api-lib-1.0.27.tgz#df285d961efcda029a2537d85956d5be3e748142"
-  integrity sha512-JcX67lvQVpuk/LPZsWp5ZjO0i4FDf/P54KaS2ydxGOj2mtPcNqtYjhoZkA1ETCSLc3/uPyGaBoh/sxbxrJPNfg==
+"@aneuhold/core-ts-api-lib@^1.0.28":
+  version "1.0.28"
+  resolved "https://registry.yarnpkg.com/@aneuhold/core-ts-api-lib/-/core-ts-api-lib-1.0.28.tgz#e757204bac4aa53fb7eb6ca8aac4f5f3713abbb3"
+  integrity sha512-XUudzpxgyYS90FqNOUj5AUAlMOkFQ6XiM5KHJfStnbuUgf1FWOnpYnPoYNmcf/h9L1n3r/q4+KAPa8S63ijYQQ==
   dependencies:
-    "@aneuhold/core-ts-db-lib" "^1.0.24"
-    "@aneuhold/core-ts-lib" "^1.1.9"
+    "@aneuhold/core-ts-db-lib" "^1.0.25"
+    "@aneuhold/core-ts-lib" "^1.1.10"
     bson "^6.2.0"
 
-"@aneuhold/core-ts-db-lib@^1.0.24":
-  version "1.0.24"
-  resolved "https://registry.yarnpkg.com/@aneuhold/core-ts-db-lib/-/core-ts-db-lib-1.0.24.tgz#d6272348a7a5e95c68a593675ec2cad4dd443b0a"
-  integrity sha512-YpXWWy6toECn1hCIiTF6ZzY9YH2cdwCVYU21HDx7PwmdaIRDJbSLtWBh4DjEgoktjEkoUI+j7Em6p4m4Z99U2g==
+"@aneuhold/core-ts-db-lib@^1.0.25":
+  version "1.0.25"
+  resolved "https://registry.yarnpkg.com/@aneuhold/core-ts-db-lib/-/core-ts-db-lib-1.0.25.tgz#ecbe7067ac5705082a2fecade23abab20c662248"
+  integrity sha512-WNam4zkv7iE9sBlEr1vUOar7TO30UaU0mAuTUPDKiL9ATk90F+HP3I25HS785gaqRgOnt1kNQBCOdtEEJGduYA==
   dependencies:
+    "@aneuhold/core-ts-lib" "^1.1.10"
     bson "^6.2.0"
 
-"@aneuhold/core-ts-lib@^1.1.9":
-  version "1.1.9"
-  resolved "https://registry.yarnpkg.com/@aneuhold/core-ts-lib/-/core-ts-lib-1.1.9.tgz#b3bc01a3aa471df58a4929f4eca0e5af196ba426"
-  integrity sha512-WChmw2wIZ80UA3ZrDc6YJSq19JcyAC/Z7Rx0EkIfXxITREzxSvTq1nE5Ikt6rGjoC+r0OcWxaCi6QuFAs3aBBA==
+"@aneuhold/core-ts-lib@^1.1.10":
+  version "1.1.10"
+  resolved "https://registry.yarnpkg.com/@aneuhold/core-ts-lib/-/core-ts-lib-1.1.10.tgz#ceb738d06b950053ad9b0327163e62f46a8d450f"
+  integrity sha512-UNoYKZ41mXZVGCDGAkQegiiEQbvPYQIDF+xGH+XLhos3sPGjJ91wQZM8WulrrmKU8MJMHuCgwjd8pKl3z0eO/g==
 
 "@esbuild/android-arm64@0.18.20":
   version "0.18.20"

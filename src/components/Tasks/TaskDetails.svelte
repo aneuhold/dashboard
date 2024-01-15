@@ -10,7 +10,7 @@
 -->
 <script lang="ts">
   import { goto } from '$app/navigation';
-  import { DashboardTask, getDashboardTaskChildrenIds } from '@aneuhold/core-ts-db-lib';
+  import { DashboardTask, DashboardTaskService } from '@aneuhold/core-ts-db-lib';
   import Button, { Icon } from '@smui/button';
   import Checkbox from '@smui/checkbox';
   import FormField from '@smui/form-field';
@@ -40,7 +40,9 @@
         .map((taskValue) => taskValue._id.toString())
     : [];
   $: allChildrenIds = $task
-    ? getDashboardTaskChildrenIds(Object.values($taskMap), [$task._id])
+    ? DashboardTaskService.getChildrenIds(Object.values($taskMap), [$task._id]).map((id) =>
+        id.toString()
+      )
     : [];
   // Explicitly include `task` so that it reactively updates
   $: breadCrumbArray = TaskService.getBreadCrumbArray($task ? $task._id.toString() : taskId);
@@ -90,7 +92,7 @@
           </div>
           <InputBox label="Description" isTextArea={true} bind:onBlurValue={$task.description} />
           <TaskDateInfo {taskId} />
-          <TaskRecurrenceInfo {taskId} />
+          <TaskRecurrenceInfo {taskId} childTaskIds={allChildrenIds} />
           <div class="extraTaskInfo">
             <TaskTagsSelector {taskId} />
             <TaskSharingInfo {taskId} />
