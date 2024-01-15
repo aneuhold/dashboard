@@ -9,7 +9,6 @@
   export let taskId: string;
   $: task = TaskService.getTaskStore(taskId);
 
-  let taskMap = TaskService.getStore();
   let currentlyChosenDateType: 'start' | 'due' = 'start';
   let datePickerOpen = false;
   let confirmationDialogOpen = false;

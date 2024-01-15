@@ -146,13 +146,10 @@
           disabled={!isRecurring || hasParentRecurringTask}
           recurrenceInfo={currentRecurrenceInfo}
           on:change={updateRecurrenceInfo}
-          dueDate={$task.parentRecurringTaskInfo
-            ? $task.parentRecurringTaskInfo.dueDate
-            : $task.dueDate}
-          startDate={$task.parentRecurringTaskInfo
-            ? $task.parentRecurringTaskInfo.startDate
-            : $task.startDate}
+          dueDate={$task.dueDate}
+          startDate={$task.startDate}
           taskIsCompleted={$task.completed}
+          parentRecurringTaskInfo={$task.parentRecurringTaskInfo}
         />
       </Content>
     </Panel>

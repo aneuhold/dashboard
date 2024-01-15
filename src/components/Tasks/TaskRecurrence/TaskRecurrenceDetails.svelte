@@ -28,6 +28,13 @@
   export let taskIsCompleted: boolean;
   export let startDate: Date | undefined;
   export let dueDate: Date | undefined;
+  export let parentRecurringTaskInfo:
+    | {
+        taskId: ObjectId;
+        startDate?: Date;
+        dueDate?: Date;
+      }
+    | undefined = undefined;
 
   $: exampleOfRecurrence = createExampleOfRecurrence(startDate, dueDate, recurrenceInfo);
   $: rInfo = createRInfoStore(recurrenceInfo);
@@ -92,6 +99,7 @@
     newTask.startDate = startDate;
     newTask.dueDate = dueDate;
     newTask.recurrenceInfo = recurrenceInfo;
+    newTask.parentRecurringTaskInfo = parentRecurringTaskInfo;
     DashboardTaskService.updateDatesForRecurrence(newTask);
     if (recurrenceInfo.recurrenceEffect === RecurrenceEffect.rollOnCompletion) {
       const currentDate = new Date();
