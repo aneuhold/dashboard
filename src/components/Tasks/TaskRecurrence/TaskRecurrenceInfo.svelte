@@ -34,7 +34,7 @@
   $: isRecurring = !!$task.recurrenceInfo;
   $: hasParentRecurringTask = !!$task.parentRecurringTaskInfo;
   $: hasChildRecurringTask = childTaskIds.some(
-    (childTaskId) => !!$taskMap[childTaskId].recurrenceInfo
+    (childTaskId) => !!$taskMap[childTaskId]?.recurrenceInfo
   );
 
   /**

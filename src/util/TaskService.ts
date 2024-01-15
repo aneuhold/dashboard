@@ -321,11 +321,24 @@ export default class TaskService {
           insert: [newTask]
         });
       },
-      deleteTask: (objectId: string) => {
-        DashboardTaskAPIService.updateTasks({
-          delete: [{ ...this._taskMap[objectId] }]
+      deleteTask: (taskId: string) => {
+        const allTasksToDelete: DashboardTask[] = [];
+        allTasksToDelete.push(this._taskMap[taskId]);
+        DashboardTaskService.getChildrenIds(Object.values(this._taskMap), [
+          this._taskMap[taskId]._id
+        ]).forEach((id) => {
+          allTasksToDelete.push(this._taskMap[id.toString()]);
         });
-        delete this._taskMap[objectId];
+        DashboardTaskAPIService.updateTasks({
+          delete: allTasksToDelete
+        });
+        allTasksToDelete.forEach((task) => {
+          delete this._taskMap[task._id.toString()];
+          // Check and remove the store if needed
+          if (this.currentTaskStores[task._id.toString()]) {
+            delete this.currentTaskStores[task._id.toString()];
+          }
+        });
         setTaskMap();
       },
       updateTaskAndAllChildren: (taskId: string, updater: Updater<DashboardTask>) => {

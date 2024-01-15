@@ -49,6 +49,7 @@
   function addSubTask() {
     if (!$task) return;
     const newTask = new DashboardTask($task.userId);
+    newTask.title = 'New Task';
     newTask.parentTaskId = $task._id;
     newTask.sharedWith = $task.sharedWith;
     newTask.recurrenceInfo = $task.recurrenceInfo;

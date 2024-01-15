@@ -125,6 +125,8 @@
   } else if (onBlurValue !== previousOnBlurValue && onBlurValue !== inputValue) {
     inputValue = onBlurValue;
     previousOnBlurValue = onBlurValue;
+  } else if (onBlurValue !== previousOnBlurValue) {
+    previousOnBlurValue = onBlurValue;
   }
 </script>
 
