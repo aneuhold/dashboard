@@ -8,8 +8,20 @@
   export let recurrenceIsRemoved: boolean = false;
   export let recurrenceIsAdded: boolean = false;
   export let completedRemoved: boolean = false;
+
+  $: noChangesAtAll =
+    !originalStartDate &&
+    !originalDueDate &&
+    !newStartDate &&
+    !newDueDate &&
+    !recurrenceIsRemoved &&
+    !recurrenceIsAdded &&
+    !completedRemoved;
 </script>
 
+{#if noChangesAtAll}
+  <i class="dimmed-color">No changes</i>
+{/if}
 {#if recurrenceIsRemoved}
   <li>
     Recurring:

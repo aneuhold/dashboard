@@ -7,8 +7,6 @@
   import { goto } from '$app/navigation';
   import { DashboardTask, DashboardTaskService } from '@aneuhold/core-ts-db-lib';
   import Card, { Content as CardContent } from '@smui/card';
-  import Checkbox from '@smui/checkbox';
-  import FormField from '@smui/form-field';
   import { Icon } from '@smui/icon-button';
   import ClickableDiv from 'components/ClickableDiv.svelte';
   import ConfirmationDialog from 'components/ConfirmationDialog.svelte';
@@ -16,6 +14,7 @@
   import MenuButton from 'components/MenuButton.svelte';
   import TaskService from 'util/Task/TaskService';
   import { userSettings } from '../../stores/userSettings';
+  import TaskCompletedCheckbox from './TaskCompletedCheckbox.svelte';
   import TaskSharingDialog from './TaskSharingDialog.svelte';
 
   export let taskId: string;
@@ -80,9 +79,7 @@
   <Card>
     <CardContent>
       <div class="card-content">
-        <FormField>
-          <Checkbox bind:checked={$task.completed} touch />
-        </FormField>
+        <TaskCompletedCheckbox {taskId} />
         <ClickableDiv clickAction={goToTask}>
           <h4 class="mdc-typography--body1 title">
             {#if $task.title !== ''}

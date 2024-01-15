@@ -1,8 +1,15 @@
-import { DashboardTask, DashboardTaskService } from '@aneuhold/core-ts-db-lib';
+import {
+  DashboardTask,
+  DashboardTaskService,
+  DocumentService,
+  RecurrenceEffect
+} from '@aneuhold/core-ts-db-lib';
+import { ObjectId } from 'bson';
 import type { BreadCrumbArray } from 'components/BreadCrumb.svelte';
 import { writable, type Updater, type Writable } from 'svelte/store';
 import LocalData, { localDataReady } from '../LocalData';
 import DashboardTaskAPIService from '../api/DashboardTaskAPIService';
+import TaskRecurrenceService from './TaskRecurrenceService';
 
 export type TaskMap = { [objectId: string]: DashboardTask };
 export interface TaskStore extends Writable<DashboardTask> {
@@ -181,6 +188,7 @@ export default class TaskService {
     let previousStartDate = this._taskMap[taskId].startDate;
     let previousDueDate = this._taskMap[taskId].dueDate;
     let previousSharedWithLength = this._taskMap[taskId].sharedWith.length;
+    let previousCompleted = this._taskMap[taskId].completed;
 
     /**
      * Handles all logic for updating properties on an individual task.
@@ -201,6 +209,18 @@ export default class TaskService {
       // Turn on watching if needed
       if (newTask.recurrenceInfo && !newTask.parentRecurringTaskInfo) {
         watchRecurenceInfo = true;
+      }
+
+      // Handle recurrence effect trigger
+      if (
+        watchRecurenceInfo &&
+        newTask.completed !== previousCompleted &&
+        newTask.recurrenceInfo?.recurrenceEffect === RecurrenceEffect.rollOnCompletion
+      ) {
+        console.log('Triggered recurrence effect for task');
+        // Don't set previousCompleted, because it will be reverted in this case.
+        TaskRecurrenceService.executeRecurrenceForTask(newTask);
+        return;
       }
 
       // Test if any of the changes should trigger child-task updates
@@ -248,10 +268,10 @@ export default class TaskService {
         }
       }
 
-      // Update the previous dates because those alone don't trigger child-task
-      // updates
+      // Update the info that alone, doesn't trigger child-task updates
       previousDueDate = newTask.dueDate;
       previousStartDate = newTask.startDate;
+      previousCompleted = newTask.completed;
 
       // Handle normal singular task update
       this._taskMap[taskId] = newTask;
@@ -319,6 +339,43 @@ export default class TaskService {
         setTaskMap();
         DashboardTaskAPIService.updateTasks({
           insert: [newTask]
+        });
+      },
+      duplicateTask: (
+        taskId: string,
+        newTaskUpdater: Updater<DashboardTask>,
+        originalTaskUpdater?: Updater<DashboardTask>
+      ) => {
+        const parentTask = this._taskMap[taskId];
+        const allRelatedTaskIds = DashboardTaskService.getChildrenIds(
+          Object.values(this._taskMap),
+          [parentTask._id]
+        );
+        allRelatedTaskIds.push(parentTask._id);
+        const tasksToUpdate: DashboardTask[] = [];
+        const tasksToInsert: DashboardTask[] = [];
+        allRelatedTaskIds.forEach((id) => {
+          let newTask = DocumentService.deepCopy(this._taskMap[id.toString()]);
+          newTask._id = new ObjectId();
+          newTask = newTaskUpdater(newTask);
+          tasksToInsert.push(newTask);
+          this._taskMap[newTask._id.toString()] = newTask;
+        });
+        if (originalTaskUpdater) {
+          allRelatedTaskIds.forEach((id) => {
+            const updatedTask = originalTaskUpdater(this._taskMap[id.toString()]);
+            this._taskMap[id.toString()] = updatedTask;
+            tasksToUpdate.push(updatedTask);
+            const taskStore = this.currentTaskStores[id.toString()];
+            if (taskStore) {
+              taskStore.setWithoutPropogation(updatedTask);
+            }
+          });
+        }
+        setTaskMap();
+        DashboardTaskAPIService.updateTasks({
+          insert: tasksToInsert,
+          update: tasksToUpdate
         });
       },
       deleteTask: (taskId: string) => {

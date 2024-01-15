@@ -12,8 +12,6 @@
   import { goto } from '$app/navigation';
   import { DashboardTask, DashboardTaskService } from '@aneuhold/core-ts-db-lib';
   import Button, { Icon } from '@smui/button';
-  import Checkbox from '@smui/checkbox';
-  import FormField from '@smui/form-field';
   import Paper, { Content } from '@smui/paper';
   import BreadCrumb from 'components/BreadCrumb.svelte';
   import FabButton from 'components/FabButton.svelte';
@@ -21,6 +19,7 @@
   import PageTitle from 'components/PageTitle.svelte';
   import TaskService from 'util/Task/TaskService';
   import ConfirmationDialog from '../ConfirmationDialog.svelte';
+  import TaskCompletedCheckbox from './TaskCompletedCheckbox.svelte';
   import TaskDateInfo from './TaskDate/TaskDateInfo.svelte';
   import TaskList from './TaskList.svelte';
   import TaskRecurrenceInfo from './TaskRecurrence/TaskRecurrenceInfo.svelte';
@@ -53,7 +52,13 @@
     newTask.parentTaskId = $task._id;
     newTask.sharedWith = $task.sharedWith;
     newTask.recurrenceInfo = $task.recurrenceInfo;
-    newTask.parentRecurringTaskInfo = $task.parentRecurringTaskInfo;
+    newTask.parentRecurringTaskInfo = $task.recurrenceInfo
+      ? {
+          taskId: $task._id,
+          startDate: $task.startDate,
+          dueDate: $task.dueDate
+        }
+      : undefined;
     taskMap.addTask(newTask);
     goto(TaskService.getTaskRoute(newTask._id.toString()));
   }
@@ -88,9 +93,7 @@
       <Content>
         <div class="content paperContent">
           <div class="titleContainer">
-            <FormField>
-              <Checkbox bind:checked={$task.completed} touch />
-            </FormField>
+            <TaskCompletedCheckbox {taskId} />
             <InputBox variant="outlined" label="Title" bind:onBlurValue={$task.title} />
           </div>
           <InputBox label="Description" isTextArea={true} bind:onBlurValue={$task.description} />
