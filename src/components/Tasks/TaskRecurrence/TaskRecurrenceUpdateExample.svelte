@@ -7,6 +7,7 @@
   export let newDueDate: Date | undefined = undefined;
   export let recurrenceIsRemoved: boolean = false;
   export let recurrenceIsAdded: boolean = false;
+  export let completedRemoved: boolean = false;
 </script>
 
 {#if recurrenceIsRemoved}
@@ -18,6 +19,13 @@
 {/if}
 {#if recurrenceIsAdded}
   <li>Recurring: Yes</li>
+{/if}
+{#if completedRemoved}
+  <li>
+    Completed:
+    <span class="dimmed-color crossedOut">Yes</span>
+    No
+  </li>
 {/if}
 {#if originalStartDate || newStartDate}
   <li>

@@ -15,26 +15,18 @@
   export let open = false;
   export let taskId: string;
 
-  let taskMap = TaskService.getStore();
   $: task = TaskService.getTaskStore(taskId);
   $: sharedWithIds = $task.sharedWith.map((id) => id.toString());
   $: collaborators = $userSettings.collaborators;
 
   function toggleSharedWith(id: ObjectId) {
     if (sharedWithIds.includes(id.toString())) {
-      taskMap.updateTaskAndAllChildren(taskId, (task) => {
-        task.sharedWith = task.sharedWith.filter((sharedWithId) => {
-          return sharedWithId.toString() !== id.toString();
-        });
-        return task;
+      $task.sharedWith = $task.sharedWith.filter((sharedWithId) => {
+        return sharedWithId.toString() !== id.toString();
       });
     } else {
-      taskMap.updateTaskAndAllChildren(taskId, (task) => {
-        if (!task.sharedWith.some((objectId) => objectId.toString() === id.toString())) {
-          task.sharedWith.push(id);
-        }
-        return task;
-      });
+      $task.sharedWith.push(id);
+      $task.sharedWith = $task.sharedWith;
     }
   }
 
@@ -44,7 +36,6 @@
 </script>
 
 <Dialog bind:open>
-  <!-- Title cannot contain leading whitespace due to mdc-typography-baseline-top() -->
   <Title>Share "{$task.title}"</Title>
   <Content>
     <div class="content">

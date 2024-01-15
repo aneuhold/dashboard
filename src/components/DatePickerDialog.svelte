@@ -89,7 +89,7 @@
   };
 </script>
 
-<Dialog bind:open={dialogOpen}>
+<Dialog bind:open={dialogOpen} on:SMUIDialog:closed={handleCancel}>
   <Title>{title}</Title>
   <Content>
     {#if sveltyPickerVisible}

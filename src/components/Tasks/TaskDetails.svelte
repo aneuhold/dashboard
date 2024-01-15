@@ -20,7 +20,6 @@
   import InputBox from 'components/InputBox.svelte';
   import PageTitle from 'components/PageTitle.svelte';
   import TaskService from 'util/TaskService';
-  import { userSettings } from '../../stores/userSettings';
   import ConfirmationDialog from '../ConfirmationDialog.svelte';
   import TaskDateInfo from './TaskDate/TaskDateInfo.svelte';
   import TaskList from './TaskList.svelte';
@@ -49,8 +48,11 @@
 
   function addSubTask() {
     if (!$task) return;
-    const newTask = new DashboardTask($userSettings.config.userId);
+    const newTask = new DashboardTask($task.userId);
     newTask.parentTaskId = $task._id;
+    newTask.sharedWith = $task.sharedWith;
+    newTask.recurrenceInfo = $task.recurrenceInfo;
+    newTask.parentRecurringTaskInfo = $task.parentRecurringTaskInfo;
     taskMap.addTask(newTask);
     goto(TaskService.getTaskRoute(newTask._id.toString()));
   }

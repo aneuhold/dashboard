@@ -208,6 +208,7 @@
             newStartDate={exampleOfRecurrence.startDate}
             originalDueDate={dueDate}
             newDueDate={exampleOfRecurrence.dueDate}
+            completedRemoved={taskIsCompleted}
           />
         </ul>
       {/if}

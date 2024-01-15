@@ -173,12 +173,88 @@ export default class TaskService {
   private static createTaskStore(taskId: string): TaskStore {
     const { subscribe, set } = writable(this._taskMap[taskId]);
 
-    const setTask = (newTask: DashboardTask) => {
-      const oldTaskTagsLength = this._taskMap[taskId].tags.length;
-      this._taskMap[taskId] = newTask;
-      if (oldTaskTagsLength !== newTask.tags.length) {
+    // Things that are watched for changes. Try to keep this light as possible.
+    let previousTagsLength = this._taskMap[taskId].tags.length;
+    let previousRecurrenceInfoString = JSON.stringify(this._taskMap[taskId].recurrenceInfo);
+    let watchRecurenceInfo =
+      !!this._taskMap[taskId].recurrenceInfo && !this._taskMap[taskId].parentRecurringTaskInfo;
+    let previousStartDate = this._taskMap[taskId].startDate;
+    let previousDueDate = this._taskMap[taskId].dueDate;
+    let previousSharedWithLength = this._taskMap[taskId].sharedWith.length;
+
+    /**
+     * Handles all logic for updating properties on an individual task.
+     *
+     * Test how recurrenceInfo is updated, and if it is an entirely new object.
+     */
+    const updateTask = (updater: Updater<DashboardTask>) => {
+      const newTask = updater(this._taskMap[taskId]);
+      const newTagsLength = newTask.tags.length;
+
+      // Handle updating the task tags. This happens no matter what because
+      // it is separate from the task itself.
+      if (previousTagsLength !== newTagsLength) {
         this.updateTaskTags();
+        previousTagsLength = newTagsLength;
       }
+
+      // Turn on watching if needed
+      if (newTask.recurrenceInfo && !newTask.parentRecurringTaskInfo) {
+        watchRecurenceInfo = true;
+      }
+
+      // Test if any of the changes should trigger child-task updates
+      const sharedWithChanged = newTask.sharedWith.length !== previousSharedWithLength;
+      if (watchRecurenceInfo || sharedWithChanged) {
+        const newRecurrenceInfoString = JSON.stringify(newTask.recurrenceInfo);
+        const recurrenceInfoChanged = newRecurrenceInfoString !== previousRecurrenceInfoString;
+        const datesAreDifferent =
+          newTask.startDate?.getTime() !== previousStartDate?.getTime() ||
+          newTask.dueDate?.getTime() !== previousDueDate?.getTime();
+        if (recurrenceInfoChanged || datesAreDifferent || sharedWithChanged) {
+          // Make changes to task and all sub-tasks
+          console.log('Updating child tasks...');
+          this.getStore().updateTaskAndAllChildren(taskId, (task) => {
+            if (task._id.toString() === taskId) {
+              return newTask;
+            }
+            // Child task updates
+            if (newTask.recurrenceInfo) {
+              task.parentRecurringTaskInfo = {
+                taskId: newTask._id,
+                startDate: newTask.startDate,
+                dueDate: newTask.dueDate
+              };
+              task.recurrenceInfo = newTask.recurrenceInfo;
+            } else {
+              task.parentRecurringTaskInfo = undefined;
+              task.recurrenceInfo = undefined;
+            }
+            // SharedWith should always be reflected down
+            task.sharedWith = newTask.sharedWith;
+            return task;
+          });
+          // Handle turning off watching if needed
+          if (!newTask.recurrenceInfo || newTask.parentRecurringTaskInfo) {
+            watchRecurenceInfo = false;
+          }
+          // Update all the previous values
+          previousRecurrenceInfoString = newRecurrenceInfoString;
+          previousStartDate = newTask.startDate;
+          previousDueDate = newTask.dueDate;
+          previousSharedWithLength = newTask.sharedWith.length;
+          // Short-circuit the rest of the function
+          return;
+        }
+      }
+
+      // Update the previous dates because those alone don't trigger child-task
+      // updates
+      previousDueDate = newTask.dueDate;
+      previousStartDate = newTask.startDate;
+
+      // Handle normal singular task update
+      this._taskMap[taskId] = newTask;
       set(this._taskMap[taskId]);
       LocalData.taskMap = this._taskMap;
       DashboardTaskAPIService.updateTasks({
@@ -189,11 +265,10 @@ export default class TaskService {
     return {
       subscribe,
       set: (newTask: DashboardTask) => {
-        setTask(newTask);
+        updateTask(() => newTask);
       },
       update: (updater: Updater<DashboardTask>) => {
-        const updatedTask = updater(this._taskMap[taskId]);
-        setTask(updatedTask);
+        updateTask(updater);
       },
       setWithoutPropogation: (newTask: DashboardTask) => {
         set(newTask);

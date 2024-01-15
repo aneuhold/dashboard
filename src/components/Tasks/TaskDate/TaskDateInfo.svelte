@@ -54,7 +54,7 @@
   function handleStartDateDeletion() {
     // If the task is a recurring task, and the basis is the start date
     if (
-      !$task.parentRecurringTaskId &&
+      !$task.parentRecurringTaskInfo &&
       $task.recurrenceInfo?.recurrenceBasis === RecurrenceBasis.startDate
     ) {
       // If the task has a due date, the basis can be switched to the due date.
@@ -75,7 +75,7 @@
   function handleDueDateDeletion() {
     // If the task is a recurring task, and the basis is the due date
     if (
-      !$task.parentRecurringTaskId &&
+      !$task.parentRecurringTaskInfo &&
       $task.recurrenceInfo?.recurrenceBasis === RecurrenceBasis.dueDate
     ) {
       // If the task has a start date, the basis can be switched to the start date.
@@ -99,17 +99,13 @@
    * This should only happen in the edge cases where a start or due date is
    * being deleted and there is a recurring task with a recurrence basis that
    * matches the date being deleted.
-   *
-   * This is pretty lengthy, but each scenario is slightly different, and the
-   * below is very performant.
    */
   function handleDialogConfirm() {
+    // If the task is a recurring task, and the basis is the start date
     if (currentlyChosenDateType === 'start') {
       if ($task.dueDate) {
-        taskMap.updateTaskAndAllChildren(taskId, (task) => {
-          if (task._id.toString() === taskId) {
-            task.startDate = undefined;
-          }
+        task.update((task) => {
+          task.startDate = undefined;
           if (task.recurrenceInfo) {
             task.recurrenceInfo.recurrenceBasis = RecurrenceBasis.dueDate;
           } else {
@@ -120,21 +116,17 @@
           return task;
         });
       } else {
-        taskMap.updateTaskAndAllChildren(taskId, (task) => {
-          if (task._id.toString() === taskId) {
-            task.startDate = undefined;
-          }
-          task.parentRecurringTaskId = undefined;
+        task.update((task) => {
+          task.startDate = undefined;
           task.recurrenceInfo = undefined;
           return task;
         });
       }
+      // If the task is a recurring task, and the basis is the due date
     } else {
       if ($task.startDate) {
-        taskMap.updateTaskAndAllChildren(taskId, (task) => {
-          if (task._id.toString() === taskId) {
-            task.dueDate = undefined;
-          }
+        task.update((task) => {
+          task.dueDate = undefined;
           if (task.recurrenceInfo) {
             task.recurrenceInfo.recurrenceBasis = RecurrenceBasis.startDate;
           } else {
@@ -145,11 +137,8 @@
           return task;
         });
       } else {
-        taskMap.updateTaskAndAllChildren(taskId, (task) => {
-          if (task._id.toString() === taskId) {
-            task.dueDate = undefined;
-          }
-          task.parentRecurringTaskId = undefined;
+        task.update((task) => {
+          task.dueDate = undefined;
           task.recurrenceInfo = undefined;
           return task;
         });
