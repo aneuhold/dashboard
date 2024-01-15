@@ -9,7 +9,7 @@
   import Dialog, { Actions, Content, Title } from '@smui/dialog';
   import FormField from '@smui/form-field';
   import type { ObjectId } from 'bson';
-  import TaskService from 'util/TaskService';
+  import TaskService from 'util/Task/TaskService';
   import { userSettings } from '../../stores/userSettings';
 
   export let open = false;

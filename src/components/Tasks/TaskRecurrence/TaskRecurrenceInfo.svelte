@@ -18,7 +18,7 @@
   import Dialog, { Actions, Content as DialogContent, Title } from '@smui/dialog';
   import IconButton, { Icon } from '@smui/icon-button';
   import ClickableDiv from 'components/ClickableDiv.svelte';
-  import TaskService from 'util/TaskService';
+  import TaskService from 'util/Task/TaskService';
   import TaskRecurrenceDetails from './TaskRecurrenceDetails.svelte';
 
   export let taskId: string;

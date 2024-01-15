@@ -3,7 +3,7 @@
   import { DateService } from '@aneuhold/core-ts-lib';
   import ConfirmationDialog from 'components/ConfirmationDialog.svelte';
   import DatePickerDialog from 'components/DatePickerDialog.svelte';
-  import TaskService from 'util/TaskService';
+  import TaskService from 'util/Task/TaskService';
   import TaskDateButton from './TaskDateButton.svelte';
 
   export let taskId: string;

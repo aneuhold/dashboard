@@ -6,7 +6,7 @@
 <script lang="ts">
   import Autocomplete from '@smui-extra/autocomplete';
   import Chip, { Set, Text, TrailingAction } from '@smui/chips';
-  import TaskService from 'util/TaskService';
+  import TaskService from 'util/Task/TaskService';
 
   export let taskId: string;
 

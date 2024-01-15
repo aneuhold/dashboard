@@ -14,7 +14,7 @@
   import ConfirmationDialog from 'components/ConfirmationDialog.svelte';
   import type { MenuButtonItem } from 'components/MenuButton.svelte';
   import MenuButton from 'components/MenuButton.svelte';
-  import TaskService from 'util/TaskService';
+  import TaskService from 'util/Task/TaskService';
   import { userSettings } from '../../stores/userSettings';
   import TaskSharingDialog from './TaskSharingDialog.svelte';
 

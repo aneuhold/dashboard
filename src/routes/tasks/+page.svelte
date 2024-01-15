@@ -11,7 +11,7 @@
   import PageTitle from 'components/PageTitle.svelte';
   import TaskDetails from 'components/Tasks/TaskDetails.svelte';
   import TaskList from 'components/Tasks/TaskList.svelte';
-  import TaskService from 'util/TaskService';
+  import TaskService from 'util/Task/TaskService';
   import { userSettings } from '../../stores/userSettings';
   import { tasksPageInfo } from './pageInfo';
 

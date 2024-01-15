@@ -2,8 +2,8 @@ import { APIService } from '@aneuhold/core-ts-api-lib';
 import type { DashboardTask } from '@aneuhold/core-ts-db-lib';
 import { snackbar } from 'components/Snackbar.svelte';
 import LocalData from 'util/LocalData';
-import type { TaskMap } from 'util/TaskService';
-import TaskService from 'util/TaskService';
+import type { TaskMap } from 'util/Task/TaskService';
+import TaskService from 'util/Task/TaskService';
 import DashboardAPIService from './DashboardAPIService';
 
 export type TaskInsertOrUpdateInfo = {

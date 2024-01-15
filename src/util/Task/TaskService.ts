@@ -1,8 +1,8 @@
 import { DashboardTask, DashboardTaskService } from '@aneuhold/core-ts-db-lib';
 import type { BreadCrumbArray } from 'components/BreadCrumb.svelte';
 import { writable, type Updater, type Writable } from 'svelte/store';
-import LocalData, { localDataReady } from './LocalData';
-import DashboardTaskAPIService from './api/DashboardTaskAPIService';
+import LocalData, { localDataReady } from '../LocalData';
+import DashboardTaskAPIService from '../api/DashboardTaskAPIService';
 
 export type TaskMap = { [objectId: string]: DashboardTask };
 export interface TaskStore extends Writable<DashboardTask> {

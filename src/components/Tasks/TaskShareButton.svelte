@@ -1,7 +1,7 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
   import Button, { Icon } from '@smui/button';
-  import TaskService from 'util/TaskService';
+  import TaskService from 'util/Task/TaskService';
   import { userSettings } from '../../stores/userSettings';
   import TaskSharingDialog from './TaskSharingDialog.svelte';
 

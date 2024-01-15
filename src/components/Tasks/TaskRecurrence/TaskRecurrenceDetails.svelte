@@ -6,19 +6,18 @@
 -->
 <script lang="ts">
   import {
-    DashboardTask,
-    DashboardTaskService,
     RecurrenceBasis,
     RecurrenceEffect,
     RecurrenceFrequencyType,
+    type ParentRecurringTaskInfo,
     type RecurrenceInfo
   } from '@aneuhold/core-ts-db-lib';
   import Select, { Option } from '@smui/select';
-  import { ObjectId } from 'bson';
   import InputBox from 'components/InputBox.svelte';
   import WeekdaySegmentedButton from 'components/WeekdaySegmentedButton.svelte';
   import { createEventDispatcher } from 'svelte';
   import { writable, type Updater } from 'svelte/store';
+  import TaskRecurrenceService from 'util/Task/TaskRecurrenceService';
   import TaskRecurrenceInfoIcon from './TaskRecurrenceInfoIcon.svelte';
   import TaskRecurrenceUpdateExample from './TaskRecurrenceUpdateExample.svelte';
   import TaskRecurrenceWeekdayOfMonth from './TaskRecurrenceWeekdayOfMonth.svelte';
@@ -28,15 +27,14 @@
   export let taskIsCompleted: boolean;
   export let startDate: Date | undefined;
   export let dueDate: Date | undefined;
-  export let parentRecurringTaskInfo:
-    | {
-        taskId: ObjectId;
-        startDate?: Date;
-        dueDate?: Date;
-      }
-    | undefined = undefined;
+  export let parentRecurringTaskInfo: ParentRecurringTaskInfo | undefined;
 
-  $: exampleOfRecurrence = createExampleOfRecurrence(startDate, dueDate, recurrenceInfo);
+  $: exampleOfRecurrence = TaskRecurrenceService.createExampleOfRecurrence(
+    startDate,
+    dueDate,
+    recurrenceInfo,
+    parentRecurringTaskInfo
+  );
   $: rInfo = createRInfoStore(recurrenceInfo);
 
   const dispatch = createEventDispatcher<{
@@ -88,32 +86,6 @@
         break;
     }
     clearOtherTypes(newRInfo);
-  };
-
-  const createExampleOfRecurrence = (
-    startDate: Date | undefined,
-    dueDate: Date | undefined,
-    recurrenceInfo: RecurrenceInfo
-  ): DashboardTask => {
-    const newTask = new DashboardTask(new ObjectId());
-    newTask.startDate = startDate;
-    newTask.dueDate = dueDate;
-    newTask.recurrenceInfo = recurrenceInfo;
-    newTask.parentRecurringTaskInfo = parentRecurringTaskInfo;
-    DashboardTaskService.updateDatesForRecurrence(newTask);
-    if (recurrenceInfo.recurrenceEffect === RecurrenceEffect.rollOnCompletion) {
-      const currentDate = new Date();
-      if (recurrenceInfo.recurrenceBasis === RecurrenceBasis.startDate) {
-        while (newTask.startDate && newTask.startDate < currentDate) {
-          DashboardTaskService.updateDatesForRecurrence(newTask);
-        }
-      } else {
-        while (newTask.dueDate && newTask.dueDate < currentDate) {
-          DashboardTaskService.updateDatesForRecurrence(newTask);
-        }
-      }
-    }
-    return newTask;
   };
 
   const clearOtherTypes = (newRInfo: RecurrenceInfo) => {

@@ -19,7 +19,7 @@
   import FabButton from 'components/FabButton.svelte';
   import InputBox from 'components/InputBox.svelte';
   import PageTitle from 'components/PageTitle.svelte';
-  import TaskService from 'util/TaskService';
+  import TaskService from 'util/Task/TaskService';
   import ConfirmationDialog from '../ConfirmationDialog.svelte';
   import TaskDateInfo from './TaskDate/TaskDateInfo.svelte';
   import TaskList from './TaskList.svelte';

@@ -3,7 +3,7 @@ import type { DashboardUserConfig, UserCTO } from '@aneuhold/core-ts-db-lib';
 import { snackbar } from 'components/Snackbar.svelte';
 import type { UUID } from 'crypto';
 import LocalData from 'util/LocalData';
-import TaskService from 'util/TaskService';
+import TaskService from 'util/Task/TaskService';
 import { apiKey } from '../../stores/apiKey';
 import { dashboardConfig } from '../../stores/dashboardConfig';
 import { LoginState, loginState } from '../../stores/loginState';

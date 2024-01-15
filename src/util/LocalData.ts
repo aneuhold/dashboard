@@ -3,7 +3,7 @@ import { sleep } from '@aneuhold/core-ts-lib';
 import { EJSON } from 'bson';
 import { writable } from 'svelte/store';
 import type { UserSettings } from '../stores/userSettings';
-import type { TaskMap } from './TaskService';
+import type { TaskMap } from './Task/TaskService';
 import type { TaskInsertOrUpdateInfo } from './api/DashboardTaskAPIService';
 
 function createLocalDataReadyStore() {
