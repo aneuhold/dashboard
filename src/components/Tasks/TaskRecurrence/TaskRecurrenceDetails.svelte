@@ -9,26 +9,36 @@
     RecurrenceBasis,
     RecurrenceEffect,
     RecurrenceFrequencyType,
-    type ParentRecurringTaskInfo,
     type RecurrenceInfo
   } from '@aneuhold/core-ts-db-lib';
+  import { DateService } from '@aneuhold/core-ts-lib';
   import Select, { Option } from '@smui/select';
+  import ConfirmationDialog from 'components/ConfirmationDialog.svelte';
   import InputBox from 'components/InputBox.svelte';
   import WeekdaySegmentedButton from 'components/WeekdaySegmentedButton.svelte';
-  import { createEventDispatcher } from 'svelte';
   import { writable, type Updater } from 'svelte/store';
   import TaskRecurrenceService from 'util/Task/TaskRecurrenceService';
+  import TaskService from 'util/Task/TaskService';
   import TaskRecurrenceInfoIcon from './TaskRecurrenceInfoIcon.svelte';
   import TaskRecurrenceUpdateExample from './TaskRecurrenceUpdateExample.svelte';
   import TaskRecurrenceWeekdayOfMonth from './TaskRecurrenceWeekdayOfMonth.svelte';
 
-  export let disabled = true;
+  export let taskId: string;
   export let recurrenceInfo: RecurrenceInfo;
-  export let taskIsCompleted: boolean;
-  export let startDate: Date | undefined;
-  export let dueDate: Date | undefined;
-  export let parentRecurringTaskInfo: ParentRecurringTaskInfo | undefined;
 
+  let dialogMessage = '';
+  let dialogOpen = false;
+
+  $: task = TaskService.getTaskStore(taskId);
+  /**
+   * Stored so that the changes can be reverted
+   */
+  $: previousRInfoString = JSON.stringify(recurrenceInfo);
+  $: pendingRInfo = recurrenceInfo;
+  $: disabled = !$task.recurrenceInfo || !!$task.parentRecurringTaskInfo;
+  $: startDate = $task.startDate;
+  $: dueDate = $task.dueDate;
+  $: parentRecurringTaskInfo = $task.parentRecurringTaskInfo;
   $: exampleOfRecurrence = TaskRecurrenceService.createExampleOfRecurrence(
     startDate,
     dueDate,
@@ -37,21 +47,23 @@
   );
   $: rInfo = createRInfoStore(recurrenceInfo);
 
-  const dispatch = createEventDispatcher<{
-    change: RecurrenceInfo;
-  }>();
-
   function createRInfoStore(initialRInfo: RecurrenceInfo) {
     let currentFrequencyType = initialRInfo.frequency.type;
     const { set, subscribe } = writable<RecurrenceInfo>(initialRInfo);
 
-    const setRInfo = (newRInfo: RecurrenceInfo) => {
+    const setRInfo = (newRInfo: RecurrenceInfo, checkDate = true) => {
       if (newRInfo.frequency.type !== currentFrequencyType) {
         handleTypeChange(newRInfo);
       }
       currentFrequencyType = newRInfo.frequency.type;
+      if (checkDate && updateWouldTriggerRecurrence(newRInfo)) {
+        pendingRInfo = newRInfo;
+        dialogOpen = true;
+        return;
+      }
+      previousRInfoString = JSON.stringify(newRInfo);
       set(newRInfo);
-      dispatch('change', newRInfo);
+      $task.recurrenceInfo = newRInfo;
     };
     return {
       subscribe,
@@ -61,9 +73,40 @@
       update: (value: RecurrenceInfo, updater: Updater<RecurrenceInfo>) => {
         const newRInfo = updater(value);
         setRInfo(newRInfo);
+      },
+      setWithoutCheck(value: RecurrenceInfo) {
+        setRInfo(value, false);
       }
     };
   }
+
+  const updateWouldTriggerRecurrence = (newRInfo: RecurrenceInfo) => {
+    const simulatedDate = TaskRecurrenceService.getSimulatedRecurrenceDate($task, (task) => {
+      task.recurrenceInfo = newRInfo;
+      return task;
+    });
+    if (!simulatedDate) {
+      return false;
+    }
+    if (simulatedDate < new Date()) {
+      dialogMessage =
+        `This update would case the next recurrence date to be ` +
+        `${DateService.getDateTimeString(simulatedDate)} which is before now. ` +
+        `This will cause the task to be updated immediately.` +
+        `Are you sure you want to do this?`;
+      return true;
+    }
+  };
+
+  const handleDialogConfirm = () => {
+    rInfo.setWithoutCheck(pendingRInfo);
+    dialogOpen = false;
+  };
+
+  const handleDialogCancel = () => {
+    rInfo.setWithoutCheck(JSON.parse(previousRInfoString));
+    dialogOpen = false;
+  };
 
   const handleTypeChange = (newRInfo: RecurrenceInfo) => {
     switch (newRInfo.frequency.type) {
@@ -166,7 +209,7 @@
     </Select>
     <div>
       <span>Updates on next task recurrence:</span>
-      {#if $rInfo.recurrenceEffect === RecurrenceEffect.stack && !taskIsCompleted}
+      {#if $rInfo.recurrenceEffect === RecurrenceEffect.stack && !$task.completed}
         <ul>
           <li>This task</li>
           <ul>
@@ -188,13 +231,21 @@
             newStartDate={exampleOfRecurrence.startDate}
             originalDueDate={dueDate}
             newDueDate={exampleOfRecurrence.dueDate}
-            completedRemoved={taskIsCompleted}
+            completedRemoved={$task.completed}
           />
         </ul>
       {/if}
     </div>
   </div>
 </div>
+
+<ConfirmationDialog
+  bind:open={dialogOpen}
+  title="Are you sure?"
+  message={dialogMessage}
+  on:cancel={handleDialogCancel}
+  on:confirm={handleDialogConfirm}
+/>
 
 <style>
   .content {

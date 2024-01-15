@@ -5,7 +5,7 @@
 -->
 <script lang="ts">
   import {
-    DashboardTaskService,
+    DashboardTask,
     RecurrenceBasis,
     RecurrenceEffect,
     RecurrenceFrequencyType,
@@ -18,6 +18,7 @@
   import Dialog, { Actions, Content as DialogContent, Title } from '@smui/dialog';
   import IconButton, { Icon } from '@smui/icon-button';
   import ClickableDiv from 'components/ClickableDiv.svelte';
+  import TaskRecurrenceService from 'util/Task/TaskRecurrenceService';
   import TaskService from 'util/Task/TaskService';
   import TaskRecurrenceDetails from './TaskRecurrenceDetails.svelte';
 
@@ -30,12 +31,24 @@
   let errorInfoDialogOpen = false;
   let errorInfoDialogTitle = '';
   let errorInfoDialogContent = '';
+  let defaultRecurrenceInfo: RecurrenceInfo;
   $: task = TaskService.getTaskStore(taskId);
   $: isRecurring = !!$task.recurrenceInfo;
   $: hasParentRecurringTask = !!$task.parentRecurringTaskInfo;
   $: hasChildRecurringTask = childTaskIds.some(
     (childTaskId) => !!$taskMap[childTaskId]?.recurrenceInfo
   );
+  $: defaultRecurrenceInfo = {
+    frequency: {
+      type: RecurrenceFrequencyType.everyXTimeUnit,
+      everyXTimeUnit: {
+        timeUnit: 'week',
+        x: 1
+      }
+    },
+    recurrenceBasis: $task.dueDate ? RecurrenceBasis.dueDate : RecurrenceBasis.startDate,
+    recurrenceEffect: RecurrenceEffect.rollOnCompletion
+  };
 
   /**
    * This is purposefully not synced to the task store, so that updates
@@ -48,18 +61,6 @@
     previousTaskId = taskId;
     recurringInfoOpen = false;
   }
-
-  let defaultRecurrenceInfo: RecurrenceInfo = {
-    frequency: {
-      type: RecurrenceFrequencyType.everyXTimeUnit,
-      everyXTimeUnit: {
-        timeUnit: 'week',
-        x: 1
-      }
-    },
-    recurrenceBasis: RecurrenceBasis.dueDate,
-    recurrenceEffect: RecurrenceEffect.rollOnCompletion
-  };
 
   const handleRecurringClick = () => {
     if (isRecurring) {
@@ -80,17 +81,8 @@
     }
   };
 
-  const updateRecurrenceInfo = (event: CustomEvent<RecurrenceInfo>) => {
-    $task.recurrenceInfo = event.detail;
-  };
-
-  const getNextRecurrenceDate = (recurrenceInfo: RecurrenceInfo) => {
-    let date: Date | null = null;
-    if (recurrenceInfo.recurrenceBasis === RecurrenceBasis.dueDate && $task.dueDate) {
-      date = $task.dueDate;
-    } else if (recurrenceInfo.recurrenceBasis === RecurrenceBasis.startDate && $task.startDate) {
-      date = DashboardTaskService.getNextFrequencyDate($task.startDate, recurrenceInfo.frequency);
-    }
+  const getNextRecurrenceDate = (task: DashboardTask): string => {
+    const date = TaskRecurrenceService.getNextRecurrenceDate(task);
     if (!date) {
       return 'Error: please tell Tony aboot this';
     }
@@ -129,7 +121,7 @@
               <span>Recurs: On Completion</span>
             {:else if $task.recurrenceInfo}
               <span>
-                Recurs: {getNextRecurrenceDate($task.recurrenceInfo)}
+                Recurs: {getNextRecurrenceDate($task)}
               </span>
             {:else}
               <span>Recurring</span>
@@ -142,15 +134,7 @@
         </IconButton>
       </div>
       <Content class="recurringPaperContent">
-        <TaskRecurrenceDetails
-          disabled={!isRecurring || hasParentRecurringTask}
-          recurrenceInfo={currentRecurrenceInfo}
-          on:change={updateRecurrenceInfo}
-          dueDate={$task.dueDate}
-          startDate={$task.startDate}
-          taskIsCompleted={$task.completed}
-          parentRecurringTaskInfo={$task.parentRecurringTaskInfo}
-        />
+        <TaskRecurrenceDetails {taskId} recurrenceInfo={currentRecurrenceInfo} />
       </Content>
     </Panel>
   </Accordion>

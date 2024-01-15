@@ -1,9 +1,4 @@
-import {
-  DashboardTask,
-  DashboardTaskService,
-  DocumentService,
-  RecurrenceEffect
-} from '@aneuhold/core-ts-db-lib';
+import { DashboardTask, DashboardTaskService, DocumentService } from '@aneuhold/core-ts-db-lib';
 import { ObjectId } from 'bson';
 import type { BreadCrumbArray } from 'components/BreadCrumb.svelte';
 import { writable, type Updater, type Writable } from 'svelte/store';
@@ -188,7 +183,6 @@ export default class TaskService {
     let previousStartDate = this._taskMap[taskId].startDate;
     let previousDueDate = this._taskMap[taskId].dueDate;
     let previousSharedWithLength = this._taskMap[taskId].sharedWith.length;
-    let previousCompleted = this._taskMap[taskId].completed;
 
     /**
      * Handles all logic for updating properties on an individual task.
@@ -212,13 +206,7 @@ export default class TaskService {
       }
 
       // Handle recurrence effect trigger
-      if (
-        watchRecurenceInfo &&
-        newTask.completed !== previousCompleted &&
-        newTask.recurrenceInfo?.recurrenceEffect === RecurrenceEffect.rollOnCompletion
-      ) {
-        console.log('Triggered recurrence effect for task');
-        // Don't set previousCompleted, because it will be reverted in this case.
+      if (watchRecurenceInfo && TaskRecurrenceService.taskShouldRecur(newTask)) {
         TaskRecurrenceService.executeRecurrenceForTask(newTask);
         return;
       }
@@ -233,7 +221,6 @@ export default class TaskService {
           newTask.dueDate?.getTime() !== previousDueDate?.getTime();
         if (recurrenceInfoChanged || datesAreDifferent || sharedWithChanged) {
           // Make changes to task and all sub-tasks
-          console.log('Updating child tasks...');
           this.getStore().updateTaskAndAllChildren(taskId, (task) => {
             if (task._id.toString() === taskId) {
               return newTask;
@@ -271,7 +258,6 @@ export default class TaskService {
       // Update the info that alone, doesn't trigger child-task updates
       previousDueDate = newTask.dueDate;
       previousStartDate = newTask.startDate;
-      previousCompleted = newTask.completed;
 
       // Handle normal singular task update
       this._taskMap[taskId] = newTask;
@@ -324,6 +310,10 @@ export default class TaskService {
           }
         });
         setTaskMap();
+        // Check if any tasks need to recur after everything has been set
+        Object.values(this._taskMap).forEach((task) => {
+          TaskRecurrenceService.executeRecurrenceIfNeeded(task);
+        });
       },
       addTask: (newTask: DashboardTask) => {
         newTask.description = '';

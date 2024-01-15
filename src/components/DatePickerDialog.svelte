@@ -52,6 +52,7 @@
   $: if (open && previousOpen !== open) {
     previousOpen = open;
     sveltyPickerVisible = true;
+    currentlySelectedDate = initialDate;
     tick().then(() => {
       dialogOpen = true;
     });
