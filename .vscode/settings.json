@@ -4,7 +4,7 @@
   "editor.formatOnSave": true,
   // Use ESLint for all file types that it supports (which still uses prettier behind the scenes)
   "[typescript][javascript][javascriptreact][typescriptreact]": {
-    "editor.defaultFormatter": null,
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
     "editor.formatOnSave": false
   },
   "editor.codeActionsOnSave": {

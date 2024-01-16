@@ -46,6 +46,19 @@
     deleteTask();
   }
 
+  function handleDuplicateClick() {
+    taskMap.duplicateTask(taskId, (task) => {
+      // Conditional to find the original task that is being duplicated
+      if (
+        !task.parentTaskId ||
+        ($task.parentTaskId && task.parentTaskId.toString() === $task.parentTaskId.toString())
+      ) {
+        task.title = `${task.title} (Copy)`;
+      }
+      return task;
+    });
+  }
+
   function getMenuItems(task: DashboardTask) {
     let menuItems: MenuButtonItem[] = [
       {
@@ -66,6 +79,11 @@
         }
       });
     }
+    menuItems.push({
+      title: 'Duplicate',
+      iconName: 'content_copy',
+      clickAction: handleDuplicateClick
+    });
     menuItems.push({
       title: 'Delete',
       iconName: 'delete',

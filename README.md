@@ -4,16 +4,19 @@
 
 Notes for improvement:
 
-- Making it so the user can see shared sub-tasks from other users on main view
-- Auto-focus the task title when creating a new one
-- Task list things
-  - Date picker, which leads to recurring tasks and due dates / start dates. Requirements are:
-    - Picking a particular individual date and time, with restrictions on which date range can be picked (forward or backward)
-      - Svelty-picker
-      - Normal input with type datetime (Maybe just for Android if that looks nice?)
-    - Make it so that defaultRecurrenceInfo is a deep copy when assigned. Otherwise it will propogate across the UI.
-- Maybe a progress bar for sub-task completion?
-- Design for completed tasks
+- 1️⃣ Task Recursion
+  - Background timer for updating tasks
+    - Only activate when the screen is visible perhaps? Actually probably just let it do it's thing. It will automatically run all the recursion stuff when the tasks are updated.
+- Filtering + Sorting
+  - Filter button at top of list
+  - Filter settings per-user
+  - Sort at top of list
+  - Sort settings per-user
+- Task Assignment
+- Little things
+  - Design for completed tasks
+  - Auto-focus the task title when creating a new one
+  - Maybe a progress bar for sub-task completion?
 - See if it can be made to work offline with [this guide](https://developers.google.com/codelabs/pwa-training/pwa03--going-offline#1)
 
 ## General Decisions + Info for Usage

@@ -331,6 +331,10 @@ export default class TaskService {
           insert: [newTask]
         });
       },
+      /**
+       * Duplicates the given task and all of its children. The new task will
+       * be given a new ID and the given updater will be applied to it.
+       */
       duplicateTask: (
         taskId: string,
         newTaskUpdater: Updater<DashboardTask>,
@@ -344,12 +348,21 @@ export default class TaskService {
         allRelatedTaskIds.push(parentTask._id);
         const tasksToUpdate: DashboardTask[] = [];
         const tasksToInsert: DashboardTask[] = [];
+        const oldTaskIdToNewTaskId: { [oldId: string]: ObjectId } = {};
         allRelatedTaskIds.forEach((id) => {
           let newTask = DocumentService.deepCopy(this._taskMap[id.toString()]);
           newTask._id = new ObjectId();
+          oldTaskIdToNewTaskId[id.toString()] = newTask._id;
           newTask = newTaskUpdater(newTask);
           tasksToInsert.push(newTask);
           this._taskMap[newTask._id.toString()] = newTask;
+        });
+        // Map back through and update parent task IDs. Don't update the
+        // original task though, as that should retain it's current parent.
+        tasksToInsert.forEach((task) => {
+          if (task.parentTaskId && task._id.toString() !== taskId) {
+            task.parentTaskId = oldTaskIdToNewTaskId[task.parentTaskId.toString()];
+          }
         });
         if (originalTaskUpdater) {
           allRelatedTaskIds.forEach((id) => {
