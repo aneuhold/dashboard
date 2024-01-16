@@ -4,9 +4,6 @@
 
 Notes for improvement:
 
-- 1️⃣ Task Recursion
-  - Background timer for updating tasks
-    - Only activate when the screen is visible perhaps? Actually probably just let it do it's thing. It will automatically run all the recursion stuff when the tasks are updated.
 - Filtering + Sorting
   - Filter button at top of list
   - Filter settings per-user

@@ -12,6 +12,7 @@
   import ConfirmationDialog from 'components/ConfirmationDialog.svelte';
   import type { MenuButtonItem } from 'components/MenuButton.svelte';
   import MenuButton from 'components/MenuButton.svelte';
+  import { onMount } from 'svelte';
   import TaskService from 'util/Task/TaskService';
   import { userSettings } from '../../stores/userSettings';
   import TaskCompletedCheckbox from './TaskCompletedCheckbox.svelte';
@@ -21,14 +22,34 @@
 
   let deleteDialogOpen = false;
   let shareDialogOpen = false;
-  $: task = TaskService.getTaskStore(taskId);
+  /**
+   * Used so that the animation doesn't play every time the task shows up,
+   * only when completed is clicked.
+   */
+  let completeAnimationShouldShow = false;
+  let previousTaskCompletedState: boolean;
+  let hasMounted = false;
   let taskMap = TaskService.getStore();
+
+  $: task = TaskService.getTaskStore(taskId);
   $: allChildrenIds = $task
     ? DashboardTaskService.getChildrenIds(Object.values($taskMap), [$task._id])
     : [];
   $: hasExtraTaskInfo = allChildrenIds.length > 0;
   $: finalParentId = TaskService.findParentIdWithSameSharedWith($task);
   $: menuItems = getMenuItems($task);
+  $: currentStrikeClass =
+    completeAnimationShouldShow && $task.completed
+      ? ' strikeAnimate'
+      : $task.completed
+        ? ' strike'
+        : '';
+  $: currentDimClass =
+    completeAnimationShouldShow && $task.completed ? ' dimAnimate' : $task.completed ? ' dim' : '';
+
+  $: if ($task.completed !== previousTaskCompletedState && hasMounted) {
+    completeAnimationShouldShow = true;
+  }
 
   function goToTask() {
     goto(TaskService.getTaskRoute(taskId));
@@ -91,6 +112,11 @@
     });
     return menuItems;
   }
+
+  onMount(() => {
+    previousTaskCompletedState = $task.completed;
+    hasMounted = true;
+  });
 </script>
 
 <div class="container">
@@ -98,43 +124,46 @@
     <CardContent>
       <div class="card-content">
         <TaskCompletedCheckbox {taskId} />
+
         <ClickableDiv clickAction={goToTask}>
-          <h4 class="mdc-typography--body1 title">
-            {#if $task.title !== ''}
-              <span>{$task.title}</span>
-            {:else}
-              <i class="dimmed-color">Untitled</i>
-            {/if}
-            {#if $task.sharedWith.length > 0}
-              <Icon class="material-icons dimmed-color small-icon">group</Icon>
-            {/if}
-            {#if $task.recurrenceInfo}
-              <Icon class="material-icons dimmed-color small-icon">autorenew</Icon>
-            {/if}
-            {#if $task.tags.length > 0}
-              <div class="tagsContainer">
-                <Icon class="material-icons dimmed-color small-icon">sell</Icon>
-                {#each $task.tags as tag, index}
-                  <i class="mdc-typography--caption mdc-theme--text-hint-on-background">
-                    {`${tag}${index === $task.tags.length - 1 ? '' : ', '}`}
-                  </i>
-                {/each}
+          <div class={currentDimClass}>
+            <h4 class={`mdc-typography--body1 title${currentStrikeClass}`}>
+              {#if $task.title !== ''}
+                <span>{$task.title}</span>
+              {:else}
+                <i class="dimmed-color">Untitled</i>
+              {/if}
+              {#if $task.sharedWith.length > 0}
+                <Icon class="material-icons dimmed-color small-icon">group</Icon>
+              {/if}
+              {#if $task.recurrenceInfo}
+                <Icon class="material-icons dimmed-color small-icon">autorenew</Icon>
+              {/if}
+              {#if $task.tags.length > 0}
+                <div class="tagsContainer">
+                  <Icon class="material-icons dimmed-color small-icon">sell</Icon>
+                  {#each $task.tags as tag, index}
+                    <i class="mdc-typography--caption mdc-theme--text-hint-on-background">
+                      {`${tag}${index === $task.tags.length - 1 ? '' : ', '}`}
+                    </i>
+                  {/each}
+                </div>
+              {/if}
+            </h4>
+
+            {#if $task.description && $task.description !== ''}
+              <div class="mdc-deprecated-list-item__secondary-text subtitle">
+                {$task.description}
               </div>
             {/if}
-          </h4>
-
-          {#if $task.description && $task.description !== ''}
-            <div class="mdc-deprecated-list-item__secondary-text subtitle">
-              {$task.description}
-            </div>
-          {/if}
-          {#if hasExtraTaskInfo}
-            <div class="mdc-typography--caption mdc-theme--text-hint-on-background extraTaskInfo">
-              {#if allChildrenIds.length > 0}
-                {allChildrenIds.length} child task{allChildrenIds.length > 1 ? 's' : ''}
-              {/if}
-            </div>
-          {/if}
+            {#if hasExtraTaskInfo}
+              <div class="mdc-typography--caption mdc-theme--text-hint-on-background extraTaskInfo">
+                {#if allChildrenIds.length > 0}
+                  {allChildrenIds.length} child task{allChildrenIds.length > 1 ? 's' : ''}
+                {/if}
+              </div>
+            {/if}
+          </div>
         </ClickableDiv>
         <MenuButton {menuItems} alignCenterVertically />
       </div>
@@ -188,5 +217,61 @@
   .card-content {
     display: grid;
     grid-template-columns: min-content 1fr min-content;
+  }
+  .dim {
+    opacity: 0.3;
+  }
+  .dimAnimate {
+    animation-name: dim;
+    animation-duration: 1s;
+    animation-timing-function: cubic-bezier(0.5, 1, 0.5, 1);
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+  }
+  .strike {
+    position: relative;
+    &::after {
+      content: ' ';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      opacity: 0.3;
+      background: var(--mdc-theme-text-primary-on-background);
+    }
+  }
+  .strikeAnimate {
+    position: relative;
+  }
+  .strikeAnimate::after {
+    content: ' ';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: var(--mdc-theme-text-primary-on-background);
+    animation-name: strike;
+    animation-duration: 1s;
+    animation-timing-function: cubic-bezier(0.5, 1, 0.5, 1);
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+  }
+  @keyframes dim {
+    0% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0.3;
+    }
+  }
+  @keyframes strike {
+    0% {
+      width: 0;
+    }
+    100% {
+      width: 100%;
+    }
   }
 </style>
