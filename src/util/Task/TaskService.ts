@@ -16,6 +16,12 @@ export interface TaskStore extends Writable<DashboardTask> {
 }
 export type TaskStores = { [objectId: string]: TaskStore };
 
+/**
+ * The main task service.
+ *
+ * This might be able to be refactored a bit to layer updates, in the form
+ * of like middleware steps.
+ */
 export default class TaskService {
   /**
    * The backing value of the taskMap.
@@ -245,6 +251,8 @@ export default class TaskService {
           if (!newTask.recurrenceInfo || newTask.parentRecurringTaskInfo) {
             watchRecurenceInfo = false;
           }
+          // Update the time subscription just in case
+          TaskRecurrenceService.updateOrRemoveTaskTimeSubscription(newTask);
           // Update all the previous values
           previousRecurrenceInfoString = newRecurrenceInfoString;
           previousStartDate = newTask.startDate;
@@ -314,6 +322,7 @@ export default class TaskService {
         Object.values(this._taskMap).forEach((task) => {
           TaskRecurrenceService.executeRecurrenceIfNeeded(task);
         });
+        TaskRecurrenceService.buildTaskRecurrenceSubMapFresh(this._taskMap);
       },
       addTask: (newTask: DashboardTask) => {
         newTask.description = '';
@@ -327,6 +336,9 @@ export default class TaskService {
         }
         this._taskMap[newTask._id.toString()] = newTask;
         setTaskMap();
+        // Add to time subscription if needed
+        TaskRecurrenceService.updateOrRemoveTaskTimeSubscription(newTask);
+        // Make the API call
         DashboardTaskAPIService.updateTasks({
           insert: [newTask]
         });
@@ -373,6 +385,8 @@ export default class TaskService {
             if (taskStore) {
               taskStore.setWithoutPropogation(updatedTask);
             }
+            // Update the time subscription if needed
+            TaskRecurrenceService.updateOrRemoveTaskTimeSubscription(updatedTask);
           });
         }
         setTaskMap();
@@ -398,6 +412,7 @@ export default class TaskService {
           if (this.currentTaskStores[task._id.toString()]) {
             delete this.currentTaskStores[task._id.toString()];
           }
+          TaskRecurrenceService.removeTaskTimeSubscription(task._id.toString());
         });
         setTaskMap();
       },

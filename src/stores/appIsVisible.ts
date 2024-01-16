@@ -15,7 +15,8 @@ function createAppIsVisibleStore() {
           DashboardAPIService.getInitialDataIfNeeded();
         }
       }
-    }
+    },
+    get: () => _appIsVisible
   };
 }
 

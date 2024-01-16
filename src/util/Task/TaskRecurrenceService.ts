@@ -8,13 +8,24 @@ import {
   type RecurrenceInfo
 } from '@aneuhold/core-ts-db-lib';
 import { ObjectId } from 'bson';
-import type { Updater } from 'svelte/store';
-import TaskService from './TaskService';
+import type { Unsubscriber, Updater } from 'svelte/store';
+import DashboardAPIService from 'util/api/DashboardAPIService';
+import { appIsVisible } from '../../stores/appIsVisible';
+import { timeMinute } from '../../stores/timeMinute';
+import TaskService, { type TaskMap } from './TaskService';
+
+type TaskRecurrenceSubMap = { [taskId: string]: Unsubscriber };
 
 /**
  * A service for handling logic related to recurrence on tasks.
  */
 export default class TaskRecurrenceService {
+  /**
+   * The map of task IDs to the their associated unsubscriber. The unsubscriber
+   * comes from subscribing to the {@link timeMinute} store.
+   */
+  private static taskRecurrenceSubMap: TaskRecurrenceSubMap = {};
+
   /**
    * Creates an example of what would happen to a task if the recurrence
    * were to occur.
@@ -151,6 +162,61 @@ export default class TaskRecurrenceService {
     let taskCopy = DocumentService.deepCopy(originalTask);
     taskCopy = updater(taskCopy);
     return this.getNextRecurrenceDate(taskCopy);
+  }
+
+  /**
+   * This should only be called by the taskMap store when it is updated.
+   */
+  static buildTaskRecurrenceSubMapFresh(taskMap: TaskMap): void {
+    // Clear the current map
+    Object.values(this.taskRecurrenceSubMap).forEach((unsub) => unsub());
+    this.taskRecurrenceSubMap = {};
+    // Build the new map
+    Object.values(taskMap).forEach((task) => {
+      this.updateOrRemoveTaskTimeSubscription(task);
+    });
+  }
+
+  /**
+   * Attaches the provided task to the timeMinute store if it is not already
+   * attached, and if it fits the conditions to be attached.
+   *
+   * This will also remove the task from the timeMinute store if it is attached
+   * and no longer fits the conditions to be attached.
+   *
+   * This should be called whenever a task's recurrence info is updated.
+   */
+  static updateOrRemoveTaskTimeSubscription(task: DashboardTask) {
+    // Remove the current subscription if it exists
+    this.removeTaskTimeSubscription(task._id.toString());
+    if (
+      !task.parentRecurringTaskInfo &&
+      task.recurrenceInfo &&
+      task.recurrenceInfo.recurrenceEffect !== RecurrenceEffect.rollOnCompletion
+    ) {
+      const nextRecurrenceDate = this.getNextRecurrenceDate(task);
+      if (nextRecurrenceDate) {
+        this.taskRecurrenceSubMap[task._id.toString()] = timeMinute.subscribe((newDate) => {
+          if (newDate > nextRecurrenceDate) {
+            // Only run if the app is visible, otherwise, wait until it is
+            // visible.
+            if (appIsVisible.get()) {
+              // The decision was made to pull all tasks from the DB first before
+              // triggering recurrence. This is because it could be left open
+              // for a long time and updates sent to the backend could be stale.
+              DashboardAPIService.getInitialDataIfNeeded();
+            }
+          }
+        });
+      }
+    }
+  }
+
+  static removeTaskTimeSubscription(taskId: string) {
+    if (this.taskRecurrenceSubMap[taskId]) {
+      this.taskRecurrenceSubMap[taskId]();
+      delete this.taskRecurrenceSubMap[taskId];
+    }
   }
 
   /**
