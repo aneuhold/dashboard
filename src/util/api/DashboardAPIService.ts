@@ -51,6 +51,7 @@ export default class DashboardAPIService {
    */
   static async getInitialData(): Promise<boolean> {
     console.log('Getting initial data...');
+    const wasFirstSync = !this.lastInitialDataFetchTime;
     this.lastInitialDataFetchTime = Date.now();
     const apiKeyValue = this.checkOrSetupDashboardAPI();
     const result = await APIService.callDashboardAPI({
@@ -81,7 +82,9 @@ export default class DashboardAPIService {
       LocalData.currentTaskQueueItem = undefined;
       loginState.set(LoginState.LoggedIn);
       console.info('Successfully got initial data');
-      snackbar.success('Successfully synced 🎉');
+      if (wasFirstSync) {
+        snackbar.success('Successfully synced 🎉');
+      }
       return true;
     } else {
       console.error('Error getting initial data', result);
