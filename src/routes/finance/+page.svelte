@@ -120,10 +120,9 @@
     },
     {
       title: 'Experian',
-      description:
-        'Link to the Experian credit freeze page. Something is going on with the account though and cant login at the moment',
+      description: 'Link to the Experian credit freeze page.',
       clickAction: () => {
-        window.open('https://www.experian.com/freeze/center.html', '_blank');
+        window.open('https://usa.experian.com/mfe/regulatory/security-freeze', '_blank');
       },
       iconName: 'lock'
     },
@@ -175,8 +174,8 @@
       </p>
       <h6 class="section-title">Credit</h6>
       <p>
-        Everything except experian is frozen until something big needs to happen for now. Might need
-        to unfreeze if the credit card stops working. <a
+        Everything is frozen until something big needs to happen for now. Might need to unfreeze if
+        the credit card stops working. <a
           href="https://www.reddit.com/r/privacy/comments/15ifig8/has_anyone_used_kroll_monitoring_services/"
           >Here is a link to a helpful reddit thread</a
         > about credit and social security monitoring.
