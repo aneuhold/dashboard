@@ -16,6 +16,7 @@
   import TaskService from 'util/Task/TaskService';
   import { userSettings } from '../../stores/userSettings';
   import TaskCompletedCheckbox from './TaskCompletedCheckbox.svelte';
+  import TaskRowDateInfo from './TaskDate/TaskRowDateInfo.svelte';
   import TaskSharingDialog from './TaskSharingDialog.svelte';
 
   export let taskId: string;
@@ -121,10 +122,9 @@
 
 <div class="container">
   <Card>
-    <CardContent>
+    <CardContent class="taskRowCard">
       <div class="card-content">
         <TaskCompletedCheckbox {taskId} />
-
         <ClickableDiv clickAction={goToTask}>
           <div class={currentDimClass}>
             <h4 class={`mdc-typography--body1 title${currentStrikeClass}`}>
@@ -150,7 +150,7 @@
                 </div>
               {/if}
             </h4>
-
+            <TaskRowDateInfo {taskId} />
             {#if $task.description && $task.description !== ''}
               <div class="mdc-deprecated-list-item__secondary-text subtitle">
                 {$task.description}
@@ -183,6 +183,10 @@
 <TaskSharingDialog {taskId} bind:open={shareDialogOpen} />
 
 <style>
+  * :global(.taskRowCard) {
+    padding-left: 0px;
+    padding-right: 0px;
+  }
   .container {
     padding: 2px;
   }
@@ -190,6 +194,7 @@
     margin-top: 4px;
     margin-bottom: 0px;
     text-wrap: wrap;
+    max-height: 1lh;
   }
   .subtitle::before {
     display: none;
