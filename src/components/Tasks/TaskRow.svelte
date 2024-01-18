@@ -8,10 +8,10 @@
   import { DashboardTask, DashboardTaskService } from '@aneuhold/core-ts-db-lib';
   import Card, { Content as CardContent } from '@smui/card';
   import { Icon } from '@smui/icon-button';
-  import ClickableDiv from 'components/ClickableDiv.svelte';
   import ConfirmationDialog from 'components/ConfirmationDialog.svelte';
-  import type { MenuButtonItem } from 'components/MenuButton.svelte';
-  import MenuButton from 'components/MenuButton.svelte';
+  import ClickableDiv from 'components/presentational/ClickableDiv.svelte';
+  import type { MenuButtonItem } from 'components/presentational/MenuButton.svelte';
+  import MenuButton from 'components/presentational/MenuButton.svelte';
   import { onMount } from 'svelte';
   import TaskService from 'util/Task/TaskService';
   import { userSettings } from '../../stores/userSettings';

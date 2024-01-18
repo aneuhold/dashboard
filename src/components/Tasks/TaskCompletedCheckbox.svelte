@@ -3,7 +3,7 @@
   import ConfirmationDialog from 'components/ConfirmationDialog.svelte';
   import { snackbar } from 'components/Snackbar.svelte';
   import TaskService from 'util/Task/TaskService';
-  import ClickableDiv from '../ClickableDiv.svelte';
+  import ClickableDiv from '../presentational/ClickableDiv.svelte';
 
   export let taskId: string;
 

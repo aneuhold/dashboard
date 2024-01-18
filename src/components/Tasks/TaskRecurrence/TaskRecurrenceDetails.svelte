@@ -14,8 +14,8 @@
   import { DateService } from '@aneuhold/core-ts-lib';
   import Select, { Option } from '@smui/select';
   import ConfirmationDialog from 'components/ConfirmationDialog.svelte';
-  import InputBox from 'components/InputBox.svelte';
   import WeekdaySegmentedButton from 'components/WeekdaySegmentedButton.svelte';
+  import InputBox from 'components/presentational/InputBox.svelte';
   import { writable, type Updater } from 'svelte/store';
   import TaskRecurrenceService from 'util/Task/TaskRecurrenceService';
   import TaskService from 'util/Task/TaskService';

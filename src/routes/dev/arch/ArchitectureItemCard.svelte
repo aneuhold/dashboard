@@ -13,8 +13,8 @@
   import Card, { Content as CardContent } from '@smui/card';
   import { Icon } from '@smui/icon-button';
   import Tooltip, { Wrapper } from '@smui/tooltip';
-  import type { MenuButtonItem } from 'components/MenuButton.svelte';
-  import MenuButton from 'components/MenuButton.svelte';
+  import type { MenuButtonItem } from 'components/presentational/MenuButton.svelte';
+  import MenuButton from 'components/presentational/MenuButton.svelte';
   import ArchitectureInfo from 'util/ArchitectureInfo/ArchitectureInfo';
   import type { ArchitectureComponent } from 'util/ArchitectureInfo/architectureComponents';
 

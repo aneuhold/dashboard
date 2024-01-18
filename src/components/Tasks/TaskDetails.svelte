@@ -14,14 +14,14 @@
   import Button, { Icon } from '@smui/button';
   import Paper, { Content } from '@smui/paper';
   import BreadCrumb from 'components/BreadCrumb.svelte';
-  import FabButton from 'components/FabButton.svelte';
-  import InputBox from 'components/InputBox.svelte';
   import PageTitle from 'components/PageTitle.svelte';
+  import FabButton from 'components/presentational/FabButton.svelte';
+  import InputBox from 'components/presentational/InputBox.svelte';
   import TaskService from 'util/Task/TaskService';
   import ConfirmationDialog from '../ConfirmationDialog.svelte';
   import TaskCompletedCheckbox from './TaskCompletedCheckbox.svelte';
   import TaskDateInfo from './TaskDate/TaskDateInfo.svelte';
-  import TaskList from './TaskList.svelte';
+  import TaskList from './TaskList/TaskList.svelte';
   import TaskRecurrenceInfo from './TaskRecurrence/TaskRecurrenceInfo.svelte';
   import TaskShareButton from './TaskShareButton.svelte';
   import TaskSharingInfo from './TaskSharingInfo.svelte';

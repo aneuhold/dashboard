@@ -6,7 +6,7 @@
   } from '@aneuhold/core-ts-api-lib';
   import Button, { Label } from '@smui/button';
   import CircularProgress from '@smui/circular-progress';
-  import InputBox from 'components/InputBox.svelte';
+  import InputBox from 'components/presentational/InputBox.svelte';
   import LocalData from 'util/LocalData';
   import DashboardAPIService from 'util/api/DashboardAPIService';
   import { apiKey } from '../stores/apiKey';

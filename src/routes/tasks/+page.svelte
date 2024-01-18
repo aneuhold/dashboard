@@ -7,10 +7,10 @@
   import { goto } from '$app/navigation';
   import { page } from '$app/stores';
   import { DashboardTask } from '@aneuhold/core-ts-db-lib';
-  import FabButton from 'components/FabButton.svelte';
   import PageTitle from 'components/PageTitle.svelte';
   import TaskDetails from 'components/Tasks/TaskDetails.svelte';
-  import TaskList from 'components/Tasks/TaskList.svelte';
+  import TaskList from 'components/Tasks/TaskList/TaskList.svelte';
+  import FabButton from 'components/presentational/FabButton.svelte';
   import TaskService from 'util/Task/TaskService';
   import { userSettings } from '../../stores/userSettings';
   import { tasksPageInfo } from './pageInfo';

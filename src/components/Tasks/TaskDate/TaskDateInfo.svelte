@@ -2,7 +2,7 @@
   import { RecurrenceBasis } from '@aneuhold/core-ts-db-lib';
   import { DateService } from '@aneuhold/core-ts-lib';
   import ConfirmationDialog from 'components/ConfirmationDialog.svelte';
-  import DatePickerDialog from 'components/DatePickerDialog.svelte';
+  import DatePickerDialog from 'components/presentational/DatePickerDialog.svelte';
   import TaskRecurrenceService from 'util/Task/TaskRecurrenceService';
   import TaskService from 'util/Task/TaskService';
   import TaskDateButton from './TaskDateButton.svelte';
