@@ -15,27 +15,19 @@
     "@jridgewell/gen-mapping" "^0.3.0"
     "@jridgewell/trace-mapping" "^0.3.9"
 
-"@aneuhold/core-ts-api-lib@^1.0.29":
-  version "1.0.29"
-  resolved "https://registry.yarnpkg.com/@aneuhold/core-ts-api-lib/-/core-ts-api-lib-1.0.29.tgz#3fee6100cdaddc303945c8ca1685e218393ebe2f"
-  integrity sha512-7g3GJSvqAspOF8VYjq3Khr6CVpYXAHLqAgMcdRiAR+8zBjkfXxdBbuXLHvXdMX2ljtHHgkrsRqXDnkxS9Hmb5w==
+"@aneuhold/core-ts-api-lib@^1.0.32":
+  version "1.0.32"
+  resolved "https://registry.yarnpkg.com/@aneuhold/core-ts-api-lib/-/core-ts-api-lib-1.0.32.tgz#7da17659942e74406a0b3b763e3928895fc4adc2"
+  integrity sha512-eZNA4MCot8Vc1F+2jTFbfRYsNMoNOaqKvJsSjFqxLmfcHnm8D+46flGtT0QxCKqeCsN8nMytSKs1Bl8nxpae0g==
   dependencies:
-    "@aneuhold/core-ts-db-lib" "^1.0.26"
+    "@aneuhold/core-ts-db-lib" "^1.0.30"
     "@aneuhold/core-ts-lib" "^1.1.10"
     bson "^6.2.0"
 
-"@aneuhold/core-ts-db-lib@^1.0.26":
-  version "1.0.26"
-  resolved "https://registry.yarnpkg.com/@aneuhold/core-ts-db-lib/-/core-ts-db-lib-1.0.26.tgz#4c63b8a6a25218b01b98f75b04c46d34b0781e65"
-  integrity sha512-8kguYau1Ls/fFWVLvEYjGQZ7UQHOBHOoPctbJgvocM9rCllVwArE9xQv3397JdbCrgmxdNI8+MHWShogNPTuhQ==
-  dependencies:
-    "@aneuhold/core-ts-lib" "^1.1.10"
-    bson "^6.2.0"
-
-"@aneuhold/core-ts-db-lib@^1.0.28":
-  version "1.0.28"
-  resolved "https://registry.yarnpkg.com/@aneuhold/core-ts-db-lib/-/core-ts-db-lib-1.0.28.tgz#ad0bb5f72885c45104f978107ab6e23682da6f9c"
-  integrity sha512-bIZkteqhURD4Y+ZrcDgtuFN+aI5Du+5LsmIU2dX2hvS3kSo3c1yjkCE8DGPK+ZfDfJfcoftisWBt92k8VlBpdQ==
+"@aneuhold/core-ts-db-lib@^1.0.30":
+  version "1.0.30"
+  resolved "https://registry.yarnpkg.com/@aneuhold/core-ts-db-lib/-/core-ts-db-lib-1.0.30.tgz#39fdd8196eb2ba99d3986cd3794a6798277090a7"
+  integrity sha512-cQiDO4fPPOI45oA2Arp9z8Es8KxD6mFyFD51QNpcR14Ccv+opuSOCl607ACgGayj6NDtuQ+Z7kGVv1ofWarCFA==
   dependencies:
     "@aneuhold/core-ts-lib" "^1.1.10"
     bson "^6.2.0"

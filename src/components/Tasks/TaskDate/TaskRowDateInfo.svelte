@@ -10,6 +10,9 @@
 <div class="container mdc-typography--caption mdc-theme--text-hint-on-background">
   {#if $task.startDate}
     <span class="date">Starts: {DateService.getDateString($task.startDate)}</span>
+  {:else}
+    <!--Empty div to ensure the due date is always on the right-->
+    <div></div>
   {/if}
   {#if $task.dueDate}
     <span class={`date${pastDue ? ' pastDue' : ''}`}>

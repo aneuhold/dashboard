@@ -17,7 +17,9 @@
   import PageTitle from 'components/PageTitle.svelte';
   import FabButton from 'components/presentational/FabButton.svelte';
   import InputBox from 'components/presentational/InputBox.svelte';
+  import TaskListService from 'util/Task/TaskListService';
   import TaskService from 'util/Task/TaskService';
+  import { userSettings } from '../../stores/userSettings';
   import ConfirmationDialog from '../ConfirmationDialog.svelte';
   import TaskCompletedCheckbox from './TaskCompletedCheckbox.svelte';
   import TaskDateInfo from './TaskDate/TaskDateInfo.svelte';
@@ -31,17 +33,13 @@
 
   let deleteDialogOpen = false;
   let taskMap = TaskService.getStore();
-  $: task = $taskMap[taskId] ? TaskService.getTaskStore(taskId) : null;
-  $: subTaskIds = $task
-    ? Object.values($taskMap)
-        .filter((taskValue) => taskValue.parentTaskId?.toString() === taskId)
-        .map((taskValue) => taskValue._id.toString())
-    : [];
+  $: task = $taskMap[taskId] ? TaskService.getTaskStore(taskId) : undefined;
   $: allChildrenIds = $task
     ? DashboardTaskService.getChildrenIds(Object.values($taskMap), [$task._id]).map((id) =>
         id.toString()
       )
     : [];
+  $: subTaskIds = TaskListService.getTaskIdsForTask($taskMap, $userSettings, allChildrenIds, $task);
   // Explicitly include `task` so that it reactively updates
   $: breadCrumbArray = TaskService.getBreadCrumbArray($task ? $task._id.toString() : taskId);
 

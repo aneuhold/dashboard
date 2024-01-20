@@ -7,26 +7,28 @@
   import Autocomplete from '@smui-extra/autocomplete';
   import Chip, { Set, Text, TrailingAction } from '@smui/chips';
   import TaskService from 'util/Task/TaskService';
+  import TaskTagsService from 'util/Task/TaskTagsService';
+  import { currentUserId } from '../../stores/derived/currentUserId';
 
   export let taskId: string;
 
   $: task = TaskService.getTaskStore(taskId);
-  $: globalTags = TaskService.getTaskTagsStore();
-  $: unselectedTags = $globalTags.filter((tag) => !$task.tags.includes(tag));
+  $: globalTags = TaskTagsService.getStore();
+  $: unselectedTags = $globalTags.filter((tag) => !$task.tags[$currentUserId]?.includes(tag));
   // This needs to be redirected like this so that the Set component doesn't
   // make a small write on startup.
-  $: currentTags = $task.tags;
+  $: currentTags = $task.tags[$currentUserId] ?? [];
 
   let currentAutoCompleteValue = '';
   let selector: Autocomplete;
 
   function addTagToTask(tag: string) {
-    $task.tags.push(tag);
+    $task.tags[$currentUserId].push(tag);
     $task.tags = $task.tags;
   }
 
   function checkAndAddNewTag(newTag: string) {
-    if (newTag === '' || $task.tags.includes(newTag)) return;
+    if (newTag === '' || $task.tags[$currentUserId].includes(newTag)) return;
     addTagToTask(newTag);
     currentAutoCompleteValue = '';
     selector.focus();
@@ -42,7 +44,9 @@
    * Handles removal. The actual event is an internal MDC Chip Removal event.
    */
   function handleRemoval(event: CustomEvent<{ chipId: string }>) {
-    $task.tags = $task.tags.filter((tag) => tag !== event.detail.chipId);
+    $task.tags[$currentUserId] = $task.tags[$currentUserId].filter(
+      (tag) => tag !== event.detail.chipId
+    );
   }
 
   function handleNewSelection() {
@@ -57,9 +61,9 @@
   }
 </script>
 
-<div class={`tagsSelectorContainer${$task.tags.length > 0 ? ' reducedTopMargin' : ''}`}>
+<div class={`tagsSelectorContainer${currentTags.length > 0 ? ' reducedTopMargin' : ''}`}>
   <div class="tagChipsContainer">
-    {#if $task.tags.length === 0}
+    {#if currentTags.length === 0}
       <i class="mdc-typography--body2 subTasksTitle dimmed-color">No tags</i>
     {:else}
       <span>Tags</span>
@@ -86,7 +90,7 @@
     on:SMUIAutocomplete:selected={handleSelection}
   >
     <div slot="no-matches">
-      {#if $task.tags.includes(currentAutoCompleteValue)}
+      {#if currentTags.includes(currentAutoCompleteValue)}
         <Text>Tag "{currentAutoCompleteValue}" already added</Text>
       {:else}
         <Text>Add tag "{currentAutoCompleteValue}"</Text>

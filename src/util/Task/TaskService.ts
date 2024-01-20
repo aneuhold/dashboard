@@ -5,6 +5,7 @@ import { writable, type Updater, type Writable } from 'svelte/store';
 import LocalData, { localDataReady } from '../LocalData';
 import DashboardTaskAPIService from '../api/DashboardTaskAPIService';
 import TaskRecurrenceService from './TaskRecurrenceService';
+import TaskTagsService from './TaskTagsService';
 
 export type TaskMap = { [objectId: string]: DashboardTask };
 export interface TaskStore extends Writable<DashboardTask> {
@@ -35,7 +36,6 @@ export default class TaskService {
    * multiple stores for the same task.
    */
   private static currentTaskStores: TaskStores = {};
-  private static taskTagsStore: Writable<string[]> | undefined;
 
   /**
    * The store which contains all tasks in the app. This will only trigger an
@@ -59,13 +59,6 @@ export default class TaskService {
       this.currentTaskStores[taskId] = this.createTaskStore(taskId);
     }
     return this.currentTaskStores[taskId];
-  }
-
-  static getTaskTagsStore() {
-    if (!this.taskTagsStore) {
-      this.taskTagsStore = writable<string[]>(this.getAllTaskTags());
-    }
-    return this.taskTagsStore;
   }
 
   static getTaskRoute(taskId: string, includeFirstSlash = true) {
@@ -157,25 +150,12 @@ export default class TaskService {
     }
   }
 
-  private static getAllTaskTags() {
-    const allTaskTagsMap = Object.values(this._taskMap).reduce(
-      (tags, task) => {
-        task.tags.forEach((tag) => {
-          tags[tag] = true;
-        });
-        return tags;
-      },
-      {} as Record<string, boolean>
-    );
-    return Object.keys(allTaskTagsMap);
-  }
-
-  private static updateTaskTags() {
-    if (this.taskTagsStore) {
-      this.taskTagsStore.set(this.getAllTaskTags());
-    } else {
-      this.taskTagsStore = writable<string[]>(this.getAllTaskTags());
-    }
+  /**
+   * Gets the current state of the task map. Use only when it is really needed.
+   * Otherwise, use the store.
+   */
+  static getCurrentTaskMap() {
+    return this._taskMap;
   }
 
   private static createTaskStore(taskId: string): TaskStore {
@@ -202,7 +182,7 @@ export default class TaskService {
       // Handle updating the task tags. This happens no matter what because
       // it is separate from the task itself.
       if (previousTagsLength !== newTagsLength) {
-        this.updateTaskTags();
+        TaskTagsService.updateTaskTagsStore();
         previousTagsLength = newTagsLength;
       }
 
@@ -303,7 +283,7 @@ export default class TaskService {
     const setTaskMap = () => {
       set(this._taskMap);
       LocalData.taskMap = this._taskMap;
-      this.updateTaskTags();
+      TaskTagsService.updateTaskTagsStore();
     };
 
     return {

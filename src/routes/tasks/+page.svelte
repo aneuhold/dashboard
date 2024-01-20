@@ -11,19 +11,14 @@
   import TaskDetails from 'components/Tasks/TaskDetails.svelte';
   import TaskList from 'components/Tasks/TaskList/TaskList.svelte';
   import FabButton from 'components/presentational/FabButton.svelte';
+  import TaskListService from 'util/Task/TaskListService';
   import TaskService from 'util/Task/TaskService';
   import { userSettings } from '../../stores/userSettings';
   import { tasksPageInfo } from './pageInfo';
 
   const taskMap = TaskService.getStore();
 
-  $: taskIds = Object.keys($taskMap).filter((taskId) => {
-    const parentTaskId = $taskMap[taskId].parentTaskId;
-    if (!parentTaskId) return true;
-    // Conditional for shared subtasks
-    if (!$taskMap[parentTaskId.toString()]) return true;
-    return false;
-  });
+  $: taskIds = TaskListService.getTaskIds($taskMap, $userSettings, 'default');
   $: taskId = $page.url.searchParams.get('taskId');
 
   function addTask() {

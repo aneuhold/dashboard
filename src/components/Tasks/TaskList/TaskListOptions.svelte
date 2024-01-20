@@ -1,29 +1,34 @@
 <script lang="ts">
-  import Button, { Icon } from '@smui/button';
+  import ClickableDiv from 'components/presentational/ClickableDiv.svelte';
+  import SquareIconButton from 'components/presentational/SquareIconButton.svelte';
+
+  let sortDisabled = false;
+  let filterDisabled = false;
 </script>
 
 <div class="container">
-  <Button>Test</Button>
-  <Button variant="outlined" class="squareIconButton">
-    <Icon class="material-icons taskListOptionIcon">filter_list</Icon>
-  </Button>
-  <Button variant="outlined" class="squareIconButton">
-    <Icon class="material-icons taskListOptionIcon">filter_list</Icon>
-  </Button>
+  <ClickableDiv
+    clickAction={() => {
+      sortDisabled = !sortDisabled;
+    }}
+  >
+    <SquareIconButton iconName="sort" variant="outlined" disabled={sortDisabled} />
+  </ClickableDiv>
+  <ClickableDiv
+    clickAction={() => {
+      filterDisabled = !filterDisabled;
+    }}
+  >
+    <SquareIconButton iconName="filter_list" variant="outlined" disabled={filterDisabled} />
+  </ClickableDiv>
 </div>
 
 <style>
   .container {
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
     width: 100%;
-  }
-
-  * :global(.taskListOptionIcon) {
-    margin: 0px;
-  }
-
-  * :global(.squareIconButton) {
-    min-width: 42px;
+    margin-bottom: 8px;
   }
 </style>

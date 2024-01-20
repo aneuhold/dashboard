@@ -1,6 +1,6 @@
 import { DashboardUserConfig, type UserCTO } from '@aneuhold/core-ts-db-lib';
 import { ObjectId } from 'bson';
-import { writable } from 'svelte/store';
+import { writable, type Updater } from 'svelte/store';
 import LocalData, { localDataReady } from '../util/LocalData';
 
 export type UserSettings = {
@@ -10,28 +10,37 @@ export type UserSettings = {
 };
 
 function createUserSettingsStore() {
-  const { subscribe, set, update } = writable<UserSettings>({
+  let currentSettings: UserSettings = {
     pendingSettingsUpdate: false,
     // Just a dummy config to avoid null checks.
     config: new DashboardUserConfig(new ObjectId()),
     collaborators: {}
-  });
+  };
+  const { subscribe, set } = writable<UserSettings>(currentSettings);
 
   localDataReady.subscribe((ready) => {
-    if (ready && LocalData.userSettings) {
-      set(LocalData.userSettings);
+    const localDataUserSettings = LocalData.userSettings;
+    if (ready && localDataUserSettings) {
+      updateUserSettings(() => localDataUserSettings);
     }
   });
+
+  const updateUserSettings = (updater: Updater<UserSettings>) => {
+    currentSettings = updater(currentSettings);
+    set(currentSettings);
+    LocalData.userSettings = currentSettings;
+  };
 
   return {
     subscribe,
     set: (newSettings: UserSettings) => {
-      set(newSettings);
-      LocalData.userSettings = newSettings;
+      updateUserSettings(() => newSettings);
     },
-    update,
+    update: (updater: Updater<UserSettings>) => {
+      updateUserSettings(updater);
+    },
     addCollaborator: (user: UserCTO) => {
-      update((settings) => {
+      updateUserSettings((settings) => {
         settings.config.collaborators.push(user._id);
         settings.collaborators[user._id.toString()] = user;
         settings.pendingSettingsUpdate = true;
@@ -39,7 +48,7 @@ function createUserSettingsStore() {
       });
     },
     removeCollaborator: (userName: string) => {
-      update((settings) => {
+      updateUserSettings((settings) => {
         const collaboratorId = Object.values(settings.collaborators).find(
           (userCto) => userCto.userName === userName
         )?._id;

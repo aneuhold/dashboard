@@ -14,6 +14,7 @@
   import MenuButton from 'components/presentational/MenuButton.svelte';
   import { onMount } from 'svelte';
   import TaskService from 'util/Task/TaskService';
+  import { currentUserId } from '../../stores/derived/currentUserId';
   import { userSettings } from '../../stores/userSettings';
   import TaskCompletedCheckbox from './TaskCompletedCheckbox.svelte';
   import TaskRowDateInfo from './TaskDate/TaskRowDateInfo.svelte';
@@ -139,12 +140,12 @@
               {#if $task.recurrenceInfo}
                 <Icon class="material-icons dimmed-color small-icon">autorenew</Icon>
               {/if}
-              {#if $task.tags.length > 0}
+              {#if $task.tags[$currentUserId]?.length > 0}
                 <div class="tagsContainer">
                   <Icon class="material-icons dimmed-color small-icon">sell</Icon>
-                  {#each $task.tags as tag, index}
+                  {#each $task.tags[$currentUserId] as tag, index}
                     <i class="mdc-typography--caption mdc-theme--text-hint-on-background">
-                      {`${tag}${index === $task.tags.length - 1 ? '' : ', '}`}
+                      {`${tag}${index === $task.tags[$currentUserId].length - 1 ? '' : ', '}`}
                     </i>
                   {/each}
                 </div>
