@@ -4,6 +4,7 @@ import {
   DocumentService,
   RecurrenceBasis,
   RecurrenceEffect,
+  type DashboardTaskMap,
   type ParentRecurringTaskInfo,
   type RecurrenceInfo
 } from '@aneuhold/core-ts-db-lib';
@@ -12,7 +13,7 @@ import type { Unsubscriber, Updater } from 'svelte/store';
 import DashboardAPIService from 'util/api/DashboardAPIService';
 import { appIsVisible } from '../../stores/appIsVisible';
 import { timeMinute } from '../../stores/timeMinute';
-import TaskService, { type TaskMap } from './TaskService';
+import TaskService from './TaskService';
 
 type TaskRecurrenceSubMap = { [taskId: string]: Unsubscriber };
 
@@ -167,7 +168,7 @@ export default class TaskRecurrenceService {
   /**
    * This should only be called by the taskMap store when it is updated.
    */
-  static buildTaskRecurrenceSubMapFresh(taskMap: TaskMap): void {
+  static buildTaskRecurrenceSubMapFresh(taskMap: DashboardTaskMap): void {
     // Clear the current map
     Object.values(this.taskRecurrenceSubMap).forEach((unsub) => unsub());
     this.taskRecurrenceSubMap = {};

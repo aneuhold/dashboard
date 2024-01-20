@@ -1,8 +1,7 @@
 import { APIService } from '@aneuhold/core-ts-api-lib';
-import type { DashboardTask } from '@aneuhold/core-ts-db-lib';
+import type { DashboardTask, DashboardTaskMap } from '@aneuhold/core-ts-db-lib';
 import { snackbar } from 'components/Snackbar.svelte';
 import LocalData from 'util/LocalData';
-import type { TaskMap } from 'util/Task/TaskService';
 import TaskService from 'util/Task/TaskService';
 import DashboardAPIService from './DashboardAPIService';
 
@@ -39,11 +38,11 @@ export default class DashboardTaskAPIService {
     }
   }
 
-  static convertTaskArrayToMap(tasks: DashboardTask[]): TaskMap {
+  static convertTaskArrayToMap(tasks: DashboardTask[]): DashboardTaskMap {
     return tasks.reduce((map, task) => {
       map[task._id.toString()] = task;
       return map;
-    }, {} as TaskMap);
+    }, {} as DashboardTaskMap);
   }
 
   static hasTaskQueueItem(): boolean {

@@ -1,4 +1,9 @@
-import { DashboardTask, DashboardTaskService, DocumentService } from '@aneuhold/core-ts-db-lib';
+import {
+  DashboardTask,
+  DashboardTaskService,
+  DocumentService,
+  type DashboardTaskMap
+} from '@aneuhold/core-ts-db-lib';
 import { ObjectId } from 'bson';
 import type { BreadCrumbArray } from 'components/BreadCrumb.svelte';
 import { writable, type Updater, type Writable } from 'svelte/store';
@@ -7,7 +12,6 @@ import DashboardTaskAPIService from '../api/DashboardTaskAPIService';
 import TaskRecurrenceService from './TaskRecurrenceService';
 import TaskTagsService from './TaskTagsService';
 
-export type TaskMap = { [objectId: string]: DashboardTask };
 export interface TaskStore extends Writable<DashboardTask> {
   /**
    * Sets the task without propogating the change to the backend or the
@@ -27,7 +31,7 @@ export default class TaskService {
   /**
    * The backing value of the taskMap.
    */
-  private static _taskMap: TaskMap = {};
+  private static _taskMap: DashboardTaskMap = {};
 
   private static taskMapStore: ReturnType<typeof TaskService.createTaskMapStore> | undefined;
 
@@ -288,7 +292,7 @@ export default class TaskService {
 
     return {
       subscribe,
-      set: (newTaskMap: TaskMap) => {
+      set: (newTaskMap: DashboardTaskMap) => {
         this._taskMap = newTaskMap;
         Object.entries(this.currentTaskStores).forEach(([taskId, store]) => {
           if (!this._taskMap[taskId]) {

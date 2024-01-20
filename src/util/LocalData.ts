@@ -1,9 +1,9 @@
 import type { DashboardConfig, Translations } from '@aneuhold/core-ts-api-lib';
+import type { DashboardTaskMap } from '@aneuhold/core-ts-db-lib';
 import { sleep } from '@aneuhold/core-ts-lib';
 import { EJSON } from 'bson';
 import { writable } from 'svelte/store';
 import type { UserSettings } from '../stores/userSettings';
-import type { TaskMap } from './Task/TaskService';
 import type { TaskInsertOrUpdateInfo } from './api/DashboardTaskAPIService';
 
 function createLocalDataReadyStore() {
@@ -143,15 +143,15 @@ export default class LocalData {
     return this.getStoredObject<UserSettings>(LocalData.storedKeyNames.userSettings);
   }
 
-  static set taskMap(newTaskMap: TaskMap) {
+  static set taskMap(newTaskMap: DashboardTaskMap) {
     this.storeValue(
       LocalData.storedKeyNames.taskMap,
       EJSON.stringify(newTaskMap, { relaxed: false })
     );
   }
 
-  static get taskMap(): TaskMap | null {
-    return this.getStoredObject<TaskMap>(LocalData.storedKeyNames.taskMap);
+  static get taskMap(): DashboardTaskMap | null {
+    return this.getStoredObject<DashboardTaskMap>(LocalData.storedKeyNames.taskMap);
   }
 
   static set currentTaskQueueItem(newTaskQueueItem: TaskInsertOrUpdateInfo | undefined) {
