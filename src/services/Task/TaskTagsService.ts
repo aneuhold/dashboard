@@ -1,6 +1,8 @@
+import type { DashboardTask } from '@aneuhold/core-ts-db-lib';
 import { writable, type Unsubscriber, type Writable } from 'svelte/store';
-import { TaskMapService } from '../../services/Task/TaskMapService';
 import { currentUserId } from '../../stores/derived/currentUserId';
+import type { DocumentMapStoreSubscriber } from '../DocumentMapStoreService';
+import { TaskMapService } from './TaskMapService';
 
 /**
  * A service responsible for managing tags for tasks.
@@ -23,6 +25,17 @@ export default class TaskTagsService {
       this.taskTagsStore = this.createStore();
     }
     return this.taskTagsStore;
+  }
+
+  static getSubscribersForTaskMap(): DocumentMapStoreSubscriber<DashboardTask> {
+    return {
+      beforeDocUpdate(map, oldDoc, newDoc) {
+        if (oldDoc?.tags.length !== newDoc.tags.length) {
+          TaskTagsService.updateTaskTagsStore();
+        }
+        return newDoc;
+      }
+    };
   }
 
   /**

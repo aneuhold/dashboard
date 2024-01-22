@@ -13,8 +13,8 @@
   import type { MenuButtonItem } from 'components/presentational/MenuButton.svelte';
   import MenuButton from 'components/presentational/MenuButton.svelte';
   import { onMount } from 'svelte';
-  import TaskService from 'util/Task/TaskService';
   import { TaskMapService } from '../../services/Task/TaskMapService';
+  import TaskService from '../../services/Task/TaskService';
   import { currentUserId } from '../../stores/derived/currentUserId';
   import { userSettings } from '../../stores/userSettings';
   import TaskCompletedCheckbox from './TaskCompletedCheckbox.svelte';

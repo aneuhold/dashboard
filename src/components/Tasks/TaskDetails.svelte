@@ -17,9 +17,9 @@
   import PageTitle from 'components/PageTitle.svelte';
   import FabButton from 'components/presentational/FabButton.svelte';
   import InputBox from 'components/presentational/InputBox.svelte';
-  import TaskListService from 'util/Task/TaskListService';
-  import TaskService from 'util/Task/TaskService';
+  import TaskListService from '../../services/Task/TaskListService';
   import { TaskMapService } from '../../services/Task/TaskMapService';
+  import TaskService from '../../services/Task/TaskService';
   import { userSettings } from '../../stores/userSettings';
   import ConfirmationDialog from '../ConfirmationDialog.svelte';
   import TaskCompletedCheckbox from './TaskCompletedCheckbox.svelte';

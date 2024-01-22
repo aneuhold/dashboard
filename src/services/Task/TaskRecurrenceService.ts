@@ -11,13 +11,10 @@ import {
 import { ObjectId } from 'bson';
 import type { Unsubscriber, Updater } from 'svelte/store';
 import DashboardAPIService from 'util/api/DashboardAPIService';
-import type {
-  DocumentMapStoreSubscriber,
-  UpsertManyInfo
-} from '../../services/DocumentMapStoreService';
-import { TaskMapService } from '../../services/Task/TaskMapService';
 import { appIsVisible } from '../../stores/appIsVisible';
 import { timeMinute } from '../../stores/timeMinute';
+import type { DocumentMapStoreSubscriber, UpsertManyInfo } from '../DocumentMapStoreService';
+import { TaskMapService } from './TaskMapService';
 
 type TaskRecurrenceSubMap = { [taskId: string]: Unsubscriber };
 

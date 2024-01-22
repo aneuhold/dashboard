@@ -6,8 +6,6 @@ import {
 import { ObjectId } from 'bson';
 import type { Updater } from 'svelte/store';
 import LocalData from 'util/LocalData';
-import TaskRecurrenceService from 'util/Task/TaskRecurrenceService';
-import TaskTagsService from 'util/Task/TaskTagsService';
 import DashboardTaskAPIService from 'util/api/DashboardTaskAPIService';
 import type {
   DocumentInsertOrUpdateInfo,
@@ -16,6 +14,9 @@ import type {
   UpsertManyInfo
 } from '../DocumentMapStoreService';
 import DocumentMapStoreService from '../DocumentMapStoreService';
+import TaskRecurrenceService from './TaskRecurrenceService';
+import TaskSharingService from './TaskSharingService';
+import TaskTagsService from './TaskTagsService';
 
 /**
  * The main task map service.
@@ -46,7 +47,6 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
         newDoc.description = newDoc.description || '';
         const parentTask = newDoc.parentTaskId ? map[newDoc.parentTaskId.toString()] : undefined;
         if (parentTask) {
-          newDoc.sharedWith = [...parentTask.sharedWith];
           newDoc.userId = parentTask.userId;
         }
         return newDoc;
@@ -64,29 +64,9 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
         TaskRecurrenceService.removeTaskTimeSubscription(docToDelete._id.toString());
       }
     });
-    // Recurrence things
     this.subscribers.push(TaskRecurrenceService.getSubscribersForTaskMap());
-    // Tag things
-    this.subscribers.push({
-      beforeDocUpdate(map, oldDoc, newDoc) {
-        if (oldDoc?.tags.length !== newDoc.tags.length) {
-          TaskTagsService.updateTaskTagsStore();
-        }
-        return newDoc;
-      }
-    });
-    // Shared with things
-    this.subscribers.push({
-      validateDocUpdate(map, oldDoc, newDoc) {
-        if (oldDoc?.sharedWith.length !== newDoc.sharedWith.length) {
-          return TaskMapService.getUpdateTaskAndAllChildrenInfo(newDoc._id.toString(), (task) => {
-            task.sharedWith = newDoc.sharedWith;
-            return task;
-          });
-        }
-        return null;
-      }
-    });
+    this.subscribers.push(TaskTagsService.getSubscribersForTaskMap());
+    this.subscribers.push(TaskSharingService.getSubscribersForTaskMap());
   }
 
   protected persistToLocalData(): Record<string, DashboardTask> {

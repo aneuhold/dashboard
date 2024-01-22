@@ -11,9 +11,9 @@
   import TaskDetails from 'components/Tasks/TaskDetails.svelte';
   import TaskList from 'components/Tasks/TaskList/TaskList.svelte';
   import FabButton from 'components/presentational/FabButton.svelte';
-  import TaskListService from 'util/Task/TaskListService';
-  import TaskService from 'util/Task/TaskService';
+  import TaskListService from '../../services/Task/TaskListService';
   import { TaskMapService } from '../../services/Task/TaskMapService';
+  import TaskService from '../../services/Task/TaskService';
   import { userSettings } from '../../stores/userSettings';
   import { tasksPageInfo } from './pageInfo';
 

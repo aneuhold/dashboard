@@ -17,8 +17,8 @@
   import WeekdaySegmentedButton from 'components/WeekdaySegmentedButton.svelte';
   import InputBox from 'components/presentational/InputBox.svelte';
   import { writable, type Updater } from 'svelte/store';
-  import TaskRecurrenceService from 'util/Task/TaskRecurrenceService';
   import { TaskMapService } from '../../../services/Task/TaskMapService';
+  import TaskRecurrenceService from '../../../services/Task/TaskRecurrenceService';
   import TaskRecurrenceInfoIcon from './TaskRecurrenceInfoIcon.svelte';
   import TaskRecurrenceUpdateExample from './TaskRecurrenceUpdateExample.svelte';
   import TaskRecurrenceWeekdayOfMonth from './TaskRecurrenceWeekdayOfMonth.svelte';
@@ -185,7 +185,7 @@
       <b>Basis</b>
       <TaskRecurrenceInfoIcon />
     </div>
-    {#if !startDate && !dueDate}
+    {#if !startDate && !dueDate && !parentRecurringTaskInfo}
       <span class="mdc-typography--body2 dimmed-color">
         A start date or a due date must be set to pick a basis
       </span>

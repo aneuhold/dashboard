@@ -1,6 +1,6 @@
 import type { DashboardTask } from '@aneuhold/core-ts-db-lib';
 import type { BreadCrumbArray } from 'components/BreadCrumb.svelte';
-import { TaskMapService } from '../../services/Task/TaskMapService';
+import { TaskMapService } from './TaskMapService';
 
 /**
  * The main task utility service.

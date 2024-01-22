@@ -3,8 +3,8 @@
   import { DateService } from '@aneuhold/core-ts-lib';
   import ConfirmationDialog from 'components/ConfirmationDialog.svelte';
   import DatePickerDialog from 'components/presentational/DatePickerDialog.svelte';
-  import TaskRecurrenceService from 'util/Task/TaskRecurrenceService';
   import { TaskMapService } from '../../../services/Task/TaskMapService';
+  import TaskRecurrenceService from '../../../services/Task/TaskRecurrenceService';
   import TaskDateButton from './TaskDateButton.svelte';
 
   export let taskId: string;
