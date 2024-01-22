@@ -13,17 +13,18 @@
   import FabButton from 'components/presentational/FabButton.svelte';
   import TaskListService from 'util/Task/TaskListService';
   import TaskService from 'util/Task/TaskService';
+  import { TaskMapService } from '../../services/Task/TaskMapService';
   import { userSettings } from '../../stores/userSettings';
   import { tasksPageInfo } from './pageInfo';
 
-  const taskMap = TaskService.getStore();
+  const taskMap = TaskMapService.getStore();
 
   $: taskIds = TaskListService.getTaskIds($taskMap, $userSettings, 'default');
   $: taskId = $page.url.searchParams.get('taskId');
 
   function addTask() {
     const newTask = new DashboardTask($userSettings.config.userId);
-    taskMap.addTask(newTask);
+    taskMap.addDoc(newTask);
     goto(TaskService.getTaskRoute(newTask._id.toString()));
   }
 </script>

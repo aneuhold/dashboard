@@ -2,13 +2,14 @@
   import { goto } from '$app/navigation';
   import Button, { Icon } from '@smui/button';
   import TaskService from 'util/Task/TaskService';
+  import { TaskMapService } from '../../services/Task/TaskMapService';
   import { userSettings } from '../../stores/userSettings';
   import TaskSharingDialog from './TaskSharingDialog.svelte';
 
   export let taskId: string;
 
   let sharingDialogOpen = false;
-  $: task = TaskService.getTaskStore(taskId);
+  $: task = TaskMapService.getTaskStore(taskId);
   $: sharingDisabled = $task?.userId.toString() !== $userSettings.config.userId.toString();
   $: finalParentId = TaskService.findParentIdWithSameSharedWith($task);
   $: buttonText = finalParentId === taskId || sharingDisabled ? 'Share' : 'Configure Sharing';

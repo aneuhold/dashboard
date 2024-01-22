@@ -1,15 +1,19 @@
-import { writable, type Writable } from 'svelte/store';
+import { writable, type Unsubscriber, type Writable } from 'svelte/store';
+import { TaskMapService } from '../../services/Task/TaskMapService';
 import { currentUserId } from '../../stores/derived/currentUserId';
-import TaskService from './TaskService';
 
 /**
  * A service responsible for managing tags for tasks.
+ *
+ * Maybe a store that triggers when any task updates?
+ *
+ * OR a service that
  */
 export default class TaskTagsService {
   private static taskTagsStore: Writable<string[]> | undefined;
   private static userId: string | undefined;
-  private static userIdUnsub: undefined | (() => void) = undefined;
-  private static taskMapUnsub: undefined | (() => void) = undefined;
+  private static userIdUnsub: undefined | Unsubscriber = undefined;
+  private static taskMapUnsub: undefined | Unsubscriber = undefined;
 
   /**
    * Gets the store of all tags used by the current user on tasks.
@@ -51,7 +55,7 @@ export default class TaskTagsService {
     }
     const userId = this.userId;
     // Convert to a map first to remove duplicates.
-    const allTaskTagsMap = Object.values(TaskService.getCurrentTaskMap()).reduce(
+    const allTaskTagsMap = Object.values(TaskMapService.getMap()).reduce(
       (tags, task) => {
         const taskTags = task.tags[userId];
         if (taskTags) {

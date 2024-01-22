@@ -21,6 +21,68 @@ Notes for improvement:
 - Recurring Tasks
   - A user can make a task recurring if one of the subtasks is shared. The UI will determine that it can't find the parent recurring task and display that in the recurring info. Because recurring info is shared to all children, each child task will have enough information to display when the next recursion date will happen.
 
+## Architecture
+
+UI Update Flow, using Tasks as an example:
+
+```mermaid
+sequenceDiagram
+  actor user as User / UI
+  participant object as In-Memory Task Object
+  participant taskStore as Task store
+  participant taskMap as TaskMap store
+  participant localData as LocalData
+  participant db as Backend DB
+
+  user->>object: Changes due date on Task
+  object->>taskStore: Hey, due date changed
+  Note over taskStore: Determine if just task, or<br/>task and child tasks need<br/>updating
+  alt Just task needs updated
+    taskStore->>user: Reflect update to task
+    taskStore->>localData: Update LocalData taskMap
+    taskStore->>db: Update DB
+  else Task and children need updated
+    taskStore->>taskMap: Update task and all children
+    taskMap->>taskStore: setWithoutPropogation
+    taskStore->>user: Reflect update to task
+    taskMap->>localData: Update LocalData taskMap
+    taskMap->>db: Update DB
+  end
+```
+
+Generic store flow theory:
+
+- A parent store needs to be utilized in the UI
+- The parent store contains a variable-length property or object, where each object needs to be watched somewhere in the UI as well
+
+```mermaid
+sequenceDiagram
+  actor user as User / UI
+  participant object as In-Memory Task Object
+  participant childStore as Child Store
+  participant parentStore as Parent store
+  participant localData as LocalData
+  participant db as Backend DB
+
+  user->>object: Changes something on child store
+  object->>childStore: Hey, something changed
+  Note over childStore: Determine if just child store,<br/>or multiple child stores<br/>need updating
+  alt Single store needs update
+    childStore->>user: Reflect updated child store
+    childStore->>parentStore: updatePersistentStorage<br/>(provide child ID)
+  else Multiple stores need update
+    childStore->>parentStore: updateMany
+    parentStore->>childStore: setWithoutPropogation
+    childStore->>user: Reflect update to child store
+  end
+  parentStore->>localData: setAndReturnCopy
+  localData->>parentStore: Return object copy
+  Note over parentStore: Store object copy as previous state
+  parentStore->>childStore: setPreviousState<br/>(Separate object)
+  Note over childStore: Store state as previous state
+  parentStore->>db: Update DB
+```
+
 ## Developing
 
 To start working on the project simply run:

@@ -20,19 +20,20 @@
   import ClickableDiv from 'components/presentational/ClickableDiv.svelte';
   import TaskRecurrenceService from 'util/Task/TaskRecurrenceService';
   import TaskService from 'util/Task/TaskService';
+  import { TaskMapService } from '../../../services/Task/TaskMapService';
   import TaskRecurrenceDetails from './TaskRecurrenceDetails.svelte';
 
   export let taskId: string;
   export let childTaskIds: string[];
 
   let recurringInfoOpen = false;
-  let taskMap = TaskService.getStore();
+  let taskMap = TaskMapService.getStore();
   let previousTaskId = taskId;
   let errorInfoDialogOpen = false;
   let errorInfoDialogTitle = '';
   let errorInfoDialogContent = '';
   let defaultRecurrenceInfo: RecurrenceInfo;
-  $: task = TaskService.getTaskStore(taskId);
+  $: task = TaskMapService.getTaskStore(taskId);
   $: isRecurring = !!$task.recurrenceInfo;
   $: hasParentRecurringTask = !!$task.parentRecurringTaskInfo;
   $: hasChildRecurringTask = childTaskIds.some(

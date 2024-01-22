@@ -150,6 +150,12 @@ export default class LocalData {
     );
   }
 
+  static setAndGetTaskMap(newTaskMap: DashboardTaskMap): DashboardTaskMap {
+    const stringifiedTaskMap = EJSON.stringify(newTaskMap, { relaxed: false });
+    this.storeValue(LocalData.storedKeyNames.taskMap, stringifiedTaskMap);
+    return EJSON.parse(stringifiedTaskMap) as DashboardTaskMap;
+  }
+
   static get taskMap(): DashboardTaskMap | null {
     return this.getStoredObject<DashboardTaskMap>(LocalData.storedKeyNames.taskMap);
   }

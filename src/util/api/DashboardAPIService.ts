@@ -3,7 +3,7 @@ import type { DashboardUserConfig, UserCTO } from '@aneuhold/core-ts-db-lib';
 import { snackbar } from 'components/Snackbar.svelte';
 import type { UUID } from 'crypto';
 import LocalData from 'util/LocalData';
-import TaskService from 'util/Task/TaskService';
+import { TaskMapService } from '../../services/Task/TaskMapService';
 import { apiKey } from '../../stores/apiKey';
 import { dashboardConfig } from '../../stores/dashboardConfig';
 import { LoginState, loginState } from '../../stores/loginState';
@@ -76,7 +76,9 @@ export default class DashboardAPIService {
         config: result.data.userConfig,
         collaborators: this.getCollaboratorsFromResult(result.data)
       });
-      TaskService.getStore().set(DashboardTaskAPIService.convertTaskArrayToMap(result.data.tasks));
+      TaskMapService.getStore().set(
+        DashboardTaskAPIService.convertTaskArrayToMap(result.data.tasks)
+      );
       // Clear the task queue since we just got the initial data
       LocalData.taskQueue = [];
       LocalData.currentTaskQueueItem = undefined;
@@ -112,7 +114,9 @@ export default class DashboardAPIService {
         config: result.data.userConfig,
         collaborators: this.getCollaboratorsFromResult(result.data)
       });
-      TaskService.getStore().set(DashboardTaskAPIService.convertTaskArrayToMap(result.data.tasks));
+      TaskMapService.getStore().set(
+        DashboardTaskAPIService.convertTaskArrayToMap(result.data.tasks)
+      );
     } else {
       console.error('Error updating settings', result);
     }

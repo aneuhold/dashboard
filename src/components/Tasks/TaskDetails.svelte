@@ -19,6 +19,7 @@
   import InputBox from 'components/presentational/InputBox.svelte';
   import TaskListService from 'util/Task/TaskListService';
   import TaskService from 'util/Task/TaskService';
+  import { TaskMapService } from '../../services/Task/TaskMapService';
   import { userSettings } from '../../stores/userSettings';
   import ConfirmationDialog from '../ConfirmationDialog.svelte';
   import TaskCompletedCheckbox from './TaskCompletedCheckbox.svelte';
@@ -32,8 +33,8 @@
   export let taskId: string;
 
   let deleteDialogOpen = false;
-  let taskMap = TaskService.getStore();
-  $: task = $taskMap[taskId] ? TaskService.getTaskStore(taskId) : undefined;
+  let taskMap = TaskMapService.getStore();
+  $: task = $taskMap[taskId] ? TaskMapService.getTaskStore(taskId) : undefined;
   $: allChildrenIds = $task
     ? DashboardTaskService.getChildrenIds(Object.values($taskMap), [$task._id]).map((id) =>
         id.toString()
@@ -57,7 +58,7 @@
           dueDate: $task.dueDate
         }
       : undefined;
-    taskMap.addTask(newTask);
+    taskMap.addDoc(newTask);
     goto(TaskService.getTaskRoute(newTask._id.toString()));
   }
 
@@ -69,7 +70,7 @@
       ? TaskService.getTaskRoute(parentTaskId.toString())
       : TaskService.getTaskCategoryRoute(taskId);
     goto(routeToNavigateTo).then(() => {
-      taskMap.deleteTask(taskId);
+      taskMap.deleteDoc(taskId);
     });
   }
 

@@ -4,12 +4,12 @@
   Sharing information for use in the Task Details component.
 -->
 <script lang="ts">
-  import TaskService from 'util/Task/TaskService';
+  import { TaskMapService } from '../../services/Task/TaskMapService';
   import { userSettings } from '../../stores/userSettings';
 
   export let taskId: string;
 
-  $: task = TaskService.getTaskStore(taskId);
+  $: task = TaskMapService.getTaskStore(taskId);
   /**
    * Only inlcudes the ids of the users that the current user is a collaborator
    * with.

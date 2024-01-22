@@ -2,7 +2,7 @@ import { APIService } from '@aneuhold/core-ts-api-lib';
 import type { DashboardTask, DashboardTaskMap } from '@aneuhold/core-ts-db-lib';
 import { snackbar } from 'components/Snackbar.svelte';
 import LocalData from 'util/LocalData';
-import TaskService from 'util/Task/TaskService';
+import { TaskMapService } from '../../services/Task/TaskMapService';
 import DashboardAPIService from './DashboardAPIService';
 
 export type TaskInsertOrUpdateInfo = {
@@ -82,7 +82,7 @@ export default class DashboardTaskAPIService {
         // Only set the task map if there are no more tasks to process. This
         // should help prevent the task map from being set to an old value if
         // the user refreshes the page while the task queue is being processed.
-        TaskService.getStore().set(this.convertTaskArrayToMap(updatedTaskList));
+        TaskMapService.getStore().set(this.convertTaskArrayToMap(updatedTaskList));
       } else {
         // If there was an error, add the task back to the queue and try again
         // Save this for later to ensure there is no infinite loop

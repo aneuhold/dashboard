@@ -11,9 +11,13 @@ import {
 import { ObjectId } from 'bson';
 import type { Unsubscriber, Updater } from 'svelte/store';
 import DashboardAPIService from 'util/api/DashboardAPIService';
+import type {
+  DocumentMapStoreSubscriber,
+  UpsertManyInfo
+} from '../../services/DocumentMapStoreService';
+import { TaskMapService } from '../../services/Task/TaskMapService';
 import { appIsVisible } from '../../stores/appIsVisible';
 import { timeMinute } from '../../stores/timeMinute';
-import TaskService from './TaskService';
 
 type TaskRecurrenceSubMap = { [taskId: string]: Unsubscriber };
 
@@ -88,6 +92,10 @@ export default class TaskRecurrenceService {
    * This should only be triggered exactly when it is time to do so. The logic
    * for that should be contained elsewhere.
    *
+   * This will automatically happen if a task was manually updated and it is
+   * time for it to recur. So this method should only be called when the task
+   * map is set.
+   *
    * This will not take any action if there is no recurrence info on the task.
    */
   static executeRecurrenceForTask(task: DashboardTask) {
@@ -95,14 +103,69 @@ export default class TaskRecurrenceService {
       return;
     }
     console.log('Executing recurrence for task', task);
-    const taskMap = TaskService.getStore();
+    const taskMap = TaskMapService.getStore();
+    taskMap.upsertMany(this.getRecurrenceUpdateInfo(task));
+  }
+
+  static getSubscribersForTaskMap(): DocumentMapStoreSubscriber<DashboardTask> {
+    return {
+      // Check if any tasks need to recur after everything has been set
+      afterMapSet: (newMap) => {
+        Object.values(newMap).forEach((task) => {
+          TaskRecurrenceService.executeRecurrenceIfNeeded(task);
+        });
+        TaskRecurrenceService.buildTaskRecurrenceSubMapFresh(newMap);
+      },
+      afterDocAddition(map, newDoc) {
+        TaskRecurrenceService.updateOrRemoveTaskTimeSubscription(newDoc);
+      },
+      validateDocUpdate(map, oldDoc, newDoc) {
+        const watchRecurrenceInfo = newDoc.recurrenceInfo && !newDoc.parentRecurringTaskInfo;
+        const datesAreDifferent =
+          newDoc.startDate?.getTime() !== oldDoc?.startDate?.getTime() ||
+          newDoc.dueDate?.getTime() !== oldDoc?.dueDate?.getTime();
+        if (watchRecurrenceInfo && TaskRecurrenceService.taskShouldRecur(newDoc)) {
+          return TaskRecurrenceService.getRecurrenceUpdateInfo(newDoc);
+        } else if (watchRecurrenceInfo || oldDoc?.recurrenceInfo || datesAreDifferent) {
+          const recurrenceInfoChanged =
+            JSON.stringify(oldDoc?.recurrenceInfo) !== JSON.stringify(newDoc.recurrenceInfo);
+          if (recurrenceInfoChanged) {
+            TaskRecurrenceService.updateOrRemoveTaskTimeSubscription(newDoc);
+            return TaskMapService.getUpdateTaskAndAllChildrenInfo(newDoc._id.toString(), (task) => {
+              if (task._id.toString() === newDoc._id.toString()) {
+                return task;
+              }
+              if (newDoc.recurrenceInfo) {
+                task.parentRecurringTaskInfo = {
+                  taskId: newDoc._id,
+                  startDate: newDoc.startDate,
+                  dueDate: newDoc.dueDate
+                };
+                task.recurrenceInfo = newDoc.recurrenceInfo;
+              } else {
+                task.parentRecurringTaskInfo = undefined;
+                task.recurrenceInfo = undefined;
+              }
+              return task;
+            });
+          }
+        }
+        return null;
+      }
+    };
+  }
+
+  private static getRecurrenceUpdateInfo(task: DashboardTask): UpsertManyInfo<DashboardTask> {
+    if (!task.recurrenceInfo || task.parentRecurringTaskInfo) {
+      throw new Error('Task does not have recurrence info and should not be updated');
+    }
     if (task.recurrenceInfo.recurrenceEffect === RecurrenceEffect.stack && !task.completed) {
-      taskMap.duplicateTask(
+      return TaskMapService.getDuplicateTaskUpdateInfo(
         task._id.toString(),
-        (newTask) => {
-          newTask.completed = false;
-          this.updateDatesForRecurrence(newTask);
-          return newTask;
+        (task) => {
+          task.completed = true;
+          TaskRecurrenceService.updateDatesForRecurrence(task);
+          return task;
         },
         (originalTask) => {
           originalTask.recurrenceInfo = undefined;
@@ -111,8 +174,8 @@ export default class TaskRecurrenceService {
         }
       );
     } else {
-      taskMap.updateTaskAndAllChildren(task._id.toString(), (task) => {
-        this.updateDatesForRecurrence(task);
+      return TaskMapService.getUpdateTaskAndAllChildrenInfo(task._id.toString(), (task) => {
+        TaskRecurrenceService.updateDatesForRecurrence(task);
         task.completed = false;
         return task;
       });
@@ -223,7 +286,7 @@ export default class TaskRecurrenceService {
   /**
    * Updates the provided Tasks's dates based on the recurrence info in-place.
    */
-  private static updateDatesForRecurrence(task: DashboardTask): void {
+  static updateDatesForRecurrence(task: DashboardTask): void {
     if (!task.recurrenceInfo) {
       return;
     }

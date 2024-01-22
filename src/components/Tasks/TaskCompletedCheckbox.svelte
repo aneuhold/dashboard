@@ -2,13 +2,13 @@
   import Checkbox from '@smui/checkbox';
   import ConfirmationDialog from 'components/ConfirmationDialog.svelte';
   import { snackbar } from 'components/Snackbar.svelte';
-  import TaskService from 'util/Task/TaskService';
+  import { TaskMapService } from '../../services/Task/TaskMapService';
   import ClickableDiv from '../presentational/ClickableDiv.svelte';
 
   export let taskId: string;
 
   let dialogOpen = false;
-  $: task = TaskService.getTaskStore(taskId);
+  $: task = TaskMapService.getTaskStore(taskId);
   $: preventDefault =
     !$task.parentRecurringTaskInfo &&
     !$task.completed &&

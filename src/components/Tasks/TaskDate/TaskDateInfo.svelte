@@ -4,11 +4,11 @@
   import ConfirmationDialog from 'components/ConfirmationDialog.svelte';
   import DatePickerDialog from 'components/presentational/DatePickerDialog.svelte';
   import TaskRecurrenceService from 'util/Task/TaskRecurrenceService';
-  import TaskService from 'util/Task/TaskService';
+  import { TaskMapService } from '../../../services/Task/TaskMapService';
   import TaskDateButton from './TaskDateButton.svelte';
 
   export let taskId: string;
-  $: task = TaskService.getTaskStore(taskId);
+  $: task = TaskMapService.getTaskStore(taskId);
 
   let currentlyChosenDateType: 'start' | 'due' = 'start';
   let datePickerOpen = false;

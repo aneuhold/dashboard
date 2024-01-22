@@ -1,9 +1,9 @@
 <script lang="ts">
   import { DateService } from '@aneuhold/core-ts-lib';
-  import TaskService from 'util/Task/TaskService';
+  import { TaskMapService } from '../../../services/Task/TaskMapService';
 
   export let taskId: string;
-  $: task = TaskService.getTaskStore(taskId);
+  $: task = TaskMapService.getTaskStore(taskId);
   $: pastDue = $task.dueDate && $task.dueDate < new Date();
 </script>
 

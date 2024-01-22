@@ -6,13 +6,13 @@
 <script lang="ts">
   import Autocomplete from '@smui-extra/autocomplete';
   import Chip, { Set, Text, TrailingAction } from '@smui/chips';
-  import TaskService from 'util/Task/TaskService';
   import TaskTagsService from 'util/Task/TaskTagsService';
+  import { TaskMapService } from '../../services/Task/TaskMapService';
   import { currentUserId } from '../../stores/derived/currentUserId';
 
   export let taskId: string;
 
-  $: task = TaskService.getTaskStore(taskId);
+  $: task = TaskMapService.getTaskStore(taskId);
   $: globalTags = TaskTagsService.getStore();
   $: unselectedTags = $globalTags.filter((tag) => !$task.tags[$currentUserId]?.includes(tag));
   // This needs to be redirected like this so that the Set component doesn't

@@ -14,6 +14,7 @@
   import MenuButton from 'components/presentational/MenuButton.svelte';
   import { onMount } from 'svelte';
   import TaskService from 'util/Task/TaskService';
+  import { TaskMapService } from '../../services/Task/TaskMapService';
   import { currentUserId } from '../../stores/derived/currentUserId';
   import { userSettings } from '../../stores/userSettings';
   import TaskCompletedCheckbox from './TaskCompletedCheckbox.svelte';
@@ -31,9 +32,9 @@
   let completeAnimationShouldShow = false;
   let previousTaskCompletedState: boolean;
   let hasMounted = false;
-  let taskMap = TaskService.getStore();
+  let taskMap = TaskMapService.getStore();
 
-  $: task = TaskService.getTaskStore(taskId);
+  $: task = TaskMapService.getTaskStore(taskId);
   $: allChildrenIds = $task
     ? DashboardTaskService.getChildrenIds(Object.values($taskMap), [$task._id])
     : [];
@@ -58,7 +59,7 @@
   }
 
   function deleteTask() {
-    taskMap.deleteTask(taskId);
+    taskMap.deleteDoc(taskId);
   }
 
   function handleDeleteClick() {
@@ -70,16 +71,18 @@
   }
 
   function handleDuplicateClick() {
-    taskMap.duplicateTask(taskId, (task) => {
-      // Conditional to find the original task that is being duplicated
-      if (
-        !task.parentTaskId ||
-        ($task.parentTaskId && task.parentTaskId.toString() === $task.parentTaskId.toString())
-      ) {
-        task.title = `${task.title} (Copy)`;
-      }
-      return task;
-    });
+    taskMap.upsertMany(
+      TaskMapService.getDuplicateTaskUpdateInfo(taskId, (task) => {
+        // Conditional to find the original task that is being duplicated
+        if (
+          !task.parentTaskId ||
+          ($task.parentTaskId && task.parentTaskId.toString() === $task.parentTaskId.toString())
+        ) {
+          task.title = `${task.title} (Copy)`;
+        }
+        return task;
+      })
+    );
   }
 
   function getMenuItems(task: DashboardTask) {

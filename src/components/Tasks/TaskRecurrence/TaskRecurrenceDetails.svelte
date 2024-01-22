@@ -18,7 +18,7 @@
   import InputBox from 'components/presentational/InputBox.svelte';
   import { writable, type Updater } from 'svelte/store';
   import TaskRecurrenceService from 'util/Task/TaskRecurrenceService';
-  import TaskService from 'util/Task/TaskService';
+  import { TaskMapService } from '../../../services/Task/TaskMapService';
   import TaskRecurrenceInfoIcon from './TaskRecurrenceInfoIcon.svelte';
   import TaskRecurrenceUpdateExample from './TaskRecurrenceUpdateExample.svelte';
   import TaskRecurrenceWeekdayOfMonth from './TaskRecurrenceWeekdayOfMonth.svelte';
@@ -29,7 +29,7 @@
   let dialogMessage = '';
   let dialogOpen = false;
 
-  $: task = TaskService.getTaskStore(taskId);
+  $: task = TaskMapService.getTaskStore(taskId);
   /**
    * Stored so that the changes can be reverted
    */

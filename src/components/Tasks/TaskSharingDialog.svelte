@@ -9,13 +9,13 @@
   import Dialog, { Actions, Content, Title } from '@smui/dialog';
   import FormField from '@smui/form-field';
   import type { ObjectId } from 'bson';
-  import TaskService from 'util/Task/TaskService';
+  import { TaskMapService } from '../../services/Task/TaskMapService';
   import { userSettings } from '../../stores/userSettings';
 
   export let open = false;
   export let taskId: string;
 
-  $: task = TaskService.getTaskStore(taskId);
+  $: task = TaskMapService.getTaskStore(taskId);
   $: sharedWithIds = $task.sharedWith.map((id) => id.toString());
   $: collaborators = $userSettings.collaborators;
 
