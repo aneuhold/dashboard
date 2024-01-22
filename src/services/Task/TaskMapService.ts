@@ -22,22 +22,22 @@ import TaskTagsService from './TaskTagsService';
  * The main task map service.
  */
 export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
-  private static instance: TaskMapService;
+  private static instance = new TaskMapService();
 
   private constructor() {
     super();
   }
 
   static getStore(): DocumentMapStore<DashboardTask> {
-    return this.getInstance().store;
+    return this.instance.store;
   }
 
   static getTaskStore(taskId: string): DocumentStore<DashboardTask> {
-    return this.getInstance().getDocStore(taskId);
+    return this.instance.getDocStore(taskId);
   }
 
   static getMap(): Record<string, DashboardTask> {
-    return this.getInstance().documentMap;
+    return this.instance.documentMap;
   }
 
   protected setupSubscribers(): void {
@@ -79,19 +79,12 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
     DashboardTaskAPIService.updateTasks(updateInfo);
   }
 
-  private static getInstance() {
-    if (!this.instance) {
-      this.instance = new TaskMapService();
-    }
-    return this.instance;
-  }
-
   static getDuplicateTaskUpdateInfo(
     taskId: string,
     newTaskUpdater: Updater<DashboardTask>,
     originalTaskUpdater?: Updater<DashboardTask>
   ): UpsertManyInfo<DashboardTask> {
-    const map = this.getInstance().documentMap;
+    const map = this.instance.documentMap;
     const parentTask = map[taskId];
     const allRelatedTaskIds = DashboardTaskService.getChildrenIds(Object.values(map), [
       parentTask._id
@@ -135,7 +128,7 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
     taskId: string,
     updater: Updater<DashboardTask>
   ): UpsertManyInfo<DashboardTask> {
-    const map = this.getInstance().documentMap;
+    const map = this.instance.documentMap;
     const parentTask = map[taskId];
     const allRelatedTaskIds = DashboardTaskService.getChildrenIds(Object.values(map), [
       parentTask._id

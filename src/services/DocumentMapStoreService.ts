@@ -132,7 +132,7 @@ export type DocumentMapStoreSubscriber<T extends BaseDocument> = {
  */
 export default abstract class DocumentMapStoreService<T extends BaseDocument> {
   protected documentMap: Record<string, T> = {};
-  protected store: DocumentMapStore<T>;
+  protected store: DocumentMapStore<T> = this.createMapStore();
   protected childStores: Record<string, DocumentChildStore<T>> = {};
   protected previousState: Record<string, T> = {};
   /**
@@ -142,7 +142,6 @@ export default abstract class DocumentMapStoreService<T extends BaseDocument> {
   protected subscribers: DocumentMapStoreSubscriber<T>[] = [];
 
   protected constructor() {
-    this.store = this.createMapStore();
     this.setupSubscribers();
   }
 
@@ -174,6 +173,9 @@ export default abstract class DocumentMapStoreService<T extends BaseDocument> {
   }
 
   private createDocStore(docId: string): DocumentChildStore<T> {
+    if (!this.documentMap[docId]) {
+      throw new Error(`Cannot create doc store for doc that does not exist. Doc ID: ${docId}`);
+    }
     const { subscribe, set } = writable<T>(this.documentMap[docId]);
 
     const updateDoc = (updater: Updater<T>) => {
@@ -245,6 +247,7 @@ export default abstract class DocumentMapStoreService<T extends BaseDocument> {
     localDataReady.subscribe((ready) => {
       const localDataMap = this.getFromLocalData();
       if (ready && localDataMap) {
+        this.documentMap = localDataMap;
         set(localDataMap);
       }
     });
@@ -300,7 +303,7 @@ export default abstract class DocumentMapStoreService<T extends BaseDocument> {
        * Sets the document map. This should only be used when the store is
        * initialized from data that comes from the backend.
        */
-      set: (newMap: Record<string, T>) => {
+      set: (newMap) => {
         this.documentMap = newMap;
         Object.entries(this.childStores).forEach(([docId, store]) => {
           if (!this.documentMap[docId]) {

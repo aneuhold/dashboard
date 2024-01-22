@@ -5,6 +5,12 @@
 
   let snackBarRef: Snackbar;
 
+  const openSnackBar = () => {
+    if (snackBarRef) {
+      snackBarRef.open();
+    }
+  };
+
   export const snackbar = {
     success: (message: string, timeout = 5000) => {
       snackbarSettings.set({
@@ -12,7 +18,7 @@
         currentClass: 'success',
         timeout
       });
-      snackBarRef.open();
+      openSnackBar();
     },
     error: (message: string, timeout = 5000) => {
       snackbarSettings.set({
@@ -20,7 +26,7 @@
         currentClass: 'error',
         timeout
       });
-      snackBarRef.open();
+      openSnackBar();
     },
     warning: (message: string, timeout = 5000) => {
       snackbarSettings.set({
@@ -28,7 +34,7 @@
         currentClass: 'warning',
         timeout
       });
-      snackBarRef.open();
+      openSnackBar();
     }
   };
 

@@ -38,13 +38,6 @@ export default class TaskTagsService {
     };
   }
 
-  /**
-   * Temporary method while refactoring.
-   */
-  static updateTaskTagsStore() {
-    this.getStore().set(this.getAllTaskTags());
-  }
-
   private static createStore(): Writable<string[]> {
     const taskTagsStore = writable<string[]>([]);
     if (!this.userIdUnsub) {
@@ -56,6 +49,10 @@ export default class TaskTagsService {
       });
     }
     return taskTagsStore;
+  }
+
+  private static updateTaskTagsStore() {
+    this.getStore().set(this.getAllTaskTags());
   }
 
   /**

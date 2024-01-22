@@ -39,7 +39,7 @@
     ? DashboardTaskService.getChildrenIds(Object.values($taskMap), [$task._id])
     : [];
   $: hasExtraTaskInfo = allChildrenIds.length > 0;
-  $: finalParentId = TaskService.findParentIdWithSameSharedWith($task);
+  $: finalSharedParentId = $task ? TaskService.findParentIdWithSameSharedWith($task) : '';
   $: menuItems = getMenuItems($task);
   $: currentStrikeClass =
     completeAnimationShouldShow && $task.completed
@@ -95,7 +95,7 @@
     ];
     if (
       task.userId.toString() === $userSettings.config.userId.toString() &&
-      finalParentId === taskId
+      finalSharedParentId === taskId
     ) {
       menuItems.push({
         title: 'Share',
