@@ -12,6 +12,7 @@
   import Paper, { Content } from '@smui/paper';
   import PageTitle from 'components/PageTitle.svelte';
   import { snackbar } from 'components/Snackbar.svelte';
+  import GlobalTagSettings from 'components/Tasks/TaskTags/GlobalTagSettings.svelte';
   import InputBox from 'components/presentational/InputBox.svelte';
   import DashboardAPIService from 'util/api/DashboardAPIService';
   import { userSettings } from '../../stores/userSettings';
@@ -119,6 +120,7 @@
             </Button>
           </div>
         </div>
+        <GlobalTagSettings />
         <hr class="sectionSeparator" />
         <Button disabled={!$userSettings.pendingSettingsUpdate} on:click={saveSettings}>
           {#if updatingSettings}

@@ -1,6 +1,7 @@
 import { DashboardUserConfig, type UserCTO } from '@aneuhold/core-ts-db-lib';
 import { ObjectId } from 'bson';
 import { writable, type Updater } from 'svelte/store';
+import DashboardAPIService from 'util/api/DashboardAPIService';
 import LocalData, { localDataReady } from '../util/LocalData';
 
 export type UserSettings = {
@@ -62,6 +63,14 @@ function createUserSettingsStore() {
         delete settings.collaborators[collaboratorId.toString()];
         settings.pendingSettingsUpdate = true;
         return settings;
+      });
+    },
+    saveSettings: () => {
+      DashboardAPIService.updateSettings(currentSettings.config).then(() => {
+        updateUserSettings((settings) => {
+          settings.pendingSettingsUpdate = false;
+          return settings;
+        });
       });
     }
   };
