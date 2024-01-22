@@ -28,7 +28,7 @@
   import TaskRecurrenceInfo from './TaskRecurrence/TaskRecurrenceInfo.svelte';
   import TaskShareButton from './TaskShareButton.svelte';
   import TaskSharingInfo from './TaskSharingInfo.svelte';
-  import TaskTagsSelector from './TaskTagsSelector.svelte';
+  import TaskTagsSelector from './TaskTags/TaskTagsSelector.svelte';
 
   export let taskId: string;
 

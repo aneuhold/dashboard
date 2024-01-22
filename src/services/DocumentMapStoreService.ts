@@ -94,6 +94,7 @@ export type DocumentMapStoreSubscriber<T extends BaseDocument> = {
    */
   validateDocDeletion?: (map: Record<string, T>, docToDelete: T) => string[];
   beforeDocDeletion?: (map: Record<string, T>, docToDelete: T) => void;
+  afterDocDeletion?: (map: Record<string, T>, docsDeleted: T[]) => void;
   /**
    * A hook which runs before a doc is updated in the map. This can be used to
    * indicate that the update to the doc will require other docs to be updated
@@ -382,15 +383,19 @@ export default abstract class DocumentMapStoreService<T extends BaseDocument> {
             }
           });
         });
-        // Persist the changes to the DB before removing from the map.
-        this.persistToDb({
-          delete: allDocsToDelete
-        });
         docIdsToDelete.forEach((id) => {
           delete this.documentMap[id];
           delete this.childStores[id];
         });
         setMap();
+        this.subscribers.forEach((subscriber) => {
+          if (subscriber.afterDocDeletion) {
+            subscriber.afterDocDeletion(this.documentMap, allDocsToDelete);
+          }
+        });
+        this.persistToDb({
+          delete: allDocsToDelete
+        });
       }
     };
   }

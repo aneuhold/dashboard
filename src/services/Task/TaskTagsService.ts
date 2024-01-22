@@ -15,7 +15,6 @@ export default class TaskTagsService {
   private static taskTagsStore: Writable<string[]> | undefined;
   private static userId: string | undefined;
   private static userIdUnsub: undefined | Unsubscriber = undefined;
-  private static taskMapUnsub: undefined | Unsubscriber = undefined;
 
   /**
    * Gets the store of all tags used by the current user on tasks.
@@ -30,10 +29,28 @@ export default class TaskTagsService {
   static getSubscribersForTaskMap(): DocumentMapStoreSubscriber<DashboardTask> {
     return {
       beforeDocUpdate(map, oldDoc, newDoc) {
-        if (oldDoc?.tags.length !== newDoc.tags.length) {
+        if (!TaskTagsService.userId) {
+          return newDoc;
+        }
+        const oldUserTags = oldDoc?.tags[TaskTagsService.userId] ?? [];
+        const newUserTags = newDoc.tags[TaskTagsService.userId] ?? [];
+        if (oldUserTags.length !== newUserTags.length) {
           TaskTagsService.updateTaskTagsStore();
         }
         return newDoc;
+      },
+      afterDocDeletion(map, docsDeleted) {
+        const userId = TaskTagsService.userId;
+        if (!userId) {
+          return;
+        }
+        const someDocHadTags = docsDeleted.some((doc) => {
+          const userTags = doc.tags[userId] ?? [];
+          return userTags.length > 0;
+        });
+        if (someDocHadTags) {
+          TaskTagsService.updateTaskTagsStore();
+        }
       }
     };
   }
@@ -67,9 +84,9 @@ export default class TaskTagsService {
     // Convert to a map first to remove duplicates.
     const allTaskTagsMap = Object.values(TaskMapService.getMap()).reduce(
       (tags, task) => {
-        const taskTags = task.tags[userId];
-        if (taskTags) {
-          taskTags.forEach((tag) => {
+        const tagsForUser = task.tags[userId];
+        if (tagsForUser) {
+          tagsForUser.forEach((tag) => {
             tags[tag] = true;
           });
         }
