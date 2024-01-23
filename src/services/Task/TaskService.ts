@@ -1,4 +1,5 @@
 import type { DashboardTask } from '@aneuhold/core-ts-db-lib';
+import { ArrayService } from '@aneuhold/core-ts-lib';
 import type { BreadCrumbArray } from 'components/BreadCrumb.svelte';
 import { TaskMapService } from './TaskMapService';
 
@@ -64,17 +65,11 @@ export default class TaskService {
     if (!parentTask) {
       return task._id.toString();
     }
-    // Fancy array comparison logic
     if (
-      parentTask.sharedWith.length === task.sharedWith.length &&
-      parentTask.sharedWith
-        .map((id) => id.toString())
-        .sort()
-        .join() ===
-        task.sharedWith
-          .map((id) => id.toString())
-          .sort()
-          .join()
+      ArrayService.arraysHaveSamePrimitiveValues(
+        task.sharedWith.map((id) => id.toString()),
+        parentTask.sharedWith.map((id) => id.toString())
+      )
     ) {
       return this.findParentIdWithSameSharedWith(parentTask);
     }

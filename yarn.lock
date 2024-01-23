@@ -37,6 +37,11 @@
   resolved "https://registry.yarnpkg.com/@aneuhold/core-ts-lib/-/core-ts-lib-1.1.10.tgz#ceb738d06b950053ad9b0327163e62f46a8d450f"
   integrity sha512-UNoYKZ41mXZVGCDGAkQegiiEQbvPYQIDF+xGH+XLhos3sPGjJ91wQZM8WulrrmKU8MJMHuCgwjd8pKl3z0eO/g==
 
+"@aneuhold/core-ts-lib@^1.1.11":
+  version "1.1.11"
+  resolved "https://registry.yarnpkg.com/@aneuhold/core-ts-lib/-/core-ts-lib-1.1.11.tgz#6c87ad75c309af9810d89db433b5beaa5e82683d"
+  integrity sha512-esMkQbdo3y4KAWZGuGpoV39l0XibpOjZ8XfJSpiNLfuSF4xRwufGawKo5tYCDyrVgAgqwQwnW6HniSHvc96E+g==
+
 "@esbuild/android-arm64@0.18.20":
   version "0.18.20"
   resolved "https://registry.yarnpkg.com/@esbuild/android-arm64/-/android-arm64-0.18.20.tgz#984b4f9c8d0377443cc2dfcef266d02244593622"

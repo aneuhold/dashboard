@@ -1,5 +1,6 @@
 import type { DashboardTask } from '@aneuhold/core-ts-db-lib';
 import type { DashboardTagSettings } from '@aneuhold/core-ts-db-lib/lib/embedded-types/dashboard/userConfig/Tags';
+import { ArrayService } from '@aneuhold/core-ts-lib';
 import { writable, type Unsubscriber, type Writable } from 'svelte/store';
 import { userSettings } from '../../stores/userSettings';
 import type { DocumentMapStoreSubscriber } from '../DocumentMapStoreService';
@@ -67,12 +68,21 @@ export default class TaskTagsService {
     userSettings.saveSettings();
   }
 
-  private static getNewTags(oldTags: string[], newTags: string[]): string[] {
-    return newTags.filter((tag) => !oldTags.includes(tag));
-  }
-
-  private static getRemovedTags(oldTags: string[], newTags: string[]): string[] {
-    return oldTags.filter((tag) => !newTags.includes(tag));
+  /**
+   * Updates a tag from the current user's settings and all tasks.
+   */
+  static updateTag(oldTag: string, newTag: string) {
+    // Setup user settings subscribers if needed.
+    if (!this.taskTagsStore) {
+      this.taskTagsStore = this.createStore();
+    }
+    userSettings.update((settings) => {
+      settings.config.tagSettings[newTag] = settings.config.tagSettings[oldTag];
+      delete settings.config.tagSettings[oldTag];
+      return settings;
+    });
+    userSettings.saveSettings();
+    this.updateTagInAllTasks(oldTag, newTag);
   }
 
   private static addTagForUserIfNeeded(tag: string) {
@@ -121,10 +131,22 @@ export default class TaskTagsService {
             this.removeTagFromAllTasks(removedTags[0]);
           }
           updateTaskTags(newTagSettings);
+        } else if (
+          !ArrayService.arraysHaveSamePrimitiveValues(this.previousUserTagsArray, newUserTagsArray)
+        ) {
+          updateTaskTags(newTagSettings);
         }
       });
     }
     return taskTagsStore;
+  }
+
+  private static getNewTags(oldTags: string[], newTags: string[]): string[] {
+    return newTags.filter((tag) => !oldTags.includes(tag));
+  }
+
+  private static getRemovedTags(oldTags: string[], newTags: string[]): string[] {
+    return oldTags.filter((tag) => !newTags.includes(tag));
   }
 
   /**

@@ -120,7 +120,10 @@
             </Button>
           </div>
         </div>
-        <GlobalTagSettings />
+        <hr class="sectionSeparator" />
+        <div class="globalTagSettingsContainer">
+          <GlobalTagSettings />
+        </div>
         <hr class="sectionSeparator" />
         <Button disabled={!$userSettings.pendingSettingsUpdate} on:click={saveSettings}>
           {#if updatingSettings}
@@ -154,6 +157,9 @@
     display: flex;
     flex-direction: column;
     margin-bottom: 16px;
+  }
+  .globalTagSettingsContainer {
+    width: 100%;
   }
   .userNameSearch {
     display: flex;

@@ -3,6 +3,7 @@
   import Card, { Content } from '@smui/card';
   import type { MenuButtonItem } from 'components/presentational/MenuButton.svelte';
   import MenuButton from 'components/presentational/MenuButton.svelte';
+  import { createEventDispatcher } from 'svelte';
   import TaskTagsService from '../../../services/Task/TaskTagsService';
   import { userSettings } from '../../../stores/userSettings';
 
@@ -11,13 +12,17 @@
   $: tagSettings = $userSettings.config.tagSettings[tagName];
   $: menuItems = getMenuItems(tagSettings);
 
+  const dispatch = createEventDispatcher<{
+    openEditor: string;
+  }>();
+
   const getMenuItems = (tagSettings: DashboardTagSetting) => {
     const menuItems: MenuButtonItem[] = [
       {
         title: 'Edit',
         iconName: 'edit',
         clickAction: () => {
-          console.log('edit');
+          dispatch('openEditor', tagName);
         }
       },
       {
