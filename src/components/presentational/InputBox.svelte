@@ -81,6 +81,12 @@
    */
   export let isSmall = false;
 
+  /**
+   * Optional validation value that can be set. If it is set, the input box
+   * will be invalid.
+   */
+  export let isValid = true;
+
   let previousOnBlurValue = onBlurValue;
 
   /**
@@ -94,10 +100,11 @@
    * quite useful in the future.
    */
   $: invalid =
-    typeof inputValue === 'number' &&
-    (isNaN(inputValue) ||
-      (min !== undefined && inputValue < min) ||
-      (max !== undefined && inputValue > max));
+    !isValid ||
+    (typeof inputValue === 'number' &&
+      (isNaN(inputValue) ||
+        (min !== undefined && inputValue < min) ||
+        (max !== undefined && inputValue > max)));
 
   const dispatch = createEventDispatcher();
 
