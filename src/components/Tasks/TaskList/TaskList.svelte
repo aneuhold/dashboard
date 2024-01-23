@@ -9,10 +9,11 @@
   import TaskListOptions from './TaskListOptions.svelte';
 
   export let taskIds: string[];
+  export let parentTaskId: string | undefined = undefined;
 </script>
 
 <div class="content">
-  <TaskListOptions />
+  <TaskListOptions category="default" {parentTaskId} />
   {#each taskIds as taskId (taskId)}
     <div transition:slide>
       <TaskRow {taskId} />

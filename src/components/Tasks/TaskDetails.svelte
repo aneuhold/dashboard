@@ -121,20 +121,19 @@
           </i>
         {/if}
       </div>
-      <TaskList taskIds={subTaskIds} />
+      <TaskList parentTaskId={taskId} taskIds={subTaskIds} />
     {:else}
       <div class="mdc-typography--body1 subTasksTitle dimmed-color"><i>No sub tasks</i></div>
     {/if}
     <FabButton iconName="add" clickHandler={addSubTask} label="Add Subtask" />
+    <ConfirmationDialog
+      title="Delete Task"
+      message={`Are you sure you want to delete this task? It has ${allChildrenIds.length} sub tasks.`}
+      bind:open={deleteDialogOpen}
+      on:confirm={deleteTask}
+    />
   {/if}
 </div>
-
-<ConfirmationDialog
-  title="Delete Task"
-  message={`Are you sure you want to delete this task? It has ${allChildrenIds.length} sub tasks.`}
-  bind:open={deleteDialogOpen}
-  on:confirm={deleteTask}
-/>
 
 <style>
   .titleContainer {

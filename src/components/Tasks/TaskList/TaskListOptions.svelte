@@ -1,27 +1,113 @@
 <script lang="ts">
+  import {
+    DashboardTask,
+    getDefaultTaskListFilterSettings,
+    getDefaultTaskListSortSettings,
+    type DashboardTaskListFilterSettings,
+    type DashboardTaskListSortSettings
+  } from '@aneuhold/core-ts-db-lib';
   import ClickableDiv from 'components/presentational/ClickableDiv.svelte';
   import SquareIconButton from 'components/presentational/SquareIconButton.svelte';
+  import { TaskMapService } from '../../../services/Task/TaskMapService';
+  import { currentUserId } from '../../../stores/derived/currentUserId';
+  import { userSettings } from '../../../stores/userSettings';
+  import TaskListSortingDialog from './TaskListSortingDialog.svelte';
 
-  let sortDisabled = false;
-  let filterDisabled = false;
+  export let parentTaskId: string | undefined = undefined;
+  export let category: string;
+
+  $: parentTask = parentTaskId ? TaskMapService.getTaskStore(parentTaskId) : undefined;
+  $: parentTaskSortSettings = $parentTask ? $parentTask.sortSettings[$currentUserId] : undefined;
+  $: parentTaskFilterSettings = $parentTask
+    ? $parentTask.filterSettings[$currentUserId]
+    : undefined;
+  $: userTaskSortSettings = $userSettings.config.taskListSortSettings[category];
+  $: userTaskFilterSettings = $userSettings.config.taskListFilterSettings[category];
+  $: currentSortSettings =
+    parentTaskSortSettings ??
+    userTaskSortSettings ??
+    getDefaultTaskListSortSettings($currentUserId);
+  $: currentFilterSettings =
+    parentTaskFilterSettings ??
+    userTaskFilterSettings ??
+    getDefaultTaskListFilterSettings($currentUserId);
+  $: sortingDimmed = parentTaskId ? !parentTaskSortSettings : !userTaskSortSettings;
+  $: filterDimmed = parentTaskId ? !parentTaskFilterSettings : !userTaskFilterSettings;
+  $: taskSpecificText = getTaskSpecificText({
+    parentTask: $parentTask,
+    parentTaskSortSettings,
+    parentTaskFilterSettings
+  });
+
+  let sortingDialogOpen = false;
+
+  const getTaskSpecificText = (settingsInfo: {
+    parentTask?: DashboardTask;
+    parentTaskSortSettings?: DashboardTaskListSortSettings;
+    parentTaskFilterSettings?: DashboardTaskListFilterSettings;
+  }) => {
+    const { parentTask, parentTaskSortSettings, parentTaskFilterSettings } = settingsInfo;
+    if (parentTask) {
+      if (parentTaskSortSettings && parentTaskFilterSettings) {
+        return 'Task-specific sort + filter';
+      } else if (parentTaskSortSettings) {
+        return 'Task-specific sort';
+      } else if (parentTaskFilterSettings) {
+        return 'Task-specific filter';
+      }
+    }
+    return '';
+  };
+
+  const handleUpdateSortSettings = (event: CustomEvent<DashboardTaskListSortSettings>) => {
+    const newSortSettings = event.detail;
+    if ($parentTask) {
+      $parentTask.sortSettings[$currentUserId] = newSortSettings;
+    } else {
+      $userSettings.config.taskListSortSettings[category] = newSortSettings;
+      userSettings.saveSettings();
+    }
+  };
+  const handleResetSortSettings = () => {
+    if ($parentTask) {
+      const sortSettings = $parentTask.sortSettings;
+      delete sortSettings[$currentUserId];
+      $parentTask.sortSettings = sortSettings;
+    } else {
+      const sortSettings = $userSettings.config.taskListSortSettings;
+      delete sortSettings[category];
+      $userSettings.config.taskListSortSettings = sortSettings;
+      userSettings.saveSettings();
+    }
+  };
 </script>
 
 <div class="container">
   <ClickableDiv
     clickAction={() => {
-      sortDisabled = !sortDisabled;
+      sortingDialogOpen = true;
     }}
   >
-    <SquareIconButton iconName="sort" variant="outlined" disabled={sortDisabled} />
+    <SquareIconButton iconName="sort" variant="outlined" disabled={sortingDimmed} />
   </ClickableDiv>
+  {#if $parentTask}
+    <i class="dimmed-color">{taskSpecificText}</i>
+  {/if}
   <ClickableDiv
     clickAction={() => {
-      filterDisabled = !filterDisabled;
+      console.log('filter clicked');
     }}
   >
-    <SquareIconButton iconName="filter_list" variant="outlined" disabled={filterDisabled} />
+    <SquareIconButton iconName="filter_list" variant="outlined" disabled={filterDimmed} />
   </ClickableDiv>
 </div>
+
+<TaskListSortingDialog
+  initialSettings={currentSortSettings}
+  bind:open={sortingDialogOpen}
+  on:updateSettings={handleUpdateSortSettings}
+  on:reset={handleResetSortSettings}
+/>
 
 <style>
   .container {
@@ -30,5 +116,6 @@
     justify-content: space-between;
     width: 100%;
     margin-bottom: 8px;
+    align-items: center;
   }
 </style>
