@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { DashboardTagSetting } from '@aneuhold/core-ts-db-lib';
   import Card, { Content } from '@smui/card';
+  import IconButton, { Icon } from '@smui/icon-button';
   import type { MenuButtonItem } from 'components/presentational/MenuButton.svelte';
   import MenuButton from 'components/presentational/MenuButton.svelte';
   import { createEventDispatcher } from 'svelte';
@@ -8,6 +9,7 @@
   import { userSettings } from '../../../stores/userSettings';
 
   export let tagName: string;
+  export let maxPriority: number;
 
   $: tagSettings = $userSettings.config.tagSettings[tagName];
   $: menuItems = getMenuItems(tagSettings);
@@ -33,7 +35,7 @@
         }
       }
     ];
-    if (tagSettings.priority !== 0) {
+    if (tagSettings && tagSettings.priority !== 0) {
       menuItems.push({
         title: 'Remove priority',
         iconName: 'remove',
@@ -47,6 +49,38 @@
       });
     }
     return menuItems;
+  };
+
+  const incrementPriority = () => {
+    userSettings.update((settings) => {
+      Object.keys(settings.config.tagSettings).forEach((otherTagName) => {
+        // Increment all the existing non-zero tags priority by 1 that are
+        // lower than the current tag
+        const otherTagPriority = settings.config.tagSettings[otherTagName].priority;
+        if (otherTagPriority === tagSettings.priority + 1) {
+          settings.config.tagSettings[otherTagName].priority -= 1;
+        }
+      });
+      settings.config.tagSettings[tagName].priority += 1;
+      return settings;
+    });
+    userSettings.saveSettings();
+  };
+
+  const decrementPriority = () => {
+    userSettings.update((settings) => {
+      Object.keys(settings.config.tagSettings).forEach((otherTagName) => {
+        // Decrement all the existing non-zero tags priority by 1 that are
+        // higher than the current tag
+        const otherTagPriority = settings.config.tagSettings[otherTagName].priority;
+        if (otherTagPriority === tagSettings.priority - 1) {
+          settings.config.tagSettings[otherTagName].priority += 1;
+        }
+      });
+      settings.config.tagSettings[tagName].priority -= 1;
+      return settings;
+    });
+    userSettings.saveSettings();
   };
 
   const addPriorityToTag = () => {
@@ -89,11 +123,25 @@
     <Content class="tagRowContent">
       <div class="card-content">
         <div class="left-side">
-          <h4 class="mdc-typography--body1 title">
+          {#if tagSettings.priority !== 0}
+            {#if tagSettings.priority !== 1}
+              <IconButton size="button" on:click={decrementPriority}>
+                <Icon class="material-icons">arrow_downward</Icon>
+              </IconButton>
+            {/if}
+            {#if tagSettings.priority !== maxPriority}
+              <IconButton size="button" on:click={incrementPriority}>
+                <Icon class="material-icons">arrow_upward</Icon>
+              </IconButton>
+            {/if}
+          {/if}
+        </div>
+        <div class="tagInfo">
+          <h4 class="mdc-typography--body1 text">
             {tagName}
           </h4>
           {#if tagSettings.priority !== 0}
-            <span class="mdc-deprecated-list-item__secondary-text subtitle">
+            <span class="mdc-deprecated-list-item__secondary-text text">
               Priority: {tagSettings.priority}
             </span>
           {/if}
@@ -106,35 +154,35 @@
 
 <style>
   * :global(.tagRowContent) {
-    padding: 0px 8px;
-    padding-left: 16px;
+    padding: 0px;
   }
-  .title {
+  .text {
     margin-top: 0px;
-    margin-bottom: -5px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 4px;
-  }
-  .subtitle {
-    margin-top: 4px;
     margin-bottom: 0px;
-    text-wrap: wrap;
   }
   /* Fixes a weird issue with mdc-deprecated-list-item__secondary-text */
-  .subtitle::before {
+  .text::before {
     display: none;
   }
   .card-content {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    gap: 8px;
   }
   .left-side {
     display: flex;
     flex-direction: row;
-    gap: 16px;
     align-items: center;
+    flex-wrap: nowrap;
+  }
+  .tagInfo {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+    margin-bottom: 8px;
   }
 </style>
