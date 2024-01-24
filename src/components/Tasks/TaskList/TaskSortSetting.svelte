@@ -78,10 +78,11 @@
   <Card variant="outlined">
     <Content class="tagRowContent">
       <div class={tagContentClass}>
-        <div class="iconSet">
+        <div class="iconSet leftIconSet">
           <Checkbox
             checked={!disabled}
             touch
+            class="tagCheckbox"
             on:click={() => {
               if (disabled) {
                 enable();
@@ -110,6 +111,7 @@
               singleSelect
               selected={sortDirectionChoice}
               key={(segment) => segment.value}
+              class="tagSegmentedButton"
             >
               <Segment
                 {segment}
@@ -132,12 +134,20 @@
   * :global(.tagRowContent) {
     padding: 0px;
   }
+  * :global(.tagCheckbox) {
+    margin: 0px;
+  }
+  * :global(.tagSegmentedButton) {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+  }
   .colorWhite {
     color: var(--mdc-theme-on-primary);
   }
   .text {
-    margin-top: 0px;
-    margin-bottom: 0px;
+    margin-top: 4px;
+    margin-bottom: 4px;
   }
   .card-content {
     display: flex;
@@ -152,5 +162,8 @@
     flex-direction: row;
     align-items: center;
     flex-wrap: nowrap;
+  }
+  .leftIconSet {
+    margin-right: -4px;
   }
 </style>
