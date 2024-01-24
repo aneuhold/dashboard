@@ -4,7 +4,11 @@
   A list of tasks.
 -->
 <script lang="ts">
-  import { getDefaultTaskListSortSettings } from '@aneuhold/core-ts-db-lib';
+  import {
+    DashboardTaskService,
+    DashboardTaskSortBy,
+    getDefaultTaskListSortSettings
+  } from '@aneuhold/core-ts-db-lib';
   import TaskRow from 'components/Tasks/TaskRow.svelte';
   import { flip } from 'svelte/animate';
   import { slide } from 'svelte/transition';
@@ -17,6 +21,7 @@
   export let category: string;
   export let parentTaskId: string | undefined = undefined;
 
+  const taskMap = TaskMapService.getStore();
   $: parentTask = parentTaskId ? TaskMapService.getTaskStore(parentTaskId) : undefined;
   $: parentTaskSortSettings = $parentTask ? $parentTask.sortSettings[$currentUserId] : undefined;
   $: userTaskSortSettings = $userSettings.config.taskListSortSettings[category];
@@ -24,6 +29,18 @@
     parentTaskSortSettings ??
     userTaskSortSettings ??
     getDefaultTaskListSortSettings($currentUserId);
+  $: isSortedByTagsFirst =
+    currentSortSettings.sortList.length !== 0 &&
+    currentSortSettings.sortList[0].sortBy === DashboardTaskSortBy.tags;
+  $: tagHeaderMap = isSortedByTagsFirst
+    ? DashboardTaskService.getTagHeaderMap(
+        $taskMap,
+        taskIds,
+        $currentUserId,
+        $userSettings.config.tagSettings,
+        'No Priority'
+      )
+    : undefined;
 </script>
 
 <div class="content">
@@ -36,7 +53,10 @@
   />
   {#each taskIds as taskId (taskId)}
     <div transition:slide animate:flip={{ duration: 200 }}>
-      <TaskRow {taskId} />
+      <TaskRow
+        tagHeaderName={tagHeaderMap && tagHeaderMap[taskId] ? tagHeaderMap[taskId] : undefined}
+        {taskId}
+      />
     </div>
   {/each}
 </div>
