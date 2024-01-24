@@ -2,37 +2,32 @@
   import {
     DashboardTask,
     getDefaultTaskListFilterSettings,
-    getDefaultTaskListSortSettings,
     type DashboardTaskListFilterSettings,
     type DashboardTaskListSortSettings
   } from '@aneuhold/core-ts-db-lib';
   import ClickableDiv from 'components/presentational/ClickableDiv.svelte';
   import SquareIconButton from 'components/presentational/SquareIconButton.svelte';
-  import { TaskMapService } from '../../../services/Task/TaskMapService';
+  import type { DocumentStore } from '../../../services/DocumentMapStoreService';
   import { currentUserId } from '../../../stores/derived/currentUserId';
   import { userSettings } from '../../../stores/userSettings';
   import TaskListSortingDialog from './TaskListSortingDialog.svelte';
 
-  export let parentTaskId: string | undefined = undefined;
   export let category: string;
+  export let parentTask: DocumentStore<DashboardTask> | undefined = undefined;
+  export let parentTaskSortSettings: DashboardTaskListSortSettings | undefined = undefined;
+  export let userTaskSortSettings: DashboardTaskListSortSettings | undefined = undefined;
+  export let currentSortSettings: DashboardTaskListSortSettings;
 
-  $: parentTask = parentTaskId ? TaskMapService.getTaskStore(parentTaskId) : undefined;
-  $: parentTaskSortSettings = $parentTask ? $parentTask.sortSettings[$currentUserId] : undefined;
   $: parentTaskFilterSettings = $parentTask
     ? $parentTask.filterSettings[$currentUserId]
     : undefined;
-  $: userTaskSortSettings = $userSettings.config.taskListSortSettings[category];
   $: userTaskFilterSettings = $userSettings.config.taskListFilterSettings[category];
-  $: currentSortSettings =
-    parentTaskSortSettings ??
-    userTaskSortSettings ??
-    getDefaultTaskListSortSettings($currentUserId);
   $: currentFilterSettings =
     parentTaskFilterSettings ??
     userTaskFilterSettings ??
     getDefaultTaskListFilterSettings($currentUserId);
-  $: sortingDimmed = parentTaskId ? !parentTaskSortSettings : !userTaskSortSettings;
-  $: filterDimmed = parentTaskId ? !parentTaskFilterSettings : !userTaskFilterSettings;
+  $: sortingDimmed = $parentTask ? !parentTaskSortSettings : !userTaskSortSettings;
+  $: filterDimmed = $parentTask ? !parentTaskFilterSettings : !userTaskFilterSettings;
   $: taskSpecificText = getTaskSpecificText({
     parentTask: $parentTask,
     parentTaskSortSettings,

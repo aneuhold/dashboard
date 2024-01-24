@@ -40,7 +40,7 @@
   {:else}
     <PageTitle title={tasksPageInfo.shortTitle} subtitle={tasksPageInfo.description} />
 
-    <TaskList {taskIds} />
+    <TaskList category="default" {taskIds} />
 
     <FabButton clickHandler={addTask} iconName="add" />
   {/if}

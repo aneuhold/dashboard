@@ -20,8 +20,13 @@
   import TaskCompletedCheckbox from './TaskCompletedCheckbox.svelte';
   import TaskRowDateInfo from './TaskDate/TaskRowDateInfo.svelte';
   import TaskSharingDialog from './TaskSharingDialog.svelte';
+  import TaskRowTagHeader from './TaskTags/TaskRowTagHeader.svelte';
 
   export let taskId: string;
+  /**
+   * If set, it will display the tag as a header above the task.
+   */
+  export let tagHeaderName: string | undefined = undefined;
 
   let deleteDialogOpen = false;
   let shareDialogOpen = false;
@@ -124,6 +129,9 @@
   });
 </script>
 
+{#if tagHeaderName}
+  <TaskRowTagHeader tagName={tagHeaderName} />
+{/if}
 <div class="container">
   <Card>
     <CardContent class="taskRowCard">

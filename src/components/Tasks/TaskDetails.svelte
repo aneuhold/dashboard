@@ -121,7 +121,7 @@
           </i>
         {/if}
       </div>
-      <TaskList parentTaskId={taskId} taskIds={subTaskIds} />
+      <TaskList category={$task.category} parentTaskId={taskId} taskIds={subTaskIds} />
     {:else}
       <div class="mdc-typography--body1 subTasksTitle dimmed-color"><i>No sub tasks</i></div>
     {/if}
