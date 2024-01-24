@@ -5,6 +5,7 @@
 -->
 <script lang="ts">
   import TaskRow from 'components/Tasks/TaskRow.svelte';
+  import { flip } from 'svelte/animate';
   import { slide } from 'svelte/transition';
   import TaskListOptions from './TaskListOptions.svelte';
 
@@ -15,7 +16,7 @@
 <div class="content">
   <TaskListOptions category="default" {parentTaskId} />
   {#each taskIds as taskId (taskId)}
-    <div transition:slide>
+    <div transition:slide animate:flip={{ duration: 200 }}>
       <TaskRow {taskId} />
     </div>
   {/each}
