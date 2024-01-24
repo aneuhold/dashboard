@@ -10,6 +10,7 @@
   import type { DocumentStore } from '../../../services/DocumentMapStoreService';
   import { currentUserId } from '../../../stores/derived/currentUserId';
   import { userSettings } from '../../../stores/userSettings';
+  import TaskListFilterDialog from './TaskListFilterDialog.svelte';
   import TaskListSortingDialog from './TaskListSortingDialog.svelte';
 
   export let category: string;
@@ -35,6 +36,7 @@
   });
 
   let sortingDialogOpen = false;
+  let filterDialogOpen = false;
 
   const getTaskSpecificText = (settingsInfo: {
     parentTask?: DashboardTask;
@@ -75,6 +77,27 @@
       userSettings.saveSettings();
     }
   };
+  const handleUpdateFilterSettings = (event: CustomEvent<DashboardTaskListFilterSettings>) => {
+    const newFilterSettings = event.detail;
+    if ($parentTask) {
+      $parentTask.filterSettings[$currentUserId] = newFilterSettings;
+    } else {
+      $userSettings.config.taskListFilterSettings[category] = newFilterSettings;
+      userSettings.saveSettings();
+    }
+  };
+  const handleResetFilterSettings = () => {
+    if ($parentTask) {
+      const filterSettings = $parentTask.filterSettings;
+      delete filterSettings[$currentUserId];
+      $parentTask.filterSettings = filterSettings;
+    } else {
+      const filterSettings = $userSettings.config.taskListFilterSettings;
+      delete filterSettings[category];
+      $userSettings.config.taskListFilterSettings = filterSettings;
+      userSettings.saveSettings();
+    }
+  };
 </script>
 
 <div class="container">
@@ -90,7 +113,7 @@
   {/if}
   <ClickableDiv
     clickAction={() => {
-      console.log('filter clicked');
+      filterDialogOpen = true;
     }}
   >
     <SquareIconButton iconName="filter_list" variant="outlined" disabled={filterDimmed} />
@@ -102,6 +125,12 @@
   bind:open={sortingDialogOpen}
   on:updateSettings={handleUpdateSortSettings}
   on:reset={handleResetSortSettings}
+/>
+<TaskListFilterDialog
+  initialSettings={currentFilterSettings}
+  bind:open={filterDialogOpen}
+  on:updateSettings={handleUpdateFilterSettings}
+  on:reset={handleResetFilterSettings}
 />
 
 <style>
