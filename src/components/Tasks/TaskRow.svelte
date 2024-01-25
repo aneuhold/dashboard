@@ -54,6 +54,11 @@
         : '';
   $: currentDimClass =
     completeAnimationShouldShow && $task.completed ? ' dimAnimate' : $task.completed ? ' dim' : '';
+  $: trimmedTaskDescription = $task.description
+    ? $task.description.length > 100
+      ? `${$task.description.substring(0, 100)}...`
+      : $task.description
+    : '';
 
   $: if ($task.completed !== previousTaskCompletedState && hasMounted) {
     completeAnimationShouldShow = true;
@@ -155,7 +160,7 @@
                 <div class="tagsContainer">
                   <Icon class="material-icons dimmed-color small-icon">sell</Icon>
                   {#each $task.tags[$currentUserId] as tag, index}
-                    <i class="mdc-typography--caption mdc-theme--text-hint-on-background">
+                    <i class="mdc-typography--caption mdc-theme--text-hint-on-background no-before">
                       {`${tag}${index === $task.tags[$currentUserId].length - 1 ? '' : ', '}`}
                     </i>
                   {/each}
@@ -164,12 +169,14 @@
             </h4>
             <TaskRowDateInfo {taskId} />
             {#if $task.description && $task.description !== ''}
-              <div class="mdc-deprecated-list-item__secondary-text subtitle">
-                {$task.description}
+              <div class="mdc-deprecated-list-item__secondary-text subtitle no-before">
+                {trimmedTaskDescription}
               </div>
             {/if}
             {#if hasExtraTaskInfo}
-              <div class="mdc-typography--caption mdc-theme--text-hint-on-background extraTaskInfo">
+              <div
+                class="mdc-typography--caption mdc-theme--text-hint-on-background no-before extraTaskInfo"
+              >
                 {#if allChildrenIds.length > 0}
                   {allChildrenIds.length} child task{allChildrenIds.length > 1 ? 's' : ''}
                 {/if}
@@ -207,9 +214,6 @@
     margin-bottom: 0px;
     text-wrap: wrap;
     max-height: 1lh;
-  }
-  .subtitle::before {
-    display: none;
   }
   .extraTaskInfo {
     margin-top: 2px;

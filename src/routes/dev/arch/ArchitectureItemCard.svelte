@@ -83,7 +83,9 @@
               </div>
             {/if}
             {#if $$slots.default}
-              <div class="mdc-deprecated-list-item__secondary-text subtitle"><slot /></div>
+              <div class="mdc-deprecated-list-item__secondary-text subtitle no-before">
+                <slot />
+              </div>
             {/if}
             {#if dependencyNames}
               <div class="mdc-typography--caption mdc-theme--text-hint-on-background dependencies">
@@ -121,10 +123,6 @@
     margin-top: 4px;
     margin-bottom: 0px;
     text-wrap: wrap;
-  }
-  /* Fixes a weird issue with mdc-deprecated-list-item__secondary-text */
-  .subtitle::before {
-    display: none;
   }
   .card-content {
     display: flex;

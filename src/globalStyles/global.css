@@ -22,6 +22,12 @@
   min-height: 5lh;
 }
 
+/* Fixes a strange issue with mdc-deprecated-list-item__secondary-text and 
+other text classes */
+.no-before::before {
+  display: none;
+}
+
 /* For adjusting the width of text areas */
 span:has(> .mdc-text-field__input) {
   width: 100%;
