@@ -33,6 +33,8 @@ export default class TaskTagsService {
   static getSubscribersForTaskMap(): DocumentMapStoreSubscriber<DashboardTask> {
     return {
       beforeDocUpdate(map, oldDoc, newDoc) {
+        // Temporary until the brand new tag bug is fixed
+        console.debug('before doc update hit in taskTagsService', oldDoc, newDoc);
         if (!TaskTagsService.userId) {
           return newDoc;
         }

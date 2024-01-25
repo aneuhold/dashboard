@@ -8,6 +8,7 @@
   import ClickableDiv from 'components/presentational/ClickableDiv.svelte';
   import SquareIconButton from 'components/presentational/SquareIconButton.svelte';
   import type { DocumentStore } from '../../../services/DocumentMapStoreService';
+  import TaskTagsService from '../../../services/Task/TaskTagsService';
   import { currentUserId } from '../../../stores/derived/currentUserId';
   import { userSettings } from '../../../stores/userSettings';
   import TaskListFilterDialog from './TaskListFilterDialog.svelte';
@@ -18,6 +19,8 @@
   export let parentTaskSortSettings: DashboardTaskListSortSettings | undefined = undefined;
   export let userTaskSortSettings: DashboardTaskListSortSettings | undefined = undefined;
   export let currentSortSettings: DashboardTaskListSortSettings;
+
+  const globalTags = TaskTagsService.getStore();
 
   $: parentTaskFilterSettings = $parentTask
     ? $parentTask.filterSettings[$currentUserId]
@@ -34,6 +37,9 @@
     parentTaskSortSettings,
     parentTaskFilterSettings
   });
+  $: hiddenTags = $globalTags.filter(
+    (tag) => currentFilterSettings.tags[tag] && !currentFilterSettings.tags[tag].show
+  );
 
   let sortingDialogOpen = false;
   let filterDialogOpen = false;
@@ -108,9 +114,17 @@
   >
     <SquareIconButton iconName="sort" variant="outlined" disabled={sortingDimmed} />
   </ClickableDiv>
-  {#if $parentTask}
-    <i class="dimmed-color">{taskSpecificText}</i>
+  {#if $parentTask || hiddenTags.length > 0}
+    <div class="centerText dimmed-color">
+      {#if $parentTask}
+        <i>{taskSpecificText}</i>
+      {/if}
+      {#if hiddenTags.length > 0}
+        <i class="mdc-typography--body2">{hiddenTags.join(', ')} Hidden</i>
+      {/if}
+    </div>
   {/if}
+
   <ClickableDiv
     clickAction={() => {
       filterDialogOpen = true;
@@ -141,5 +155,11 @@
     width: 100%;
     margin-bottom: 8px;
     align-items: center;
+  }
+  .centerText {
+    display: flex;
+    flex-direction: column;
+    text-wrap: wrap;
+    text-align: center;
   }
 </style>
