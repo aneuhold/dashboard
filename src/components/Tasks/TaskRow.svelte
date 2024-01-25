@@ -12,7 +12,6 @@
   import ClickableDiv from 'components/presentational/ClickableDiv.svelte';
   import type { MenuButtonItem } from 'components/presentational/MenuButton.svelte';
   import MenuButton from 'components/presentational/MenuButton.svelte';
-  import { onMount } from 'svelte';
   import { TaskMapService } from '../../services/Task/TaskMapService';
   import TaskService from '../../services/Task/TaskService';
   import { currentUserId } from '../../stores/derived/currentUserId';
@@ -127,11 +126,6 @@
     });
     return menuItems;
   }
-
-  onMount(() => {
-    previousTaskCompletedState = $task.completed;
-    hasMounted = true;
-  });
 </script>
 
 {#if tagHeaderName}
@@ -143,7 +137,7 @@
       <div class="card-content">
         <TaskCompletedCheckbox {taskId} />
         <ClickableDiv clickAction={goToTask}>
-          <div class={currentDimClass}>
+          <div class={`taskInfoContent` + currentDimClass}>
             <h4 class={`mdc-typography--body1 no-before title${currentStrikeClass}`}>
               {#if $task.title !== ''}
                 <span>{$task.title}</span>
@@ -169,9 +163,9 @@
             </h4>
             <TaskRowDateInfo {taskId} />
             {#if $task.description && $task.description !== ''}
-              <div class="mdc-deprecated-list-item__secondary-text subtitle no-before">
+              <span class="description mdc-deprecated-list-item__secondary-text no-before">
                 {trimmedTaskDescription}
-              </div>
+              </span>
             {/if}
             {#if hasExtraTaskInfo}
               <div
@@ -209,11 +203,20 @@
   .container {
     padding: 2px;
   }
-  .subtitle {
+  .taskInfoContent {
+    display: flex;
+    flex-direction: column;
+    container-type: inline-size;
+  }
+  .description {
     margin-top: 4px;
     margin-bottom: 0px;
-    text-wrap: wrap;
-    max-height: 1lh;
+  }
+  /* Container queries yay! */
+  @container (min-width: 1px) {
+    .description {
+      max-width: 100cqw;
+    }
   }
   .extraTaskInfo {
     margin-top: 2px;
