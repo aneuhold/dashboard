@@ -144,7 +144,7 @@
         <TaskCompletedCheckbox {taskId} />
         <ClickableDiv clickAction={goToTask}>
           <div class={currentDimClass}>
-            <h4 class={`mdc-typography--body1 title${currentStrikeClass}`}>
+            <h4 class={`mdc-typography--body1 no-before title${currentStrikeClass}`}>
               {#if $task.title !== ''}
                 <span>{$task.title}</span>
               {:else}

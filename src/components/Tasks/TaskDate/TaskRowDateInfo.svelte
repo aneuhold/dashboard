@@ -7,7 +7,7 @@
   $: pastDue = $task.dueDate && $task.dueDate < new Date();
 </script>
 
-<div class="container mdc-typography--caption mdc-theme--text-hint-on-background">
+<div class="container no-before mdc-typography--caption mdc-theme--text-hint-on-background">
   {#if $task.startDate}
     <span class="date">Starts: {DateService.getDateString($task.startDate)}</span>
   {:else}
