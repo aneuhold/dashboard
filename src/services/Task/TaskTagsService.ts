@@ -41,7 +41,7 @@ export default class TaskTagsService {
         if (oldUserTags.length !== newUserTags.length) {
           const tagsToAdd = TaskTagsService.getNewTags(oldUserTags, newUserTags);
           if (tagsToAdd.length > 0) {
-            // Should only ever be on tag added at a time for now.
+            // Should only ever be one tag added at a time for now.
             TaskTagsService.addTagForUserIfNeeded(tagsToAdd[0]);
           }
         }
@@ -135,6 +135,10 @@ export default class TaskTagsService {
           !ArrayService.arraysHaveSamePrimitiveValues(this.previousUserTagsArray, newUserTagsArray)
         ) {
           updateTaskTags(newTagSettings);
+        } else {
+          // Always update the current tag settings, just in case a priority
+          // changed.
+          this.currentTagSettings = newTagSettings;
         }
       });
     }
