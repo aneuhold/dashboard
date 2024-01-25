@@ -3,6 +3,7 @@
   import LinkList from 'components/LinkList.svelte';
   import type { LinkInfo } from 'components/LinkListItem.svelte';
   import PageTitle from 'components/PageTitle.svelte';
+  import { userSettings } from '../stores/userSettings';
   import { enabledPages } from '../stores/visual/enabledPages';
   import { homePageInfo } from './pageInfo';
 
@@ -75,12 +76,14 @@
       <LinkList links={tableOfContentsLinks} />
     </Content>
   </Paper>
-  <Paper>
-    <Title>Primary Links</Title>
-    <Content>
-      <LinkList links={primaryLinks} />
-    </Content>
-  </Paper>
+  {#if $userSettings.config.enabledFeatures.homePageLinks}
+    <Paper>
+      <Title>Primary Links</Title>
+      <Content>
+        <LinkList links={primaryLinks} />
+      </Content>
+    </Paper>
+  {/if}
 </div>
 
 <style>

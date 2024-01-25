@@ -13,8 +13,10 @@
   import Paper, { Content as PaperContent, Title } from '@smui/paper';
   import LinkList from 'components/LinkList.svelte';
   import type { LinkInfo } from 'components/LinkListItem.svelte';
+  import PageNotFound from 'components/PageNotFound.svelte';
   import PageTitle from 'components/PageTitle.svelte';
   import navInfo from 'util/navInfo';
+  import { userSettings } from '../../stores/userSettings';
   import { devPageInfo } from './pageInfo';
 
   const architectureLinks: Array<LinkInfo> = [
@@ -73,22 +75,26 @@
   <meta name="description" content={devPageInfo.title} />
 </svelte:head>
 
-<PageTitle title={devPageInfo.title} />
+{#if !$userSettings.config.enableDevMode}
+  <PageNotFound />
+{:else}
+  <PageTitle title={devPageInfo.title} />
 
-<div class="content">
-  <Paper>
-    <Title>Architecture</Title>
-    <PaperContent>
-      <LinkList links={architectureLinks} />
-    </PaperContent>
-  </Paper>
-  <Paper>
-    <Title>Random Tools</Title>
-    <PaperContent>
-      <LinkList links={randomToolsLinks} />
-    </PaperContent>
-  </Paper>
-</div>
+  <div class="content">
+    <Paper>
+      <Title>Architecture</Title>
+      <PaperContent>
+        <LinkList links={architectureLinks} />
+      </PaperContent>
+    </Paper>
+    <Paper>
+      <Title>Random Tools</Title>
+      <PaperContent>
+        <LinkList links={randomToolsLinks} />
+      </PaperContent>
+    </Paper>
+  </div>
+{/if}
 
 <style>
   .content {

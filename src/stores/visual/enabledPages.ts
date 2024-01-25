@@ -5,21 +5,33 @@ import { userSettings } from '../userSettings';
 function createEnabledPagesStore() {
   const { subscribe, set } = writable<PageInfo[]>(Object.values(navInfo));
 
-  let devModeEnabled = true;
+  let devModeEnabled: boolean | null = null;
+  let previousEnabledFeaturesString = '';
 
   userSettings.subscribe((settings) => {
-    if (settings.config.enableDevMode !== devModeEnabled) {
+    const newEnabledFeaturesString = JSON.stringify(settings.config.enabledFeatures);
+    if (
+      settings.config.enableDevMode !== devModeEnabled ||
+      newEnabledFeaturesString !== previousEnabledFeaturesString
+    ) {
       devModeEnabled = settings.config.enableDevMode;
-      if (!devModeEnabled) {
-        set(
-          Object.values(navInfo).filter(
-            (pageInfo) =>
-              pageInfo.title !== navInfo.dev.title && pageInfo.title !== navInfo.devArch.title
-          )
-        );
-      } else {
-        set(Object.values(navInfo));
-      }
+      previousEnabledFeaturesString = newEnabledFeaturesString;
+      set(
+        Object.values(navInfo).filter((pageInfo) => {
+          const pageTitle = pageInfo.title;
+          switch (pageTitle) {
+            case navInfo.dev.title:
+            case navInfo.devArch.title:
+              return devModeEnabled;
+            case navInfo.finance.title:
+              return settings.config.enabledFeatures.financePage;
+            case navInfo.automation.title:
+              return settings.config.enabledFeatures.automationPage;
+            default:
+              return true;
+          }
+        })
+      );
     }
   });
 
