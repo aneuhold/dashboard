@@ -197,8 +197,7 @@
 
 <style>
   * :global(.taskRowCard) {
-    padding-left: 0px;
-    padding-right: 0px;
+    padding: 0px;
   }
   .container {
     padding: 2px;
@@ -206,6 +205,7 @@
   .taskInfoContent {
     display: flex;
     flex-direction: column;
+    padding: 16px 0px;
     container-type: inline-size;
   }
   .description {
