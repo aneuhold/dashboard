@@ -66,12 +66,7 @@ function createUserSettingsStore() {
       });
     },
     saveSettings: () => {
-      DashboardAPIService.updateSettings(currentSettings.config).then(() => {
-        updateUserSettings((settings) => {
-          settings.pendingSettingsUpdate = false;
-          return settings;
-        });
-      });
+      DashboardAPIService.updateSettings(currentSettings.config);
     }
   };
 }
