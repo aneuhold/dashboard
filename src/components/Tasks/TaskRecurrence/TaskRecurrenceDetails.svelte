@@ -13,9 +13,9 @@
   } from '@aneuhold/core-ts-db-lib';
   import { DateService } from '@aneuhold/core-ts-lib';
   import Select, { Option } from '@smui/select';
-  import ConfirmationDialog from 'components/ConfirmationDialog.svelte';
   import WeekdaySegmentedButton from 'components/WeekdaySegmentedButton.svelte';
   import InputBox from 'components/presentational/InputBox.svelte';
+  import { confirmationDialog } from 'components/singletons/dialogs/SingletonConfirmationDialog.svelte';
   import { writable, type Updater } from 'svelte/store';
   import { TaskMapService } from '../../../services/Task/TaskMapService';
   import TaskRecurrenceService from '../../../services/Task/TaskRecurrenceService';
@@ -26,15 +26,11 @@
   export let taskId: string;
   export let recurrenceInfo: RecurrenceInfo;
 
-  let dialogMessage = '';
-  let dialogOpen = false;
-
   $: task = TaskMapService.getTaskStore(taskId);
   /**
    * Stored so that the changes can be reverted
    */
   $: previousRInfoString = JSON.stringify(recurrenceInfo);
-  $: pendingRInfo = recurrenceInfo;
   $: disabled = !$task.recurrenceInfo || !!$task.parentRecurringTaskInfo;
   $: startDate = $task.startDate;
   $: dueDate = $task.dueDate;
@@ -57,8 +53,6 @@
       }
       currentFrequencyType = newRInfo.frequency.type;
       if (checkDate && updateWouldTriggerRecurrence(newRInfo)) {
-        pendingRInfo = newRInfo;
-        dialogOpen = true;
         return;
       }
       previousRInfoString = JSON.stringify(newRInfo);
@@ -80,32 +74,29 @@
     };
   }
 
-  const updateWouldTriggerRecurrence = (newRInfo: RecurrenceInfo) => {
+  const updateWouldTriggerRecurrence = (newRInfo: RecurrenceInfo): boolean => {
     const simulatedDate = TaskRecurrenceService.getSimulatedRecurrenceDate($task, (task) => {
       task.recurrenceInfo = newRInfo;
       return task;
     });
-    if (!simulatedDate) {
-      return false;
-    }
-    if (simulatedDate < new Date()) {
-      dialogMessage =
-        `This update would case the next recurrence date to be ` +
-        `${DateService.getDateTimeString(simulatedDate)} which is before now. ` +
-        `This will cause the task to be updated immediately.` +
-        `Are you sure you want to do this?`;
+    if (simulatedDate && simulatedDate < new Date()) {
+      confirmationDialog.open({
+        title: 'Are you sure?',
+        message:
+          `This update would case the next recurrence date to be ` +
+          `${DateService.getDateTimeString(simulatedDate)} which is before now. ` +
+          `This will cause the task to be updated immediately.` +
+          `Are you sure you want to do this?`,
+        onConfirm: () => {
+          rInfo.setWithoutCheck(newRInfo);
+        },
+        onCancel: () => {
+          rInfo.setWithoutCheck(JSON.parse(previousRInfoString));
+        }
+      });
       return true;
     }
-  };
-
-  const handleDialogConfirm = () => {
-    rInfo.setWithoutCheck(pendingRInfo);
-    dialogOpen = false;
-  };
-
-  const handleDialogCancel = () => {
-    rInfo.setWithoutCheck(JSON.parse(previousRInfoString));
-    dialogOpen = false;
+    return false;
   };
 
   const handleTypeChange = (newRInfo: RecurrenceInfo) => {
@@ -238,14 +229,6 @@
     </div>
   </div>
 </div>
-
-<ConfirmationDialog
-  bind:open={dialogOpen}
-  title="Are you sure?"
-  message={dialogMessage}
-  on:cancel={handleDialogCancel}
-  on:confirm={handleDialogConfirm}
-/>
 
 <style>
   .content {

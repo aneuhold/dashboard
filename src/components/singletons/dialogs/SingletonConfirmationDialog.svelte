@@ -58,20 +58,27 @@
 </script>
 
 <script lang="ts">
+  let previousOpen = $open;
+
   function handleConfirm() {
     $open = false;
     $dialogStore.onConfirm();
   }
 
   function handleCancel() {
+    // Will cause the onCancel to trigger
     $open = false;
-    if ($dialogStore.onCancel) {
-      $dialogStore.onCancel();
-    }
   }
 
   $: {
-    console.log('open is', open);
+    // So that if the dialog is closed by any other means, it will trigger the
+    // onCancel function
+    if (previousOpen !== $open) {
+      if (previousOpen && !$open && $dialogStore.onCancel) {
+        $dialogStore.onCancel();
+      }
+      previousOpen = $open;
+    }
   }
 </script>
 
