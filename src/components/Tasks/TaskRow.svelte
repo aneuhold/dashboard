@@ -8,10 +8,10 @@
   import { DashboardTask, DashboardTaskService, RecurrenceEffect } from '@aneuhold/core-ts-db-lib';
   import Card, { Content as CardContent } from '@smui/card';
   import { Icon } from '@smui/icon-button';
-  import ConfirmationDialog from 'components/ConfirmationDialog.svelte';
   import ClickableDiv from 'components/presentational/ClickableDiv.svelte';
   import type { MenuButtonItem } from 'components/presentational/MenuButton.svelte';
   import MenuButton from 'components/presentational/MenuButton.svelte';
+  import { confirmationDialog } from 'components/singletons/dialogs/SingletonConfirmationDialog.svelte';
   import { TaskMapService } from '../../services/Task/TaskMapService';
   import TaskRecurrenceService from '../../services/Task/TaskRecurrenceService';
   import TaskService from '../../services/Task/TaskService';
@@ -28,9 +28,7 @@
    */
   export let tagHeaderName: string | undefined = undefined;
 
-  let deleteDialogOpen = false;
   let shareDialogOpen = false;
-  let skipDialogOpen = false;
   /**
    * Used so that the animation doesn't play every time the task shows up,
    * only when completed is clicked.
@@ -69,18 +67,6 @@
     goto(TaskService.getTaskRoute(taskId));
   }
 
-  function deleteTask() {
-    taskMap.deleteDoc(taskId);
-  }
-
-  function handleDeleteClick() {
-    if (allChildrenIds.length > 0) {
-      deleteDialogOpen = true;
-      return;
-    }
-    deleteTask();
-  }
-
   function handleDuplicateClick() {
     taskMap.upsertMany(
       TaskMapService.getDuplicateTaskUpdateInfo(taskId, (task) => {
@@ -96,8 +82,19 @@
     );
   }
 
-  function handleSkipTask() {
-    TaskRecurrenceService.executeRecurrenceForTask($task);
+  function handleSkipClick() {
+    confirmationDialog.open({
+      title: 'Skip to next Task Recurrence',
+      message:
+        `Are you sure you want to skip ${
+          $task.title === '' ? 'this task' : `"${$task.title}"`
+        }? This will move the task forward as if it has recurred. ` +
+        `This is nice if you want to skip a task instead of completing it ` +
+        `because it wasn't actually done. Save that dopamine! ❤️`,
+      onConfirm: () => {
+        TaskRecurrenceService.executeRecurrenceForTask($task);
+      }
+    });
   }
 
   function getMenuItems(task: DashboardTask) {
@@ -117,10 +114,7 @@
       menuItems.push({
         title: 'Skip',
         iconName: 'skip_next',
-        clickAction: () => {
-          console.log('it got here');
-          skipDialogOpen = true;
-        }
+        clickAction: handleSkipClick
       });
     }
     if (
@@ -143,7 +137,15 @@
     menuItems.push({
       title: 'Delete',
       iconName: 'delete',
-      clickAction: handleDeleteClick
+      clickAction: () => {
+        TaskService.handleDeleteTaskClick(
+          allChildrenIds.length,
+          () => {
+            taskMap.deleteDoc(taskId);
+          },
+          task.title
+        );
+      }
     });
     return menuItems;
   }
@@ -204,26 +206,6 @@
     </CardContent>
   </Card>
 </div>
-
-<ConfirmationDialog
-  title="Delete Task"
-  message={`Are you sure you want to delete ${
-    $task.title === '' ? 'this task' : `"${$task.title}"`
-  }? It has ${allChildrenIds.length} sub task${allChildrenIds.length > 1 ? 's' : ''}.`}
-  bind:open={deleteDialogOpen}
-  on:confirm={deleteTask}
-/>
-
-<ConfirmationDialog
-  title="Skip to next Task Recurrence"
-  message={`Are you sure you want to skip ${
-    $task.title === '' ? 'this task' : `"${$task.title}"`
-  }? This will move the task forward as if it has recurred. ` +
-    `This is nice if you want to skip a task instead of completing it ` +
-    `because it wasn't actually done. Save that dopamine! ❤️`}
-  bind:open={skipDialogOpen}
-  on:confirm={handleSkipTask}
-/>
 
 <TaskSharingDialog {taskId} bind:open={shareDialogOpen} />
 

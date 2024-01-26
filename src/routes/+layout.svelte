@@ -6,6 +6,7 @@
 <script lang="ts">
   import CircularProgress from '@smui/circular-progress';
   import Snackbar from 'components/Snackbar.svelte';
+  import SingletonConfirmationDialog from 'components/singletons/dialogs/SingletonConfirmationDialog.svelte';
   import { onDestroy, onMount } from 'svelte';
   import LocalData from 'util/LocalData';
   import Login from '../components/Login.svelte';
@@ -54,7 +55,9 @@
           <slot />
         </div>
       </NavBar>
+      <!-- Singleton Components -->
       <Snackbar />
+      <SingletonConfirmationDialog />
     </main>
   {/if}
 </div>

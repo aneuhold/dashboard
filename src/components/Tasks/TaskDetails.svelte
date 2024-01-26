@@ -21,7 +21,6 @@
   import { TaskMapService } from '../../services/Task/TaskMapService';
   import TaskService from '../../services/Task/TaskService';
   import { userSettings } from '../../stores/userSettings';
-  import ConfirmationDialog from '../ConfirmationDialog.svelte';
   import TaskCompletedCheckbox from './TaskCompletedCheckbox.svelte';
   import TaskDateInfo from './TaskDate/TaskDateInfo.svelte';
   import TaskList from './TaskList/TaskList.svelte';
@@ -32,7 +31,6 @@
 
   export let taskId: string;
 
-  let deleteDialogOpen = false;
   let taskMap = TaskMapService.getStore();
   $: task = $taskMap[taskId] ? TaskMapService.getTaskStore(taskId) : undefined;
   $: allChildrenIds = $task
@@ -80,14 +78,6 @@
       taskMap.deleteDoc(taskIdToDelete);
     });
   }
-
-  function handleDeleteClick() {
-    if (allChildrenIds.length > 0) {
-      deleteDialogOpen = true;
-      return;
-    }
-    deleteTask();
-  }
 </script>
 
 <div class="content">
@@ -111,7 +101,12 @@
           </div>
           <div class="taskButtons">
             <TaskShareButton {taskId} />
-            <Button variant="outlined" class="danger-button" on:click={handleDeleteClick}>
+            <Button
+              variant="outlined"
+              class="danger-button"
+              on:click={() =>
+                TaskService.handleDeleteTaskClick(allChildrenIds.length, deleteTask, $task?.title)}
+            >
               <Icon class="material-icons">delete</Icon>
               Delete
             </Button>
@@ -143,12 +138,6 @@
       <div class="mdc-typography--body1 subTasksTitle dimmed-color"><i>No sub tasks</i></div>
     {/if}
     <FabButton iconName="add" clickHandler={addSubTask} label="Add Subtask" />
-    <ConfirmationDialog
-      title="Delete Task"
-      message={`Are you sure you want to delete this task? It has ${allChildrenIds.length} sub tasks.`}
-      bind:open={deleteDialogOpen}
-      on:confirm={deleteTask}
-    />
   {/if}
 </div>
 

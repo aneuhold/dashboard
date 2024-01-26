@@ -23,32 +23,11 @@ Notes for improvement:
 
 ## Architecture
 
-UI Update Flow, using Tasks as an example:
+### Singleton Components
 
-```mermaid
-sequenceDiagram
-  actor user as User / UI
-  participant object as In-Memory Task Object
-  participant taskStore as Task store
-  participant taskMap as TaskMap store
-  participant localData as LocalData
-  participant db as Backend DB
+Some components are prefixed with `Singleton`, which means that they should only ever be used once. They will export functions to update their content.
 
-  user->>object: Changes due date on Task
-  object->>taskStore: Hey, due date changed
-  Note over taskStore: Determine if just task, or<br/>task and child tasks need<br/>updating
-  alt Just task needs updated
-    taskStore->>user: Reflect update to task
-    taskStore->>localData: Update LocalData taskMap
-    taskStore->>db: Update DB
-  else Task and children need updated
-    taskStore->>taskMap: Update task and all children
-    taskMap->>taskStore: setWithoutPropogation
-    taskStore->>user: Reflect update to task
-    taskMap->>localData: Update LocalData taskMap
-    taskMap->>db: Update DB
-  end
-```
+### Stores
 
 Generic store flow theory:
 

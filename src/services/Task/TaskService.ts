@@ -1,6 +1,7 @@
 import type { DashboardTask } from '@aneuhold/core-ts-db-lib';
 import { ArrayService } from '@aneuhold/core-ts-lib';
 import type { BreadCrumbArray } from 'components/BreadCrumb.svelte';
+import { confirmationDialog } from 'components/singletons/dialogs/SingletonConfirmationDialog.svelte';
 import { TaskMapService } from './TaskMapService';
 
 /**
@@ -51,6 +52,28 @@ export default class TaskService {
     }
     breadCrumbs.push(...parentTaskChain);
     return breadCrumbs;
+  }
+
+  /**
+   * A generic method for handling the delete click for a task.
+   */
+  static handleDeleteTaskClick(
+    allChildrenIdsLength: number,
+    deleteTaskCallback: () => void,
+    taskTitle?: string
+  ) {
+    if (allChildrenIdsLength > 0) {
+      confirmationDialog.open({
+        title: 'Delete Task',
+        message: `Are you sure you want to delete ${
+          !taskTitle || taskTitle === '' ? 'this task' : `"${taskTitle}"`
+        }? It has ${allChildrenIdsLength} sub task${allChildrenIdsLength > 1 ? 's' : ''}.`,
+        confirmationButtonText: 'Delete',
+        onConfirm: deleteTaskCallback
+      });
+      return;
+    }
+    deleteTaskCallback();
   }
 
   /**
