@@ -61,6 +61,15 @@
       />
     </div>
   {/each}
+  {#if sortAndFilterResult.removedIds.length > 0}
+    <div class="removedTasksText">
+      <i class=" dimmed-color">
+        {sortAndFilterResult.removedIds.length} Task{sortAndFilterResult.removedIds.length > 1
+          ? 's'
+          : ''} Hidden due to Filters
+      </i>
+    </div>
+  {/if}
 </div>
 
 <style>
@@ -68,5 +77,10 @@
     display: flex;
     flex-direction: column;
     width: 100%;
+  }
+  .removedTasksText {
+    display: flex;
+    justify-content: center;
+    margin-top: 8px;
   }
 </style>
