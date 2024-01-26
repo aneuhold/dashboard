@@ -2,7 +2,7 @@
   import Button, { Label } from '@smui/button';
   import Card, { Content } from '@smui/card';
   import { Icon } from '@smui/icon-button';
-  import { snackbar } from 'components/Snackbar.svelte';
+  import { snackbar } from 'components/singletons/SingletonSnackbar.svelte';
 
   export let iconName: string;
   export let title: string;

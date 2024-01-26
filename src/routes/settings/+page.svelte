@@ -11,9 +11,9 @@
   import FormField from '@smui/form-field';
   import Paper, { Content } from '@smui/paper';
   import PageTitle from 'components/PageTitle.svelte';
-  import { snackbar } from 'components/Snackbar.svelte';
   import GlobalTagSettings from 'components/Tasks/TaskTags/GlobalTagSettings.svelte';
   import InputBox from 'components/presentational/InputBox.svelte';
+  import { snackbar } from 'components/singletons/SingletonSnackbar.svelte';
   import DashboardAPIService from 'util/api/DashboardAPIService';
   import { userSettings } from '../../stores/userSettings';
   import { settingsPageInfo } from './pageInfo';

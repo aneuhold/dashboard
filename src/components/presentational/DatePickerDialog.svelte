@@ -3,6 +3,9 @@
   
   A date picker dialog. This component is a wrapper around the SveltyPicker 
   component. Quite a bit of override CSS is in `globalStyles/sveltyPicker.css`
+
+  At the moment it doesn't seem like this needs to be a singleton, but if
+  it gets used more than just on the TaskDetails component, then it should.
 -->
 <script lang="ts">
   import { DateService } from '@aneuhold/core-ts-lib';

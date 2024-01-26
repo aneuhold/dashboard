@@ -1,6 +1,6 @@
 import { APIService, type ProjectDashboardOutput } from '@aneuhold/core-ts-api-lib';
 import type { DashboardUserConfig, UserCTO } from '@aneuhold/core-ts-db-lib';
-import { snackbar } from 'components/Snackbar.svelte';
+import { snackbar } from 'components/singletons/SingletonSnackbar.svelte';
 import type { UUID } from 'crypto';
 import LocalData from 'util/LocalData';
 import { TaskMapService } from '../../services/Task/TaskMapService';

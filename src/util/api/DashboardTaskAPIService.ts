@@ -1,6 +1,6 @@
 import { APIService } from '@aneuhold/core-ts-api-lib';
 import type { DashboardTask, DashboardTaskMap } from '@aneuhold/core-ts-db-lib';
-import { snackbar } from 'components/Snackbar.svelte';
+import { snackbar } from 'components/singletons/SingletonSnackbar.svelte';
 import LocalData from 'util/LocalData';
 import { TaskMapService } from '../../services/Task/TaskMapService';
 import DashboardAPIService from './DashboardAPIService';
