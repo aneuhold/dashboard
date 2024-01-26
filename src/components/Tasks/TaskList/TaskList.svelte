@@ -9,6 +9,7 @@
     DashboardTaskSortBy,
     getDefaultTaskListSortSettings
   } from '@aneuhold/core-ts-db-lib';
+  import type { DashboardTaskFilterAndSortResult } from '@aneuhold/core-ts-db-lib/lib/services/dashboard/Task/TaskService';
   import TaskRow from 'components/Tasks/TaskRow.svelte';
   import { flip } from 'svelte/animate';
   import { slide } from 'svelte/transition';
@@ -17,7 +18,7 @@
   import { userSettings } from '../../../stores/userSettings';
   import TaskListOptions from './TaskListOptions.svelte';
 
-  export let taskIds: string[];
+  export let sortAndFilterResult: DashboardTaskFilterAndSortResult;
   export let category: string;
   export let parentTaskId: string | undefined = undefined;
 
@@ -35,7 +36,7 @@
   $: tagHeaderMap = isSortedByTagsFirst
     ? DashboardTaskService.getTagHeaderMap(
         $taskMap,
-        taskIds,
+        sortAndFilterResult.filteredAndSortedIds,
         $currentUserId,
         $userSettings.config.tagSettings,
         'No Priority'
@@ -50,8 +51,9 @@
     {currentSortSettings}
     {userTaskSortSettings}
     {parentTaskSortSettings}
+    removedTaskIds={sortAndFilterResult.removedIds}
   />
-  {#each taskIds as taskId (taskId)}
+  {#each sortAndFilterResult.filteredAndSortedIds as taskId (taskId)}
     <div transition:slide animate:flip={{ duration: 200 }}>
       <TaskRow
         tagHeaderName={tagHeaderMap && tagHeaderMap[taskId] ? tagHeaderMap[taskId] : undefined}

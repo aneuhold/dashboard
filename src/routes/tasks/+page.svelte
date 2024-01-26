@@ -19,7 +19,7 @@
 
   const taskMap = TaskMapService.getStore();
 
-  $: taskIds = TaskListService.getTaskIds($taskMap, $userSettings, 'default');
+  $: sortAndFilterResult = TaskListService.getTaskIds($taskMap, $userSettings, 'default');
   $: taskId = $page.url.searchParams.get('taskId');
 
   function addTask() {
@@ -40,7 +40,7 @@
   {:else}
     <PageTitle title={tasksPageInfo.shortTitle} subtitle={tasksPageInfo.description} />
 
-    <TaskList category="default" {taskIds} />
+    <TaskList category="default" {sortAndFilterResult} />
 
     <FabButton clickHandler={addTask} iconName="add" />
   {/if}

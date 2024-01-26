@@ -3,6 +3,7 @@ import {
   DashboardTaskService,
   getDefaultTaskListFilterSettings,
   getDefaultTaskListSortSettings,
+  type DashboardTaskFilterAndSortResult,
   type DashboardTaskMap
 } from '@aneuhold/core-ts-db-lib';
 import type { UserSettings } from '../../stores/userSettings';
@@ -11,7 +12,11 @@ import type { UserSettings } from '../../stores/userSettings';
  * A service responsible for getting filtered and sorted lists of task IDs.
  */
 export default class TaskListService {
-  static getTaskIds(taskMap: DashboardTaskMap, userSettings: UserSettings, category: string) {
+  static getTaskIds(
+    taskMap: DashboardTaskMap,
+    userSettings: UserSettings,
+    category: string
+  ): DashboardTaskFilterAndSortResult {
     const taskFilterSettings =
       userSettings.config.taskListFilterSettings[category] ??
       getDefaultTaskListFilterSettings(userSettings.config.userId.toString());
@@ -32,9 +37,12 @@ export default class TaskListService {
     userSettings: UserSettings,
     allChildrenIds: string[],
     task?: DashboardTask
-  ) {
+  ): DashboardTaskFilterAndSortResult {
     if (!task) {
-      return [];
+      return {
+        filteredAndSortedIds: [],
+        removedIds: []
+      };
     }
     const userId = userSettings.config.userId.toString();
     const taskFilterSettings =

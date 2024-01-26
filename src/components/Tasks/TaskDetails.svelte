@@ -40,7 +40,12 @@
         id.toString()
       )
     : [];
-  $: subTaskIds = TaskListService.getTaskIdsForTask($taskMap, $userSettings, allChildrenIds, $task);
+  $: sortAndFilterResult = TaskListService.getTaskIdsForTask(
+    $taskMap,
+    $userSettings,
+    allChildrenIds,
+    $task
+  );
   // Explicitly include `task` so that it reactively updates
   $: breadCrumbArray = TaskService.getBreadCrumbArray($task ? $task._id.toString() : taskId);
   $: parentTaskId = $task ? $task.parentTaskId : undefined;
@@ -121,16 +126,16 @@
         </div>
       </Content>
     </Paper>
-    {#if subTaskIds.length !== 0}
+    {#if sortAndFilterResult.length !== 0}
       <div class="subTasksTitleContainer">
         <h3 class="mdc-typography--headline5 subTasksTitle">Sub Tasks</h3>
-        {#if allChildrenIds.length > subTaskIds.length}
+        {#if allChildrenIds.length > sortAndFilterResult.length}
           <i class="mdc-typography--body1 subTasksTitle dimmed-color">
             {allChildrenIds.length} total child tasks
           </i>
         {/if}
       </div>
-      <TaskList category={$task.category} parentTaskId={taskId} taskIds={subTaskIds} />
+      <TaskList category={$task.category} parentTaskId={taskId} {sortAndFilterResult} />
     {:else}
       <div class="mdc-typography--body1 subTasksTitle dimmed-color"><i>No sub tasks</i></div>
     {/if}

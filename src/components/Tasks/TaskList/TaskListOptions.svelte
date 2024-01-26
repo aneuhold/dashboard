@@ -8,6 +8,7 @@
   import ClickableDiv from 'components/presentational/ClickableDiv.svelte';
   import SquareIconButton from 'components/presentational/SquareIconButton.svelte';
   import type { DocumentStore } from '../../../services/DocumentMapStoreService';
+  import { TaskMapService } from '../../../services/Task/TaskMapService';
   import TaskTagsService from '../../../services/Task/TaskTagsService';
   import { currentUserId } from '../../../stores/derived/currentUserId';
   import { userSettings } from '../../../stores/userSettings';
@@ -19,8 +20,10 @@
   export let parentTaskSortSettings: DashboardTaskListSortSettings | undefined = undefined;
   export let userTaskSortSettings: DashboardTaskListSortSettings | undefined = undefined;
   export let currentSortSettings: DashboardTaskListSortSettings;
+  export let removedTaskIds: string[];
 
   const globalTags = TaskTagsService.getStore();
+  const taskMap = TaskMapService.getStore();
 
   $: parentTaskFilterSettings = $parentTask
     ? $parentTask.filterSettings[$currentUserId]
@@ -37,8 +40,22 @@
     parentTaskSortSettings,
     parentTaskFilterSettings
   });
+  $: tagsWithRemovedIds = removedTaskIds.reduce((tagSet, id) => {
+    const task = $taskMap[id];
+    if (task && task.tags[$currentUserId]) {
+      task.tags[$currentUserId].forEach((tag) => tagSet.add(tag));
+    }
+    return tagSet;
+  }, new Set<string>());
+  /**
+   * Tags that are hidden, but only those that actually have tasks with removed
+   * ids.
+   */
   $: hiddenTags = $globalTags.filter(
-    (tag) => currentFilterSettings.tags[tag] && !currentFilterSettings.tags[tag].show
+    (tag) =>
+      currentFilterSettings.tags[tag] &&
+      !currentFilterSettings.tags[tag].show &&
+      tagsWithRemovedIds.has(tag)
   );
 
   let sortingDialogOpen = false;
