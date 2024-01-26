@@ -1,7 +1,8 @@
 <script lang="ts">
   import Button, { Label } from '@smui/button';
-  import Dialog, { Actions, Content, Title } from '@smui/dialog';
+  import { Actions, Content, Title } from '@smui/dialog';
   import { createEventDispatcher } from 'svelte';
+  import SmartDialog from './presentational/SmartDialog.svelte';
 
   export let open = false;
   export let title: string;
@@ -22,7 +23,7 @@
   };
 </script>
 
-<Dialog bind:open aria-labelledby="simple-title" aria-describedby="simple-content">
+<SmartDialog bind:open>
   <!-- Title cannot contain leading whitespace due to mdc-typography-baseline-top() -->
   <Title>{title}</Title>
   <Content>{message}</Content>
@@ -34,4 +35,4 @@
       <Label>{cancelButtonText}</Label>
     </Button>
   </Actions>
-</Dialog>
+</SmartDialog>

@@ -1,7 +1,8 @@
 <script lang="ts">
   import Button, { Label } from '@smui/button';
-  import Dialog, { Actions, Content, Title } from '@smui/dialog';
+  import { Actions, Content, Title } from '@smui/dialog';
   import InputBox from 'components/presentational/InputBox.svelte';
+  import SmartDialog from 'components/presentational/SmartDialog.svelte';
   import TaskTagsService from '../../../services/Task/TaskTagsService';
   import { userSettings } from '../../../stores/userSettings';
 
@@ -27,7 +28,7 @@
   };
 </script>
 
-<Dialog bind:open>
+<SmartDialog bind:open>
   <Title>Edit "{tagName}" Tag</Title>
   <Content>
     <InputBox label="Tag Name" isValid={tagValueIsValid} bind:inputValue={tagEditorValue} />
@@ -40,4 +41,4 @@
       <Label>Done</Label>
     </Button>
   </Actions>
-</Dialog>
+</SmartDialog>

@@ -15,9 +15,10 @@
   import Accordion, { Content, Panel } from '@smui-extra/accordion';
   import Button, { Label } from '@smui/button';
   import Checkbox from '@smui/checkbox';
-  import Dialog, { Actions, Content as DialogContent, Title } from '@smui/dialog';
+  import { Actions, Content as DialogContent, Title } from '@smui/dialog';
   import IconButton, { Icon } from '@smui/icon-button';
   import ClickableDiv from 'components/presentational/ClickableDiv.svelte';
+  import SmartDialog from 'components/presentational/SmartDialog.svelte';
   import { TaskMapService } from '../../../services/Task/TaskMapService';
   import TaskRecurrenceService from '../../../services/Task/TaskRecurrenceService';
   import TaskService from '../../../services/Task/TaskService';
@@ -141,7 +142,7 @@
   </Accordion>
 </div>
 
-<Dialog bind:open={errorInfoDialogOpen}>
+<SmartDialog bind:open={errorInfoDialogOpen}>
   <Title>{errorInfoDialogTitle}</Title>
   <DialogContent>{errorInfoDialogContent}</DialogContent>
   <Actions>
@@ -153,7 +154,7 @@
       <Label>Done</Label>
     </Button>
   </Actions>
-</Dialog>
+</SmartDialog>
 
 <style>
   /* To make it so that the separator lines go all the way across */

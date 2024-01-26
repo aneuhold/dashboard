@@ -8,10 +8,11 @@
   import { DateService } from '@aneuhold/core-ts-lib';
   import Button, { Label } from '@smui/button';
   import Checkbox from '@smui/checkbox';
-  import Dialog, { Actions, Content, Title } from '@smui/dialog';
+  import { Actions, Content, Title } from '@smui/dialog';
   import FormField from '@smui/form-field';
   import { createEventDispatcher, tick } from 'svelte';
   import SveltyPicker from 'svelty-picker';
+  import SmartDialog from './SmartDialog.svelte';
 
   export let title: string = 'Pick a date';
   export let open: boolean;
@@ -90,7 +91,7 @@
   };
 </script>
 
-<Dialog bind:open={dialogOpen} on:SMUIDialog:closed={handleCancel}>
+<SmartDialog bind:open={dialogOpen} on:SMUIDialog:closed={handleCancel}>
   <Title>{title}</Title>
   <Content>
     {#if sveltyPickerVisible}
@@ -116,4 +117,4 @@
       <Label>Done</Label>
     </Button>
   </Actions>
-</Dialog>
+</SmartDialog>

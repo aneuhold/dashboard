@@ -6,9 +6,10 @@
 <script lang="ts">
   import Button, { Label } from '@smui/button';
   import Checkbox from '@smui/checkbox';
-  import Dialog, { Actions, Content, Title } from '@smui/dialog';
+  import { Actions, Content, Title } from '@smui/dialog';
   import FormField from '@smui/form-field';
   import type { ObjectId } from 'bson';
+  import SmartDialog from 'components/presentational/SmartDialog.svelte';
   import { TaskMapService } from '../../services/Task/TaskMapService';
   import { userSettings } from '../../stores/userSettings';
 
@@ -35,7 +36,7 @@
   };
 </script>
 
-<Dialog bind:open>
+<SmartDialog bind:open>
   <Title>Share "{$task.title}"</Title>
   <Content>
     <div class="content">
@@ -66,7 +67,7 @@
       <Label>Done</Label>
     </Button>
   </Actions>
-</Dialog>
+</SmartDialog>
 
 <style>
   .content {

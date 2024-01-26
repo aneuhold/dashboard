@@ -5,7 +5,8 @@
     type DashboardTaskListSortSettings
   } from '@aneuhold/core-ts-db-lib';
   import Button, { Label } from '@smui/button';
-  import Dialog, { Actions, Content, Title } from '@smui/dialog';
+  import { Actions, Content, Title } from '@smui/dialog';
+  import SmartDialog from 'components/presentational/SmartDialog.svelte';
   import { createEventDispatcher } from 'svelte';
   import { flip } from 'svelte/animate';
   import { slide } from 'svelte/transition';
@@ -106,7 +107,7 @@
   };
 </script>
 
-<Dialog bind:open>
+<SmartDialog bind:open>
   <Title>Task Sorting Options</Title>
   <Content>
     {#each currentSortList as sortSetting (sortSetting.sortBy)}
@@ -144,7 +145,7 @@
       <Label>Done</Label>
     </Button>
   </Actions>
-</Dialog>
+</SmartDialog>
 
 <style>
 </style>

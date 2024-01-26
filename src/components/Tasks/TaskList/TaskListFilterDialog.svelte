@@ -1,7 +1,8 @@
 <script lang="ts">
   import type { DashboardTaskListFilterSettings } from '@aneuhold/core-ts-db-lib';
   import Button, { Label } from '@smui/button';
-  import Dialog, { Actions, Content, Title } from '@smui/dialog';
+  import { Actions, Content, Title } from '@smui/dialog';
+  import SmartDialog from 'components/presentational/SmartDialog.svelte';
   import { createEventDispatcher } from 'svelte';
   import TaskTagsService from '../../../services/Task/TaskTagsService';
   import TaskFilterSetting from './TaskFilterSetting.svelte';
@@ -40,7 +41,7 @@
   };
 </script>
 
-<Dialog bind:open>
+<SmartDialog bind:open>
   <Title>Task Sorting Options</Title>
   <Content>
     <TaskFilterSetting
@@ -92,7 +93,7 @@
       <Label>Done</Label>
     </Button>
   </Actions>
-</Dialog>
+</SmartDialog>
 
 <style>
   .tagsSeparator {

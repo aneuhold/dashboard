@@ -12,8 +12,9 @@
 -->
 <script lang="ts">
   import Button, { Label } from '@smui/button';
-  import Dialog, { Actions, Content, Title } from '@smui/dialog';
+  import { Actions, Content, Title } from '@smui/dialog';
   import IconButton, { Icon } from '@smui/icon-button';
+  import SmartDialog from './presentational/SmartDialog.svelte';
 
   export let title: string;
 
@@ -29,7 +30,7 @@
   <Icon class="material-icons dimmed-color">help_outline</Icon>
 </IconButton>
 
-<Dialog bind:open>
+<SmartDialog bind:open>
   <!-- Title cannot contain leading whitespace due to mdc-typography-baseline-top() -->
   <Title>{title}</Title>
   <Content><slot /></Content>
@@ -42,4 +43,4 @@
       <Label>Cool!</Label>
     </Button>
   </Actions>
-</Dialog>
+</SmartDialog>
