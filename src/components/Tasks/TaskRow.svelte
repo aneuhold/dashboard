@@ -5,7 +5,7 @@
 -->
 <script lang="ts">
   import { goto } from '$app/navigation';
-  import { DashboardTask, DashboardTaskService } from '@aneuhold/core-ts-db-lib';
+  import { DashboardTask, DashboardTaskService, RecurrenceEffect } from '@aneuhold/core-ts-db-lib';
   import Card, { Content as CardContent } from '@smui/card';
   import { Icon } from '@smui/icon-button';
   import ConfirmationDialog from 'components/ConfirmationDialog.svelte';
@@ -13,6 +13,7 @@
   import type { MenuButtonItem } from 'components/presentational/MenuButton.svelte';
   import MenuButton from 'components/presentational/MenuButton.svelte';
   import { TaskMapService } from '../../services/Task/TaskMapService';
+  import TaskRecurrenceService from '../../services/Task/TaskRecurrenceService';
   import TaskService from '../../services/Task/TaskService';
   import { currentUserId } from '../../stores/derived/currentUserId';
   import { userSettings } from '../../stores/userSettings';
@@ -29,6 +30,7 @@
 
   let deleteDialogOpen = false;
   let shareDialogOpen = false;
+  let skipDialogOpen = false;
   /**
    * Used so that the animation doesn't play every time the task shows up,
    * only when completed is clicked.
@@ -94,6 +96,10 @@
     );
   }
 
+  function handleSkipTask() {
+    TaskRecurrenceService.executeRecurrenceForTask($task);
+  }
+
   function getMenuItems(task: DashboardTask) {
     let menuItems: MenuButtonItem[] = [
       {
@@ -102,6 +108,21 @@
         clickAction: goToTask
       }
     ];
+    if (
+      task.recurrenceInfo &&
+      !task.completed &&
+      task.recurrenceInfo.recurrenceEffect !== RecurrenceEffect.stack &&
+      !task.parentRecurringTaskInfo
+    ) {
+      menuItems.push({
+        title: 'Skip',
+        iconName: 'skip_next',
+        clickAction: () => {
+          console.log('it got here');
+          skipDialogOpen = true;
+        }
+      });
+    }
     if (
       task.userId.toString() === $userSettings.config.userId.toString() &&
       finalSharedParentId === taskId
@@ -191,6 +212,17 @@
   }? It has ${allChildrenIds.length} sub task${allChildrenIds.length > 1 ? 's' : ''}.`}
   bind:open={deleteDialogOpen}
   on:confirm={deleteTask}
+/>
+
+<ConfirmationDialog
+  title="Skip to next Task Recurrence"
+  message={`Are you sure you want to skip ${
+    $task.title === '' ? 'this task' : `"${$task.title}"`
+  }? This will move the task forward as if it has recurred. ` +
+    `This is nice if you want to skip a task instead of completing it ` +
+    `because it wasn't actually done. Save that dopamine! ❤️`}
+  bind:open={skipDialogOpen}
+  on:confirm={handleSkipTask}
 />
 
 <TaskSharingDialog {taskId} bind:open={shareDialogOpen} />
