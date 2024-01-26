@@ -43,6 +43,10 @@
   $: subTaskIds = TaskListService.getTaskIdsForTask($taskMap, $userSettings, allChildrenIds, $task);
   // Explicitly include `task` so that it reactively updates
   $: breadCrumbArray = TaskService.getBreadCrumbArray($task ? $task._id.toString() : taskId);
+  $: parentTaskId = $task ? $task.parentTaskId : undefined;
+  $: parentRoute = parentTaskId
+    ? TaskService.getTaskRoute(parentTaskId.toString())
+    : TaskService.getTaskCategoryRoute(taskId);
 
   function addSubTask() {
     if (!$task) return;
@@ -64,12 +68,7 @@
 
   function deleteTask() {
     if (!$task) return;
-    const taskId = $task._id.toString();
-    const parentTaskId = $taskMap[taskId].parentTaskId;
-    const routeToNavigateTo = parentTaskId
-      ? TaskService.getTaskRoute(parentTaskId.toString())
-      : TaskService.getTaskCategoryRoute(taskId);
-    goto(routeToNavigateTo).then(() => {
+    goto(parentRoute).then(() => {
       taskMap.deleteDoc(taskId);
     });
   }
@@ -107,6 +106,16 @@
             <Button variant="outlined" class="danger-button" on:click={handleDeleteClick}>
               <Icon class="material-icons">delete</Icon>
               Delete
+            </Button>
+          </div>
+          <div class="doneButton">
+            <Button
+              on:click={() => goto(parentRoute)}
+              style="width: 100%; max-width: 500px"
+              variant="outlined"
+              class="primary-button"
+            >
+              Done
             </Button>
           </div>
         </div>
@@ -171,5 +180,10 @@
     flex-wrap: wrap;
     gap: 16px;
     justify-content: space-between;
+  }
+  .doneButton {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 </style>

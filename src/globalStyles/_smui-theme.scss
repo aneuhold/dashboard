@@ -11,6 +11,7 @@
 
 $background-color: #000;
 $surface-color: color.adjust(color-palette.$grey-900, $blue: +4);
+$primary-color: #098e1f;
 
 $success-color: color-palette.$green-500;
 $warning-color: color-palette.$orange-500;
@@ -20,7 +21,7 @@ $error-color: color-palette.$red-500;
 // If this is updated, make sure to update the colors in the `manifest.json` file
 // as well.
 @use '@material/theme/index' as theme with (
-  $primary: #098e1f,
+  $primary: $primary-color,
   $secondary: color.scale(#676778, $whiteness: -10%),
   $surface: $surface-color,
   $background: $background-color,
@@ -68,6 +69,11 @@ $error-color: color-palette.$red-500;
 .mdc-snackbar.error {
   @include snackbar.fill-color($error-color);
   @include snackbar.label-ink-color(theme-color.accessible-ink-color($error-color));
+}
+.primary-button {
+  &.mdc-button--outlined {
+    @include button.outline-color($primary-color);
+  }
 }
 .danger-button {
   &.mdc-button {
