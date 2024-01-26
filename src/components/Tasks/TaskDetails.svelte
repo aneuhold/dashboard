@@ -73,8 +73,11 @@
 
   function deleteTask() {
     if (!$task) return;
+    // Purposefully set the task ID, and don't use the one from the component
+    // otherwise the parent will be deleted.
+    const taskIdToDelete = $task._id.toString();
     goto(parentRoute).then(() => {
-      taskMap.deleteDoc(taskId);
+      taskMap.deleteDoc(taskIdToDelete);
     });
   }
 
