@@ -45,18 +45,6 @@
       >
         <Icon><svelte:component this={GitHubIcon} size={24} /></Icon>
       </IconButton>
-      <IconButton
-        class="material-icons"
-        aria-label="Wiki"
-        on:click={() => {
-          window.open(
-            'https://tiddlydrive.github.io/?state=%7B%22ids%22:%5B%2210CGz4YBnosNFYLJXXpR9GfaMK5j7WLe_%22%5D,%22action%22:%22open%22,%22userId%22:%22112679225576170416987%22,%22resourceKeys%22:%7B%7D%7D',
-            '_blank'
-          );
-        }}
-      >
-        language
-      </IconButton>
       <IconButton class="material-icons" aria-label="Log Out" on:click={handleLogOut}>
         logout
       </IconButton>
