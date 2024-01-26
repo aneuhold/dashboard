@@ -7,6 +7,7 @@
   import CircularProgress from '@smui/circular-progress';
   import SingletonSnackbar from 'components/singletons/SingletonSnackbar.svelte';
   import SingletonConfirmationDialog from 'components/singletons/dialogs/SingletonConfirmationDialog.svelte';
+  import SingletonTaskSharingDialog from 'components/singletons/dialogs/SingletonTaskSharingDialog.svelte';
   import { onDestroy, onMount } from 'svelte';
   import LocalData from 'util/LocalData';
   import Login from '../components/Login.svelte';
@@ -58,6 +59,7 @@
       <!-- Singleton Components -->
       <SingletonSnackbar />
       <SingletonConfirmationDialog />
+      <SingletonTaskSharingDialog />
     </main>
   {/if}
 </div>

@@ -1,14 +1,13 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
   import Button, { Icon } from '@smui/button';
+  import { taskSharingDialog } from 'components/singletons/dialogs/SingletonTaskSharingDialog.svelte';
   import { TaskMapService } from '../../services/Task/TaskMapService';
   import TaskService from '../../services/Task/TaskService';
   import { userSettings } from '../../stores/userSettings';
-  import TaskSharingDialog from './TaskSharingDialog.svelte';
 
   export let taskId: string;
 
-  let sharingDialogOpen = false;
   $: task = TaskMapService.getTaskStore(taskId);
   $: sharingDisabled = $task?.userId.toString() !== $userSettings.config.userId.toString();
   $: finalParentId = TaskService.findParentIdWithSameSharedWith($task);
@@ -16,7 +15,7 @@
 
   function handleClick() {
     if (finalParentId === taskId) {
-      sharingDialogOpen = true;
+      taskSharingDialog.open(taskId);
     } else {
       goto(TaskService.getTaskRoute(finalParentId, true));
     }
@@ -33,5 +32,3 @@
   <Icon class="material-icons">share</Icon>
   {buttonText}
 </Button>
-
-<TaskSharingDialog {taskId} bind:open={sharingDialogOpen} />

@@ -12,14 +12,13 @@
   import type { MenuButtonItem } from 'components/presentational/MenuButton.svelte';
   import MenuButton from 'components/presentational/MenuButton.svelte';
   import { confirmationDialog } from 'components/singletons/dialogs/SingletonConfirmationDialog.svelte';
+  import { taskSharingDialog } from 'components/singletons/dialogs/SingletonTaskSharingDialog.svelte';
   import { TaskMapService } from '../../services/Task/TaskMapService';
   import TaskRecurrenceService from '../../services/Task/TaskRecurrenceService';
   import TaskService from '../../services/Task/TaskService';
   import { currentUserId } from '../../stores/derived/currentUserId';
-  import { userSettings } from '../../stores/userSettings';
   import TaskCompletedCheckbox from './TaskCompletedCheckbox.svelte';
   import TaskRowDateInfo from './TaskDate/TaskRowDateInfo.svelte';
-  import TaskSharingDialog from './TaskSharingDialog.svelte';
   import TaskRowTagHeader from './TaskTags/TaskRowTagHeader.svelte';
 
   export let taskId: string;
@@ -28,7 +27,6 @@
    */
   export let tagHeaderName: string | undefined = undefined;
 
-  let shareDialogOpen = false;
   /**
    * Used so that the animation doesn't play every time the task shows up,
    * only when completed is clicked.
@@ -117,15 +115,12 @@
         clickAction: handleSkipClick
       });
     }
-    if (
-      task.userId.toString() === $userSettings.config.userId.toString() &&
-      finalSharedParentId === taskId
-    ) {
+    if (task.userId.toString() === $currentUserId && finalSharedParentId === taskId) {
       menuItems.push({
         title: 'Share',
         iconName: 'share',
         clickAction: () => {
-          shareDialogOpen = true;
+          taskSharingDialog.open(taskId);
         }
       });
     }
@@ -206,8 +201,6 @@
     </CardContent>
   </Card>
 </div>
-
-<TaskSharingDialog {taskId} bind:open={shareDialogOpen} />
 
 <style>
   * :global(.taskRowCard) {
