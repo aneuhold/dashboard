@@ -42,7 +42,7 @@
 </script>
 
 <SmartDialog bind:open>
-  <Title>Task Sorting Options</Title>
+  <Title>Task Filtering Options</Title>
   <Content>
     <TaskFilterSetting
       settingName="Show Completed"
