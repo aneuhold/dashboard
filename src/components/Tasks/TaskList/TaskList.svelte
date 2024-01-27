@@ -39,7 +39,8 @@
         sortAndFilterResult.filteredAndSortedIds,
         $currentUserId,
         $userSettings.config.tagSettings,
-        'No Priority'
+        'No Priority',
+        currentSortSettings.sortList[0].sortDirection
       )
     : undefined;
 </script>
