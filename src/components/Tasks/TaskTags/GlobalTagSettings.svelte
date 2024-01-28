@@ -1,4 +1,5 @@
 <script lang="ts">
+  import InfoIcon from 'components/InfoIcon.svelte';
   import { flip } from 'svelte/animate';
   import { userSettings } from '../../../stores/userSettings';
   import GlobalTagEditor from './GlobalTagEditor.svelte';
@@ -26,7 +27,39 @@
 </script>
 
 <div class="container">
-  <span class="mdc-typography--subtitle1 title">Global Task Tag Settings</span>
+  <div class="titleContainer">
+    <span class="mdc-typography--subtitle1 title">Global Task Tag Settings</span>
+    <InfoIcon title="Global Tags">
+      <p>Tags can be edited, have priorities added to them, and have priorities adjusted.</p>
+      <ul>
+        <li>
+          <b>Tag editing</b>: Tags can be edited by clicking the options next to the tag name.
+          Updating a tag name will update that tag name across all tasks.
+        </li>
+        <li>
+          <b>Adding Priority to a Tag</b>: Tags can have priorities added to them by clicking the
+          options and then "Add Priority". This will make it so that tags can be sorted according to
+          your preferences. Tags will be grouped as well according to their priority when Tags are
+          chosen as the first sorting option when viewing a task list.
+        </li>
+        <li>
+          <b>Adjusting Priority on Tags</b>: If a priority has been added to a tag, then it's
+          priority can be adjusted by clicking the arrows next to a tag's name.
+          <uL>
+            <li>
+              When sorting by tags <i>descending</i>, the higher the priority number, the further up
+              the list they will be.
+            </li>
+            <li>
+              When sorting by tags <i>ascending</i>, the higher the priority number, the lower down
+              list they will be.
+            </li>
+          </uL>
+        </li>
+      </ul>
+    </InfoIcon>
+  </div>
+
   {#each sortableTagList as tagName (tagName)}
     <div animate:flip={{ duration: 300 }}>
       <GlobalTagRow
@@ -52,5 +85,10 @@
   }
   .title {
     margin-bottom: 4px;
+  }
+  .titleContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
   }
 </style>
