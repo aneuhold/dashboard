@@ -103,6 +103,7 @@
         {endDate}
         {initialDate}
         {mode}
+        weekStart={0}
         pickerOnly={true}
         on:dateChange={handleChange}
       />
