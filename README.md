@@ -11,6 +11,7 @@ Notes for improvement:
   - Sort settings per-user
 - Task Assignment
 - Little things
+  - neoconfetti/svelte usage on task completion
   - Design for completed tasks
   - Auto-focus the task title when creating a new one
   - Maybe a progress bar for sub-task completion?
