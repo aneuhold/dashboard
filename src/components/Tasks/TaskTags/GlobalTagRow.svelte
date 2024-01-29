@@ -64,7 +64,6 @@
       settings.config.tagSettings[tagName].priority += 1;
       return settings;
     });
-    userSettings.saveSettings();
   };
 
   const decrementPriority = () => {
@@ -80,7 +79,6 @@
       settings.config.tagSettings[tagName].priority -= 1;
       return settings;
     });
-    userSettings.saveSettings();
   };
 
   const addPriorityToTag = () => {
@@ -94,7 +92,6 @@
       settings.config.tagSettings[tagName].priority = 1;
       return settings;
     });
-    userSettings.saveSettings();
   };
 
   const removePriorityFromTag = () => {
@@ -114,7 +111,6 @@
       settings.config.tagSettings[tagName].priority = 0;
       return settings;
     });
-    userSettings.saveSettings();
   };
 </script>
 

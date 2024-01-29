@@ -5,14 +5,12 @@ import DashboardAPIService from 'util/api/DashboardAPIService';
 import LocalData, { localDataReady } from '../util/LocalData';
 
 export type UserSettings = {
-  pendingSettingsUpdate: boolean;
   config: DashboardUserConfig;
   collaborators: Record<string, UserCTO>;
 };
 
 function createUserSettingsStore() {
   let currentSettings: UserSettings = {
-    pendingSettingsUpdate: false,
     // Just a dummy config to avoid null checks.
     config: new DashboardUserConfig(new ObjectId()),
     collaborators: {}
@@ -32,24 +30,28 @@ function createUserSettingsStore() {
     LocalData.userSettings = currentSettings;
   };
 
+  const updateUserSettingsAndSave = (updater: Updater<UserSettings>) => {
+    updateUserSettings(updater);
+    DashboardAPIService.updateSettings(currentSettings.config);
+  };
+
   return {
     subscribe,
     set: (newSettings: UserSettings) => {
-      updateUserSettings(() => newSettings);
+      updateUserSettingsAndSave(() => newSettings);
     },
     update: (updater: Updater<UserSettings>) => {
-      updateUserSettings(updater);
+      updateUserSettingsAndSave(updater);
     },
     addCollaborator: (user: UserCTO) => {
-      updateUserSettings((settings) => {
+      updateUserSettingsAndSave((settings) => {
         settings.config.collaborators.push(user._id);
         settings.collaborators[user._id.toString()] = user;
-        settings.pendingSettingsUpdate = true;
         return settings;
       });
     },
     removeCollaborator: (userName: string) => {
-      updateUserSettings((settings) => {
+      updateUserSettingsAndSave((settings) => {
         const collaboratorId = Object.values(settings.collaborators).find(
           (userCto) => userCto.userName === userName
         )?._id;
@@ -61,12 +63,15 @@ function createUserSettingsStore() {
           (id) => id.toString() !== collaboratorId.toString()
         );
         delete settings.collaborators[collaboratorId.toString()];
-        settings.pendingSettingsUpdate = true;
         return settings;
       });
     },
-    saveSettings: () => {
-      DashboardAPIService.updateSettings(currentSettings.config);
+    /**
+     * Sets the user settings without updating the backend.
+     * @param newSettings
+     */
+    setWithoutPropogation: (newSettings: UserSettings) => {
+      updateUserSettings(() => newSettings);
     }
   };
 }

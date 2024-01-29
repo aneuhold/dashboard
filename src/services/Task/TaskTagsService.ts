@@ -61,11 +61,24 @@ export default class TaskTagsService {
     if (!this.taskTagsStore) {
       this.taskTagsStore = this.createStore();
     }
+    // Updating user settings will automatically remove the tag from all
+    // tasks.
     userSettings.update((settings) => {
+      if (!settings.config.tagSettings[tag]) return settings;
+      const tagInfo = settings.config.tagSettings[tag];
+      if (tagInfo.priority > 0) {
+        Object.keys(settings.config.tagSettings).forEach((otherTagName) => {
+          // Decrement all the existing non-zero tags priority by 1 that are
+          // higher than the current tag
+          const otherTagPriority = settings.config.tagSettings[otherTagName].priority;
+          if (otherTagPriority > tagInfo.priority) {
+            settings.config.tagSettings[otherTagName].priority -= 1;
+          }
+        });
+      }
       delete settings.config.tagSettings[tag];
       return settings;
     });
-    userSettings.saveSettings();
   }
 
   /**
@@ -81,7 +94,6 @@ export default class TaskTagsService {
       delete settings.config.tagSettings[oldTag];
       return settings;
     });
-    userSettings.saveSettings();
     this.updateTagInAllTasks(oldTag, newTag);
   }
 
@@ -98,7 +110,6 @@ export default class TaskTagsService {
         settings.config.tagSettings = this.currentTagSettings;
         return settings;
       });
-      userSettings.saveSettings();
     }
   }
 

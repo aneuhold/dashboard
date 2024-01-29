@@ -18,24 +18,11 @@
   import { userSettings } from '../../stores/userSettings';
   import { settingsPageInfo } from './pageInfo';
 
-  let updatingSettings = false;
   let searchingForUser = false;
   let userNameSearchValue = '';
   $: collaboratorUserNames = Object.values($userSettings.collaborators).map(
     (userCto) => userCto.userName
   );
-
-  function triggerSettingsChanged() {
-    $userSettings.pendingSettingsUpdate = true;
-  }
-
-  function saveSettings() {
-    updatingSettings = true;
-    DashboardAPIService.updateSettings($userSettings.config).then(() => {
-      updatingSettings = false;
-      snackbar.success('Settings successfully saved ❤️');
-    });
-  }
 
   function handleSearchForUser() {
     if (userNameSearchValue === '') return;
@@ -69,11 +56,7 @@
       <div class="content">
         <h6 class="sectionTitle mdc-typography--subtitle1">General Settings</h6>
         <FormField>
-          <Checkbox
-            bind:checked={$userSettings.config.enableDevMode}
-            touch
-            on:click={triggerSettingsChanged}
-          />
+          <Checkbox bind:checked={$userSettings.config.enableDevMode} touch />
           <span slot="label">
             Enable dev mode
             <span class="mdc-theme--text-hint-on-background checkBoxText">
@@ -124,14 +107,6 @@
         <div class="globalTagSettingsContainer">
           <GlobalTagSettings />
         </div>
-        <hr class="sectionSeparator" />
-        <Button disabled={!$userSettings.pendingSettingsUpdate} on:click={saveSettings}>
-          {#if updatingSettings}
-            <CircularProgress style="height: 32px; width: 32px;" indeterminate={true} />
-          {:else}
-            Save Settings
-          {/if}
-        </Button>
       </div>
     </Content>
   </Paper>

@@ -22,6 +22,10 @@ Notes for improvement:
 - Recurring Tasks
   - A user can make a task recurring if one of the subtasks is shared. The UI will determine that it can't find the parent recurring task and display that in the recurring info. Because recurring info is shared to all children, each child task will have enough information to display when the next recursion date will happen.
 
+## Known Issues
+
+- Safari on Mac or iOS currently shows a 500 when the page first loads. This seems to be an [issue in Webkit](https://github.com/sveltejs/kit/issues/7805). More specifically, webkit doesn't seem to be handling top-level awaits correctly. Top level awaits are only used in `bson` and a way couldn't quite be found to address that problem.
+
 ## Architecture
 
 ### Singleton Components

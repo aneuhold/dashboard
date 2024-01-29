@@ -71,8 +71,7 @@ export default class DashboardAPIService {
       result.data.tasks
     ) {
       translations.set(result.data.translations);
-      userSettings.set({
-        pendingSettingsUpdate: false,
+      userSettings.setWithoutPropogation({
         config: result.data.userConfig,
         collaborators: this.getCollaboratorsFromResult(result.data)
       });
@@ -98,6 +97,7 @@ export default class DashboardAPIService {
 
   static async updateSettings(updatedConfig: DashboardUserConfig) {
     const apiKeyValue = this.checkOrSetupDashboardAPI();
+    console.info('Saving user settings...');
     const result = await APIService.callDashboardAPI({
       apiKey: apiKeyValue,
       options: {
@@ -109,14 +109,14 @@ export default class DashboardAPIService {
       }
     });
     if (result.success && result.data?.userConfig && result.data.tasks) {
-      userSettings.set({
-        pendingSettingsUpdate: false,
+      userSettings.setWithoutPropogation({
         config: result.data.userConfig,
         collaborators: this.getCollaboratorsFromResult(result.data)
       });
       TaskMapService.getStore().set(
         DashboardTaskAPIService.convertTaskArrayToMap(result.data.tasks)
       );
+      console.info('Successfully saved user settings');
     } else {
       console.error('Error updating settings', result);
     }

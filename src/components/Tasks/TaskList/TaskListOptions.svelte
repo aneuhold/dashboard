@@ -85,7 +85,6 @@
       $parentTask.sortSettings[$currentUserId] = newSortSettings;
     } else {
       $userSettings.config.taskListSortSettings[category] = newSortSettings;
-      userSettings.saveSettings();
     }
   };
   const handleResetSortSettings = () => {
@@ -97,7 +96,6 @@
       const sortSettings = $userSettings.config.taskListSortSettings;
       delete sortSettings[category];
       $userSettings.config.taskListSortSettings = sortSettings;
-      userSettings.saveSettings();
     }
   };
   const handleUpdateFilterSettings = (event: CustomEvent<DashboardTaskListFilterSettings>) => {
@@ -106,7 +104,6 @@
       $parentTask.filterSettings[$currentUserId] = newFilterSettings;
     } else {
       $userSettings.config.taskListFilterSettings[category] = newFilterSettings;
-      userSettings.saveSettings();
     }
   };
   const handleResetFilterSettings = () => {
@@ -118,7 +115,6 @@
       const filterSettings = $userSettings.config.taskListFilterSettings;
       delete filterSettings[category];
       $userSettings.config.taskListFilterSettings = filterSettings;
-      userSettings.saveSettings();
     }
   };
 </script>

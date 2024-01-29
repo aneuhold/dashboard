@@ -124,10 +124,10 @@
         </div>
       </Content>
     </Paper>
-    {#if sortAndFilterResult.length !== 0}
+    {#if sortAndFilterResult.filteredAndSortedIds.length !== 0}
       <div class="subTasksTitleContainer">
         <h3 class="mdc-typography--headline5 subTasksTitle">Sub Tasks</h3>
-        {#if allChildrenIds.length > sortAndFilterResult.length}
+        {#if allChildrenIds.length > sortAndFilterResult.filteredAndSortedIds.length}
           <i class="mdc-typography--body1 subTasksTitle dimmed-color">
             {allChildrenIds.length} total child tasks
           </i>
