@@ -34,6 +34,7 @@ export interface PersistentParentStore<T> {
   upsertMany: (upsertInfo: UpsertManyInfo<T>) => void;
   addDoc: (doc: T) => void;
   deleteDoc: (docId: string) => void;
+  deleteMany: (docIds: string[]) => void;
 }
 
 export interface SetableStore<T> extends Readable<T> {
@@ -298,6 +299,46 @@ export default abstract class DocumentMapStoreService<T extends BaseDocument> {
       });
     };
 
+    const deleteManyDocs = (docIds: string[]) => {
+      const docsToDelete = docIds.map((id) => this.documentMap[id]);
+      // Validate deletion to find more to delete
+      const docIdsToDelete = this.subscribers.reduce((newDocIdsToDelete, subscriber) => {
+        if (subscriber.validateDocDeletion) {
+          const validateFunction = subscriber.validateDocDeletion;
+          docsToDelete.forEach((docToDelete) => {
+            const newIdsToDelete = validateFunction(this.documentMap, docToDelete);
+            newIdsToDelete.forEach((id) => newDocIdsToDelete.add(id));
+          });
+        }
+        return newDocIdsToDelete;
+      }, new Set<string>());
+      // Run before deletion hooks
+      const allDocsToDelete: T[] = [];
+      docIdsToDelete.forEach((id) => {
+        allDocsToDelete.push(this.documentMap[id]);
+        this.subscribers.forEach((subscriber) => {
+          if (subscriber.beforeDocDeletion) {
+            subscriber.beforeDocDeletion(this.documentMap, this.documentMap[id]);
+          }
+        });
+      });
+      docIdsToDelete.forEach((id) => {
+        delete this.documentMap[id];
+        delete this.childStores[id];
+      });
+      setMap();
+      // Run after deletion hooks
+      this.subscribers.forEach((subscriber) => {
+        if (subscriber.afterDocDeletion) {
+          subscriber.afterDocDeletion(this.documentMap, docsToDelete);
+        }
+      });
+      // Persist
+      this.persistToDb({
+        delete: docsToDelete
+      });
+    };
+
     return {
       subscribe,
       /**
@@ -365,37 +406,11 @@ export default abstract class DocumentMapStoreService<T extends BaseDocument> {
           insert: [updatedDoc]
         });
       },
+      deleteMany: (docIds: string[]) => {
+        deleteManyDocs(docIds);
+      },
       deleteDoc: (docId: string) => {
-        const docToDelete = this.documentMap[docId];
-        const docIdsToDelete = this.subscribers.reduce((docIds, subscriber) => {
-          if (subscriber.validateDocDeletion) {
-            const newIdsToDelete = subscriber.validateDocDeletion(this.documentMap, docToDelete);
-            newIdsToDelete.forEach((id) => docIds.add(id));
-          }
-          return docIds;
-        }, new Set<string>());
-        const allDocsToDelete: T[] = [];
-        docIdsToDelete.forEach((id) => {
-          allDocsToDelete.push(this.documentMap[id]);
-          this.subscribers.forEach((subscriber) => {
-            if (subscriber.beforeDocDeletion) {
-              subscriber.beforeDocDeletion(this.documentMap, this.documentMap[id]);
-            }
-          });
-        });
-        docIdsToDelete.forEach((id) => {
-          delete this.documentMap[id];
-          delete this.childStores[id];
-        });
-        setMap();
-        this.subscribers.forEach((subscriber) => {
-          if (subscriber.afterDocDeletion) {
-            subscriber.afterDocDeletion(this.documentMap, allDocsToDelete);
-          }
-        });
-        this.persistToDb({
-          delete: allDocsToDelete
-        });
+        deleteManyDocs([docId]);
       }
     };
   }

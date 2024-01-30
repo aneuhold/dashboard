@@ -11,6 +11,7 @@
   import FormField from '@smui/form-field';
   import Paper, { Content } from '@smui/paper';
   import PageTitle from 'components/PageTitle.svelte';
+  import TaskDeletionSettings from 'components/Tasks/TaskDeletionSettings.svelte';
   import GlobalTagSettings from 'components/Tasks/TaskTags/GlobalTagSettings.svelte';
   import InputBox from 'components/presentational/InputBox.svelte';
   import { snackbar } from 'components/singletons/SingletonSnackbar.svelte';
@@ -107,6 +108,8 @@
         <div class="globalTagSettingsContainer">
           <GlobalTagSettings />
         </div>
+        <hr class="sectionSeparator" />
+        <TaskDeletionSettings />
       </div>
     </Content>
   </Paper>

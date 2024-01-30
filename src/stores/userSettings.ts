@@ -72,7 +72,11 @@ function createUserSettingsStore() {
      */
     setWithoutPropogation: (newSettings: UserSettings) => {
       updateUserSettings(() => newSettings);
-    }
+    },
+    /**
+     * Simply gets the current settings.
+     */
+    get: () => currentSettings
   };
 }
 

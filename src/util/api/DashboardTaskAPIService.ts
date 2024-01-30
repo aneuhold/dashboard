@@ -1,12 +1,7 @@
 import type { ProjectDashboardOptions } from '@aneuhold/core-ts-api-lib';
 import type { DashboardTask } from '@aneuhold/core-ts-db-lib';
+import type { DocumentInsertOrUpdateInfo } from '../../services/DocumentMapStoreService';
 import DashboardAPIService from './DashboardAPIService';
-
-export type TaskInsertOrUpdateInfo = {
-  insert?: DashboardTask[];
-  update?: DashboardTask[];
-  delete?: DashboardTask[];
-};
 
 /**
  * This service is used to insert or update tasks in the backend. It is
@@ -23,7 +18,7 @@ export default class DashboardTaskAPIService {
    * If a set of tasks is already being inserted or updated, this will be added
    * to the queue and executed after the previous set is done.
    */
-  static updateTasks(updateInfo: TaskInsertOrUpdateInfo) {
+  static updateTasks(updateInfo: DocumentInsertOrUpdateInfo<DashboardTask>) {
     const request: ProjectDashboardOptions = {};
     if (updateInfo.insert && updateInfo.insert.length > 0) {
       request.insert = {

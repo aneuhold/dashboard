@@ -3,10 +3,12 @@ import {
   DocumentService,
   type DashboardTask
 } from '@aneuhold/core-ts-db-lib';
+import { DateService } from '@aneuhold/core-ts-lib';
 import { ObjectId } from 'bson';
 import type { Updater } from 'svelte/store';
 import LocalData from 'util/LocalData';
 import DashboardTaskAPIService from 'util/api/DashboardTaskAPIService';
+import { userSettings } from '../../stores/userSettings';
 import type {
   DocumentInsertOrUpdateInfo,
   DocumentMapStore,
@@ -43,6 +45,9 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
   protected setupSubscribers(): void {
     // Basic task things
     this.subscribers.push({
+      afterMapSet(map) {
+        TaskMapService.autoDeleteTasksPostSet(map);
+      },
       beforeDocAddition(map, newDoc) {
         newDoc.description = newDoc.description || '';
         const parentTask = newDoc.parentTaskId ? map[newDoc.parentTaskId.toString()] : undefined;
@@ -140,5 +145,40 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
       updater,
       newDocs: []
     };
+  }
+
+  /**
+   * Auto-deletes tasks that are older than the user's auto task deletion
+   * settings.
+   */
+  private static autoDeleteTasksPostSet(map: Record<string, DashboardTask>) {
+    // Check for any tasks that need to be auto-deleted.
+    const userConfig = userSettings.get().config;
+    if (userConfig.autoTaskDeletionDays < 5 || userConfig.autoTaskDeletionDays > 90) {
+      console.error(
+        `User ${userConfig.userId} has an invalid autoTaskDeletionDays ` +
+          `value of ${userConfig.autoTaskDeletionDays}.`
+      );
+      return;
+    }
+    const dateThreshold = DateService.addDays(new Date(), -userConfig.autoTaskDeletionDays);
+    // Only tasks that don't have a parent, aren't recurring,
+    // are completed, and are older than the threshold
+    const taskIdsToDelete = Object.values(map)
+      .filter((task) => {
+        return (
+          task.userId.toString() === userConfig.userId.toString() &&
+          task.completed &&
+          !task.parentTaskId &&
+          !task.parentRecurringTaskInfo &&
+          !task.recurrenceInfo &&
+          task.lastUpdatedDate < dateThreshold
+        );
+      })
+      .map((task) => task._id.toString());
+    if (taskIdsToDelete.length !== 0) {
+      console.log(`Deleting ${taskIdsToDelete.length} tasks due to auto task deletion.`);
+      this.getStore().deleteMany(taskIdsToDelete);
+    }
   }
 }
