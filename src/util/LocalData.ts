@@ -1,10 +1,13 @@
-import type { DashboardConfig, Translations } from '@aneuhold/core-ts-api-lib';
+import type {
+  DashboardConfig,
+  ProjectDashboardOptions,
+  Translations
+} from '@aneuhold/core-ts-api-lib';
 import type { DashboardTaskMap } from '@aneuhold/core-ts-db-lib';
 import { sleep } from '@aneuhold/core-ts-lib';
 import { EJSON } from 'bson';
 import { writable } from 'svelte/store';
 import type { UserSettings } from '../stores/userSettings';
-import type { TaskInsertOrUpdateInfo } from './api/DashboardTaskAPIService';
 
 function createLocalDataReadyStore() {
   const { subscribe, set } = writable<boolean>(false);
@@ -34,8 +37,8 @@ export default class LocalData {
     translations: `${this.PREFIX}translations`,
     userSettings: `${this.PREFIX}userSettings`,
     taskMap: `${this.PREFIX}taskMap`,
-    currentTaskQueueItem: `${this.PREFIX}currentTaskQueueItem`,
-    taskQueue: `${this.PREFIX}taskQueue`
+    currentApiRequest: `${this.PREFIX}currentApiRequest`,
+    apiRequestQueue: `${this.PREFIX}apiRequestQueue`
   };
 
   /**
@@ -160,16 +163,13 @@ export default class LocalData {
     return this.getStoredObject<DashboardTaskMap>(LocalData.storedKeyNames.taskMap);
   }
 
-  static set currentTaskQueueItem(newTaskQueueItem: TaskInsertOrUpdateInfo | undefined) {
-    this.storeValue(
-      LocalData.storedKeyNames.currentTaskQueueItem,
-      EJSON.stringify(newTaskQueueItem)
-    );
+  static set currentApiRequest(newApiRequest: ProjectDashboardOptions | undefined) {
+    this.storeValue(LocalData.storedKeyNames.currentApiRequest, EJSON.stringify(newApiRequest));
   }
 
-  static get currentTaskQueueItem(): TaskInsertOrUpdateInfo | undefined {
-    const result = this.getStoredObject<TaskInsertOrUpdateInfo>(
-      LocalData.storedKeyNames.currentTaskQueueItem
+  static get currentApiRequest(): ProjectDashboardOptions | undefined {
+    const result = this.getStoredObject<ProjectDashboardOptions>(
+      LocalData.storedKeyNames.currentApiRequest
     );
     if (!result) {
       return undefined;
@@ -177,13 +177,13 @@ export default class LocalData {
     return result;
   }
 
-  static set taskQueue(newTaskQueue: TaskInsertOrUpdateInfo[]) {
-    this.storeValue(LocalData.storedKeyNames.taskQueue, EJSON.stringify(newTaskQueue));
+  static set apiRequestQueue(newRequestQueue: ProjectDashboardOptions[]) {
+    this.storeValue(LocalData.storedKeyNames.apiRequestQueue, EJSON.stringify(newRequestQueue));
   }
 
-  static get taskQueue(): TaskInsertOrUpdateInfo[] {
-    const result = this.getStoredObject<TaskInsertOrUpdateInfo[]>(
-      LocalData.storedKeyNames.taskQueue
+  static get apiRequestQueue(): ProjectDashboardOptions[] {
+    const result = this.getStoredObject<ProjectDashboardOptions[]>(
+      LocalData.storedKeyNames.apiRequestQueue
     );
     if (!result) {
       return [];

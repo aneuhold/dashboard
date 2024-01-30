@@ -1,8 +1,5 @@
-import { APIService } from '@aneuhold/core-ts-api-lib';
-import type { DashboardTask, DashboardTaskMap } from '@aneuhold/core-ts-db-lib';
-import { snackbar } from 'components/singletons/SingletonSnackbar.svelte';
-import LocalData from 'util/LocalData';
-import { TaskMapService } from '../../services/Task/TaskMapService';
+import type { ProjectDashboardOptions } from '@aneuhold/core-ts-api-lib';
+import type { DashboardTask } from '@aneuhold/core-ts-db-lib';
 import DashboardAPIService from './DashboardAPIService';
 
 export type TaskInsertOrUpdateInfo = {
@@ -20,8 +17,6 @@ export type TaskInsertOrUpdateInfo = {
  * processed.
  */
 export default class DashboardTaskAPIService {
-  private static processingTaskQueue = false;
-
   /**
    * Inserts, deletes, or updates tasks in the backend.
    *
@@ -29,98 +24,25 @@ export default class DashboardTaskAPIService {
    * to the queue and executed after the previous set is done.
    */
   static updateTasks(updateInfo: TaskInsertOrUpdateInfo) {
-    // Add the task to the queue
-    this.pushTaskQueueItem(updateInfo);
-
-    // Start processing the queue if not already doing so
-    if (!this.processingTaskQueue && LocalData.taskQueue.length > 0) {
-      this.processTaskQueue();
+    const request: ProjectDashboardOptions = {};
+    if (updateInfo.insert && updateInfo.insert.length > 0) {
+      request.insert = {
+        tasks: updateInfo.insert
+      };
     }
-  }
-
-  static convertTaskArrayToMap(tasks: DashboardTask[]): DashboardTaskMap {
-    return tasks.reduce((map, task) => {
-      map[task._id.toString()] = task;
-      return map;
-    }, {} as DashboardTaskMap);
-  }
-
-  static hasTaskQueueItem(): boolean {
-    return LocalData.taskQueue.length > 0;
-  }
-
-  private static pushTaskQueueItem(updateInfo: TaskInsertOrUpdateInfo) {
-    const taskQueue = LocalData.taskQueue;
-    taskQueue.push(updateInfo);
-    LocalData.taskQueue = taskQueue;
-  }
-
-  private static shiftTaskQueueItem(): TaskInsertOrUpdateInfo | undefined {
-    const taskQueue = LocalData.taskQueue;
-    const result = taskQueue.shift();
-    LocalData.taskQueue = taskQueue;
-    return result;
-  }
-
-  private static unshiftTaskQueueItem(updateInfo: TaskInsertOrUpdateInfo) {
-    const taskQueue = LocalData.taskQueue;
-    taskQueue.unshift(updateInfo);
-    LocalData.taskQueue = taskQueue;
-  }
-
-  private static async processTaskQueue() {
-    this.processingTaskQueue = true;
-    while (LocalData.taskQueue.length > 0) {
-      LocalData.currentTaskQueueItem = this.shiftTaskQueueItem();
-      const currentTask = LocalData.currentTaskQueueItem;
-      if (!currentTask) {
-        console.error('No current task to process, something went wrong!!');
-        break;
-      }
-      const updatedTaskList = await this.callDashboardAPI(currentTask);
-      if (updatedTaskList && LocalData.taskQueue.length === 0) {
-        // Only set the task map if there are no more tasks to process. This
-        // should help prevent the task map from being set to an old value if
-        // the user refreshes the page while the task queue is being processed.
-        TaskMapService.getStore().set(this.convertTaskArrayToMap(updatedTaskList));
-      } else {
-        // If there was an error, add the task back to the queue and try again
-        // Save this for later to ensure there is no infinite loop
-        // this.unshiftTaskQueueItem(LocalData.currentTaskQueueItem!);
-      }
+    if (updateInfo.update && updateInfo.update.length > 0) {
+      request.update = {
+        tasks: updateInfo.update
+      };
     }
-    this.processingTaskQueue = false;
-  }
-
-  private static async callDashboardAPI(
-    insertInfo: TaskInsertOrUpdateInfo
-  ): Promise<DashboardTask[] | null> {
-    const apiKeyValue = DashboardAPIService.checkOrSetupDashboardAPI();
-    console.log('Processing task queue item', insertInfo);
-    const result = await APIService.callDashboardAPI({
-      apiKey: apiKeyValue,
-      options: {
-        delete: {
-          tasks: insertInfo?.delete
-        },
-        insert: {
-          tasks: insertInfo?.insert
-        },
-        update: {
-          tasks: insertInfo?.update
-        },
-        get: {
-          tasks: true
-        }
-      }
-    });
-    if (!result.success || !result.data?.tasks) {
-      console.error('Error processing task queue item', insertInfo, result);
-      snackbar.error('Error updating tasks');
-      return null;
-    } else {
-      console.log('Successfully processed task queue item', insertInfo);
-      return result.data.tasks;
+    if (updateInfo.delete && updateInfo.delete.length > 0) {
+      request.delete = {
+        tasks: updateInfo.delete
+      };
     }
+    request.get = {
+      tasks: true
+    };
+    DashboardAPIService.queryApi(request);
   }
 }

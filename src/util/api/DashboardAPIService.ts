@@ -1,5 +1,14 @@
-import { APIService, type ProjectDashboardOutput } from '@aneuhold/core-ts-api-lib';
-import type { DashboardUserConfig, UserCTO } from '@aneuhold/core-ts-db-lib';
+import {
+  APIService,
+  type ProjectDashboardOptions,
+  type ProjectDashboardOutput
+} from '@aneuhold/core-ts-api-lib';
+import type {
+  DashboardTask,
+  DashboardTaskMap,
+  DashboardUserConfig,
+  UserCTO
+} from '@aneuhold/core-ts-db-lib';
 import { snackbar } from 'components/singletons/SingletonSnackbar.svelte';
 import type { UUID } from 'crypto';
 import LocalData from 'util/LocalData';
@@ -9,14 +18,36 @@ import { dashboardConfig } from '../../stores/dashboardConfig';
 import { LoginState, loginState } from '../../stores/loginState';
 import { translations } from '../../stores/translations';
 import { userSettings } from '../../stores/userSettings';
-import DashboardTaskAPIService from './DashboardTaskAPIService';
 
 const SECONDS_TO_WAIT_BEFORE_FETCHING_INITIAL_DATA = 10;
 
 export default class DashboardAPIService {
+  /**
+   * A variable to determine if the initial data is currently being fetched
+   * for the first time.
+   * This is used to show the user that the data was synced if it was fetched
+   * successfully.
+   */
+  private static processingFirstInitData = false;
   static lastInitialDataFetchTime: number | null = null;
-
   private static dashboardAPIUrlSet = false;
+  private static processingRequestQueue = false;
+
+  /**
+   * Inserts, deletes, updates or gets items in the backend.
+   *
+   * If an API request is already being processed, this will be added
+   * to the queue and executed after the previous request is done.
+   */
+  static queryApi(apiOptions: ProjectDashboardOptions) {
+    // Add the options to the queue
+    this.pushApiRequest(apiOptions);
+
+    // Start processing the queue if not already doing so
+    if (!this.processingRequestQueue && LocalData.apiRequestQueue.length > 0) {
+      this.processApiRequests();
+    }
+  }
 
   /**
    * Fetches the initial data if
@@ -27,7 +58,7 @@ export default class DashboardAPIService {
    * ago or it hasn't been fetched yet.
    */
   static async getInitialDataIfNeeded() {
-    if (loginState.get() === LoginState.LoggedIn && !DashboardTaskAPIService.hasTaskQueueItem()) {
+    if (loginState.get() === LoginState.LoggedIn && LocalData.apiRequestQueue.length === 0) {
       if (!this.lastInitialDataFetchTime) {
         await this.getInitialData();
       } else if (
@@ -45,83 +76,44 @@ export default class DashboardAPIService {
   }
 
   /**
-   * Gets the initial data from the backend and sets the stores accordingly.
-   *
-   * @returns true if the data was successfully retrieved, false otherwise
+   * Gets initial data as if the user is just logging in.
    */
-  static async getInitialData(): Promise<boolean> {
+  static async getInitialDataForLogin() {
+    this.lastInitialDataFetchTime = null;
+    await this.getInitialData();
+  }
+
+  /**
+   * Gets the initial data from the backend and sets the stores accordingly.
+   */
+  static async getInitialData(): Promise<void> {
     console.log('Getting initial data...');
-    const wasFirstSync = !this.lastInitialDataFetchTime;
+    this.processingFirstInitData = !this.lastInitialDataFetchTime;
     this.lastInitialDataFetchTime = Date.now();
-    const apiKeyValue = this.checkOrSetupDashboardAPI();
-    const result = await APIService.callDashboardAPI({
-      apiKey: apiKeyValue,
-      options: {
-        get: {
-          translations: true,
-          userConfig: true,
-          tasks: true
-        }
+
+    this.queryApi({
+      get: {
+        translations: true,
+        userConfig: true,
+        tasks: true
       }
     });
-    if (
-      result.success &&
-      result.data?.translations &&
-      result.data.userConfig &&
-      result.data.tasks
-    ) {
-      translations.set(result.data.translations);
-      userSettings.setWithoutPropogation({
-        config: result.data.userConfig,
-        collaborators: this.getCollaboratorsFromResult(result.data)
-      });
-      TaskMapService.getStore().set(
-        DashboardTaskAPIService.convertTaskArrayToMap(result.data.tasks)
-      );
-      // Clear the task queue since we just got the initial data
-      LocalData.taskQueue = [];
-      LocalData.currentTaskQueueItem = undefined;
-      loginState.set(LoginState.LoggedIn);
-      console.info('Successfully got initial data');
-      if (wasFirstSync) {
-        snackbar.success('Successfully synced 🎉');
-      }
-      return true;
-    } else {
-      console.error('Error getting initial data', result);
-      snackbar.error('Error syncing');
-      loginState.set(LoginState.LoggedOut);
-      return false;
-    }
   }
 
   static async updateSettings(updatedConfig: DashboardUserConfig) {
-    const apiKeyValue = this.checkOrSetupDashboardAPI();
     console.info('Saving user settings...');
-    const result = await APIService.callDashboardAPI({
-      apiKey: apiKeyValue,
-      options: {
-        // Get tasks as well because the collaborators might have changed
-        get: { userConfig: true, tasks: true },
-        update: {
-          userConfig: updatedConfig
-        }
+    this.queryApi({
+      // Get tasks as well because the collaborators might have changed
+      get: { userConfig: true, tasks: true },
+      update: {
+        userConfig: updatedConfig
       }
     });
-    if (result.success && result.data?.userConfig && result.data.tasks) {
-      userSettings.setWithoutPropogation({
-        config: result.data.userConfig,
-        collaborators: this.getCollaboratorsFromResult(result.data)
-      });
-      TaskMapService.getStore().set(
-        DashboardTaskAPIService.convertTaskArrayToMap(result.data.tasks)
-      );
-      console.info('Successfully saved user settings');
-    } else {
-      console.error('Error updating settings', result);
-    }
   }
 
+  /**
+   * This processes separately from the queue because it is a special case.
+   */
   static async checkIfUsernameIsValid(username: string): Promise<UserCTO | null> {
     const apiKeyValue = this.checkOrSetupDashboardAPI();
     const result = await APIService.callDashboardAPI({
@@ -154,6 +146,107 @@ export default class DashboardAPIService {
       throw new Error('API Key not set!');
     }
     return apiKeyValue;
+  }
+
+  /**
+   * Starts processing the currently queued API requests. Each result is
+   * combined together and processed at the end.
+   */
+  private static async processApiRequests() {
+    this.processingRequestQueue = true;
+    let combinedOutput: ProjectDashboardOutput = {};
+    while (LocalData.apiRequestQueue.length > 0) {
+      const currentRequest = this.shiftApiRequestQueue();
+      LocalData.currentApiRequest = currentRequest;
+      if (!currentRequest) {
+        console.error('No current API request to process, something went wrong!!');
+        break;
+      }
+      const result = await this.callDashboardAPI(currentRequest);
+      if (result) {
+        combinedOutput = { ...combinedOutput, ...result };
+      }
+      if (result && LocalData.apiRequestQueue.length === 0) {
+        // Only set the stores if there are no more requests to process. This
+        // should help prevent the stores from being set to an old value if
+        // the user refreshes the page while the task queue is being processed.
+        this.processDashboardApiOutput(combinedOutput);
+      } else {
+        // If there was an error, add the task back to the queue and try again
+        // Save this for later to ensure there is no infinite loop
+        // this.unshiftTaskQueueItem(LocalData.currentTaskQueueItem!);
+      }
+    }
+    this.processingRequestQueue = false;
+  }
+
+  private static async callDashboardAPI(
+    input: ProjectDashboardOptions
+  ): Promise<ProjectDashboardOutput | null> {
+    const apiKeyValue = this.checkOrSetupDashboardAPI();
+    console.log('Processing API request', input);
+    const result = await APIService.callDashboardAPI({
+      apiKey: apiKeyValue,
+      options: input
+    });
+    if (result.success) {
+      console.info('Successfully processed API request', input);
+      return result.data;
+    } else {
+      console.error('Error processing API request', input, result);
+      return null;
+    }
+  }
+
+  /**
+   * Processes the final output of a series of API requests.
+   */
+  private static processDashboardApiOutput(output: ProjectDashboardOutput) {
+    if (output.translations) {
+      translations.set(output.translations);
+    }
+    if (output.userConfig) {
+      userSettings.setWithoutPropogation({
+        config: output.userConfig,
+        collaborators: this.getCollaboratorsFromResult(output)
+      });
+    }
+    if (output.tasks) {
+      TaskMapService.getStore().set(this.convertTaskArrayToMap(output.tasks));
+    }
+    // Trigger some extra info if this is the first sync
+    if (this.processingFirstInitData && Object.keys(output).length > 0) {
+      loginState.set(LoginState.LoggedIn);
+      console.info('Successfully got initial data');
+      snackbar.success('Successfully synced 🎉');
+    } else if (this.processingFirstInitData) {
+      // If there wasn't any data that came back from the initial sync, then
+      // something went wrong.
+      loginState.set(LoginState.LoggedOut);
+      console.error('Error getting initial data', output);
+      snackbar.error('Error syncing');
+    }
+    this.processingFirstInitData = false;
+  }
+
+  private static pushApiRequest(apiInput: ProjectDashboardOptions) {
+    const apiRequestQueue = LocalData.apiRequestQueue;
+    apiRequestQueue.push(apiInput);
+    LocalData.apiRequestQueue = apiRequestQueue;
+  }
+
+  private static shiftApiRequestQueue(): ProjectDashboardOptions | undefined {
+    const apiRequestQueue = LocalData.apiRequestQueue;
+    const result = apiRequestQueue.shift();
+    LocalData.apiRequestQueue = apiRequestQueue;
+    return result;
+  }
+
+  private static convertTaskArrayToMap(tasks: DashboardTask[]): DashboardTaskMap {
+    return tasks.reduce((map, task) => {
+      map[task._id.toString()] = task;
+      return map;
+    }, {} as DashboardTaskMap);
   }
 
   static getCollaboratorsFromResult(data: ProjectDashboardOutput): Record<string, UserCTO> {

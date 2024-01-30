@@ -11,15 +11,16 @@
   import DashboardAPIService from 'util/api/DashboardAPIService';
   import { apiKey } from '../stores/apiKey';
   import { dashboardConfig } from '../stores/dashboardConfig';
+  import { LoginState, loginState } from '../stores/loginState';
   import { password } from '../stores/password';
 
   let typedUserName = LocalData.username;
   let typedPassword = LocalData.password;
-  let processingCredentials = false;
+  $: processingCredentials = $loginState === LoginState.ProcessingCredentials;
   let invalidCredentials = false;
 
   function handleSubmit() {
-    processingCredentials = true;
+    $loginState = LoginState.ProcessingCredentials;
     LocalData.username = typedUserName;
     password.set(typedPassword);
     APIService.validateUser({
@@ -42,9 +43,8 @@
         console.error('No dashboard function URL found in config');
         return;
       }
-      DashboardAPIService.getInitialData().then(() => {
-        processingCredentials = false;
-      });
+      // This will eventually update the login state
+      DashboardAPIService.getInitialDataForLogin();
     }
   }
 </script>
