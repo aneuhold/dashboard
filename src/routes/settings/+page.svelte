@@ -7,6 +7,7 @@
   import PageTitle from '$components/PageTitle.svelte';
   import TaskDeletionSettings from '$components/Tasks/TaskDeletionSettings.svelte';
   import GlobalTagSettings from '$components/Tasks/TaskTags/GlobalTagSettings.svelte';
+  import Confetti from '$components/presentational/Confetti.svelte';
   import InputBox from '$components/presentational/InputBox.svelte';
   import { snackbar } from '$components/singletons/SingletonSnackbar.svelte';
   import DashboardAPIService from '$util/api/DashboardAPIService';
@@ -16,13 +17,12 @@
   import CircularProgress from '@smui/circular-progress';
   import FormField from '@smui/form-field';
   import Paper, { Content } from '@smui/paper';
-  import { ConfettiExplosion } from 'svelte-confetti-explosion';
   import { userSettings } from '../../stores/userSettings';
   import { settingsPageInfo } from './pageInfo';
 
   let searchingForUser = false;
   let userNameSearchValue = '';
-  let confettiIsVisible = false;
+  let showConfetti = false;
   let previousUseConfetti = $userSettings.config.enabledFeatures.useConfettiForTasks;
 
   $: collaboratorUserNames = Object.values($userSettings.collaborators).map(
@@ -114,25 +114,21 @@
         </div>
         <hr class="sectionSeparator" />
         <FormField>
-          {#if confettiIsVisible}
-            <ConfettiExplosion />
-          {/if}
+          <Confetti bind:show={showConfetti} />
           <Checkbox
             bind:checked={$userSettings.config.enabledFeatures.useConfettiForTasks}
             on:click={() => {
               if (!previousUseConfetti) {
-                confettiIsVisible = true;
+                showConfetti = true;
                 previousUseConfetti = true;
-                setTimeout(() => {
-                  confettiIsVisible = false;
-                }, 3000);
               } else {
                 previousUseConfetti = false;
+                showConfetti = false;
               }
             }}
             touch
           />
-          <span slot="label"> Enable confetti for tasks </span>
+          <span slot="label">Enable confetti for tasks</span>
         </FormField>
         <hr class="sectionSeparator" />
         <TaskDeletionSettings />
@@ -178,8 +174,6 @@
     flex-direction: column;
     gap: 8px;
     margin-bottom: 80px;
-    /* Added for the confetti effect */
-    overflow: hidden;
   }
   .checkBoxText {
     margin-left: 8px;
