@@ -10,6 +10,7 @@
   export let taskId: string;
 
   let showConfetti = false;
+  let currentTimeout: NodeJS.Timeout | undefined = undefined;
 
   $: task = TaskMapService.getTaskStore(taskId);
   $: preventDefault =
@@ -37,44 +38,24 @@
 
   function handleToggle() {
     if ($userSettings.config.enabledFeatures.useConfettiForTasks) {
-      if (!$task.completed && preventDefault) {
-        // If the task will roll on completion, then show the confetti and
-        // toggle right away, because it won't show checked anyway.
+      if (!$task.completed) {
         showConfetti = true;
-        toggleCompleted();
-      } else if (!$task.completed) {
-        showConfetti = true;
+        // Use a timeout so that it will have a little bit to show the animation.
+        if (currentTimeout) clearTimeout(currentTimeout);
+        currentTimeout = setTimeout(() => {
+          $task.completed = !$task.completed;
+        }, 1200);
+        return;
       } else {
         showConfetti = false;
-        toggleCompleted();
       }
-    } else {
-      toggleCompleted();
     }
-  }
-
-  function toggleCompleted() {
     $task.completed = !$task.completed;
-  }
-
-  /**
-   * Only toggles the completed state if the task is not already completed and
-   * preventDefault isn't set. If it didn't check for preventDefault, it would
-   * trigger recurrence twice.
-   */
-  function handleConfettiComplete() {
-    if (!$task.completed && !preventDefault) {
-      toggleCompleted();
-    }
   }
 </script>
 
 <ClickableDiv clickAction={handleCheckboxClick}>
-  <Confetti
-    durationMs={1500}
-    bind:show={showConfetti}
-    on:confettiComplete={handleConfettiComplete}
-  />
+  <Confetti bind:show={showConfetti} />
   <Checkbox
     checked={$task.completed}
     touch

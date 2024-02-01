@@ -13,10 +13,13 @@
   $: confettiEnabled = $userSettings.config.enabledFeatures.useConfettiForTasks;
   $: showConfetti = show && confettiEnabled;
 
+  let currentTimeout: NodeJS.Timeout | undefined = undefined;
+
   const dispatch = createEventDispatcher();
 
   $: if (show && confettiEnabled) {
-    setTimeout(() => {
+    if (currentTimeout) clearTimeout(currentTimeout);
+    currentTimeout = setTimeout(() => {
       show = false;
       dispatch('confettiComplete');
     }, durationMs);
