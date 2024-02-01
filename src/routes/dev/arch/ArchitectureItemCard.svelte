@@ -10,13 +10,13 @@
   in styles when using the menu component.
 -->
 <script lang="ts">
+  import type { MenuButtonItem } from '$components/presentational/MenuButton.svelte';
+  import MenuButton from '$components/presentational/MenuButton.svelte';
+  import ArchitectureInfo from '$util/ArchitectureInfo/ArchitectureInfo';
+  import type { ArchitectureComponent } from '$util/ArchitectureInfo/architectureComponents';
   import Card, { Content as CardContent } from '@smui/card';
   import { Icon } from '@smui/icon-button';
   import Tooltip, { Wrapper } from '@smui/tooltip';
-  import type { MenuButtonItem } from 'components/presentational/MenuButton.svelte';
-  import MenuButton from 'components/presentational/MenuButton.svelte';
-  import ArchitectureInfo from 'util/ArchitectureInfo/ArchitectureInfo';
-  import type { ArchitectureComponent } from 'util/ArchitectureInfo/architectureComponents';
 
   export let archComponent: ArchitectureComponent;
 

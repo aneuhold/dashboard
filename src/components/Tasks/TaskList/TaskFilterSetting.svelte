@@ -1,7 +1,7 @@
 <script lang="ts">
+  import ClickableDiv from '$components/presentational/ClickableDiv.svelte';
   import Card, { Content } from '@smui/card';
   import Checkbox from '@smui/checkbox';
-  import ClickableDiv from 'components/presentational/ClickableDiv.svelte';
   import { createEventDispatcher } from 'svelte';
 
   export let settingName: string;

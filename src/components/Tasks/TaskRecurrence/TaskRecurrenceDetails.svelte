@@ -5,6 +5,9 @@
   the `TaskRecurrenceInfo` component.
 -->
 <script lang="ts">
+  import WeekdaySegmentedButton from '$components/WeekdaySegmentedButton.svelte';
+  import InputBox from '$components/presentational/InputBox.svelte';
+  import { confirmationDialog } from '$components/singletons/dialogs/SingletonConfirmationDialog.svelte';
   import {
     RecurrenceBasis,
     RecurrenceEffect,
@@ -13,9 +16,6 @@
   } from '@aneuhold/core-ts-db-lib';
   import { DateService } from '@aneuhold/core-ts-lib';
   import Select, { Option } from '@smui/select';
-  import WeekdaySegmentedButton from 'components/WeekdaySegmentedButton.svelte';
-  import InputBox from 'components/presentational/InputBox.svelte';
-  import { confirmationDialog } from 'components/singletons/dialogs/SingletonConfirmationDialog.svelte';
   import { writable, type Updater } from 'svelte/store';
   import { TaskMapService } from '../../../services/Task/TaskMapService';
   import TaskRecurrenceService from '../../../services/Task/TaskRecurrenceService';

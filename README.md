@@ -4,12 +4,6 @@
 
 Notes for improvement:
 
-- Filtering + Sorting
-  - Filter button at top of list
-  - Filter settings per-user
-  - Sort at top of list
-  - Sort settings per-user
-- Task Assignment
 - Little things
   - neoconfetti/svelte usage on task completion
   - Design for completed tasks
@@ -17,16 +11,25 @@ Notes for improvement:
   - Maybe a progress bar for sub-task completion?
 - See if it can be made to work offline with [this guide](https://developers.google.com/codelabs/pwa-training/pwa03--going-offline#1)
 
-## General Decisions + Info for Usage
+## Overview
+
+### General Decisions + Info for Usage
 
 - Recurring Tasks
   - A user can make a task recurring if one of the subtasks is shared. The UI will determine that it can't find the parent recurring task and display that in the recurring info. Because recurring info is shared to all children, each child task will have enough information to display when the next recursion date will happen.
+- Tiered Tag System (or Priority + Location)
+  - The result of thinking about this was that there wasn't really a way to do it without making the UI more complicated or ending up in a situation where the user would need to reorder tags on tasks for it to show up correctly.
+  - The potential thought was making the order of tags matter to increasingly indent out sections or change the header map result
 
-## Known Issues
+### Known Issues
 
 - Safari on Mac or iOS currently shows a 500 when the page first loads. This seems to be an [issue in Webkit](https://github.com/sveltejs/kit/issues/7805). More specifically, webkit doesn't seem to be handling top-level awaits correctly. Top level awaits are only used in `bson` and a way couldn't quite be found to address that problem.
 
 ## Architecture
+
+### Usage of Yarn 4.x
+
+The version of yarn was upgraded to the latest to take advantage of some new features, particularly `yarn patch`, but also to see how the package manager works.
 
 ### Singleton Components
 
@@ -95,7 +98,7 @@ The reason that the `pageInfo.ts` files are separate and not done in the module 
 
 - [Link to the exact logo that was created](https://prefinem.com/simple-icon-generator/#eyJiYWNrZ3JvdW5kQ29sb3IiOiIjMDAwMDAiLCJib3JkZXJDb2xvciI6IiMwOThlMWYiLCJib3JkZXJXaWR0aCI6IjciLCJleHBvcnRTaXplIjoiMTkyIiwiZXhwb3J0aW5nIjp0cnVlLCJmb250RmFtaWx5IjoiUm9ib3RvIFNsYWIiLCJmb250UG9zaXRpb24iOiI2OCIsImZvbnRTaXplIjoiNTAiLCJmb250V2VpZ2h0Ijo2MDAsImltYWdlIjoiIiwiaW1hZ2VNYXNrIjoiIiwiaW1hZ2VTaXplIjo1MCwic2hhcGUiOiJjaXJjbGUiLCJ0ZXh0Ijoi4pqZ77iPIn0), in case the sizes need to be exported again. This makes it easier to export.
 
-## Building
+### Building
 
 To create a production version of the app:
 

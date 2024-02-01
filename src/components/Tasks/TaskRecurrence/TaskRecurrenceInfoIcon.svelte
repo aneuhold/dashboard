@@ -1,5 +1,5 @@
 <script>
-  import InfoIcon from 'components/InfoIcon.svelte';
+  import InfoIcon from '$components/InfoIcon.svelte';
 </script>
 
 <InfoIcon title="Recurring Tasks">

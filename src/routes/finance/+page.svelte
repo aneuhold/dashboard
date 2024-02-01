@@ -4,10 +4,10 @@
   A page for Financial info.
 -->
 <script lang="ts">
+  import LinkList from '$components/LinkList.svelte';
+  import type { LinkInfo } from '$components/LinkListItem.svelte';
+  import PageTitle from '$components/PageTitle.svelte';
   import Paper, { Content, Title } from '@smui/paper';
-  import LinkList from 'components/LinkList.svelte';
-  import type { LinkInfo } from 'components/LinkListItem.svelte';
-  import PageTitle from 'components/PageTitle.svelte';
   import { TR, translations } from '../../stores/translations';
   import { financePageInfo } from './pageInfo';
 

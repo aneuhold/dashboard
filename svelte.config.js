@@ -17,9 +17,10 @@ const config = {
     alias: {
       // this will match a directory and its contents
       // (`my-directory/x` resolves to `path/to/my-directory/x`)
-      components: 'src/components',
-      util: 'src/util',
-      actions: 'src/actions'
+      // Prefix all of these with $ to avoid conflicts with built-in packages.
+      $components: 'src/components',
+      $util: 'src/util',
+      $actions: 'src/actions'
     }
   }
 };

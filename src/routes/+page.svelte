@@ -1,8 +1,8 @@
 <script lang="ts">
+  import LinkList from '$components/LinkList.svelte';
+  import type { LinkInfo } from '$components/LinkListItem.svelte';
+  import PageTitle from '$components/PageTitle.svelte';
   import Paper, { Content, Title } from '@smui/paper';
-  import LinkList from 'components/LinkList.svelte';
-  import type { LinkInfo } from 'components/LinkListItem.svelte';
-  import PageTitle from 'components/PageTitle.svelte';
   import { userSettings } from '../stores/userSettings';
   import { enabledPages } from '../stores/visual/enabledPages';
   import { homePageInfo } from './pageInfo';

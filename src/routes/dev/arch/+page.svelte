@@ -12,14 +12,14 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
   import { page } from '$app/stores';
+  import PageTitle from '$components/PageTitle.svelte';
+  import ArchitectureInfo from '$util/ArchitectureInfo/ArchitectureInfo';
+  import type { ArchitectureContext } from '$util/ArchitectureInfo/architectureContextInfo';
+  import architectureContextInfo from '$util/ArchitectureInfo/architectureContextInfo';
   import IconButton from '@smui/icon-button';
   import List, { Item, PrimaryText, SecondaryText, Text } from '@smui/list';
   import Paper, { Content as PaperContent, Subtitle, Title } from '@smui/paper';
-  import PageTitle from 'components/PageTitle.svelte';
   import { onDestroy } from 'svelte';
-  import ArchitectureInfo from 'util/ArchitectureInfo/ArchitectureInfo';
-  import type { ArchitectureContext } from 'util/ArchitectureInfo/architectureContextInfo';
-  import architectureContextInfo from 'util/ArchitectureInfo/architectureContextInfo';
   import ArchitectureSection from './ArchitectureSection.svelte';
   import { archPageInfo } from './pageInfo';
 

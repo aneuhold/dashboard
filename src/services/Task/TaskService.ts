@@ -1,7 +1,7 @@
+import type { BreadCrumbArray } from '$components/BreadCrumb.svelte';
+import { confirmationDialog } from '$components/singletons/dialogs/SingletonConfirmationDialog.svelte';
 import type { DashboardTask } from '@aneuhold/core-ts-db-lib';
 import { ArrayService } from '@aneuhold/core-ts-lib';
-import type { BreadCrumbArray } from 'components/BreadCrumb.svelte';
-import { confirmationDialog } from 'components/singletons/dialogs/SingletonConfirmationDialog.svelte';
 import { TaskMapService } from './TaskMapService';
 
 /**

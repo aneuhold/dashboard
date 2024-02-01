@@ -1,5 +1,5 @@
 import { goto } from '$app/navigation';
-import type { PageInfo } from 'util/navInfo';
+import type { PageInfo } from '$util/navInfo';
 
 export const settingsPageInfo: PageInfo = {
   shortTitle: 'Settings',

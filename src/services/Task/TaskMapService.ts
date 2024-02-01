@@ -1,3 +1,5 @@
+import LocalData from '$util/LocalData';
+import DashboardTaskAPIService from '$util/api/DashboardTaskAPIService';
 import {
   DashboardTaskService,
   DocumentService,
@@ -6,8 +8,6 @@ import {
 import { DateService } from '@aneuhold/core-ts-lib';
 import { ObjectId } from 'bson';
 import type { Updater } from 'svelte/store';
-import LocalData from 'util/LocalData';
-import DashboardTaskAPIService from 'util/api/DashboardTaskAPIService';
 import { userSettings } from '../../stores/userSettings';
 import type {
   DocumentInsertOrUpdateInfo,

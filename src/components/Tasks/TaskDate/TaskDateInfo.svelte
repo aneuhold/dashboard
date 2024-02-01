@@ -1,8 +1,8 @@
 <script lang="ts">
+  import DatePickerDialog from '$components/presentational/DatePickerDialog.svelte';
+  import { confirmationDialog } from '$components/singletons/dialogs/SingletonConfirmationDialog.svelte';
   import { RecurrenceBasis } from '@aneuhold/core-ts-db-lib';
   import { DateService } from '@aneuhold/core-ts-lib';
-  import DatePickerDialog from 'components/presentational/DatePickerDialog.svelte';
-  import { confirmationDialog } from 'components/singletons/dialogs/SingletonConfirmationDialog.svelte';
   import { TaskMapService } from '../../../services/Task/TaskMapService';
   import TaskRecurrenceService from '../../../services/Task/TaskRecurrenceService';
   import TaskDateButton from './TaskDateButton.svelte';

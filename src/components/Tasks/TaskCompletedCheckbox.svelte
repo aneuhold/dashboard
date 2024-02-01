@@ -1,7 +1,7 @@
 <script lang="ts">
+  import { snackbar } from '$components/singletons/SingletonSnackbar.svelte';
+  import { confirmationDialog } from '$components/singletons/dialogs/SingletonConfirmationDialog.svelte';
   import Checkbox from '@smui/checkbox';
-  import { snackbar } from 'components/singletons/SingletonSnackbar.svelte';
-  import { confirmationDialog } from 'components/singletons/dialogs/SingletonConfirmationDialog.svelte';
   import { TaskMapService } from '../../services/Task/TaskMapService';
   import ClickableDiv from '../presentational/ClickableDiv.svelte';
 

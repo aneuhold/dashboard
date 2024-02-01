@@ -1,6 +1,6 @@
 <script lang="ts">
+  import WeekdaySegmentedButton from '$components/WeekdaySegmentedButton.svelte';
   import Select, { Option } from '@smui/select';
-  import WeekdaySegmentedButton from 'components/WeekdaySegmentedButton.svelte';
 
   export let weekDay: number;
   export let weekOfMonth: number | 'last';

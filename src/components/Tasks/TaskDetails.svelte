@@ -10,13 +10,13 @@
 -->
 <script lang="ts">
   import { goto } from '$app/navigation';
+  import BreadCrumb from '$components/BreadCrumb.svelte';
+  import PageTitle from '$components/PageTitle.svelte';
+  import FabButton from '$components/presentational/FabButton.svelte';
+  import InputBox from '$components/presentational/InputBox.svelte';
   import { DashboardTask, DashboardTaskService } from '@aneuhold/core-ts-db-lib';
   import Button, { Icon } from '@smui/button';
   import Paper, { Content } from '@smui/paper';
-  import BreadCrumb from 'components/BreadCrumb.svelte';
-  import PageTitle from 'components/PageTitle.svelte';
-  import FabButton from 'components/presentational/FabButton.svelte';
-  import InputBox from 'components/presentational/InputBox.svelte';
   import TaskListService from '../../services/Task/TaskListService';
   import { TaskMapService } from '../../services/Task/TaskMapService';
   import TaskService from '../../services/Task/TaskService';

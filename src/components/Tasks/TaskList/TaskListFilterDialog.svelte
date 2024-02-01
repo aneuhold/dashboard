@@ -1,8 +1,8 @@
 <script lang="ts">
+  import SmartDialog from '$components/presentational/SmartDialog.svelte';
   import type { DashboardTaskListFilterSettings } from '@aneuhold/core-ts-db-lib';
   import Button, { Label } from '@smui/button';
   import { Actions, Content, Title } from '@smui/dialog';
-  import SmartDialog from 'components/presentational/SmartDialog.svelte';
   import { createEventDispatcher } from 'svelte';
   import TaskTagsService from '../../../services/Task/TaskTagsService';
   import TaskFilterSetting from './TaskFilterSetting.svelte';

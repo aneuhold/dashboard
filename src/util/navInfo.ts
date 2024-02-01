@@ -1,4 +1,4 @@
-import type { LinkInfo } from 'components/LinkListItem.svelte';
+import type { LinkInfo } from '$components/LinkListItem.svelte';
 import { automationPageInfo } from '../routes/automation/pageInfo';
 import { archPageInfo } from '../routes/dev/arch/pageInfo';
 import { devPageInfo } from '../routes/dev/pageInfo';

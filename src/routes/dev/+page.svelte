@@ -7,15 +7,15 @@
   - SVG icons: https://worldvectorlogo.com/
 -->
 <script lang="ts">
+  import LinkList from '$components/LinkList.svelte';
+  import type { LinkInfo } from '$components/LinkListItem.svelte';
+  import PageNotFound from '$components/PageNotFound.svelte';
+  import PageTitle from '$components/PageTitle.svelte';
   import DigitalOceanIcon from '$lib/svgs/DigitalOceanIcon.svelte';
   import MongoDbIcon from '$lib/svgs/MongoDBIcon.svelte';
   import NetlifyIcon from '$lib/svgs/NetlifyIcon.svelte';
+  import navInfo from '$util/navInfo';
   import Paper, { Content as PaperContent, Title } from '@smui/paper';
-  import LinkList from 'components/LinkList.svelte';
-  import type { LinkInfo } from 'components/LinkListItem.svelte';
-  import PageNotFound from 'components/PageNotFound.svelte';
-  import PageTitle from 'components/PageTitle.svelte';
-  import navInfo from 'util/navInfo';
   import { userSettings } from '../../stores/userSettings';
   import { devPageInfo } from './pageInfo';
 

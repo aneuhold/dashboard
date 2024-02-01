@@ -1,5 +1,5 @@
+import DashboardAPIService from '$util/api/DashboardAPIService';
 import { writable } from 'svelte/store';
-import DashboardAPIService from 'util/api/DashboardAPIService';
 
 function createAppIsVisibleStore() {
   let _appIsVisible = true;

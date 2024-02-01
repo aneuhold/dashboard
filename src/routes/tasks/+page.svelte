@@ -6,11 +6,11 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
   import { page } from '$app/stores';
+  import PageTitle from '$components/PageTitle.svelte';
+  import TaskDetails from '$components/Tasks/TaskDetails.svelte';
+  import TaskList from '$components/Tasks/TaskList/TaskList.svelte';
+  import FabButton from '$components/presentational/FabButton.svelte';
   import { DashboardTask } from '@aneuhold/core-ts-db-lib';
-  import PageTitle from 'components/PageTitle.svelte';
-  import TaskDetails from 'components/Tasks/TaskDetails.svelte';
-  import TaskList from 'components/Tasks/TaskList/TaskList.svelte';
-  import FabButton from 'components/presentational/FabButton.svelte';
   import TaskListService from '../../services/Task/TaskListService';
   import { TaskMapService } from '../../services/Task/TaskMapService';
   import TaskService from '../../services/Task/TaskService';

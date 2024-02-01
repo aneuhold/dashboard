@@ -1,6 +1,6 @@
+import { localDataReady } from '$util/LocalData';
 import type { BaseDocument } from '@aneuhold/core-ts-db-lib';
 import { writable, type Readable, type Updater, type Writable } from 'svelte/store';
-import { localDataReady } from 'util/LocalData';
 
 /**
  * A store that has persistence capabilities and is a child of a

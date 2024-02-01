@@ -1,6 +1,6 @@
+import LocalData, { localDataReady } from '$util/LocalData';
+import DashboardAPIService from '$util/api/DashboardAPIService';
 import { writable } from 'svelte/store';
-import LocalData, { localDataReady } from 'util/LocalData';
-import DashboardAPIService from 'util/api/DashboardAPIService';
 
 export enum LoginState {
   Initializing = 'Initializing',

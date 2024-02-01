@@ -1,0 +1,20 @@
+diff --git a/lib/bson.mjs b/lib/bson.mjs
+index c07d7ad4f3e44c47d86c4022611f2a7f07a9a757..bc68f3e5247eaa4458658ff53079857a555de0f5 100644
+--- a/lib/bson.mjs
++++ b/lib/bson.mjs
+@@ -128,14 +128,7 @@ class BSONRuntimeError extends BSONError {
+ function nodejsMathRandomBytes(byteLength) {
+     return nodeJsByteUtils.fromNumberArray(Array.from({ length: byteLength }, () => Math.floor(Math.random() * 256)));
+ }
+-const nodejsRandomBytes = await (async () => {
+-    try {
+-        return (await import('crypto')).randomBytes;
+-    }
+-    catch {
+-        return nodejsMathRandomBytes;
+-    }
+-})();
++const nodejsRandomBytes = nodejsMathRandomBytes;
+ const nodeJsByteUtils = {
+     toLocalBufferType(potentialBuffer) {
+         if (Buffer.isBuffer(potentialBuffer)) {

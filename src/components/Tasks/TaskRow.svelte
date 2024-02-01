@@ -5,14 +5,14 @@
 -->
 <script lang="ts">
   import { goto } from '$app/navigation';
+  import ClickableDiv from '$components/presentational/ClickableDiv.svelte';
+  import type { MenuButtonItem } from '$components/presentational/MenuButton.svelte';
+  import MenuButton from '$components/presentational/MenuButton.svelte';
+  import { confirmationDialog } from '$components/singletons/dialogs/SingletonConfirmationDialog.svelte';
+  import { taskSharingDialog } from '$components/singletons/dialogs/SingletonTaskSharingDialog.svelte';
   import { DashboardTask, DashboardTaskService, RecurrenceEffect } from '@aneuhold/core-ts-db-lib';
   import Card, { Content as CardContent } from '@smui/card';
   import { Icon } from '@smui/icon-button';
-  import ClickableDiv from 'components/presentational/ClickableDiv.svelte';
-  import type { MenuButtonItem } from 'components/presentational/MenuButton.svelte';
-  import MenuButton from 'components/presentational/MenuButton.svelte';
-  import { confirmationDialog } from 'components/singletons/dialogs/SingletonConfirmationDialog.svelte';
-  import { taskSharingDialog } from 'components/singletons/dialogs/SingletonTaskSharingDialog.svelte';
   import { TaskMapService } from '../../services/Task/TaskMapService';
   import TaskRecurrenceService from '../../services/Task/TaskRecurrenceService';
   import TaskService from '../../services/Task/TaskService';

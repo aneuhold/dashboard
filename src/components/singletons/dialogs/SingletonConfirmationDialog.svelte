@@ -5,9 +5,9 @@
   exported functions to show the dialog.
 -->
 <script lang="ts" context="module">
+  import SmartDialog from '$components/presentational/SmartDialog.svelte';
   import Button, { Label } from '@smui/button';
   import { Actions, Content, Title } from '@smui/dialog';
-  import SmartDialog from 'components/presentational/SmartDialog.svelte';
   import { writable } from 'svelte/store';
 
   export type ConfirmationDialogSettings = {

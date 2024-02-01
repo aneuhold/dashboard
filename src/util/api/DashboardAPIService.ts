@@ -1,17 +1,17 @@
+import { snackbar } from '$components/singletons/SingletonSnackbar.svelte';
+import LocalData from '$util/LocalData';
 import {
-  APIService,
-  type ProjectDashboardOptions,
-  type ProjectDashboardOutput
+    APIService,
+    type ProjectDashboardOptions,
+    type ProjectDashboardOutput
 } from '@aneuhold/core-ts-api-lib';
 import type {
-  DashboardTask,
-  DashboardTaskMap,
-  DashboardUserConfig,
-  UserCTO
+    DashboardTask,
+    DashboardTaskMap,
+    DashboardUserConfig,
+    UserCTO
 } from '@aneuhold/core-ts-db-lib';
-import { snackbar } from 'components/singletons/SingletonSnackbar.svelte';
 import type { UUID } from 'crypto';
-import LocalData from 'util/LocalData';
 import { TaskMapService } from '../../services/Task/TaskMapService';
 import { apiKey } from '../../stores/apiKey';
 import { dashboardConfig } from '../../stores/dashboardConfig';

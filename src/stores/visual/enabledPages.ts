@@ -1,5 +1,5 @@
+import navInfo, { type PageInfo } from '$util/navInfo';
 import { writable } from 'svelte/store';
-import navInfo, { type PageInfo } from 'util/navInfo';
 import { userSettings } from '../userSettings';
 
 function createEnabledPagesStore() {

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import InfoIcon from 'components/InfoIcon.svelte';
+  import InfoIcon from '$components/InfoIcon.svelte';
   import { flip } from 'svelte/animate';
   import { userSettings } from '../../../stores/userSettings';
   import GlobalTagEditor from './GlobalTagEditor.svelte';

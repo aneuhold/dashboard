@@ -1,4 +1,5 @@
 <script lang="ts">
+  import SmartDialog from '$components/presentational/SmartDialog.svelte';
   import {
     DashboardTaskSortBy,
     DashboardTaskSortDirection,
@@ -6,7 +7,6 @@
   } from '@aneuhold/core-ts-db-lib';
   import Button, { Label } from '@smui/button';
   import { Actions, Content, Title } from '@smui/dialog';
-  import SmartDialog from 'components/presentational/SmartDialog.svelte';
   import { createEventDispatcher } from 'svelte';
   import { flip } from 'svelte/animate';
   import { slide } from 'svelte/transition';
