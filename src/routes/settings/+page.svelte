@@ -16,11 +16,15 @@
   import CircularProgress from '@smui/circular-progress';
   import FormField from '@smui/form-field';
   import Paper, { Content } from '@smui/paper';
+  import { ConfettiExplosion } from 'svelte-confetti-explosion';
   import { userSettings } from '../../stores/userSettings';
   import { settingsPageInfo } from './pageInfo';
 
   let searchingForUser = false;
   let userNameSearchValue = '';
+  let confettiIsVisible = false;
+  let previousUseConfetti = $userSettings.config.enabledFeatures.useConfettiForTasks;
+
   $: collaboratorUserNames = Object.values($userSettings.collaborators).map(
     (userCto) => userCto.userName
   );
@@ -109,6 +113,28 @@
           <GlobalTagSettings />
         </div>
         <hr class="sectionSeparator" />
+        <FormField>
+          {#if confettiIsVisible}
+            <ConfettiExplosion />
+          {/if}
+          <Checkbox
+            bind:checked={$userSettings.config.enabledFeatures.useConfettiForTasks}
+            on:click={() => {
+              if (!previousUseConfetti) {
+                confettiIsVisible = true;
+                previousUseConfetti = true;
+                setTimeout(() => {
+                  confettiIsVisible = false;
+                }, 3000);
+              } else {
+                previousUseConfetti = false;
+              }
+            }}
+            touch
+          />
+          <span slot="label"> Enable confetti for tasks </span>
+        </FormField>
+        <hr class="sectionSeparator" />
         <TaskDeletionSettings />
       </div>
     </Content>
@@ -152,6 +178,8 @@
     flex-direction: column;
     gap: 8px;
     margin-bottom: 80px;
+    /* Added for the confetti effect */
+    overflow: hidden;
   }
   .checkBoxText {
     margin-left: 8px;

@@ -78,6 +78,8 @@
     display: flex;
     flex-direction: column;
     width: 100%;
+    /* Added for the confetti effect */
+    overflow: hidden;
   }
   .removedTasksText {
     display: flex;

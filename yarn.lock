@@ -22,24 +22,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aneuhold/core-ts-api-lib@npm:^1.0.45":
-  version: 1.0.45
-  resolution: "@aneuhold/core-ts-api-lib@npm:1.0.45"
+"@aneuhold/core-ts-api-lib@npm:^1.0.46":
+  version: 1.0.46
+  resolution: "@aneuhold/core-ts-api-lib@npm:1.0.46"
   dependencies:
-    "@aneuhold/core-ts-db-lib": "npm:^1.0.45"
+    "@aneuhold/core-ts-db-lib": "npm:^1.0.46"
     "@aneuhold/core-ts-lib": "npm:^1.1.11"
     bson: "npm:^6.2.0"
-  checksum: 10c0/2bbef12a92d4c10eb6962ac5af56ca135b915d312fa7c0eee82b2424f260f2487fded5801b1c0e52894c1bd84bfe72c17f01ab3e55a3a673a716eae9b96d271d
+  checksum: 10c0/bac7a3a752c3ef6b2d51f455e15853d328d9850909b283fd49c13ab5748092e9376397fe3c9799fdd416455534a98b1651d2525ea4a503859064bcbe86b0b0cd
   languageName: node
   linkType: hard
 
-"@aneuhold/core-ts-db-lib@npm:^1.0.45":
-  version: 1.0.45
-  resolution: "@aneuhold/core-ts-db-lib@npm:1.0.45"
+"@aneuhold/core-ts-db-lib@npm:^1.0.46":
+  version: 1.0.46
+  resolution: "@aneuhold/core-ts-db-lib@npm:1.0.46"
   dependencies:
     "@aneuhold/core-ts-lib": "npm:^1.1.10"
     bson: "npm:^6.2.0"
-  checksum: 10c0/25af887b83eec48da2587e7bf9273f512d06a76ce9711d3c9811b2d1908221372fa8d40a1c88a6fac9c22b623a8f2e0d74cf2ad978977ae9d6145c9a6b232785
+  checksum: 10c0/bddca8d7f3e6459783d2b6329d4225915bccb0dc85533acebd4cc7e9b5f8e8d3b7daa6527d3030ab1a00f3e3c74b9573e88405521d481e3fe13877dda7193385
   languageName: node
   linkType: hard
 
@@ -2480,8 +2480,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "dashboard@workspace:."
   dependencies:
-    "@aneuhold/core-ts-api-lib": "npm:^1.0.45"
-    "@aneuhold/core-ts-db-lib": "npm:^1.0.45"
+    "@aneuhold/core-ts-api-lib": "npm:^1.0.46"
+    "@aneuhold/core-ts-db-lib": "npm:^1.0.46"
     "@aneuhold/core-ts-lib": "npm:^1.1.11"
     "@fontsource/fira-mono": "npm:^5.0.8"
     "@neoconfetti/svelte": "npm:^2.2.1"
@@ -2525,6 +2525,7 @@ __metadata:
     smui-theme: "npm:^7.0.0-beta.15"
     svelte: "npm:^4"
     svelte-check: "npm:^3.6.0"
+    svelte-confetti-explosion: "npm:^0.4.0"
     svelty-picker: "npm:^5.2.0"
     tslib: "npm:^2.4.1"
     typescript: "npm:^5.0.0"
@@ -5330,6 +5331,13 @@ __metadata:
   bin:
     svelte-check: bin/svelte-check
   checksum: 10c0/59c97c927df6a9ddab13f41a563da2b5b8d7bc004bfb7143e9b149b3cca94c65e7fdc9a447fd29dfcdf588364b325a420952153adbe95985a94f520e6cce39fa
+  languageName: node
+  linkType: hard
+
+"svelte-confetti-explosion@npm:^0.4.0":
+  version: 0.4.0
+  resolution: "svelte-confetti-explosion@npm:0.4.0"
+  checksum: 10c0/91f279bc9ca252f5b02bb7ccb3cf0f25a1402fdb37b5cfe348cdf23d5aed64d1e2e4ef0dec798591112dd5837de1d6aebd280e1d7fffc84e5c42665d649b9486
   languageName: node
   linkType: hard
 

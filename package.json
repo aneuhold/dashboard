@@ -7,14 +7,14 @@
     "preview": "yarn theme && vite preview",
     "theme": "smui-theme compile static/smui.css -i src/globalStyles",
     "test": "vitest",
-    "upgrade:core": "yarn upgrade --latest --pattern @aneuhold",
-    "upgrade:smui": "yarn upgrade --latest --pattern @smui"
+    "upgrade:core": "yarn up '@aneuhold/*'",
+    "upgrade:smui": "yarn up '@smui/*'"
   },
   "packageManager": "yarn@4.1.0",
   "type": "module",
   "devDependencies": {
-    "@aneuhold/core-ts-api-lib": "^1.0.45",
-    "@aneuhold/core-ts-db-lib": "^1.0.45",
+    "@aneuhold/core-ts-api-lib": "^1.0.46",
+    "@aneuhold/core-ts-db-lib": "^1.0.46",
     "@aneuhold/core-ts-lib": "^1.1.11",
     "@fontsource/fira-mono": "^5.0.8",
     "@neoconfetti/svelte": "^2.2.1",
@@ -58,6 +58,7 @@
     "smui-theme": "^7.0.0-beta.15",
     "svelte": "^4",
     "svelte-check": "^3.6.0",
+    "svelte-confetti-explosion": "^0.4.0",
     "svelty-picker": "^5.2.0",
     "tslib": "^2.4.1",
     "typescript": "^5.0.0",

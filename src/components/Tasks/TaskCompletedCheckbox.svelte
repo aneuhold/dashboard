@@ -2,10 +2,14 @@
   import { snackbar } from '$components/singletons/SingletonSnackbar.svelte';
   import { confirmationDialog } from '$components/singletons/dialogs/SingletonConfirmationDialog.svelte';
   import Checkbox from '@smui/checkbox';
+  import { ConfettiExplosion } from 'svelte-confetti-explosion';
   import { TaskMapService } from '../../services/Task/TaskMapService';
+  import { userSettings } from '../../stores/userSettings';
   import ClickableDiv from '../presentational/ClickableDiv.svelte';
 
   export let taskId: string;
+
+  let confettiIsVisible = false;
 
   $: task = TaskMapService.getTaskStore(taskId);
   $: preventDefault =
@@ -23,6 +27,12 @@
       });
     } else {
       $task.completed = !$task.completed;
+      if ($task.completed && $userSettings.config.enabledFeatures.useConfettiForTasks) {
+        confettiIsVisible = true;
+        setTimeout(() => {
+          confettiIsVisible = false;
+        }, 3000);
+      }
     }
   }
 
@@ -33,6 +43,9 @@
 </script>
 
 <ClickableDiv clickAction={toggleCompleted}>
+  {#if confettiIsVisible}
+    <ConfettiExplosion />
+  {/if}
   <Checkbox
     checked={$task.completed}
     touch
