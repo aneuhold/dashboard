@@ -97,6 +97,18 @@ export default class TaskTagsService {
     this.updateTagInAllTasks(oldTag, newTag);
   }
 
+  static addTagForUser(tag: string) {
+    const currentTagSettings = userSettings.get().config.tagSettings;
+    if (!currentTagSettings[tag]) {
+      userSettings.update((settings) => {
+        settings.config.tagSettings[tag] = {
+          priority: 0
+        };
+        return settings;
+      });
+    }
+  }
+
   private static addTagForUserIfNeeded(tag: string) {
     if (!TaskTagsService.userId) {
       return;

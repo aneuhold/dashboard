@@ -7,29 +7,38 @@
   import { userSettings } from '../../../stores/userSettings';
 
   export let open = false;
-  export let tagName: string;
+  /**
+   * The tag name to update. If not provided, the editor will be in "add" mode.
+   */
+  export let tagName: string | undefined = undefined;
 
-  $: tagEditorValue = tagName;
+  $: tagEditorValue = tagName ?? '';
   $: tagValueIsValid = validateTagEditorValue(tagEditorValue);
   $: buttonIsDisabled = !tagValueIsValid || tagEditorValue === tagName;
+  $: tagEditorTitle = tagName ? `Edit "${tagName}" Tag` : 'Add New Tag';
 
   const handleCancel = () => {
     open = false;
   };
   const handleDone = () => {
-    open = false;
     if (tagEditorValue !== tagName) {
-      TaskTagsService.updateTag(tagName, tagEditorValue);
+      if (tagName) {
+        TaskTagsService.updateTag(tagName, tagEditorValue);
+      } else {
+        TaskTagsService.addTagForUser(tagEditorValue);
+      }
     }
+    open = false;
   };
 
   const validateTagEditorValue = (value: string) => {
-    return tagEditorValue === tagName || (!$userSettings.config.tagSettings[value] && value !== '');
+    if (tagEditorValue === '') return false;
+    return tagEditorValue === tagName || !$userSettings.config.tagSettings[value];
   };
 </script>
 
 <SmartDialog bind:open>
-  <Title>Edit "{tagName}" Tag</Title>
+  <Title>{tagEditorTitle}</Title>
   <Content>
     <InputBox label="Tag Name" isValid={tagValueIsValid} bind:inputValue={tagEditorValue} />
   </Content>

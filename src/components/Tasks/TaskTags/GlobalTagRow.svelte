@@ -120,16 +120,20 @@
       <div class="card-content">
         <div class="left-side">
           {#if tagSettings.priority !== 0}
-            {#if tagSettings.priority !== 1}
-              <IconButton size="button" on:click={decrementPriority}>
-                <Icon class="material-icons">arrow_downward</Icon>
-              </IconButton>
-            {/if}
-            {#if tagSettings.priority !== maxPriority}
-              <IconButton size="button" on:click={incrementPriority}>
-                <Icon class="material-icons">arrow_upward</Icon>
-              </IconButton>
-            {/if}
+            <IconButton
+              size="button"
+              on:click={decrementPriority}
+              disabled={tagSettings.priority === 1}
+            >
+              <Icon class="material-icons">arrow_downward</Icon>
+            </IconButton>
+            <IconButton
+              size="button"
+              on:click={incrementPriority}
+              disabled={tagSettings.priority === maxPriority}
+            >
+              <Icon class="material-icons">arrow_upward</Icon>
+            </IconButton>
           {/if}
         </div>
         <div class="tagInfo">

@@ -1,5 +1,6 @@
 <script lang="ts">
   import InfoIcon from '$components/InfoIcon.svelte';
+  import Button from '@smui/button/src/Button.svelte';
   import { flip } from 'svelte/animate';
   import { userSettings } from '../../../stores/userSettings';
   import GlobalTagEditor from './GlobalTagEditor.svelte';
@@ -18,7 +19,7 @@
   });
 
   let editorOpen = false;
-  let editorOpenForTag = '';
+  let editorOpenForTag: string | undefined = '';
 
   const handleOpenEditor = (event: CustomEvent<string>) => {
     editorOpenForTag = event.detail;
@@ -72,6 +73,15 @@
   {#each nonSortableTagList as tagName}
     <GlobalTagRow maxPriority={sortableTagList.length} {tagName} on:openEditor={handleOpenEditor} />
   {/each}
+  <div class="addTagButtonContainer">
+    <Button
+      variant="outlined"
+      on:click={() => {
+        editorOpenForTag = undefined;
+        editorOpen = true;
+      }}>Add New Tag</Button
+    >
+  </div>
 </div>
 
 <GlobalTagEditor tagName={editorOpenForTag} bind:open={editorOpen} />
@@ -90,5 +100,10 @@
     display: flex;
     flex-direction: row;
     align-items: center;
+  }
+  .addTagButtonContainer {
+    display: flex;
+    margin-top: 16px;
+    justify-content: center;
   }
 </style>
