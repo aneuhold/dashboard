@@ -156,6 +156,16 @@
         <li>{tr.key('finance.banking-info.credit-card-strategy.li1')}</li>
         <li>{tr.key('finance.banking-info.credit-card-strategy.li2')}</li>
       </ul>
+      <h6 class="section-title">{tr.key('finance.banking-info.banking-strategy.title')}</h6>
+      <p>
+        {tr.key('finance.banking-info.banking-strategy.p1')}
+      </p>
+      <ul>
+        <li>{tr.key('finance.banking-info.banking-strategy.li1')}</li>
+        <li>{tr.key('finance.banking-info.banking-strategy.li2')}</li>
+        <li>{tr.key('finance.banking-info.banking-strategy.li3')}</li>
+        <li>{tr.key('finance.banking-info.banking-strategy.li4')}</li>
+      </ul>
     </Content>
   </Paper>
 
