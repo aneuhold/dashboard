@@ -5,7 +5,7 @@
 
   /**
    * Determines if the confetti should be shown. This should be bound to because
-   * it resets after 3000 ms back to false.
+   * it resets after the {@link durationMs} back to false.
    */
   export let show = false;
   export let durationMs = 3000;
