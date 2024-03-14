@@ -27,6 +27,8 @@ function createEnabledPagesStore() {
               return settings.config.enabledFeatures.financePage;
             case navInfo.automation.title:
               return settings.config.enabledFeatures.automationPage;
+            case navInfo.entertainment.title:
+              return settings.config.enabledFeatures.entertainmentPage;
             default:
               return true;
           }
