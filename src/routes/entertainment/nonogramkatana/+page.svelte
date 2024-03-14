@@ -4,9 +4,20 @@
   A page for entertainment things, like games and stuff like that.
 -->
 <script lang="ts">
+  import LinkList from '$components/LinkList.svelte';
+  import type { LinkInfo } from '$components/LinkListItem.svelte';
   import PageTitle from '$components/PageTitle.svelte';
-  import Paper, { Content, Title } from '@smui/paper';
+  import Paper, { Content } from '@smui/paper';
+  import { nonogramKatanaBuildingsPageInfo } from './buildings/pageInfo';
+  import { nonogramKatanaItemsPageInfo } from './items/pageInfo';
   import { nonogramKatanaPageInfo } from './pageInfo';
+
+  const tableOfContentsLinks: Array<LinkInfo> = [
+    nonogramKatanaItemsPageInfo,
+    nonogramKatanaBuildingsPageInfo
+  ];
+
+  // What should be the data structure for the info here?
 </script>
 
 <svelte:head>
@@ -20,8 +31,9 @@
 />
 <div class="content">
   <Paper>
-    <Title>Something</Title>
-    <Content>Something here</Content>
+    <Content>
+      <LinkList links={tableOfContentsLinks} />
+    </Content>
   </Paper>
 </div>
 
