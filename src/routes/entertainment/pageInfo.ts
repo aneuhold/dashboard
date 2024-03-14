@@ -6,7 +6,7 @@ export const entertainmentPageInfo: PageInfo = {
   title: 'Entertainment',
   description: 'Games, and other fun things',
   url: '/entertainment',
-  iconName: 'attach_money',
+  iconName: 'videogame_asset',
   clickAction: () => {
     goto(entertainmentPageInfo.url);
   },
