@@ -28,6 +28,7 @@ function createEnabledPagesStore() {
             case navInfo.automation.title:
               return settings.config.enabledFeatures.automationPage;
             case navInfo.entertainment.title:
+            case navInfo.nonogramKatana.title:
               return settings.config.enabledFeatures.entertainmentPage;
             default:
               return true;

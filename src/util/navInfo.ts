@@ -2,6 +2,7 @@ import type { LinkInfo } from '$components/LinkListItem.svelte';
 import { automationPageInfo } from '../routes/automation/pageInfo';
 import { archPageInfo } from '../routes/dev/arch/pageInfo';
 import { devPageInfo } from '../routes/dev/pageInfo';
+import { nonogramKatanaPageInfo } from '../routes/entertainment/nonogramkatana/pageInfo';
 import { entertainmentPageInfo } from '../routes/entertainment/pageInfo';
 import { financePageInfo } from '../routes/finance/pageInfo';
 import { homePageInfo } from '../routes/pageInfo';
@@ -45,6 +46,7 @@ const navInfo = {
   automation: automationPageInfo,
   tasks: tasksPageInfo,
   entertainment: entertainmentPageInfo,
+  nonogramKatana: nonogramKatanaPageInfo,
   settings: settingsPageInfo
 } satisfies Record<string, PageInfo>;
 

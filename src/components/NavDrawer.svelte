@@ -59,6 +59,9 @@
                 {pageInfo.iconName}
               </Graphic>
             {/if}
+            {#if pageInfo.icon}
+              <Graphic><svelte:component this={pageInfo.icon} /></Graphic>
+            {/if}
             <Text>{pageInfo.shortTitle}</Text>
           </Item>
         {/each}
