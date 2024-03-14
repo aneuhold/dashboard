@@ -13,15 +13,6 @@
 
   const primaryLinks: Array<LinkInfo> = [
     {
-      title: 'Tasks (Toodledo)',
-      description:
-        'Task management and tracking. This should eventually be recreated in the dashboard.',
-      clickAction: () => {
-        window.open('https://tasks.toodledo.com/main/-9#', '_blank');
-      },
-      iconName: 'task'
-    },
-    {
       title: 'House Wiki (TiddlyWiki)',
       description: 'Wiki for house info',
       clickAction: () => {
