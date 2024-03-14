@@ -8,13 +8,13 @@
   import type { LinkInfo } from '$components/LinkListItem.svelte';
   import PageTitle from '$components/PageTitle.svelte';
   import Paper, { Content } from '@smui/paper';
-  import { nonogramKatanaBuildingsPageInfo } from './buildings/pageInfo';
   import { nonogramKatanaItemsPageInfo } from './items/pageInfo';
   import { nonogramKatanaPageInfo } from './pageInfo';
+  import { nonogramKatanaUpgradesPageInfo } from './upgrades/pageInfo';
 
   const tableOfContentsLinks: Array<LinkInfo> = [
     nonogramKatanaItemsPageInfo,
-    nonogramKatanaBuildingsPageInfo
+    nonogramKatanaUpgradesPageInfo
   ];
 
   // What should be the data structure for the info here?

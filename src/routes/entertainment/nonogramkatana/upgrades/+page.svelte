@@ -1,24 +1,19 @@
-<!--
-  @component
-  
-  A page for entertainment things, like games and stuff like that.
--->
 <script lang="ts">
   import PageTitle from '$components/PageTitle.svelte';
   import Paper, { Content, Title } from '@smui/paper';
-  import { nonogramKatanaBuildingsPageInfo } from './pageInfo';
+  import { nonogramKatanaUpgradesPageInfo } from './pageInfo';
 
   // What should be the data structure for the info here?
 </script>
 
 <svelte:head>
-  <title>{nonogramKatanaBuildingsPageInfo.shortTitle}</title>
-  <meta name="description" content={nonogramKatanaBuildingsPageInfo.description} />
+  <title>{nonogramKatanaUpgradesPageInfo.shortTitle}</title>
+  <meta name="description" content={nonogramKatanaUpgradesPageInfo.description} />
 </svelte:head>
 
 <PageTitle
-  title={nonogramKatanaBuildingsPageInfo.shortTitle}
-  subtitle={nonogramKatanaBuildingsPageInfo.description}
+  title={nonogramKatanaUpgradesPageInfo.shortTitle}
+  subtitle={nonogramKatanaUpgradesPageInfo.description}
 />
 <div class="content">
   <Paper>

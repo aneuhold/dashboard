@@ -5,7 +5,9 @@
 -->
 <script lang="ts" context="module">
   import PageTitle from '$components/PageTitle.svelte';
-  import Paper, { Content, Title } from '@smui/paper';
+  import Paper, { Content } from '@smui/paper';
+  import type { ComponentType } from 'svelte';
+  import NonogramKatanaItemRow from './NonogramKatanaItemRow.svelte';
   import { nonogramKatanaItemsPageInfo } from './pageInfo';
 
   export enum NonogramKatanaItemName {
@@ -28,9 +30,11 @@
     Steel = 'steel'
   }
 
+  /**
+   * This might be the thing that is stored in the DB.
+   */
   export type NonogramKatanaItem = {
     itemName: NonogramKatanaItemName;
-    displayName: string;
     currentAmount: number;
     storageCap?: number;
     minDesired?: number;
@@ -38,95 +42,146 @@
     priority?: number;
   };
 
+  type NonogramKatanaItemDisplayInfo = {
+    displayName: string;
+    icon?: ComponentType;
+    usedFor?: string[];
+  };
+
+  /**
+   * The display info for each item in the game.
+   */
+  export const nonogramKatanaItemDisplayInfo: {
+    [key in NonogramKatanaItemName]: NonogramKatanaItemDisplayInfo;
+  } = {
+    [NonogramKatanaItemName.Coin]: {
+      displayName: 'Coin',
+      usedFor: ['Expeditions']
+    },
+    [NonogramKatanaItemName.CryptoCoin]: {
+      displayName: 'Crypto-coin'
+    },
+    [NonogramKatanaItemName.Ruby]: {
+      displayName: 'Ruby'
+    },
+    [NonogramKatanaItemName.Fan]: {
+      displayName: 'Fan'
+    },
+    [NonogramKatanaItemName.Arrows]: {
+      displayName: 'Arrows'
+    },
+    [NonogramKatanaItemName.Katana]: {
+      displayName: 'Katana'
+    },
+    [NonogramKatanaItemName.Shuriken]: {
+      displayName: 'Shuriken'
+    },
+    [NonogramKatanaItemName.Spikes]: {
+      displayName: 'Spikes'
+    },
+    [NonogramKatanaItemName.Boomerang]: {
+      displayName: 'Boomerang'
+    },
+    [NonogramKatanaItemName.Petard]: {
+      displayName: 'Petard'
+    },
+    [NonogramKatanaItemName.Bomb]: {
+      displayName: 'Bomb'
+    },
+    [NonogramKatanaItemName.Firework]: {
+      displayName: 'Firework'
+    },
+    [NonogramKatanaItemName.BatteringRam]: {
+      displayName: 'Battering Ram'
+    },
+    [NonogramKatanaItemName.Anchor]: {
+      displayName: 'Anchor'
+    },
+    [NonogramKatanaItemName.Wood]: {
+      displayName: 'Wood'
+    },
+    [NonogramKatanaItemName.Stone]: {
+      displayName: 'Stone'
+    },
+    [NonogramKatanaItemName.Steel]: {
+      displayName: 'Steel'
+    }
+  };
+
   const nonogramKatanaDefaultItems: { [key in NonogramKatanaItemName]: NonogramKatanaItem } = {
     [NonogramKatanaItemName.Coin]: {
       itemName: NonogramKatanaItemName.Coin,
-      displayName: 'Coin',
       currentAmount: 163,
       storageCap: 1360,
       priority: 1
     },
     [NonogramKatanaItemName.CryptoCoin]: {
       itemName: NonogramKatanaItemName.CryptoCoin,
-      displayName: 'Crypto-coin',
       currentAmount: 328,
       storageCap: 1360
     },
     [NonogramKatanaItemName.Ruby]: {
       itemName: NonogramKatanaItemName.Ruby,
-      displayName: 'Ruby',
       currentAmount: 35,
       storageCap: 1360
     },
     [NonogramKatanaItemName.Fan]: {
       itemName: NonogramKatanaItemName.Fan,
-      displayName: 'Fan',
       currentAmount: 62,
       storageCap: 136
     },
     [NonogramKatanaItemName.Arrows]: {
       itemName: NonogramKatanaItemName.Arrows,
-      displayName: 'Arrows',
       currentAmount: 0,
       storageCap: 136
     },
     [NonogramKatanaItemName.Katana]: {
       itemName: NonogramKatanaItemName.Katana,
-      displayName: 'Katana',
       currentAmount: 0,
       storageCap: 136
     },
     [NonogramKatanaItemName.Shuriken]: {
       itemName: NonogramKatanaItemName.Shuriken,
-      displayName: 'Shuriken',
       currentAmount: 0,
       storageCap: 136
     },
     [NonogramKatanaItemName.Spikes]: {
       itemName: NonogramKatanaItemName.Spikes,
-      displayName: 'Spikes',
       currentAmount: 0,
       storageCap: 136
     },
     [NonogramKatanaItemName.Boomerang]: {
       itemName: NonogramKatanaItemName.Boomerang,
-      displayName: 'Boomerang',
       currentAmount: 0,
       storageCap: 136
     },
     [NonogramKatanaItemName.Petard]: {
       itemName: NonogramKatanaItemName.Petard,
-      displayName: 'Petard',
       currentAmount: 0,
       storageCap: 136
     },
     [NonogramKatanaItemName.Bomb]: {
       itemName: NonogramKatanaItemName.Bomb,
-      displayName: 'Bomb',
       currentAmount: 0,
       storageCap: 136
     },
     [NonogramKatanaItemName.Firework]: {
       itemName: NonogramKatanaItemName.Firework,
-      displayName: 'Firework',
       currentAmount: 0,
       storageCap: 136
     },
     [NonogramKatanaItemName.BatteringRam]: {
       itemName: NonogramKatanaItemName.BatteringRam,
-      displayName: 'Battering Ram',
       currentAmount: 0,
       storageCap: 136
     },
     [NonogramKatanaItemName.Anchor]: {
       itemName: NonogramKatanaItemName.Anchor,
-      displayName: 'Anchor',
       currentAmount: 0,
       storageCap: 136
     },
     [NonogramKatanaItemName.Wood]: {
       itemName: NonogramKatanaItemName.Wood,
-      displayName: 'Wood',
       currentAmount: 0,
       storageCap: 100,
       minDesired: 50,
@@ -134,7 +189,6 @@
     },
     [NonogramKatanaItemName.Stone]: {
       itemName: NonogramKatanaItemName.Stone,
-      displayName: 'Stone',
       currentAmount: 0,
       storageCap: 100,
       minDesired: 50,
@@ -142,7 +196,6 @@
     },
     [NonogramKatanaItemName.Steel]: {
       itemName: NonogramKatanaItemName.Steel,
-      displayName: 'Steel',
       currentAmount: 0,
       storageCap: 100,
       minDesired: 50,
@@ -166,8 +219,11 @@
 />
 <div class="content">
   <Paper>
-    <Title>Something</Title>
-    <Content>Something here</Content>
+    <Content>
+      {#each Object.values(nonogramKatanaDefaultItems) as item}
+        <NonogramKatanaItemRow {item} />
+      {/each}
+    </Content>
   </Paper>
 </div>
 

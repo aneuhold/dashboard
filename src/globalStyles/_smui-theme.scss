@@ -103,6 +103,7 @@ $bg-color-on-surface: color.scale($surface-color, $whiteness: +10%);
   --success: #{$success-color};
   --text-on-success: #{$text-on-success};
   --bg-color-on-surface: #{$bg-color-on-surface};
+  --error: #{$error-color};
 }
 
 // --- Global Styles ---
