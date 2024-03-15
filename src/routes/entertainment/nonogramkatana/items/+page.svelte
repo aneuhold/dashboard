@@ -1,46 +1,11 @@
-<!--
-  @component
-  
-  A page for entertainment things, like games and stuff like that.
--->
 <script lang="ts" context="module">
   import PageTitle from '$components/PageTitle.svelte';
+  import { NonogramKatanaItemName } from '@aneuhold/core-ts-db-lib';
   import Paper, { Content } from '@smui/paper';
   import type { ComponentType } from 'svelte';
+  import { NonogramKatanaItemMapService } from '../../../../services/NonogramKatana/NonogramKatanaItemMapService';
   import NonogramKatanaItemRow from './NonogramKatanaItemRow.svelte';
   import { nonogramKatanaItemsPageInfo } from './pageInfo';
-
-  export enum NonogramKatanaItemName {
-    Coin = 'coin',
-    CryptoCoin = 'cryptoCoin',
-    Ruby = 'ruby',
-    Fan = 'fan',
-    Arrows = 'arrows',
-    Katana = 'katana',
-    Shuriken = 'shuriken',
-    Spikes = 'spikes',
-    Boomerang = 'boomerang',
-    Petard = 'petard',
-    Bomb = 'bomb',
-    Firework = 'firework',
-    BatteringRam = 'batteringRam',
-    Anchor = 'anchor',
-    Wood = 'wood',
-    Stone = 'stone',
-    Steel = 'steel'
-  }
-
-  /**
-   * This might be the thing that is stored in the DB.
-   */
-  export type NonogramKatanaItem = {
-    itemName: NonogramKatanaItemName;
-    currentAmount: number;
-    storageCap?: number;
-    minDesired?: number;
-    maxDesired?: number;
-    priority?: number;
-  };
 
   type NonogramKatanaItemDisplayInfo = {
     displayName: string;
@@ -100,112 +65,77 @@
     [NonogramKatanaItemName.Wood]: {
       displayName: 'Wood'
     },
+    [NonogramKatanaItemName.WoodenBeam]: {
+      displayName: 'Wooden Beam'
+    },
+    [NonogramKatanaItemName.WoodenPlank]: {
+      displayName: 'Wooden Plank'
+    },
     [NonogramKatanaItemName.Stone]: {
       displayName: 'Stone'
     },
     [NonogramKatanaItemName.Steel]: {
       displayName: 'Steel'
-    }
-  };
-
-  const nonogramKatanaDefaultItems: { [key in NonogramKatanaItemName]: NonogramKatanaItem } = {
-    [NonogramKatanaItemName.Coin]: {
-      itemName: NonogramKatanaItemName.Coin,
-      currentAmount: 163,
-      storageCap: 1360,
-      priority: 1
     },
-    [NonogramKatanaItemName.CryptoCoin]: {
-      itemName: NonogramKatanaItemName.CryptoCoin,
-      currentAmount: 328,
-      storageCap: 1360
+    [NonogramKatanaItemName.MeteoricIron]: {
+      displayName: 'Meteoric Iron'
     },
-    [NonogramKatanaItemName.Ruby]: {
-      itemName: NonogramKatanaItemName.Ruby,
-      currentAmount: 35,
-      storageCap: 1360
+    [NonogramKatanaItemName.Charcoal]: {
+      displayName: 'Charcoal'
     },
-    [NonogramKatanaItemName.Fan]: {
-      itemName: NonogramKatanaItemName.Fan,
-      currentAmount: 62,
-      storageCap: 136
+    [NonogramKatanaItemName.Gunpowder]: {
+      displayName: 'Gunpowder'
     },
-    [NonogramKatanaItemName.Arrows]: {
-      itemName: NonogramKatanaItemName.Arrows,
-      currentAmount: 0,
-      storageCap: 136
+    [NonogramKatanaItemName.IronSand]: {
+      displayName: 'Iron Sand'
     },
-    [NonogramKatanaItemName.Katana]: {
-      itemName: NonogramKatanaItemName.Katana,
-      currentAmount: 0,
-      storageCap: 136
+    [NonogramKatanaItemName.Chemicals]: {
+      displayName: 'Chemicals'
     },
-    [NonogramKatanaItemName.Shuriken]: {
-      itemName: NonogramKatanaItemName.Shuriken,
-      currentAmount: 0,
-      storageCap: 136
+    [NonogramKatanaItemName.Thread]: {
+      displayName: 'Thread'
     },
-    [NonogramKatanaItemName.Spikes]: {
-      itemName: NonogramKatanaItemName.Spikes,
-      currentAmount: 0,
-      storageCap: 136
+    [NonogramKatanaItemName.Pearl]: {
+      displayName: 'Pearl'
     },
-    [NonogramKatanaItemName.Boomerang]: {
-      itemName: NonogramKatanaItemName.Boomerang,
-      currentAmount: 0,
-      storageCap: 136
+    [NonogramKatanaItemName.Rice]: {
+      displayName: 'Rice'
     },
-    [NonogramKatanaItemName.Petard]: {
-      itemName: NonogramKatanaItemName.Petard,
-      currentAmount: 0,
-      storageCap: 136
+    [NonogramKatanaItemName.Wheat]: {
+      displayName: 'Wheat'
     },
-    [NonogramKatanaItemName.Bomb]: {
-      itemName: NonogramKatanaItemName.Bomb,
-      currentAmount: 0,
-      storageCap: 136
+    [NonogramKatanaItemName.Flour]: {
+      displayName: 'Flour'
     },
-    [NonogramKatanaItemName.Firework]: {
-      itemName: NonogramKatanaItemName.Firework,
-      currentAmount: 0,
-      storageCap: 136
+    [NonogramKatanaItemName.Egg]: {
+      displayName: 'Egg'
     },
-    [NonogramKatanaItemName.BatteringRam]: {
-      itemName: NonogramKatanaItemName.BatteringRam,
-      currentAmount: 0,
-      storageCap: 136
+    [NonogramKatanaItemName.CoffeeBeans]: {
+      displayName: 'Coffee Beans'
     },
-    [NonogramKatanaItemName.Anchor]: {
-      itemName: NonogramKatanaItemName.Anchor,
-      currentAmount: 0,
-      storageCap: 136
+    [NonogramKatanaItemName.Spices]: {
+      displayName: 'Spices'
     },
-    [NonogramKatanaItemName.Wood]: {
-      itemName: NonogramKatanaItemName.Wood,
-      currentAmount: 0,
-      storageCap: 100,
-      minDesired: 50,
-      maxDesired: 100
+    [NonogramKatanaItemName.Salmon]: {
+      displayName: 'Salmon'
     },
-    [NonogramKatanaItemName.Stone]: {
-      itemName: NonogramKatanaItemName.Stone,
-      currentAmount: 0,
-      storageCap: 100,
-      minDesired: 50,
-      maxDesired: 100
+    [NonogramKatanaItemName.Sushi]: {
+      displayName: 'Sushi'
     },
-    [NonogramKatanaItemName.Steel]: {
-      itemName: NonogramKatanaItemName.Steel,
-      currentAmount: 0,
-      storageCap: 100,
-      minDesired: 50,
-      maxDesired: 100
+    [NonogramKatanaItemName.FriedEggs]: {
+      displayName: 'Fried Eggs'
     }
   };
 </script>
 
 <script lang="ts">
-  // What should be the data structure for the info here?
+  import SingletonNonogramKatanaItemDialog from '$components/singletons/dialogs/SingletonNonogramKatanaItemDialog.svelte';
+  import Button from '@smui/button';
+  import { userSettings } from '../../../../stores/userSettings';
+
+  let itemMap = NonogramKatanaItemMapService.getStore();
+  $: items = Object.values($itemMap);
+  $: itemsMissing = items.length < Object.values(NonogramKatanaItemName).length;
 </script>
 
 <svelte:head>
@@ -220,12 +150,24 @@
 <div class="content">
   <Paper>
     <Content>
-      {#each Object.values(nonogramKatanaDefaultItems) as item}
-        <NonogramKatanaItemRow {item} />
-      {/each}
+      {#if itemsMissing}
+        <Button
+          on:click={() => {
+            NonogramKatanaItemMapService.createOrUpdateItems($userSettings.config.userId);
+          }}
+        >
+          Add / Update Items with defaults
+        </Button>
+      {/if}
+      {#if items.length > 0}
+        {#each items as item}
+          <NonogramKatanaItemRow {item} />
+        {/each}
+      {/if}
     </Content>
   </Paper>
 </div>
+<SingletonNonogramKatanaItemDialog />
 
 <style>
   .content {

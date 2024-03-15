@@ -14,13 +14,16 @@
   export let breadCrumbArray: BreadCrumbArray | null = null;
 
   let activeRoute: string = '/';
+  let previousLink: string | undefined;
   $: routeArray = breadCrumbArray
     ? breadCrumbArray
     : activeRoute
         .split('/')
         .filter((route) => route !== '')
         .map((route) => {
-          return { name: route, link: route };
+          const routeLink = previousLink ? previousLink + '/' + route : route;
+          previousLink = routeLink;
+          return { name: route, link: routeLink };
         });
 
   page.subscribe((pageData) => {

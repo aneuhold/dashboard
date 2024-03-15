@@ -1,17 +1,14 @@
 import { snackbar } from '$components/singletons/SingletonSnackbar.svelte';
 import LocalData from '$util/LocalData';
 import {
-    APIService,
-    type ProjectDashboardOptions,
-    type ProjectDashboardOutput
+  APIService,
+  type ProjectDashboardOptions,
+  type ProjectDashboardOutput
 } from '@aneuhold/core-ts-api-lib';
-import type {
-    DashboardTask,
-    DashboardTaskMap,
-    DashboardUserConfig,
-    UserCTO
-} from '@aneuhold/core-ts-db-lib';
+import type { BaseDocument, DashboardUserConfig, UserCTO } from '@aneuhold/core-ts-db-lib';
 import type { UUID } from 'crypto';
+import { NonogramKatanaItemMapService } from '../../services/NonogramKatana/NonogramKatanaItemMapService';
+import { NonogramKatanaUpgradeMapService } from '../../services/NonogramKatana/NonogramKatanaUpgradeMapService';
 import { TaskMapService } from '../../services/Task/TaskMapService';
 import { apiKey } from '../../stores/apiKey';
 import { dashboardConfig } from '../../stores/dashboardConfig';
@@ -95,7 +92,9 @@ export default class DashboardAPIService {
       get: {
         translations: true,
         userConfig: true,
-        tasks: true
+        tasks: true,
+        nonogramKatanaItems: true,
+        nonogramKatanaUpgrades: true
       }
     });
   }
@@ -212,7 +211,18 @@ export default class DashboardAPIService {
       });
     }
     if (output.tasks) {
-      TaskMapService.getStore().set(this.convertTaskArrayToMap(output.tasks));
+      TaskMapService.getStore().set(this.convertDocumentArrayToMap(output.tasks));
+    }
+    if (output.nonogramKatanaItems) {
+      NonogramKatanaItemMapService.getStore().set(
+        this.convertDocumentArrayToMap(output.nonogramKatanaItems)
+      );
+    }
+    if (output.nonogramKatanaUpgrades) {
+      console.log('Setting nonogram katana upgrades', output.nonogramKatanaUpgrades);
+      NonogramKatanaUpgradeMapService.getStore().set(
+        this.convertDocumentArrayToMap(output.nonogramKatanaUpgrades)
+      );
     }
     // Trigger some extra info if this is the first sync
     if (this.processingFirstInitData && Object.keys(output).length > 0) {
@@ -242,11 +252,16 @@ export default class DashboardAPIService {
     return result;
   }
 
-  private static convertTaskArrayToMap(tasks: DashboardTask[]): DashboardTaskMap {
-    return tasks.reduce((map, task) => {
-      map[task._id.toString()] = task;
-      return map;
-    }, {} as DashboardTaskMap);
+  private static convertDocumentArrayToMap<T extends BaseDocument>(
+    documents: T[]
+  ): Record<string, T> {
+    return documents.reduce(
+      (map, document) => {
+        map[document._id.toString()] = document;
+        return map;
+      },
+      {} as Record<string, T>
+    );
   }
 
   static getCollaboratorsFromResult(data: ProjectDashboardOutput): Record<string, UserCTO> {

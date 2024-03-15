@@ -1,0 +1,306 @@
+import LocalData from '$util/LocalData';
+import DashboardAPIService from '$util/api/DashboardAPIService';
+import {
+  NonogramKatanaItemName,
+  NonogramKatanaUpgrade,
+  NonogramKatanaUpgradeName
+} from '@aneuhold/core-ts-db-lib';
+import type { ObjectId } from 'bson';
+import type {
+  DocumentInsertOrUpdateInfo,
+  DocumentMapStore,
+  DocumentStore
+} from '../DocumentMapStoreService';
+import DocumentMapStoreService from '../DocumentMapStoreService';
+
+export const defaultNonogramKatanaUpgrades: Record<
+  NonogramKatanaUpgradeName,
+  Partial<NonogramKatanaUpgrade>
+> = {
+  [NonogramKatanaUpgradeName.BuildingGuildLvl2]: {
+    upgradeName: NonogramKatanaUpgradeName.BuildingGuildLvl2,
+    completed: false,
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        currentAmount: 0,
+        requiredAmount: 50
+      },
+      {
+        itemName: NonogramKatanaItemName.Ruby,
+        currentAmount: 0,
+        requiredAmount: 1
+      },
+      {
+        itemName: NonogramKatanaItemName.Wood,
+        currentAmount: 0,
+        requiredAmount: 50
+      },
+      {
+        itemName: NonogramKatanaItemName.Stone,
+        currentAmount: 0,
+        requiredAmount: 50
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.BuildingGuildLvl3]: {
+    upgradeName: NonogramKatanaUpgradeName.BuildingGuildLvl3,
+    completed: false,
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        currentAmount: 0,
+        requiredAmount: 150
+      },
+      {
+        itemName: NonogramKatanaItemName.Ruby,
+        currentAmount: 0,
+        requiredAmount: 1
+      },
+      {
+        itemName: NonogramKatanaItemName.WoodenBeam,
+        currentAmount: 0,
+        requiredAmount: 300
+      },
+      {
+        itemName: NonogramKatanaItemName.Stone,
+        currentAmount: 0,
+        requiredAmount: 150
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.BuildingGuildLvl4]: {
+    upgradeName: NonogramKatanaUpgradeName.BuildingGuildLvl4,
+    completed: false,
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        currentAmount: 0,
+        requiredAmount: 250
+      },
+      {
+        itemName: NonogramKatanaItemName.Ruby,
+        currentAmount: 0,
+        requiredAmount: 4
+      },
+      {
+        itemName: NonogramKatanaItemName.WoodenBeam,
+        currentAmount: 0,
+        requiredAmount: 500
+      },
+      {
+        itemName: NonogramKatanaItemName.Stone,
+        currentAmount: 0,
+        requiredAmount: 250
+      },
+      {
+        itemName: NonogramKatanaItemName.Steel,
+        currentAmount: 0,
+        requiredAmount: 40
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.BuildingGuildLvl5]: {
+    upgradeName: NonogramKatanaUpgradeName.BuildingGuildLvl5,
+    completed: false,
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        currentAmount: 0,
+        requiredAmount: 300
+      },
+      {
+        itemName: NonogramKatanaItemName.Ruby,
+        currentAmount: 0,
+        requiredAmount: 8
+      },
+      {
+        itemName: NonogramKatanaItemName.WoodenBeam,
+        currentAmount: 0,
+        requiredAmount: 600
+      },
+      {
+        itemName: NonogramKatanaItemName.Stone,
+        currentAmount: 0,
+        requiredAmount: 300
+      },
+      {
+        itemName: NonogramKatanaItemName.Steel,
+        currentAmount: 0,
+        requiredAmount: 50
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.BuildingWarehouseLvl1]: {
+    upgradeName: NonogramKatanaUpgradeName.BuildingWarehouseLvl1,
+    completed: false,
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        currentAmount: 0,
+        requiredAmount: 100
+      },
+      {
+        itemName: NonogramKatanaItemName.Ruby,
+        currentAmount: 0,
+        requiredAmount: 1
+      },
+      {
+        itemName: NonogramKatanaItemName.Wood,
+        currentAmount: 0,
+        requiredAmount: 60
+      },
+      {
+        itemName: NonogramKatanaItemName.Stone,
+        currentAmount: 0,
+        requiredAmount: 60
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.BuildingWarehouseLvl2]: {
+    upgradeName: NonogramKatanaUpgradeName.BuildingWarehouseLvl2,
+    completed: false,
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        currentAmount: 0,
+        requiredAmount: 200
+      },
+      {
+        itemName: NonogramKatanaItemName.Ruby,
+        currentAmount: 0,
+        requiredAmount: 2
+      },
+      {
+        itemName: NonogramKatanaItemName.Wood,
+        currentAmount: 0,
+        requiredAmount: 80
+      },
+      {
+        itemName: NonogramKatanaItemName.Stone,
+        currentAmount: 0,
+        requiredAmount: 80
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.BuildingWarehouseLvl3]: {
+    upgradeName: NonogramKatanaUpgradeName.BuildingWarehouseLvl3,
+    completed: false,
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        currentAmount: 0,
+        requiredAmount: 300
+      },
+      {
+        itemName: NonogramKatanaItemName.Ruby,
+        currentAmount: 0,
+        requiredAmount: 3
+      },
+      {
+        itemName: NonogramKatanaItemName.WoodenBeam,
+        currentAmount: 0,
+        requiredAmount: 200
+      },
+      {
+        itemName: NonogramKatanaItemName.Stone,
+        currentAmount: 0,
+        requiredAmount: 100
+      }
+    ]
+  }
+};
+
+/**
+ * The Nonogram Katana upgrade map service.
+ */
+export class NonogramKatanaUpgradeMapService extends DocumentMapStoreService<NonogramKatanaUpgrade> {
+  private static instance = new NonogramKatanaUpgradeMapService();
+  private static nameToIdMap: { [upgradeName: string]: string } = {};
+
+  private constructor() {
+    super();
+  }
+
+  static getStore(): DocumentMapStore<NonogramKatanaUpgrade> {
+    return this.instance.store;
+  }
+
+  static getUpgradeStore(upgradeId: string): DocumentStore<NonogramKatanaUpgrade> {
+    const upgradeStore = this.instance.getDocStore(upgradeId);
+    this.nameToIdMap[this.getMap()[upgradeId].upgradeName] = upgradeId;
+    return upgradeStore;
+  }
+
+  static getUpgradeStoreByName(
+    upgradeName: NonogramKatanaUpgradeName
+  ): DocumentStore<NonogramKatanaUpgrade> {
+    if (!this.nameToIdMap[upgradeName]) {
+      this.createUpgradeNameToIdMap(this.getMap());
+    }
+    return this.getUpgradeStore(this.nameToIdMap[upgradeName]);
+  }
+
+  static getMap(): Record<string, NonogramKatanaUpgrade> {
+    return this.instance.documentMap;
+  }
+
+  /**
+   * Currently just creates new upgrades that don't already exist. Should
+   * probably be enhanced so that it can update existing ones in the DB.
+   */
+  static createOrUpdateUpgrades(userId: ObjectId): void {
+    const currentMap = this.getMap();
+    const existingUpgradeNames = new Set(
+      Object.values(currentMap).map((upgrade) => upgrade.upgradeName)
+    );
+    const upgradesToAdd: NonogramKatanaUpgrade[] = [];
+    const newUpgradeIds: Set<string> = new Set();
+    Object.values(NonogramKatanaUpgradeName).forEach((upgradeName) => {
+      if (!existingUpgradeNames.has(upgradeName)) {
+        const newUpgrade = new NonogramKatanaUpgrade(userId, upgradeName);
+        const upgradeDefault = defaultNonogramKatanaUpgrades[upgradeName];
+        newUpgrade.completed = upgradeDefault.completed ?? false;
+        newUpgrade.priority = upgradeDefault.priority ?? 0;
+        newUpgrade.requiredItems = upgradeDefault.requiredItems ?? [];
+        newUpgradeIds.add(newUpgrade._id.toString());
+        upgradesToAdd.push(newUpgrade);
+      }
+    });
+    if (upgradesToAdd.length > 0) {
+      this.getStore().upsertMany({
+        filter: (doc) => newUpgradeIds.has(doc._id.toString()),
+        newDocs: upgradesToAdd,
+        updater: (doc) => doc
+      });
+    }
+  }
+
+  protected setupSubscribers(): void {
+    this.subscribers.push({
+      afterMapSet: (map) => {
+        NonogramKatanaUpgradeMapService.createUpgradeNameToIdMap(map);
+      }
+    });
+  }
+
+  protected persistToLocalData(): Record<string, NonogramKatanaUpgrade> {
+    return LocalData.setAndGetNonogramKatanaUpgradeMap(this.documentMap);
+  }
+  protected getFromLocalData(): Record<string, NonogramKatanaUpgrade> | null {
+    return LocalData.nonogramKatanaUpgradeMap;
+  }
+  protected persistToDb(updateInfo: DocumentInsertOrUpdateInfo<NonogramKatanaUpgrade>): void {
+    DashboardAPIService.queryApi({
+      update: updateInfo.update ? { nonogramKatanaUpgrades: updateInfo.update } : undefined,
+      insert: updateInfo.insert ? { nonogramKatanaUpgrades: updateInfo.insert } : undefined
+    });
+  }
+
+  private static createUpgradeNameToIdMap(map: Record<string, NonogramKatanaUpgrade>) {
+    this.nameToIdMap = {};
+    Object.values(map).forEach((upgrade) => {
+      this.nameToIdMap[upgrade.upgradeName] = upgrade._id.toString();
+    });
+  }
+}

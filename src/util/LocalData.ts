@@ -3,7 +3,11 @@ import type {
   ProjectDashboardOptions,
   Translations
 } from '@aneuhold/core-ts-api-lib';
-import type { DashboardTaskMap } from '@aneuhold/core-ts-db-lib';
+import type {
+  DashboardTaskMap,
+  NonogramKatanaItem,
+  NonogramKatanaUpgrade
+} from '@aneuhold/core-ts-db-lib';
 import { sleep } from '@aneuhold/core-ts-lib';
 import { EJSON } from 'bson';
 import { writable } from 'svelte/store';
@@ -38,7 +42,9 @@ export default class LocalData {
     userSettings: `${this.PREFIX}userSettings`,
     taskMap: `${this.PREFIX}taskMap`,
     currentApiRequest: `${this.PREFIX}currentApiRequest`,
-    apiRequestQueue: `${this.PREFIX}apiRequestQueue`
+    apiRequestQueue: `${this.PREFIX}apiRequestQueue`,
+    nonogramKatanaItemMap: `${this.PREFIX}nonogramKatanaItemMap`,
+    nonogramKatanaUpgradeMap: `${this.PREFIX}nonogramKatanaUpgradeMap`
   };
 
   /**
@@ -161,6 +167,34 @@ export default class LocalData {
 
   static get taskMap(): DashboardTaskMap | null {
     return this.getStoredObject<DashboardTaskMap>(LocalData.storedKeyNames.taskMap);
+  }
+
+  static setAndGetNonogramKatanaItemMap(
+    newItemMap: Record<string, NonogramKatanaItem>
+  ): Record<string, NonogramKatanaItem> {
+    const stringifiedItemMap = EJSON.stringify(newItemMap, { relaxed: false });
+    this.storeValue(LocalData.storedKeyNames.nonogramKatanaItemMap, stringifiedItemMap);
+    return EJSON.parse(stringifiedItemMap) as Record<string, NonogramKatanaItem>;
+  }
+
+  static get nonogramKatanaItemMap(): Record<string, NonogramKatanaItem> | null {
+    return this.getStoredObject<Record<string, NonogramKatanaItem>>(
+      LocalData.storedKeyNames.nonogramKatanaItemMap
+    );
+  }
+
+  static setAndGetNonogramKatanaUpgradeMap(
+    newUpgradeMap: Record<string, NonogramKatanaUpgrade>
+  ): Record<string, NonogramKatanaUpgrade> {
+    const stringifiedUpgradeMap = EJSON.stringify(newUpgradeMap, { relaxed: false });
+    this.storeValue(LocalData.storedKeyNames.nonogramKatanaUpgradeMap, stringifiedUpgradeMap);
+    return EJSON.parse(stringifiedUpgradeMap) as Record<string, NonogramKatanaUpgrade>;
+  }
+
+  static get nonogramKatanaUpgradeMap(): Record<string, NonogramKatanaUpgrade> | null {
+    return this.getStoredObject<Record<string, NonogramKatanaUpgrade>>(
+      LocalData.storedKeyNames.nonogramKatanaUpgradeMap
+    );
   }
 
   static set currentApiRequest(newApiRequest: ProjectDashboardOptions | undefined) {

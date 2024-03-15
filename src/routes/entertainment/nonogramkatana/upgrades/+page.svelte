@@ -1,9 +1,69 @@
-<script lang="ts">
+<script lang="ts" context="module">
   import PageTitle from '$components/PageTitle.svelte';
-  import Paper, { Content, Title } from '@smui/paper';
+  import { NonogramKatanaUpgradeName } from '@aneuhold/core-ts-db-lib';
+  import Paper, { Content } from '@smui/paper';
+  import type { ComponentType } from 'svelte';
+  import { NonogramKatanaUpgradeMapService } from '../../../../services/NonogramKatana/NonogramKatanaUpgradeMapService';
+  import NonogramKatanaUpgradeRow from './NonogramKatanaUpgradeRow.svelte';
   import { nonogramKatanaUpgradesPageInfo } from './pageInfo';
 
-  // What should be the data structure for the info here?
+  export type NonogramKatanaUpgradeDisplayInfo = {
+    displayName: string;
+    requiredUpgrades: NonogramKatanaUpgradeName[];
+    icon?: ComponentType;
+  };
+
+  export const nonogramKatanaUpgradesDisplayInfo: Record<
+    NonogramKatanaUpgradeName,
+    NonogramKatanaUpgradeDisplayInfo
+  > = {
+    [NonogramKatanaUpgradeName.BuildingGuildLvl2]: {
+      displayName: 'Guild Lvl 2',
+      requiredUpgrades: []
+    },
+    [NonogramKatanaUpgradeName.BuildingGuildLvl3]: {
+      displayName: 'Guild Lvl 3',
+      requiredUpgrades: [NonogramKatanaUpgradeName.BuildingGuildLvl2]
+    },
+    [NonogramKatanaUpgradeName.BuildingGuildLvl4]: {
+      displayName: 'Guild Lvl 4',
+      requiredUpgrades: [NonogramKatanaUpgradeName.BuildingGuildLvl3]
+    },
+    [NonogramKatanaUpgradeName.BuildingGuildLvl5]: {
+      displayName: 'Guild Lvl 5',
+      requiredUpgrades: [NonogramKatanaUpgradeName.BuildingGuildLvl4]
+    },
+    [NonogramKatanaUpgradeName.BuildingWarehouseLvl1]: {
+      displayName: 'Warehouse Lvl 1',
+      requiredUpgrades: []
+    },
+    [NonogramKatanaUpgradeName.BuildingWarehouseLvl2]: {
+      displayName: 'Warehouse Lvl 2',
+      requiredUpgrades: [
+        NonogramKatanaUpgradeName.BuildingWarehouseLvl1,
+        NonogramKatanaUpgradeName.BuildingGuildLvl2
+      ]
+    },
+    [NonogramKatanaUpgradeName.BuildingWarehouseLvl3]: {
+      displayName: 'Warehouse Lvl 3',
+      requiredUpgrades: [
+        NonogramKatanaUpgradeName.BuildingWarehouseLvl2,
+        NonogramKatanaUpgradeName.BuildingGuildLvl3
+      ]
+    }
+  };
+</script>
+
+<script lang="ts">
+  import Button from '@smui/button';
+  import { userSettings } from '../../../../stores/userSettings';
+
+  let upgradeMap = NonogramKatanaUpgradeMapService.getStore();
+  $: upgrades = Object.values($upgradeMap);
+
+  $: {
+    console.log(upgrades);
+  }
 </script>
 
 <svelte:head>
@@ -17,8 +77,20 @@
 />
 <div class="content">
   <Paper>
-    <Title>Something</Title>
-    <Content>Something here</Content>
+    <Content>
+      <Button
+        on:click={() => {
+          NonogramKatanaUpgradeMapService.createOrUpdateUpgrades($userSettings.config.userId);
+        }}
+      >
+        Add / Update Upgrades
+      </Button>
+      {#if upgrades.length > 0}
+        {#each upgrades as upgrade}
+          <NonogramKatanaUpgradeRow upgradeName={upgrade.upgradeName} />
+        {/each}
+      {/if}
+    </Content>
   </Paper>
 </div>
 

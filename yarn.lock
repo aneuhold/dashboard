@@ -22,34 +22,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aneuhold/core-ts-api-lib@npm:^1.0.46":
-  version: 1.0.46
-  resolution: "@aneuhold/core-ts-api-lib@npm:1.0.46"
+"@aneuhold/core-ts-api-lib@npm:^1.0.47":
+  version: 1.0.47
+  resolution: "@aneuhold/core-ts-api-lib@npm:1.0.47"
   dependencies:
-    "@aneuhold/core-ts-db-lib": "npm:^1.0.46"
+    "@aneuhold/core-ts-db-lib": "npm:^1.0.48"
     "@aneuhold/core-ts-lib": "npm:^1.1.11"
     bson: "npm:^6.2.0"
-  checksum: 10c0/bac7a3a752c3ef6b2d51f455e15853d328d9850909b283fd49c13ab5748092e9376397fe3c9799fdd416455534a98b1651d2525ea4a503859064bcbe86b0b0cd
+  checksum: 10c0/5ff0e087304a447d5c3c5da90398de138ae678a467617a26dc3b5eb3567d756e2e758f38da7e773875ab13cfe425dc6f43056844d93c6c20d79efc49a86a424e
   languageName: node
   linkType: hard
 
-"@aneuhold/core-ts-db-lib@npm:^1.0.46":
-  version: 1.0.46
-  resolution: "@aneuhold/core-ts-db-lib@npm:1.0.46"
+"@aneuhold/core-ts-db-lib@npm:^1.0.48":
+  version: 1.0.48
+  resolution: "@aneuhold/core-ts-db-lib@npm:1.0.48"
   dependencies:
     "@aneuhold/core-ts-lib": "npm:^1.1.10"
     bson: "npm:^6.2.0"
-  checksum: 10c0/bddca8d7f3e6459783d2b6329d4225915bccb0dc85533acebd4cc7e9b5f8e8d3b7daa6527d3030ab1a00f3e3c74b9573e88405521d481e3fe13877dda7193385
-  languageName: node
-  linkType: hard
-
-"@aneuhold/core-ts-db-lib@npm:^1.0.47":
-  version: 1.0.47
-  resolution: "@aneuhold/core-ts-db-lib@npm:1.0.47"
-  dependencies:
-    "@aneuhold/core-ts-lib": "npm:^1.1.10"
-    bson: "npm:^6.2.0"
-  checksum: 10c0/cd6adc2cd58524692712ce0b1e3cd9982baabfd81ecbb485c76916d575f81a7698476a000192ef502ba925b5edd30f527cd16866a7d61f68f094edc490f805a7
+  checksum: 10c0/f5c893d4eb0e6c2cee9e0540cd2f2002580a67b0b44a54a358362f2c3e6b282a6d023efc03baa6db25d5ac19d730a6bc4a3d9270326ecc70e46a886f38f011e5
   languageName: node
   linkType: hard
 
@@ -2490,8 +2480,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "dashboard@workspace:."
   dependencies:
-    "@aneuhold/core-ts-api-lib": "npm:^1.0.46"
-    "@aneuhold/core-ts-db-lib": "npm:^1.0.47"
+    "@aneuhold/core-ts-api-lib": "npm:^1.0.47"
+    "@aneuhold/core-ts-db-lib": "npm:^1.0.48"
     "@aneuhold/core-ts-lib": "npm:^1.1.11"
     "@fontsource/fira-mono": "npm:^5.0.8"
     "@neoconfetti/svelte": "npm:^2.2.1"

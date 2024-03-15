@@ -1,9 +1,11 @@
 <script lang="ts">
   import InputBox from '$components/presentational/InputBox.svelte';
+  import { nonogramKatanaItemDialog } from '$components/singletons/dialogs/SingletonNonogramKatanaItemDialog.svelte';
+  import type { NonogramKatanaItem } from '@aneuhold/core-ts-db-lib';
   import Card, { Content as CardContent } from '@smui/card';
   import { Icon } from '@smui/common';
   import IconButton from '@smui/icon-button';
-  import { nonogramKatanaItemDisplayInfo, type NonogramKatanaItem } from './+page.svelte';
+  import { nonogramKatanaItemDisplayInfo } from './+page.svelte';
 
   export let item: NonogramKatanaItem;
 
@@ -62,7 +64,11 @@
             {/if}
           </div>
         </div>
-        <IconButton><Icon class="material-icons dimmed-color">edit</Icon></IconButton>
+        <IconButton
+          on:click={() => {
+            nonogramKatanaItemDialog.open(item._id.toString());
+          }}><Icon class="material-icons dimmed-color">edit</Icon></IconButton
+        >
       </div>
     </CardContent>
   </Card>
