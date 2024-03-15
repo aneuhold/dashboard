@@ -17,6 +17,10 @@
     $item.itemName
   );
   $: amountThatCanBeSpent = $item.currentAmount - ($item.minDesired ?? 0);
+
+  $: {
+    console.log(upgradesThatRequireThisItem);
+  }
 </script>
 
 <div class="container">

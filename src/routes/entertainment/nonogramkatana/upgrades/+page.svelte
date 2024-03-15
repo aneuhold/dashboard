@@ -56,14 +56,18 @@
 
 <script lang="ts">
   import Button from '@smui/button';
+  import Checkbox from '@smui/checkbox';
+  import { flip } from 'svelte/animate';
+  import { slide } from 'svelte/transition';
   import { userSettings } from '../../../../stores/userSettings';
 
   let upgradeMap = NonogramKatanaUpgradeMapService.getStore();
-  $: upgrades = Object.values($upgradeMap);
-
-  $: {
-    console.log(upgrades);
-  }
+  let showAll = false;
+  $: allUpgrades = Object.values($upgradeMap);
+  $: workableUpgrades = Object.values(
+    NonogramKatanaUpgradeMapService.getWorkableUpgrades($upgradeMap)
+  );
+  $: currentlyShownUpgrades = showAll ? allUpgrades : workableUpgrades;
 </script>
 
 <svelte:head>
@@ -78,16 +82,24 @@
 <div class="content">
   <Paper>
     <Content>
-      <Button
-        on:click={() => {
-          NonogramKatanaUpgradeMapService.createOrUpdateUpgrades($userSettings.config.userId);
-        }}
-      >
-        Add / Update Upgrades
-      </Button>
-      {#if upgrades.length > 0}
-        {#each upgrades as upgrade}
-          <NonogramKatanaUpgradeRow upgradeName={upgrade.upgradeName} />
+      <div class="topSettingsRow">
+        <Button
+          on:click={() => {
+            NonogramKatanaUpgradeMapService.createOrUpdateUpgrades($userSettings.config.userId);
+          }}
+        >
+          Add / Update Upgrades
+        </Button>
+        <div class="showAllSetting">
+          Show all upgrades
+          <Checkbox bind:checked={showAll} touch />
+        </div>
+      </div>
+      {#if currentlyShownUpgrades.length > 0}
+        {#each currentlyShownUpgrades as upgrade (upgrade.upgradeName)}
+          <div transition:slide animate:flip={{ duration: 200 }}>
+            <NonogramKatanaUpgradeRow upgradeName={upgrade.upgradeName} />
+          </div>
         {/each}
       {/if}
     </Content>
@@ -99,5 +111,17 @@
     display: flex;
     flex-direction: column;
     gap: 16px;
+  }
+  .topSettingsRow {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    justify-content: space-between;
+  }
+  .showAllSetting {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
   }
 </style>

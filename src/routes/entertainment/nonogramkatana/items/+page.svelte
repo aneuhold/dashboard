@@ -131,6 +131,8 @@
 <script lang="ts">
   import SingletonNonogramKatanaItemDialog from '$components/singletons/dialogs/SingletonNonogramKatanaItemDialog.svelte';
   import Button from '@smui/button';
+  import { flip } from 'svelte/animate';
+  import { slide } from 'svelte/transition';
   import { userSettings } from '../../../../stores/userSettings';
 
   let itemMap = NonogramKatanaItemMapService.getStore();
@@ -160,8 +162,10 @@
         </Button>
       {/if}
       {#if items.length > 0}
-        {#each items as item}
-          <NonogramKatanaItemRow itemId={item._id.toString()} />
+        {#each items as item (item._id.toString())}
+          <div transition:slide animate:flip={{ duration: 200 }}>
+            <NonogramKatanaItemRow itemId={item._id.toString()} />
+          </div>
         {/each}
       {/if}
     </Content>
