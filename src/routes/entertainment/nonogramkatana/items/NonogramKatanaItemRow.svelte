@@ -109,11 +109,6 @@
     flex-wrap: wrap;
     gap: 8px;
   }
-  .subtitle {
-    margin-top: 4px;
-    margin-bottom: 0px;
-    text-wrap: wrap;
-  }
   .card-content {
     display: flex;
     flex-direction: row;
