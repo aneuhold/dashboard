@@ -1,15 +1,22 @@
 <script lang="ts">
   import InputBox from '$components/presentational/InputBox.svelte';
   import { nonogramKatanaItemDialog } from '$components/singletons/dialogs/SingletonNonogramKatanaItemDialog.svelte';
-  import type { NonogramKatanaItem } from '@aneuhold/core-ts-db-lib';
   import Card, { Content as CardContent } from '@smui/card';
   import { Icon } from '@smui/common';
   import IconButton from '@smui/icon-button';
+  import { NonogramKatanaItemMapService } from '../../../../services/NonogramKatana/NonogramKatanaItemMapService';
+  import { NonogramKatanaUpgradeMapService } from '../../../../services/NonogramKatana/NonogramKatanaUpgradeMapService';
   import { nonogramKatanaItemDisplayInfo } from './+page.svelte';
+  import NonogramKatanaRelatedUpgrade from './NonogramKatanaRelatedUpgrade.svelte';
 
-  export let item: NonogramKatanaItem;
+  export let itemId: string;
 
-  $: displayInfo = nonogramKatanaItemDisplayInfo[item.itemName];
+  $: item = NonogramKatanaItemMapService.getItemStore(itemId);
+  $: displayInfo = nonogramKatanaItemDisplayInfo[$item.itemName];
+  $: upgradesThatRequireThisItem = NonogramKatanaUpgradeMapService.getUpgradeStoresByItemName(
+    $item.itemName
+  );
+  $: amountThatCanBeSpent = $item.currentAmount - ($item.minDesired ?? 0);
 </script>
 
 <div class="container">
@@ -26,36 +33,47 @@
             <h4 class="mdc-typography--body1 title">
               {displayInfo.displayName}
               <InputBox
-                inputValue={item.currentAmount}
+                bind:onBlurValue={$item.currentAmount}
                 inputType="number"
                 min={0}
-                max={item.storageCap}
+                max={$item.storageCap ?? undefined}
                 label="Qty"
               />
-              {#if item.minDesired}
+              {#if $item.minDesired}
                 <span class="mdc-typography--caption mdc-theme--text-hint-on-background">
-                  Min Desired: <span class={item.currentAmount < item.minDesired ? 'error' : ''}>
-                    {item.minDesired}
+                  Min Desired: <span class={$item.currentAmount < $item.minDesired ? 'error' : ''}>
+                    {$item.minDesired}
                   </span>
                 </span>
               {/if}
-              {#if item.maxDesired}
+              {#if $item.maxDesired}
                 <span class="mdc-typography--caption mdc-theme--text-hint-on-background">
-                  Max Desired: <span class={item.currentAmount > item.maxDesired ? 'error' : ''}>
-                    {item.maxDesired}
+                  Max Desired: <span class={$item.currentAmount > $item.maxDesired ? 'error' : ''}>
+                    {$item.maxDesired}
                   </span>
                 </span>
               {/if}
-              {#if item.storageCap}
+              {#if $item.storageCap}
                 <span class="mdc-typography--caption mdc-theme--text-hint-on-background">
-                  Storage Cap: {item.storageCap}
+                  Storage Cap: {$item.storageCap}
                 </span>
               {/if}
+              <span class="mdc-typography--caption">
+                Amount that can be spent now: {amountThatCanBeSpent}
+              </span>
             </h4>
             {#if displayInfo.usedFor}
               <div class="mdc-typography--caption mdc-theme--text-hint-on-background dependencies">
                 <span>Used for: </span>
                 <ul class="dependencies-list">
+                  {#if upgradesThatRequireThisItem.length > 0}
+                    {#each upgradesThatRequireThisItem as upgrade}
+                      <NonogramKatanaRelatedUpgrade
+                        itemName={$item.itemName}
+                        relatedUpgrade={upgrade}
+                      />
+                    {/each}
+                  {/if}
                   {#each displayInfo.usedFor as usedFor}
                     <li>{usedFor}</li>
                   {/each}
@@ -66,7 +84,7 @@
         </div>
         <IconButton
           on:click={() => {
-            nonogramKatanaItemDialog.open(item._id.toString());
+            nonogramKatanaItemDialog.open(itemId);
           }}><Icon class="material-icons dimmed-color">edit</Icon></IconButton
         >
       </div>
@@ -84,6 +102,7 @@
     display: flex;
     flex-direction: row;
     align-items: center;
+    flex-wrap: wrap;
     gap: 8px;
   }
   .subtitle {

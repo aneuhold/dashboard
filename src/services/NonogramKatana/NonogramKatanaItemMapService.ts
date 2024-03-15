@@ -230,7 +230,7 @@ export class NonogramKatanaItemMapService extends DocumentMapStoreService<Nonogr
 
   static getItemStoreByName(itemName: NonogramKatanaItemName): DocumentStore<NonogramKatanaItem> {
     if (!this.nameToIdMap[itemName]) {
-      console.error('There was an error when trying to get the item with itemName: ' + itemName);
+      this.createItemNameIdMap(this.getMap());
     }
     return this.getItemStore(this.nameToIdMap[itemName]);
   }
@@ -274,10 +274,7 @@ export class NonogramKatanaItemMapService extends DocumentMapStoreService<Nonogr
   protected setupSubscribers(): void {
     this.subscribers.push({
       afterMapSet: (map) => {
-        NonogramKatanaItemMapService.nameToIdMap = {};
-        Object.values(map).forEach((item) => {
-          NonogramKatanaItemMapService.nameToIdMap[item.itemName] = item._id.toString();
-        });
+        NonogramKatanaItemMapService.createItemNameIdMap(map);
       }
     });
   }
@@ -291,7 +288,17 @@ export class NonogramKatanaItemMapService extends DocumentMapStoreService<Nonogr
   protected persistToDb(updateInfo: DocumentInsertOrUpdateInfo<NonogramKatanaItem>): void {
     DashboardAPIService.queryApi({
       update: updateInfo.update ? { nonogramKatanaItems: updateInfo.update } : undefined,
-      insert: updateInfo.insert ? { nonogramKatanaItems: updateInfo.insert } : undefined
+      insert: updateInfo.insert ? { nonogramKatanaItems: updateInfo.insert } : undefined,
+      get: {
+        nonogramKatanaItems: true
+      }
+    });
+  }
+
+  private static createItemNameIdMap(map: Record<string, NonogramKatanaItem>) {
+    this.nameToIdMap = {};
+    Object.values(map).forEach((item) => {
+      this.nameToIdMap[item.itemName] = item._id.toString();
     });
   }
 }

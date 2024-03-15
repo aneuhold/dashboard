@@ -217,6 +217,10 @@ export const defaultNonogramKatanaUpgrades: Record<
 export class NonogramKatanaUpgradeMapService extends DocumentMapStoreService<NonogramKatanaUpgrade> {
   private static instance = new NonogramKatanaUpgradeMapService();
   private static nameToIdMap: { [upgradeName: string]: string } = {};
+  /**
+   * A map from item names to the upgrades that require them.
+   */
+  private static itemNameToUpgradesMap: { [itemName: string]: string[] } = {};
 
   private constructor() {
     super();
@@ -236,9 +240,22 @@ export class NonogramKatanaUpgradeMapService extends DocumentMapStoreService<Non
     upgradeName: NonogramKatanaUpgradeName
   ): DocumentStore<NonogramKatanaUpgrade> {
     if (!this.nameToIdMap[upgradeName]) {
-      this.createUpgradeNameToIdMap(this.getMap());
+      this.createHelperMaps(this.getMap());
     }
     return this.getUpgradeStore(this.nameToIdMap[upgradeName]);
+  }
+
+  /**
+   * Gets the list of upgrade stores that require the given item name.
+   */
+  static getUpgradeStoresByItemName(
+    itemName: NonogramKatanaItemName
+  ): DocumentStore<NonogramKatanaUpgrade>[] {
+    const upgradeIds = this.itemNameToUpgradesMap[itemName];
+    if (!upgradeIds) {
+      return [];
+    }
+    return upgradeIds.map((upgradeId) => this.getUpgradeStore(upgradeId));
   }
 
   static getMap(): Record<string, NonogramKatanaUpgrade> {
@@ -279,7 +296,7 @@ export class NonogramKatanaUpgradeMapService extends DocumentMapStoreService<Non
   protected setupSubscribers(): void {
     this.subscribers.push({
       afterMapSet: (map) => {
-        NonogramKatanaUpgradeMapService.createUpgradeNameToIdMap(map);
+        NonogramKatanaUpgradeMapService.createHelperMaps(map);
       }
     });
   }
@@ -293,14 +310,26 @@ export class NonogramKatanaUpgradeMapService extends DocumentMapStoreService<Non
   protected persistToDb(updateInfo: DocumentInsertOrUpdateInfo<NonogramKatanaUpgrade>): void {
     DashboardAPIService.queryApi({
       update: updateInfo.update ? { nonogramKatanaUpgrades: updateInfo.update } : undefined,
-      insert: updateInfo.insert ? { nonogramKatanaUpgrades: updateInfo.insert } : undefined
+      insert: updateInfo.insert ? { nonogramKatanaUpgrades: updateInfo.insert } : undefined,
+      get: {
+        nonogramKatanaUpgrades: true
+      }
     });
   }
 
-  private static createUpgradeNameToIdMap(map: Record<string, NonogramKatanaUpgrade>) {
+  /**
+   * Creates a couple helper maps for easier access to the upgrades.
+   */
+  private static createHelperMaps(map: Record<string, NonogramKatanaUpgrade>) {
     this.nameToIdMap = {};
     Object.values(map).forEach((upgrade) => {
       this.nameToIdMap[upgrade.upgradeName] = upgrade._id.toString();
+      upgrade.requiredItems.forEach((requiredItem) => {
+        if (!this.itemNameToUpgradesMap[requiredItem.itemName]) {
+          this.itemNameToUpgradesMap[requiredItem.itemName] = [];
+        }
+        this.itemNameToUpgradesMap[requiredItem.itemName].push(upgrade._id.toString());
+      });
     });
   }
 }

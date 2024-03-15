@@ -161,7 +161,7 @@
       {/if}
       {#if items.length > 0}
         {#each items as item}
-          <NonogramKatanaItemRow {item} />
+          <NonogramKatanaItemRow itemId={item._id.toString()} />
         {/each}
       {/if}
     </Content>
