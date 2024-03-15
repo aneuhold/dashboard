@@ -219,7 +219,6 @@ export default class DashboardAPIService {
       );
     }
     if (output.nonogramKatanaUpgrades) {
-      console.log('Setting nonogram katana upgrades', output.nonogramKatanaUpgrades);
       NonogramKatanaUpgradeMapService.getStore().set(
         this.convertDocumentArrayToMap(output.nonogramKatanaUpgrades)
       );

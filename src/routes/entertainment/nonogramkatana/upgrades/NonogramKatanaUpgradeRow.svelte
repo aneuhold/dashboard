@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { nonogramKatanaUpgradeDialog } from '$components/singletons/dialogs/SingletonNonogramKatanaUpgradeDialog.svelte';
   import type { NonogramKatanaUpgradeName } from '@aneuhold/core-ts-db-lib';
   import Card, { Content as CardContent } from '@smui/card';
   import Checkbox from '@smui/checkbox';
@@ -6,6 +7,7 @@
   import IconButton from '@smui/icon-button';
   import { NonogramKatanaUpgradeMapService } from '../../../../services/NonogramKatana/NonogramKatanaUpgradeMapService';
   import { nonogramKatanaUpgradesDisplayInfo } from './+page.svelte';
+  import NonogramKatanaRequiredItem from './NonogramKatanaRequiredItem.svelte';
   import NonogramKatanaRequiredUpgrade from './NonogramKatanaRequiredUpgrade.svelte';
 
   export let upgradeName: NonogramKatanaUpgradeName;
@@ -32,10 +34,11 @@
               <span>Required items: </span>
               <ul class="dependencies-list">
                 {#each $upgrade.requiredItems as requiredItem}
-                  <li>
-                    {requiredItem.itemName}:
-                    {requiredItem.currentAmount}/{requiredItem.requiredAmount}
-                  </li>
+                  <NonogramKatanaRequiredItem
+                    requiredAmount={requiredItem.requiredAmount}
+                    currentAmount={requiredItem.currentAmount}
+                    itemName={requiredItem.itemName}
+                  />
                 {/each}
               </ul>
             </div>
@@ -51,7 +54,9 @@
             {/if}
           </div>
         </div>
-        <IconButton><Icon class="material-icons dimmed-color">edit</Icon></IconButton>
+        <IconButton on:click={() => nonogramKatanaUpgradeDialog.open($upgrade._id.toString())}
+          ><Icon class="material-icons dimmed-color">edit</Icon></IconButton
+        >
       </div>
     </CardContent>
   </Card>

@@ -55,6 +55,7 @@
 </script>
 
 <script lang="ts">
+  import SingletonNonogramKatanaUpgradeDialog from '$components/singletons/dialogs/SingletonNonogramKatanaUpgradeDialog.svelte';
   import Button from '@smui/button';
   import Checkbox from '@smui/checkbox';
   import { flip } from 'svelte/animate';
@@ -105,6 +106,7 @@
     </Content>
   </Paper>
 </div>
+<SingletonNonogramKatanaUpgradeDialog />
 
 <style>
   .content {

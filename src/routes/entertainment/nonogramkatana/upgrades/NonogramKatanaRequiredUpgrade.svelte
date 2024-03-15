@@ -8,4 +8,4 @@
   $: upgradeDisplayName = nonogramKatanaUpgradesDisplayInfo[upgradeName].displayName;
 </script>
 
-<li>{$upgrade.completed ? '✅' : '❌'}{upgradeDisplayName}</li>
+<li>{$upgrade.completed ? '✅ ' : '❌ '}{upgradeDisplayName}</li>
