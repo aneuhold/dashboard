@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { NonogramKatanaUpgradeName } from '@aneuhold/core-ts-db-lib';
   import { NonogramKatanaUpgradeMapService } from '../../../../services/NonogramKatana/NonogramKatanaUpgradeMapService';
-  import { nonogramKatanaUpgradesDisplayInfo } from './+page.svelte';
+  import { nonogramKatanaUpgradesDisplayInfo } from './nonogramKatanaUpgradesDisplayInfo';
 
   export let upgradeName: NonogramKatanaUpgradeName;
   $: upgrade = NonogramKatanaUpgradeMapService.getUpgradeStoreByName(upgradeName);

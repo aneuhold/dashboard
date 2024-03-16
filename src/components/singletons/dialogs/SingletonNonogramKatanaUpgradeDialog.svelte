@@ -28,7 +28,7 @@
   import InputBox from '$components/presentational/InputBox.svelte';
   import Checkbox from '@smui/checkbox';
   import { nonogramKatanaItemDisplayInfo } from '../../../routes/entertainment/nonogramkatana/items/+page.svelte';
-  import { nonogramKatanaUpgradesDisplayInfo } from '../../../routes/entertainment/nonogramkatana/upgrades/+page.svelte';
+  import { nonogramKatanaUpgradesDisplayInfo } from '../../../routes/entertainment/nonogramkatana/upgrades/nonogramKatanaUpgradesDisplayInfo';
   import { NonogramKatanaUpgradeMapService } from '../../../services/NonogramKatana/NonogramKatanaUpgradeMapService';
 
   $: upgrade = $currentUpgradeId
@@ -72,6 +72,13 @@
           {/each}
         {/if}
       </div>
+      <span>Priority: </span>
+      <InputBox
+        bind:onBlurValue={$upgrade.priority}
+        inputType="number"
+        max={100}
+        label="Priority"
+      />
     </Content>
     <Actions>
       <Button

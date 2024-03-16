@@ -6,9 +6,9 @@
   import { Icon } from '@smui/common';
   import IconButton from '@smui/icon-button';
   import { NonogramKatanaUpgradeMapService } from '../../../../services/NonogramKatana/NonogramKatanaUpgradeMapService';
-  import { nonogramKatanaUpgradesDisplayInfo } from './+page.svelte';
   import NonogramKatanaRequiredItem from './NonogramKatanaRequiredItem.svelte';
   import NonogramKatanaRequiredUpgrade from './NonogramKatanaRequiredUpgrade.svelte';
+  import { nonogramKatanaUpgradesDisplayInfo } from './nonogramKatanaUpgradesDisplayInfo';
 
   export let upgradeName: NonogramKatanaUpgradeName;
   $: upgrade = NonogramKatanaUpgradeMapService.getUpgradeStoreByName(upgradeName);

@@ -1,57 +1,10 @@
 <script lang="ts" context="module">
   import PageTitle from '$components/PageTitle.svelte';
-  import { NonogramKatanaUpgradeName } from '@aneuhold/core-ts-db-lib';
+  import { NonogramKatanaUpgrade } from '@aneuhold/core-ts-db-lib';
   import Paper, { Content } from '@smui/paper';
-  import type { ComponentType } from 'svelte';
   import { NonogramKatanaUpgradeMapService } from '../../../../services/NonogramKatana/NonogramKatanaUpgradeMapService';
   import NonogramKatanaUpgradeRow from './NonogramKatanaUpgradeRow.svelte';
   import { nonogramKatanaUpgradesPageInfo } from './pageInfo';
-
-  export type NonogramKatanaUpgradeDisplayInfo = {
-    displayName: string;
-    requiredUpgrades: NonogramKatanaUpgradeName[];
-    icon?: ComponentType;
-  };
-
-  export const nonogramKatanaUpgradesDisplayInfo: Record<
-    NonogramKatanaUpgradeName,
-    NonogramKatanaUpgradeDisplayInfo
-  > = {
-    [NonogramKatanaUpgradeName.BuildingGuildLvl2]: {
-      displayName: 'Guild Lvl 2',
-      requiredUpgrades: []
-    },
-    [NonogramKatanaUpgradeName.BuildingGuildLvl3]: {
-      displayName: 'Guild Lvl 3',
-      requiredUpgrades: [NonogramKatanaUpgradeName.BuildingGuildLvl2]
-    },
-    [NonogramKatanaUpgradeName.BuildingGuildLvl4]: {
-      displayName: 'Guild Lvl 4',
-      requiredUpgrades: [NonogramKatanaUpgradeName.BuildingGuildLvl3]
-    },
-    [NonogramKatanaUpgradeName.BuildingGuildLvl5]: {
-      displayName: 'Guild Lvl 5',
-      requiredUpgrades: [NonogramKatanaUpgradeName.BuildingGuildLvl4]
-    },
-    [NonogramKatanaUpgradeName.BuildingWarehouseLvl1]: {
-      displayName: 'Warehouse Lvl 1',
-      requiredUpgrades: []
-    },
-    [NonogramKatanaUpgradeName.BuildingWarehouseLvl2]: {
-      displayName: 'Warehouse Lvl 2',
-      requiredUpgrades: [
-        NonogramKatanaUpgradeName.BuildingWarehouseLvl1,
-        NonogramKatanaUpgradeName.BuildingGuildLvl2
-      ]
-    },
-    [NonogramKatanaUpgradeName.BuildingWarehouseLvl3]: {
-      displayName: 'Warehouse Lvl 3',
-      requiredUpgrades: [
-        NonogramKatanaUpgradeName.BuildingWarehouseLvl2,
-        NonogramKatanaUpgradeName.BuildingGuildLvl3
-      ]
-    }
-  };
 </script>
 
 <script lang="ts">
@@ -62,12 +15,15 @@
   import { slide } from 'svelte/transition';
   import { userSettings } from '../../../../stores/userSettings';
 
+  const sortFunction: (a: NonogramKatanaUpgrade, b: NonogramKatanaUpgrade) => number = (a, b) =>
+    b.priority - a.priority;
+
   let upgradeMap = NonogramKatanaUpgradeMapService.getStore();
   let showAll = false;
-  $: allUpgrades = Object.values($upgradeMap);
+  $: allUpgrades = Object.values($upgradeMap).sort(sortFunction);
   $: workableUpgrades = Object.values(
     NonogramKatanaUpgradeMapService.getWorkableUpgrades($upgradeMap)
-  );
+  ).sort(sortFunction);
   $: currentlyShownUpgrades = showAll ? allUpgrades : workableUpgrades;
 </script>
 

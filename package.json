@@ -14,7 +14,7 @@
   "type": "module",
   "devDependencies": {
     "@aneuhold/core-ts-api-lib": "^1.0.47",
-    "@aneuhold/core-ts-db-lib": "^1.0.48",
+    "@aneuhold/core-ts-db-lib": "^1.0.55",
     "@aneuhold/core-ts-lib": "^1.1.11",
     "@fontsource/fira-mono": "^5.0.8",
     "@neoconfetti/svelte": "^2.2.1",
