@@ -1,6 +1,6 @@
 <script lang="ts" context="module">
   import PageTitle from '$components/PageTitle.svelte';
-  import { NonogramKatanaUpgrade } from '@aneuhold/core-ts-db-lib';
+  import { NonogramKatanaUpgrade, NonogramKatanaUpgradeName } from '@aneuhold/core-ts-db-lib';
   import Paper, { Content } from '@smui/paper';
   import { NonogramKatanaUpgradeMapService } from '../../../../services/NonogramKatana/NonogramKatanaUpgradeMapService';
   import NonogramKatanaUpgradeRow from './NonogramKatanaUpgradeRow.svelte';
@@ -25,6 +25,7 @@
     NonogramKatanaUpgradeMapService.getWorkableUpgrades($upgradeMap)
   ).sort(sortFunction);
   $: currentlyShownUpgrades = showAll ? allUpgrades : workableUpgrades;
+  $: upgradesMissing = allUpgrades.length < Object.values(NonogramKatanaUpgradeName).length;
 </script>
 
 <svelte:head>
@@ -40,13 +41,16 @@
   <Paper>
     <Content>
       <div class="topSettingsRow">
-        <Button
-          on:click={() => {
-            NonogramKatanaUpgradeMapService.createOrUpdateUpgrades($userSettings.config.userId);
-          }}
-        >
-          Add / Update Upgrades
-        </Button>
+        {#if upgradesMissing}
+          <Button
+            on:click={() => {
+              NonogramKatanaUpgradeMapService.createOrUpdateUpgrades($userSettings.config.userId);
+            }}
+          >
+            Add / Update Upgrades
+          </Button>
+        {/if}
+
         <div class="showAllSetting">
           Show all upgrades
           <Checkbox bind:checked={showAll} touch />
