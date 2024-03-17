@@ -550,7 +550,7 @@ export const nonogramKatanaUpgradesDisplayInfo: Record<
       },
       {
         itemName: NonogramKatanaItemName.WoodenBeam,
-        requiredAmount: 150
+        requiredAmount: 300
       },
       {
         itemName: NonogramKatanaItemName.Stone,

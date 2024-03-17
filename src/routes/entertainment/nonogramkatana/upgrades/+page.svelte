@@ -50,7 +50,6 @@
             Add / Update Upgrades
           </Button>
         {/if}
-
         <div class="showAllSetting">
           Show all upgrades
           <Checkbox bind:checked={showAll} touch />
