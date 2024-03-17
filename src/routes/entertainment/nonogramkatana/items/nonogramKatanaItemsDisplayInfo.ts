@@ -140,7 +140,13 @@ export const nonogramKatanaItemsDisplayInfo: {
     defaultPriority: -8
   },
   [NonogramKatanaItemName.Spices]: {
-    displayName: 'Spices'
+    displayName: 'Spices',
+    usedFor: [
+      'Crafting Ramen (Food Stall, 1 Spices)',
+      'Crafting Curry (Food Stall, 4 Spices)',
+      'Crafting Berserker Rage Potion (Alchemist Hut, 1 Spices)'
+    ],
+    collectedFrom: ['Completing Ship Missions (Random chance for 1 Spices)', 'Caravan Missions']
   },
   [NonogramKatanaItemName.Salmon]: {
     displayName: 'Salmon'
