@@ -58,9 +58,17 @@ export class NonogramKatanaUpgradeMapService extends DocumentMapStoreService<Non
     if (!upgradeNames) {
       return [];
     }
-    const filteredUpgradeNames = upgradeNames.filter((upgradeName) => {
-      return !filterToOnlyWorkableUpgrades || workableUpgrades[upgradeName];
-    });
+    const filteredUpgradeNames = upgradeNames
+      .filter((upgradeName) => {
+        return !filterToOnlyWorkableUpgrades || workableUpgrades[upgradeName];
+      })
+      .sort((a, b) => {
+        const upgradeAId = this.nameToIdMap[a]!;
+        const upgradeBId = this.nameToIdMap[b]!;
+        const aPriority = map[upgradeAId].priority;
+        const bPriority = map[upgradeBId].priority;
+        return bPriority - aPriority;
+      });
     const upgradeStores = filteredUpgradeNames.map((upgradeName) =>
       this.getUpgradeStoreByName(upgradeName)
     );
