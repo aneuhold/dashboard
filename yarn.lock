@@ -22,24 +22,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aneuhold/core-ts-api-lib@npm:^1.0.47":
-  version: 1.0.47
-  resolution: "@aneuhold/core-ts-api-lib@npm:1.0.47"
+"@aneuhold/core-ts-api-lib@npm:^1.0.48":
+  version: 1.0.48
+  resolution: "@aneuhold/core-ts-api-lib@npm:1.0.48"
   dependencies:
-    "@aneuhold/core-ts-db-lib": "npm:^1.0.48"
+    "@aneuhold/core-ts-db-lib": "npm:^1.0.55"
     "@aneuhold/core-ts-lib": "npm:^1.1.11"
     bson: "npm:^6.2.0"
-  checksum: 10c0/5ff0e087304a447d5c3c5da90398de138ae678a467617a26dc3b5eb3567d756e2e758f38da7e773875ab13cfe425dc6f43056844d93c6c20d79efc49a86a424e
-  languageName: node
-  linkType: hard
-
-"@aneuhold/core-ts-db-lib@npm:^1.0.48":
-  version: 1.0.48
-  resolution: "@aneuhold/core-ts-db-lib@npm:1.0.48"
-  dependencies:
-    "@aneuhold/core-ts-lib": "npm:^1.1.10"
-    bson: "npm:^6.2.0"
-  checksum: 10c0/f5c893d4eb0e6c2cee9e0540cd2f2002580a67b0b44a54a358362f2c3e6b282a6d023efc03baa6db25d5ac19d730a6bc4a3d9270326ecc70e46a886f38f011e5
+  checksum: 10c0/c1e15389f741627a3c791e2c621081fdc8f7a6e2ad29ac95cf46165028f9fee9d51b846a7c16d18ec628c92cf96b05bb000395cdafd15c59420d91daa5b1031d
   languageName: node
   linkType: hard
 
@@ -2490,7 +2480,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "dashboard@workspace:."
   dependencies:
-    "@aneuhold/core-ts-api-lib": "npm:^1.0.47"
+    "@aneuhold/core-ts-api-lib": "npm:^1.0.48"
     "@aneuhold/core-ts-db-lib": "npm:^1.0.55"
     "@aneuhold/core-ts-lib": "npm:^1.1.11"
     "@fontsource/fira-mono": "npm:^5.0.8"

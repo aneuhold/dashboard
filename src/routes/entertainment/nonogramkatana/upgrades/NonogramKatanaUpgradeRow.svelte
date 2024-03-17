@@ -33,10 +33,10 @@
             <div class="mdc-typography--caption mdc-theme--text-hint-on-background dependencies">
               <span>Required items: </span>
               <ul class="dependencies-list">
-                {#each $upgrade.requiredItems as requiredItem}
+                {#each displayInfo.requiredItems as requiredItem}
                   <NonogramKatanaRequiredItem
                     requiredAmount={requiredItem.requiredAmount}
-                    currentAmount={requiredItem.currentAmount}
+                    currentAmount={$upgrade.currentItemAmounts[requiredItem.itemName] ?? 0}
                     itemName={requiredItem.itemName}
                   />
                 {/each}

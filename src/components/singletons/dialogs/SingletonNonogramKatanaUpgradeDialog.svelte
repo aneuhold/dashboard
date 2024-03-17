@@ -5,10 +5,15 @@
   exported functions to show the dialog.
 -->
 <script lang="ts" context="module">
+  import InputBox from '$components/presentational/InputBox.svelte';
   import SmartDialog from '$components/presentational/SmartDialog.svelte';
   import Button, { Label } from '@smui/button';
+  import Checkbox from '@smui/checkbox';
   import { Actions, Content, Title } from '@smui/dialog';
   import { writable } from 'svelte/store';
+  import { nonogramKatanaItemsDisplayInfo } from '../../../routes/entertainment/nonogramkatana/items/nonogramKatanaItemsDisplayInfo';
+  import { nonogramKatanaUpgradesDisplayInfo } from '../../../routes/entertainment/nonogramkatana/upgrades/nonogramKatanaUpgradesDisplayInfo';
+  import { NonogramKatanaUpgradeMapService } from '../../../services/NonogramKatana/NonogramKatanaUpgradeMapService';
 
   /**
    * A Nonogram Katana upgrade dialog which can be used anywhere in the app.
@@ -25,16 +30,22 @@
 </script>
 
 <script lang="ts">
-  import InputBox from '$components/presentational/InputBox.svelte';
-  import Checkbox from '@smui/checkbox';
-  import { nonogramKatanaItemDisplayInfo } from '../../../routes/entertainment/nonogramkatana/items/+page.svelte';
-  import { nonogramKatanaUpgradesDisplayInfo } from '../../../routes/entertainment/nonogramkatana/upgrades/nonogramKatanaUpgradesDisplayInfo';
-  import { NonogramKatanaUpgradeMapService } from '../../../services/NonogramKatana/NonogramKatanaUpgradeMapService';
+  import { NonogramKatanaItemName } from '@aneuhold/core-ts-db-lib';
 
   $: upgrade = $currentUpgradeId
     ? NonogramKatanaUpgradeMapService.getUpgradeStore($currentUpgradeId)
     : null;
   $: displayInfo = $upgrade ? nonogramKatanaUpgradesDisplayInfo[$upgrade.upgradeName] : null;
+
+  function getItemAmount(itemName: NonogramKatanaItemName) {
+    return $upgrade ? $upgrade.currentItemAmounts[itemName] : 0;
+  }
+
+  function updateItemToAmount(itemName: NonogramKatanaItemName, amount: number) {
+    if ($upgrade) {
+      $upgrade.currentItemAmounts[itemName] = amount;
+    }
+  }
 </script>
 
 <SmartDialog bind:open={$open}>
@@ -42,27 +53,24 @@
     <Title>Update "{displayInfo.displayName}"</Title>
     <Content>
       <div class="content">
-        {#if $upgrade.requiredItems.length > 0}
-          {#each $upgrade.requiredItems as requiredItem}
+        {#if displayInfo.requiredItems.length > 0}
+          {#each displayInfo.requiredItems as requiredItem}
             <Checkbox
-              checked={requiredItem.currentAmount === requiredItem.requiredAmount}
+              checked={getItemAmount(requiredItem.itemName) === requiredItem.requiredAmount}
               on:click={() => {
-                if (requiredItem.currentAmount !== requiredItem.requiredAmount) {
-                  requiredItem.currentAmount = requiredItem.requiredAmount;
+                if (getItemAmount(requiredItem.itemName) !== requiredItem.requiredAmount) {
+                  updateItemToAmount(requiredItem.itemName, requiredItem.requiredAmount);
                 } else {
-                  requiredItem.currentAmount = 0;
+                  updateItemToAmount(requiredItem.itemName, 0);
                 }
-                if ($upgrade) {
-                  // Just a state update
-                  $upgrade.requiredItems = $upgrade.requiredItems;
-                }
+                // might need a state update here.
               }}
             />
             <span class="mdc-typography--body1">
-              {nonogramKatanaItemDisplayInfo[requiredItem.itemName].displayName}
+              {nonogramKatanaItemsDisplayInfo[requiredItem.itemName].displayName}
             </span>
             <InputBox
-              bind:onBlurValue={requiredItem.currentAmount}
+              bind:onBlurValue={$upgrade.currentItemAmounts[requiredItem.itemName]}
               inputType="number"
               min={0}
               max={requiredItem.requiredAmount}

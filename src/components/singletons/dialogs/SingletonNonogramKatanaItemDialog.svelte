@@ -9,7 +9,6 @@
   import Button, { Label } from '@smui/button';
   import { Actions, Content, Title } from '@smui/dialog';
   import { writable } from 'svelte/store';
-  import { nonogramKatanaItemDisplayInfo } from '../../../routes/entertainment/nonogramkatana/items/+page.svelte';
   import { NonogramKatanaItemMapService } from '../../../services/NonogramKatana/NonogramKatanaItemMapService';
 
   /**
@@ -29,9 +28,10 @@
 <script lang="ts">
   import InputBox from '$components/presentational/InputBox.svelte';
   import Checkbox from '@smui/checkbox';
+  import { nonogramKatanaItemsDisplayInfo } from '../../../routes/entertainment/nonogramkatana/items/nonogramKatanaItemsDisplayInfo';
 
   $: item = $currentItemId ? NonogramKatanaItemMapService.getItemStore($currentItemId) : null;
-  $: displayInfo = $item ? nonogramKatanaItemDisplayInfo[$item.itemName] : null;
+  $: displayInfo = $item ? nonogramKatanaItemsDisplayInfo[$item.itemName] : null;
   $: minDesiredPresent = $item && $item.minDesired !== undefined && $item.minDesired !== null;
   $: maxDesiredPresent = $item && $item.maxDesired !== undefined && $item.maxDesired !== null;
   $: storageCapPresent = $item && $item.storageCap !== undefined && $item.storageCap !== null;

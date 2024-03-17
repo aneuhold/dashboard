@@ -4,7 +4,7 @@ import type { ComponentType } from 'svelte';
 export type NonogramKatanaUpgradeDisplayInfo = {
   displayName: string;
   requiredUpgrades: NonogramKatanaUpgradeName[];
-  requiredItems: Array<{ itemName: string; requiredAmount: number }>;
+  requiredItems: Array<{ itemName: NonogramKatanaItemName; requiredAmount: number }>;
   defaultPriority?: number;
   icon?: ComponentType;
 };

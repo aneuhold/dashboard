@@ -6,21 +6,17 @@
   import IconButton from '@smui/icon-button';
   import { NonogramKatanaItemMapService } from '../../../../services/NonogramKatana/NonogramKatanaItemMapService';
   import { NonogramKatanaUpgradeMapService } from '../../../../services/NonogramKatana/NonogramKatanaUpgradeMapService';
-  import { nonogramKatanaItemDisplayInfo } from './+page.svelte';
   import NonogramKatanaRelatedUpgrade from './NonogramKatanaRelatedUpgrade.svelte';
+  import { nonogramKatanaItemsDisplayInfo } from './nonogramKatanaItemsDisplayInfo';
 
   export let itemId: string;
 
   $: item = NonogramKatanaItemMapService.getItemStore(itemId);
-  $: displayInfo = nonogramKatanaItemDisplayInfo[$item.itemName];
+  $: displayInfo = nonogramKatanaItemsDisplayInfo[$item.itemName];
   $: upgradesThatRequireThisItem = NonogramKatanaUpgradeMapService.getUpgradeStoresByItemName(
     $item.itemName
   );
   $: amountThatCanBeSpent = $item.currentAmount - ($item.minDesired ?? 0);
-
-  $: {
-    console.log(upgradesThatRequireThisItem);
-  }
 </script>
 
 <div class="container">

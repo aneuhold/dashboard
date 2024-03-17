@@ -15,7 +15,7 @@
 
   $: item = NonogramKatanaItemMapService.getItemStoreByName(itemName);
   $: upgradeDisplayInfo = nonogramKatanaUpgradesDisplayInfo[$relatedUpgrade.upgradeName];
-  $: requiredItemAmounts = $relatedUpgrade.requiredItems.find(
+  $: requiredItemAmounts = upgradeDisplayInfo.requiredItems.find(
     (requiredItem) => requiredItem.itemName === itemName
   );
 </script>

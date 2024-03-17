@@ -1,14 +1,14 @@
 <script lang="ts">
   import { NonogramKatanaItemName } from '@aneuhold/core-ts-db-lib';
   import { NonogramKatanaItemMapService } from '../../../../services/NonogramKatana/NonogramKatanaItemMapService';
-  import { nonogramKatanaItemDisplayInfo } from '../items/+page.svelte';
+  import { nonogramKatanaItemsDisplayInfo } from '../items/nonogramKatanaItemsDisplayInfo';
 
   export let itemName: NonogramKatanaItemName;
   export let requiredAmount: number;
   export let currentAmount: number;
 
   $: item = NonogramKatanaItemMapService.getItemStoreByName(itemName);
-  $: itemDisplayInfo = nonogramKatanaItemDisplayInfo[itemName];
+  $: itemDisplayInfo = nonogramKatanaItemsDisplayInfo[itemName];
   $: amountThatCanBeSpent = Math.min(
     Math.max(0, $item.currentAmount - ($item.minDesired ?? 0)),
     requiredAmount - currentAmount
