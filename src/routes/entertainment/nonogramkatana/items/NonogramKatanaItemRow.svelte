@@ -62,7 +62,7 @@
                 Amount that can be spent now: {amountThatCanBeSpent}
               </span>
             </h4>
-            {#if displayInfo.usedFor}
+            {#if displayInfo.usedFor || upgradesThatRequireThisItem.length > 0}
               <div class="mdc-typography--caption mdc-theme--text-hint-on-background dependencies">
                 <span>Used for: </span>
                 <ul class="dependencies-list">
@@ -74,9 +74,11 @@
                       />
                     {/each}
                   {/if}
-                  {#each displayInfo.usedFor as usedFor}
-                    <li>{usedFor}</li>
-                  {/each}
+                  {#if displayInfo.usedFor && displayInfo.usedFor.length > 0}
+                    {#each displayInfo.usedFor as usedFor}
+                      <li>{usedFor}</li>
+                    {/each}
+                  {/if}
                 </ul>
               </div>
             {/if}

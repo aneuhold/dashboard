@@ -15,7 +15,7 @@
   import { userSettings } from '../../../../stores/userSettings';
 
   let itemMap = NonogramKatanaItemMapService.getStore();
-  $: items = Object.values($itemMap);
+  $: items = Object.values($itemMap).sort((a, b) => b.priority - a.priority);
   $: itemsMissing = items.length < Object.values(NonogramKatanaItemName).length;
 </script>
 

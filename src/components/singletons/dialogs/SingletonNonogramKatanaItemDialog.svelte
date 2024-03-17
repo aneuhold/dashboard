@@ -105,6 +105,8 @@
           <i class="mdc-typography--body1 dimmed-color">Storage cap</i>
         {/if}
       </div>
+      <span>Priority: </span>
+      <InputBox bind:onBlurValue={$item.priority} inputType="number" max={100} label="Priority" />
     </Content>
     <Actions>
       <Button
