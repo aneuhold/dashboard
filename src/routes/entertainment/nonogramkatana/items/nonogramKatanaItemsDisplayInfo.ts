@@ -105,7 +105,14 @@ export const nonogramKatanaItemsDisplayInfo: {
     displayName: 'Gunpowder'
   },
   [NonogramKatanaItemName.IronSand]: {
-    displayName: 'Iron Sand'
+    displayName: 'Iron Sand',
+    usedFor: ['Crafting Steel at Furnace', 'Bourse (15 Iron Sand -> 5 Steel)'],
+    collectedFrom: [
+      'Solving Nonograms',
+      'Buying it in the shop (2 Coin -> 1 Iron Sand)',
+      'Bourse (3 Coffee Beans -> 5 Iron Sand)',
+      'Completing "Prospecting" Ship Missions'
+    ]
   },
   [NonogramKatanaItemName.Chemicals]: {
     displayName: 'Chemicals'

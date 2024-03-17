@@ -82,6 +82,16 @@
                 </ul>
               </div>
             {/if}
+            {#if displayInfo.collectedFrom && displayInfo.collectedFrom.length > 0}
+              <div class="mdc-typography--caption mdc-theme--text-hint-on-background dependencies">
+                <span>Acquired from: </span>
+                <ul class="dependencies-list">
+                  {#each displayInfo.collectedFrom as collectedFrom}
+                    <li>{collectedFrom}</li>
+                  {/each}
+                </ul>
+              </div>
+            {/if}
           </div>
         </div>
         <IconButton
