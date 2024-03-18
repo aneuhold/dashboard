@@ -22,24 +22,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aneuhold/core-ts-api-lib@npm:^1.0.48":
-  version: 1.0.48
-  resolution: "@aneuhold/core-ts-api-lib@npm:1.0.48"
+"@aneuhold/core-ts-api-lib@npm:^1.0.50":
+  version: 1.0.50
+  resolution: "@aneuhold/core-ts-api-lib@npm:1.0.50"
   dependencies:
-    "@aneuhold/core-ts-db-lib": "npm:^1.0.55"
+    "@aneuhold/core-ts-db-lib": "npm:^1.0.57"
     "@aneuhold/core-ts-lib": "npm:^1.1.11"
     bson: "npm:^6.2.0"
-  checksum: 10c0/c1e15389f741627a3c791e2c621081fdc8f7a6e2ad29ac95cf46165028f9fee9d51b846a7c16d18ec628c92cf96b05bb000395cdafd15c59420d91daa5b1031d
+  checksum: 10c0/9c27a8064592a2c22d6349bc2b6438cf0eff55b73ad6720c0de4cc2e0c0d6907a565e87ab93eeee0ed49693189ce9074f971881ea9c8d95ab34af0f5fa256867
   languageName: node
   linkType: hard
 
-"@aneuhold/core-ts-db-lib@npm:^1.0.55":
-  version: 1.0.55
-  resolution: "@aneuhold/core-ts-db-lib@npm:1.0.55"
+"@aneuhold/core-ts-db-lib@npm:^1.0.57":
+  version: 1.0.57
+  resolution: "@aneuhold/core-ts-db-lib@npm:1.0.57"
   dependencies:
     "@aneuhold/core-ts-lib": "npm:^1.1.10"
     bson: "npm:^6.2.0"
-  checksum: 10c0/b03999b8ea61b1bfa5b8fbe3788865a59e06bc73d4f2a42909411c0e6cc96cafbc8124216849b961847b7789d626a328b0b9654dd5e5829e6648062fec375ad0
+  checksum: 10c0/60e2dea31235eea97ea371760d415fe81991176a9facd8bb906a7032c168e4f14714bb20a82389816fb78b99aefec74ac51c61e336a0778f46a7687ac7d8c68c
   languageName: node
   linkType: hard
 
@@ -2480,8 +2480,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "dashboard@workspace:."
   dependencies:
-    "@aneuhold/core-ts-api-lib": "npm:^1.0.48"
-    "@aneuhold/core-ts-db-lib": "npm:^1.0.55"
+    "@aneuhold/core-ts-api-lib": "npm:^1.0.50"
+    "@aneuhold/core-ts-db-lib": "npm:^1.0.57"
     "@aneuhold/core-ts-lib": "npm:^1.1.11"
     "@fontsource/fira-mono": "npm:^5.0.8"
     "@neoconfetti/svelte": "npm:^2.2.1"

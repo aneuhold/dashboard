@@ -5139,5 +5139,1051 @@ export const nonogramKatanaUpgradesDisplayInfo: Record<
         requiredAmount: 1
       }
     ]
+  },
+  [NonogramKatanaUpgradeName.CharacterSkillLogisticianLvl1]: {
+    displayName: 'Logistician Lvl 1 (Character Skill)',
+    requiredUpgrades: [],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Ruby,
+        requiredAmount: 1
+      },
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 200
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.CharacterSkillLogisticianLvl2]: {
+    displayName: 'Logistician Lvl 2 (Character Skill)',
+    requiredUpgrades: [NonogramKatanaUpgradeName.CharacterSkillLogisticianLvl1],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Ruby,
+        requiredAmount: 2
+      },
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 400
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.CharacterSkillLogisticianLvl3]: {
+    displayName: 'Logistician Lvl 3 (Character Skill)',
+    requiredUpgrades: [NonogramKatanaUpgradeName.CharacterSkillLogisticianLvl2],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Ruby,
+        requiredAmount: 3
+      },
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 600
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.CharacterSkillLogisticianLvl4]: {
+    displayName: 'Logistician Lvl 4 (Character Skill)',
+    requiredUpgrades: [NonogramKatanaUpgradeName.CharacterSkillLogisticianLvl3],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Ruby,
+        requiredAmount: 4
+      },
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 800
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.CharacterSkillLogisticianLvl5]: {
+    displayName: 'Logistician Lvl 5 (Character Skill)',
+    requiredUpgrades: [NonogramKatanaUpgradeName.CharacterSkillLogisticianLvl4],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Ruby,
+        requiredAmount: 5
+      },
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 1000
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.CharacterSkillWeaponCollectorLvl1]: {
+    displayName: 'Weapon Collector Lvl 1 (Character Skill)',
+    requiredUpgrades: [],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Ruby,
+        requiredAmount: 1
+      },
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 200
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.CharacterSkillWeaponCollectorLvl2]: {
+    displayName: 'Weapon Collector Lvl 2 (Character Skill)',
+    requiredUpgrades: [NonogramKatanaUpgradeName.CharacterSkillWeaponCollectorLvl1],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Ruby,
+        requiredAmount: 2
+      },
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 400
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.CharacterSkillWeaponCollectorLvl3]: {
+    displayName: 'Weapon Collector Lvl 3 (Character Skill)',
+    requiredUpgrades: [NonogramKatanaUpgradeName.CharacterSkillWeaponCollectorLvl2],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Ruby,
+        requiredAmount: 3
+      },
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 600
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.CharacterSkillTreasureHunterLvl1]: {
+    displayName: 'Treasure Hunter Lvl 1 (Character Skill)',
+    requiredUpgrades: [],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Ruby,
+        requiredAmount: 1
+      },
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 200
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.CharacterSkillTreasureHunterLvl2]: {
+    displayName: 'Treasure Hunter Lvl 2 (Character Skill)',
+    requiredUpgrades: [NonogramKatanaUpgradeName.CharacterSkillTreasureHunterLvl1],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Ruby,
+        requiredAmount: 2
+      },
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 600
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.CharacterSkillTreasureHunterLvl3]: {
+    displayName: 'Treasure Hunter Lvl 3 (Character Skill)',
+    requiredUpgrades: [NonogramKatanaUpgradeName.CharacterSkillTreasureHunterLvl2],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Ruby,
+        requiredAmount: 4
+      },
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 800
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.CharacterSkillAthleteLvl1]: {
+    displayName: 'Athlete Lvl 1 (Character Skill)',
+    requiredUpgrades: [],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Ruby,
+        requiredAmount: 1
+      },
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 200
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.CharacterSkillAthleteLvl2]: {
+    displayName: 'Athlete Lvl 2 (Character Skill)',
+    requiredUpgrades: [NonogramKatanaUpgradeName.CharacterSkillAthleteLvl1],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Ruby,
+        requiredAmount: 2
+      },
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 400
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.CharacterSkillAthleteLvl3]: {
+    displayName: 'Athlete Lvl 3 (Character Skill)',
+    requiredUpgrades: [NonogramKatanaUpgradeName.CharacterSkillAthleteLvl2],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Ruby,
+        requiredAmount: 3
+      },
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 600
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.CharacterSkillAthleteLvl4]: {
+    displayName: 'Athlete Lvl 4 (Character Skill)',
+    requiredUpgrades: [NonogramKatanaUpgradeName.CharacterSkillAthleteLvl3],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Ruby,
+        requiredAmount: 4
+      },
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 800
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.CharacterSkillAthleteLvl5]: {
+    displayName: 'Athlete Lvl 5 (Character Skill)',
+    requiredUpgrades: [NonogramKatanaUpgradeName.CharacterSkillAthleteLvl4],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Ruby,
+        requiredAmount: 5
+      },
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 1000
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.CharacterSkillAthleteLvl6]: {
+    displayName: 'Athlete Lvl 6 (Character Skill)',
+    requiredUpgrades: [NonogramKatanaUpgradeName.CharacterSkillAthleteLvl5],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Ruby,
+        requiredAmount: 6
+      },
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 2400
+      },
+      {
+        itemName: NonogramKatanaItemName.Honey,
+        requiredAmount: 30
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.CharacterSkillAntiquarianLvl1]: {
+    displayName: 'Antiquarian Lvl 1 (Character Skill)',
+    requiredUpgrades: [],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Ruby,
+        requiredAmount: 2
+      },
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 300
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.CharacterSkillAntiquarianLvl2]: {
+    displayName: 'Antiquarian Lvl 2 (Character Skill)',
+    requiredUpgrades: [NonogramKatanaUpgradeName.CharacterSkillAntiquarianLvl1],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Ruby,
+        requiredAmount: 3
+      },
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 600
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.CharacterSkillIntellectualLvl1]: {
+    displayName: 'Intellectual Lvl 1 (Character Skill)',
+    requiredUpgrades: [],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Ruby,
+        requiredAmount: 2
+      },
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 400
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.CharacterSkillIntellectualLvl2]: {
+    displayName: 'Intellectual Lvl 2 (Character Skill)',
+    requiredUpgrades: [NonogramKatanaUpgradeName.CharacterSkillIntellectualLvl1],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Ruby,
+        requiredAmount: 3
+      },
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 800
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.CharacterSkillIntellectualLvl3]: {
+    displayName: 'Intellectual Lvl 3 (Character Skill)',
+    requiredUpgrades: [NonogramKatanaUpgradeName.CharacterSkillIntellectualLvl2],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Ruby,
+        requiredAmount: 4
+      },
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 2400
+      },
+      {
+        itemName: NonogramKatanaItemName.Paper,
+        requiredAmount: 30
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.CharacterSkillGardenerLvl1]: {
+    displayName: 'Gardener Lvl 1 (Character Skill)',
+    requiredUpgrades: [NonogramKatanaUpgradeName.BuildingGardenLvl1],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Ruby,
+        requiredAmount: 2
+      },
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 700
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.CharacterSkillGardenerLvl2]: {
+    displayName: 'Gardener Lvl 2 (Character Skill)',
+    requiredUpgrades: [NonogramKatanaUpgradeName.CharacterSkillGardenerLvl1],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Ruby,
+        requiredAmount: 3
+      },
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 1000
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.CharacterSkillRockGardenContemplatorLvl1]: {
+    displayName: 'Rock Garden Contemplator Lvl 1 (Character Skill)',
+    requiredUpgrades: [NonogramKatanaUpgradeName.BuildingRockGardenLvl1],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Ruby,
+        requiredAmount: 2
+      },
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 700
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.CharacterSkillRockGardenContemplatorLvl2]: {
+    displayName: 'Rock Garden Contemplator Lvl 2 (Character Skill)',
+    requiredUpgrades: [NonogramKatanaUpgradeName.CharacterSkillRockGardenContemplatorLvl1],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Ruby,
+        requiredAmount: 3
+      },
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 1000
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.CharacterSkillCarpenterLvl1]: {
+    displayName: 'Carpenter Lvl 1 (Character Skill)',
+    requiredUpgrades: [NonogramKatanaUpgradeName.BuildingLumberMillLvl1],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Ruby,
+        requiredAmount: 2
+      },
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 800
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.CharacterSkillCarpenterLvl2]: {
+    displayName: 'Carpenter Lvl 2 (Character Skill)',
+    requiredUpgrades: [NonogramKatanaUpgradeName.CharacterSkillCarpenterLvl1],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Ruby,
+        requiredAmount: 3
+      },
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 1100
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.CharacterSkillCarpenterLvl3]: {
+    displayName: 'Carpenter Lvl 3 (Character Skill)',
+    requiredUpgrades: [NonogramKatanaUpgradeName.CharacterSkillCarpenterLvl2],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Ruby,
+        requiredAmount: 4
+      },
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 1400
+      },
+      {
+        itemName: NonogramKatanaItemName.CupOfCoffee,
+        requiredAmount: 10
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.CharacterSkillMetallurgistLvl1]: {
+    displayName: 'Metallurgist Lvl 1 (Character Skill)',
+    requiredUpgrades: [NonogramKatanaUpgradeName.BuildingFurnaceLvl1],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Ruby,
+        requiredAmount: 2
+      },
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 800
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.CharacterSkillMetallurgistLvl2]: {
+    displayName: 'Metallurgist Lvl 2 (Character Skill)',
+    requiredUpgrades: [NonogramKatanaUpgradeName.CharacterSkillMetallurgistLvl1],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Ruby,
+        requiredAmount: 3
+      },
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 1100
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.CharacterSkillMetallurgistLvl3]: {
+    displayName: 'Metallurgist Lvl 3 (Character Skill)',
+    requiredUpgrades: [NonogramKatanaUpgradeName.CharacterSkillMetallurgistLvl2],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Ruby,
+        requiredAmount: 4
+      },
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 1400
+      },
+      {
+        itemName: NonogramKatanaItemName.CupOfCoffee,
+        requiredAmount: 10
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.CharacterSkillMechanicLvl1]: {
+    displayName: 'Mechanic Lvl 1 (Character Skill)',
+    requiredUpgrades: [NonogramKatanaUpgradeName.BuildingWorkshopLvl1],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Ruby,
+        requiredAmount: 2
+      },
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 900
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.CharacterSkillMechanicLvl2]: {
+    displayName: 'Mechanic Lvl 2 (Character Skill)',
+    requiredUpgrades: [NonogramKatanaUpgradeName.CharacterSkillMechanicLvl1],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Ruby,
+        requiredAmount: 3
+      },
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 1200
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.CharacterSkillMechanicLvl3]: {
+    displayName: 'Mechanic Lvl 3 (Character Skill)',
+    requiredUpgrades: [NonogramKatanaUpgradeName.CharacterSkillMechanicLvl2],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Ruby,
+        requiredAmount: 4
+      },
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 1500
+      },
+      {
+        itemName: NonogramKatanaItemName.CupOfCoffee,
+        requiredAmount: 10
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.CharacterSkillBlacksmithLvl1]: {
+    displayName: 'Blacksmith Lvl 1 (Character Skill)',
+    requiredUpgrades: [NonogramKatanaUpgradeName.BuildingSmithyLvl1],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Ruby,
+        requiredAmount: 2
+      },
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 900
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.CharacterSkillBlacksmithLvl2]: {
+    displayName: 'Blacksmith Lvl 2 (Character Skill)',
+    requiredUpgrades: [NonogramKatanaUpgradeName.CharacterSkillBlacksmithLvl1],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Ruby,
+        requiredAmount: 3
+      },
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 1200
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.CharacterSkillBlacksmithLvl3]: {
+    displayName: 'Blacksmith Lvl 3 (Character Skill)',
+    requiredUpgrades: [NonogramKatanaUpgradeName.CharacterSkillBlacksmithLvl2],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Ruby,
+        requiredAmount: 4
+      },
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 1500
+      },
+      {
+        itemName: NonogramKatanaItemName.CupOfCoffee,
+        requiredAmount: 10
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.CharacterSkillAlchemistLvl1]: {
+    displayName: 'Alchemist Lvl 1 (Character Skill)',
+    requiredUpgrades: [NonogramKatanaUpgradeName.BuildingAlchemistHutLvl1],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Ruby,
+        requiredAmount: 2
+      },
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 900
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.CharacterSkillAlchemistLvl2]: {
+    displayName: 'Alchemist Lvl 2 (Character Skill)',
+    requiredUpgrades: [NonogramKatanaUpgradeName.CharacterSkillAlchemistLvl1],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Ruby,
+        requiredAmount: 3
+      },
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 1200
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.CharacterSkillAlchemistLvl3]: {
+    displayName: 'Alchemist Lvl 3 (Character Skill)',
+    requiredUpgrades: [NonogramKatanaUpgradeName.CharacterSkillAlchemistLvl2],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Ruby,
+        requiredAmount: 4
+      },
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 1500
+      },
+      {
+        itemName: NonogramKatanaItemName.CupOfCoffee,
+        requiredAmount: 10
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.CharacterSkillBoatswainLvl1]: {
+    displayName: 'Boatswain Lvl 1 (Character Skill)',
+    requiredUpgrades: [NonogramKatanaUpgradeName.BuildingShipLvl1],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Ruby,
+        requiredAmount: 3
+      },
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 1000
+      },
+      {
+        itemName: NonogramKatanaItemName.Salmon,
+        requiredAmount: 20
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.CharacterSkillBoatswainLvl2]: {
+    displayName: 'Boatswain Lvl 2 (Character Skill)',
+    requiredUpgrades: [NonogramKatanaUpgradeName.CharacterSkillBoatswainLvl1],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Ruby,
+        requiredAmount: 4
+      },
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 1500
+      },
+      {
+        itemName: NonogramKatanaItemName.Tuna,
+        requiredAmount: 10
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.CharacterSkillCameleerLvl1]: {
+    displayName: 'Cameleer Lvl 1 (Character Skill)',
+    requiredUpgrades: [NonogramKatanaUpgradeName.BuildingCaravanLvl1],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Ruby,
+        requiredAmount: 4
+      },
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 2000
+      },
+      {
+        itemName: NonogramKatanaItemName.Paper,
+        requiredAmount: 20
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.CharacterSkillCameleerLvl2]: {
+    displayName: 'Cameleer Lvl 2 (Character Skill)',
+    requiredUpgrades: [NonogramKatanaUpgradeName.CharacterSkillCameleerLvl1],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Ruby,
+        requiredAmount: 5
+      },
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 2400
+      },
+      {
+        itemName: NonogramKatanaItemName.Silk,
+        requiredAmount: 30
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.CharacterSkillAeronautLvl1]: {
+    displayName: 'Aeronaut Lvl 1 (Character Skill)',
+    requiredUpgrades: [NonogramKatanaUpgradeName.BuildingAirshipLvl1],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Ruby,
+        requiredAmount: 4
+      },
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 2000
+      },
+      {
+        itemName: NonogramKatanaItemName.Paper,
+        requiredAmount: 30
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.CharacterSkillAeronautLvl2]: {
+    displayName: 'Aeronaut Lvl 2 (Character Skill)',
+    requiredUpgrades: [NonogramKatanaUpgradeName.CharacterSkillAeronautLvl1],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Ruby,
+        requiredAmount: 5
+      },
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 2400
+      },
+      {
+        itemName: NonogramKatanaItemName.Gears,
+        requiredAmount: 40
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.DungeonAbilitySmashingBlowLvl1]: {
+    displayName: 'Smashing Blow Lvl 1 (Dungeon Ability)',
+    requiredUpgrades: [NonogramKatanaUpgradeName.BuildingDungeonLvl1],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 100
+      },
+      {
+        itemName: NonogramKatanaItemName.AncientPage,
+        requiredAmount: 10
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.DungeonAbilitySmashingBlowLvl2]: {
+    displayName: 'Smashing Blow Lvl 2 (Dungeon Ability)',
+    requiredUpgrades: [NonogramKatanaUpgradeName.DungeonAbilitySmashingBlowLvl1],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 200
+      },
+      {
+        itemName: NonogramKatanaItemName.AncientPage,
+        requiredAmount: 15
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.DungeonAbilityRoundKickLvl1]: {
+    displayName: 'Round Kick Lvl 1 (Dungeon Ability)',
+    requiredUpgrades: [NonogramKatanaUpgradeName.BuildingDungeonLvl1],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 100
+      },
+      {
+        itemName: NonogramKatanaItemName.AncientPage,
+        requiredAmount: 10
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.DungeonAbilityRoundKickLvl2]: {
+    displayName: 'Round Kick Lvl 2 (Dungeon Ability)',
+    requiredUpgrades: [NonogramKatanaUpgradeName.DungeonAbilityRoundKickLvl1],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 200
+      },
+      {
+        itemName: NonogramKatanaItemName.AncientPage,
+        requiredAmount: 15
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.DungeonAbilityRoundKickLvl3]: {
+    displayName: 'Round Kick Lvl 3 (Dungeon Ability)',
+    requiredUpgrades: [NonogramKatanaUpgradeName.DungeonAbilityRoundKickLvl2],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 300
+      },
+      {
+        itemName: NonogramKatanaItemName.AncientPage,
+        requiredAmount: 20
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.DungeonAbilityThrowingLvl1]: {
+    displayName: 'Throwing Lvl 1 (Dungeon Ability)',
+    requiredUpgrades: [NonogramKatanaUpgradeName.BuildingDungeonLvl1],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 100
+      },
+      {
+        itemName: NonogramKatanaItemName.AncientPage,
+        requiredAmount: 10
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.DungeonAbilityThrowingLvl2]: {
+    displayName: 'Throwing Lvl 2 (Dungeon Ability)',
+    requiredUpgrades: [NonogramKatanaUpgradeName.DungeonAbilityThrowingLvl1],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 200
+      },
+      {
+        itemName: NonogramKatanaItemName.AncientPage,
+        requiredAmount: 15
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.DungeonAbilityThrowingLvl3]: {
+    displayName: 'Throwing Lvl 3 (Dungeon Ability)',
+    requiredUpgrades: [NonogramKatanaUpgradeName.DungeonAbilityThrowingLvl2],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 300
+      },
+      {
+        itemName: NonogramKatanaItemName.AncientPage,
+        requiredAmount: 20
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.DungeonAbilityTrapsLvl1]: {
+    displayName: 'Traps Lvl 1 (Dungeon Ability)',
+    requiredUpgrades: [NonogramKatanaUpgradeName.BuildingDungeonLvl1],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 100
+      },
+      {
+        itemName: NonogramKatanaItemName.AncientPage,
+        requiredAmount: 10
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.DungeonAbilityTrapsLvl2]: {
+    displayName: 'Traps Lvl 2 (Dungeon Ability)',
+    requiredUpgrades: [NonogramKatanaUpgradeName.DungeonAbilityTrapsLvl1],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 200
+      },
+      {
+        itemName: NonogramKatanaItemName.AncientPage,
+        requiredAmount: 15
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.DungeonAbilityDoctor]: {
+    displayName: 'Doctor (Dungeon Ability)',
+    requiredUpgrades: [NonogramKatanaUpgradeName.BuildingDungeonLvl1],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 200
+      },
+      {
+        itemName: NonogramKatanaItemName.AncientPage,
+        requiredAmount: 15
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.DungeonAbilityDemoralization]: {
+    displayName: 'Demoralization (Dungeon Ability)',
+    requiredUpgrades: [NonogramKatanaUpgradeName.BuildingDungeonLvl1],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 200
+      },
+      {
+        itemName: NonogramKatanaItemName.AncientPage,
+        requiredAmount: 15
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.DungeonAbilityTrainedEye]: {
+    displayName: 'Trained Eye (Dungeon Ability)',
+    requiredUpgrades: [NonogramKatanaUpgradeName.BuildingDungeonLvl1],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 100
+      },
+      {
+        itemName: NonogramKatanaItemName.AncientPage,
+        requiredAmount: 10
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.DungeonAbilitySprinter]: {
+    displayName: 'Sprinter (Dungeon Ability)',
+    requiredUpgrades: [NonogramKatanaUpgradeName.BuildingDungeonLvl1],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 100
+      },
+      {
+        itemName: NonogramKatanaItemName.AncientPage,
+        requiredAmount: 10
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.DungeonAbilityTacticalGaze]: {
+    displayName: 'Tactical Gaze (Dungeon Ability)',
+    requiredUpgrades: [NonogramKatanaUpgradeName.BuildingDungeonLvl1],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 200
+      },
+      {
+        itemName: NonogramKatanaItemName.AncientPage,
+        requiredAmount: 15
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.DungeonAbilityMartialArtsLvl1]: {
+    displayName: 'Martial Arts Lvl 1 (Dungeon Ability)',
+    requiredUpgrades: [NonogramKatanaUpgradeName.BuildingDungeonLvl1],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 200
+      },
+      {
+        itemName: NonogramKatanaItemName.AncientPage,
+        requiredAmount: 15
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.DungeonAbilityMartialArtsLvl2]: {
+    displayName: 'Martial Arts Lvl 2 (Dungeon Ability)',
+    requiredUpgrades: [NonogramKatanaUpgradeName.DungeonAbilityMartialArtsLvl1],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 300
+      },
+      {
+        itemName: NonogramKatanaItemName.AncientPage,
+        requiredAmount: 20
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.DungeonAbilityMartialArtsLvl3]: {
+    displayName: 'Martial Arts Lvl 3 (Dungeon Ability)',
+    requiredUpgrades: [NonogramKatanaUpgradeName.DungeonAbilityMartialArtsLvl2],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 400
+      },
+      {
+        itemName: NonogramKatanaItemName.AncientPage,
+        requiredAmount: 30
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.DungeonAbilityHardeningLvl1]: {
+    displayName: 'Hardening Lvl 1 (Dungeon Ability)',
+    requiredUpgrades: [NonogramKatanaUpgradeName.BuildingDungeonLvl1],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 200
+      },
+      {
+        itemName: NonogramKatanaItemName.AncientPage,
+        requiredAmount: 15
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.DungeonAbilityHardeningLvl2]: {
+    displayName: 'Hardening Lvl 2 (Dungeon Ability)',
+    requiredUpgrades: [NonogramKatanaUpgradeName.DungeonAbilityHardeningLvl1],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 300
+      },
+      {
+        itemName: NonogramKatanaItemName.AncientPage,
+        requiredAmount: 20
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.DungeonAbilityEquipmentPreparationLvl1]: {
+    displayName: 'Equipment Preparation Lvl 1 (Dungeon Ability)',
+    requiredUpgrades: [NonogramKatanaUpgradeName.BuildingDungeonLvl1],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 200
+      },
+      {
+        itemName: NonogramKatanaItemName.AncientPage,
+        requiredAmount: 15
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.DungeonAbilityEquipmentPreparationLvl2]: {
+    displayName: 'Equipment Preparation Lvl 2 (Dungeon Ability)',
+    requiredUpgrades: [NonogramKatanaUpgradeName.DungeonAbilityEquipmentPreparationLvl1],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 300
+      },
+      {
+        itemName: NonogramKatanaItemName.AncientPage,
+        requiredAmount: 20
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.DungeonAbilityTrapsIndifference]: {
+    displayName: 'Traps Indifference (Dungeon Ability)',
+    requiredUpgrades: [NonogramKatanaUpgradeName.BuildingDungeonLvl1],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 200
+      },
+      {
+        itemName: NonogramKatanaItemName.AncientPage,
+        requiredAmount: 15
+      }
+    ]
+  },
+  [NonogramKatanaUpgradeName.DungeonAbilityTrapsAgility]: {
+    displayName: 'Traps Agility (Dungeon Ability)',
+    requiredUpgrades: [NonogramKatanaUpgradeName.BuildingDungeonLvl1],
+    requiredItems: [
+      {
+        itemName: NonogramKatanaItemName.Coin,
+        requiredAmount: 300
+      },
+      {
+        itemName: NonogramKatanaItemName.AncientPage,
+        requiredAmount: 20
+      }
+    ]
   }
 };

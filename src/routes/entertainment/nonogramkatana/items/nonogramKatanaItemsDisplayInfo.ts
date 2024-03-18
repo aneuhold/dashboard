@@ -24,7 +24,12 @@ export const nonogramKatanaItemsDisplayInfo: {
   [NonogramKatanaItemName.Coin]: {
     displayName: 'Coin',
     defaultPriority: -1,
-    usedFor: ['Expeditions']
+    usedFor: [
+      'Crafting Treasure Maps (2 for lvl 1, 4 for lvl 2, 8 for lvl 3)',
+      'Starting Treasure Map Lvl 1 (20 Coin)',
+      'Starting Treasure Map Lvl 2 (60 Coin)',
+      'Starting Treasure Map Lvl 3 (100 Coin)'
+    ]
   },
   [NonogramKatanaItemName.CryptoCoin]: {
     displayName: 'Crypto-coin'
@@ -74,10 +79,17 @@ export const nonogramKatanaItemsDisplayInfo: {
   },
   [NonogramKatanaItemName.Wood]: {
     displayName: 'Wood',
+    usedFor: [
+      'Crafting Wooden Beam (5 Wood -> 10 Wooden Beam)',
+      'Crafting Wooden Plank (5 Wood -> 10 Wooden Plank)',
+      'Starting Treasure Map Lvl 1 (8 Wood)',
+      'Starting Treasure Map Lvl 2 (20 Wood)'
+    ],
     defaultPriority: -3
   },
   [NonogramKatanaItemName.WoodenBeam]: {
     displayName: 'Wooden Beam',
+    usedFor: ['Starting Treasure Map Lvl 3 (60 Wooden Beam)'],
     defaultPriority: -4
   },
   [NonogramKatanaItemName.WoodenPlank]: {
@@ -90,6 +102,7 @@ export const nonogramKatanaItemsDisplayInfo: {
   },
   [NonogramKatanaItemName.Steel]: {
     displayName: 'Steel',
+    usedFor: ['Starting Treasure Map Lvl 2 (20 Steel)'],
     defaultPriority: -7
   },
   [NonogramKatanaItemName.MeteoricIron]: {
@@ -102,7 +115,8 @@ export const nonogramKatanaItemsDisplayInfo: {
     displayName: 'Charcoal'
   },
   [NonogramKatanaItemName.Gunpowder]: {
-    displayName: 'Gunpowder'
+    displayName: 'Gunpowder',
+    usedFor: ['Starting Treasure Map Lvl 3 (30 Gunpowder)']
   },
   [NonogramKatanaItemName.IronSand]: {
     displayName: 'Iron Sand',
@@ -138,6 +152,9 @@ export const nonogramKatanaItemsDisplayInfo: {
   [NonogramKatanaItemName.CoffeeBeans]: {
     displayName: 'Coffee Beans',
     defaultPriority: -8
+  },
+  [NonogramKatanaItemName.CupOfCoffee]: {
+    displayName: 'Cup of Coffee'
   },
   [NonogramKatanaItemName.Spices]: {
     displayName: 'Spices',
