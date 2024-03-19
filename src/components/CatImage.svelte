@@ -1,4 +1,6 @@
 <script lang="ts">
+  import IconButton, { Icon } from '@smui/icon-button';
+
   let imageUrl = 'https://i.imgur.com/czx5YDq.gif';
   async function getImage() {
     const image = await fetch('https://api.thecatapi.com/v1/images/search');
@@ -9,13 +11,21 @@
 </script>
 
 <div class="imageContainer">
+  <IconButton
+    on:click={() => {
+      getImage();
+    }}
+  >
+    <Icon class="material-icons dimmed-color">refresh</Icon>
+  </IconButton>
   <img class="image" src={imageUrl} alt="cat" />
 </div>
 
 <style>
   .imageContainer {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
   }
   .image {
     max-width: min(90%, 400px);
