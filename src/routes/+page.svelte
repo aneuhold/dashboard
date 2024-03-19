@@ -1,4 +1,5 @@
 <script lang="ts">
+  import CatImage from '$components/CatImage.svelte';
   import LinkList from '$components/LinkList.svelte';
   import type { LinkInfo } from '$components/LinkListItem.svelte';
   import PageTitle from '$components/PageTitle.svelte';
@@ -67,6 +68,13 @@
       <LinkList links={tableOfContentsLinks} />
     </Content>
   </Paper>
+  {#if $userSettings.config.enabledFeatures.catImageOnHomePage}
+    <Paper>
+      <Content>
+        <CatImage />
+      </Content>
+    </Paper>
+  {/if}
   {#if $userSettings.config.enabledFeatures.homePageLinks}
     <Paper>
       <Title>Primary Links</Title>

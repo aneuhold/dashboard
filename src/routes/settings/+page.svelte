@@ -65,7 +65,16 @@
           <span slot="label">
             Enable dev mode
             <span class="mdc-theme--text-hint-on-background checkBoxText">
-              Enables some development features on the site.
+              Enables some development features on the site
+            </span>
+          </span>
+        </FormField>
+        <FormField>
+          <Checkbox bind:checked={$userSettings.config.enabledFeatures.catImageOnHomePage} touch />
+          <span slot="label">
+            Enable cat image on home page 🐈
+            <span class="mdc-theme--text-hint-on-background checkBoxText">
+              Just adds a random cat image to the home page
             </span>
           </span>
         </FormField>

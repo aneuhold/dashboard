@@ -13,8 +13,8 @@
   "packageManager": "yarn@4.1.0",
   "type": "module",
   "devDependencies": {
-    "@aneuhold/core-ts-api-lib": "^1.0.50",
-    "@aneuhold/core-ts-db-lib": "^1.0.57",
+    "@aneuhold/core-ts-api-lib": "^1.0.51",
+    "@aneuhold/core-ts-db-lib": "^1.0.58",
     "@aneuhold/core-ts-lib": "^1.1.11",
     "@fontsource/fira-mono": "^5.0.8",
     "@neoconfetti/svelte": "^2.2.1",
