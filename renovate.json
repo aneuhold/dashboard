@@ -16,11 +16,13 @@
     {
       "groupName": "Formatting and Linting",
       "matchPackagePatterns": ["^eslint.*", "^prettier.*"],
+      "matchPackageNames": ["typescript-eslint"],
       "automerge": true
     },
     {
       "groupName": "Svelte",
-      "matchPackagePatterns": ["^svelte.*"]
+      "matchPackagePatterns": ["^svelte.*", "^@smui.*", "^@sveltejs/.*"],
+      "matchPackageNames": ["svelty-picker"]
     }
   ]
 }
