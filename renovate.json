@@ -15,14 +15,25 @@
     },
     {
       "groupName": "Formatting and Linting",
-      "matchPackagePatterns": ["^eslint.*", "^prettier.*"],
+      "matchPackagePatterns": ["^eslint.*", "^prettier.*", "^@typescript-eslint.*"],
       "matchPackageNames": ["typescript-eslint"],
       "automerge": true
     },
     {
       "groupName": "Svelte",
       "matchPackagePatterns": ["^svelte.*", "^@smui.*", "^@sveltejs/.*"],
-      "matchPackageNames": ["svelty-picker"]
+      "matchPackageNames": ["svelty-picker", "@fontsource/fira-mono", "smui-theme"]
+    },
+    {
+      "groupName": "Build + Testing",
+      "matchPackageNames": [
+        "typescript",
+        "vite",
+        "vite-plugin-node-polyfills",
+        "vitest",
+        "@types/node",
+        "yarn"
+      ]
     }
   ]
 }
