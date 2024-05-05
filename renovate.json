@@ -1,0 +1,39 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "timezone": "America/Los_Angeles",
+  "prConcurrentLimit": 8,
+  "lockFileMaintenance": {
+    "enabled": false
+  },
+  "schedule": ["every weekend"],
+  "packageRules": [
+    {
+      "groupName": "Personal Libraries",
+      "matchPackagePatterns": ["^@aneuhold/.*"],
+      "automerge": true
+    },
+    {
+      "groupName": "Formatting and Linting",
+      "matchPackagePatterns": ["^eslint.*", "^prettier.*", "^@typescript-eslint.*"],
+      "matchPackageNames": ["typescript-eslint"],
+      "automerge": true
+    },
+    {
+      "groupName": "Svelte",
+      "matchPackagePatterns": ["^svelte.*", "^@smui.*", "^@sveltejs/.*"],
+      "matchPackageNames": ["svelty-picker", "@fontsource/fira-mono", "smui-theme"]
+    },
+    {
+      "groupName": "Build + Testing",
+      "matchPackageNames": [
+        "typescript",
+        "vite",
+        "vite-plugin-node-polyfills",
+        "vitest",
+        "@types/node",
+        "yarn"
+      ]
+    }
+  ]
+}
