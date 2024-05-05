@@ -10,17 +10,17 @@
   "packageRules": [
     {
       "groupName": "Personal Libraries",
-      "packagePatterns": ["^@aneuhold/.*"],
+      "matchPackagePatterns": ["^@aneuhold/.*"],
       "automerge": true
     },
     {
       "groupName": "Formatting and Linting",
-      "packagePatterns": ["^eslint.*", "^prettier.*"],
+      "matchPackagePatterns": ["^eslint.*", "^prettier.*"],
       "automerge": true
     },
     {
       "groupName": "Svelte",
-      "packagePatterns": ["^svelte.*"]
+      "matchPackagePatterns": ["^svelte.*"]
     }
   ]
 }
