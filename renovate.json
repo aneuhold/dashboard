@@ -6,6 +6,8 @@
   "lockFileMaintenance": {
     "enabled": false
   },
+  "rangeStrategy": "bump",
+  "separateMajorMinor": false,
   "schedule": ["every weekend"],
   "packageRules": [
     {
@@ -34,6 +36,14 @@
         "@types/node",
         "yarn"
       ]
+    },
+    {
+      "groupName": "Resolutions Dependencies Disabled",
+      "description": "Disable updates to resolutions because resolutions are typically set to get around a specific issue",
+      "enabled": false,
+      "matchPackagePatterns": [".*"],
+      "matchDepTypes": ["resolutions"],
+      "automerge": false
     }
   ]
 }
