@@ -3,11 +3,24 @@
   "extends": ["config:recommended"],
   "timezone": "America/Los_Angeles",
   "prConcurrentLimit": 8,
+  "lockFileMaintenance": {
+    "enabled": false
+  },
+  "schedule": ["every weekend"],
   "packageRules": [
     {
       "groupName": "Personal Libraries",
       "packagePatterns": ["^@aneuhold/.*"],
       "automerge": true
+    },
+    {
+      "groupName": "Formatting and Linting",
+      "packagePatterns": ["^eslint.*", "^prettier.*"],
+      "automerge": true
+    },
+    {
+      "groupName": "Svelte",
+      "packagePatterns": ["^svelte.*"]
     }
   ]
 }
