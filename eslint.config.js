@@ -40,16 +40,20 @@ export default tseslint.config(
       }
     },
     // Rules for svelte
-    rules: {}
+    rules: {
+      'svelte/valid-compile': ['warn']
+    }
   },
   {
     // Rules for everything
     rules: {
-      'no-use-before-define': 'off'
+      'no-use-before-define': 'off',
+      // Seems like a rule of thumb for projects that use typescript
+      'no-undef': 'off'
     }
   },
   {
-    ignores: ['**/.svelte-kit', '**/.yarn', '**/build', '**/node_modules', '.DS_Store']
+    ignores: ['.svelte-kit', '.yarn', 'build', 'node_modules', '**/.DS_Store']
   },
   {
     // disable type-aware linting on JS files

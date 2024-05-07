@@ -10,6 +10,7 @@
   export let taskId: string;
 
   let showConfetti = false;
+
   let currentTimeout: NodeJS.Timeout | undefined = undefined;
 
   $: task = TaskMapService.getTaskStore(taskId);

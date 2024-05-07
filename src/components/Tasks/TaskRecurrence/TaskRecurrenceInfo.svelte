@@ -95,7 +95,7 @@
 <div class="container">
   <Accordion>
     <Panel variant="outlined" color="secondary" bind:open={recurringInfoOpen}>
-      <div class={`headerContainer${!!$task.recurrenceInfo ? '' : ' dimmed-color'}`}>
+      <div class={`headerContainer${$task.recurrenceInfo ? '' : ' dimmed-color'}`}>
         <div class="header">
           {#if !hasParentRecurringTask && (isRecurring || !hasChildRecurringTask)}
             <ClickableDiv clickAction={handleRecurringClick}>
