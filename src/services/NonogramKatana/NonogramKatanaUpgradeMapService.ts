@@ -107,13 +107,10 @@ export class NonogramKatanaUpgradeMapService extends DocumentMapStoreService<Non
           return otherUpgrade.completed;
         });
       })
-      .reduce(
-        (map, [upgradeName, upgradeId]) => {
-          map[upgradeName] = upgradeMap[upgradeId];
-          return map;
-        },
-        {} as Record<string, NonogramKatanaUpgrade>
-      );
+      .reduce<Record<string, NonogramKatanaUpgrade>>((map, [upgradeName, upgradeId]) => {
+        map[upgradeName] = upgradeMap[upgradeId];
+        return map;
+      }, {});
     return workableUpgrades;
   }
 
@@ -137,7 +134,7 @@ export class NonogramKatanaUpgradeMapService extends DocumentMapStoreService<Non
         newUpgrade.priority = upgradeDisplayInfo.defaultPriority ?? -50;
         newUpgrade.currentItemAmounts = {};
         upgradeDisplayInfo.requiredItems.forEach((requiredItem) => {
-          newUpgrade.currentItemAmounts[requiredItem.itemName as NonogramKatanaItemName] = 0;
+          newUpgrade.currentItemAmounts[requiredItem.itemName] = 0;
         });
         newUpgradeIds.add(newUpgrade._id.toString());
         upgradesToAdd.push(newUpgrade);

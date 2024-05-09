@@ -230,7 +230,9 @@ export default class TaskRecurrenceService {
    */
   static buildTaskRecurrenceSubMapFresh(taskMap: DashboardTaskMap): void {
     // Clear the current map
-    Object.values(this.taskRecurrenceSubMap).forEach((unsub) => unsub());
+    Object.values(this.taskRecurrenceSubMap).forEach((unsub) => {
+      unsub();
+    });
     this.taskRecurrenceSubMap = {};
     // Build the new map
     Object.values(taskMap).forEach((task) => {

@@ -46,6 +46,14 @@ const defaultConfig = tseslint.config(
           allowBoolean: true
         }
       ],
+      // ❗️ This should really be turned back on. It is turned off for now,
+      // because it seems that the type definitions on the backend are wrong.
+      // Types that have objects with variable key names should be updated
+      // so that the value is not always defined. AKA the value is optional.
+      '@typescript-eslint/no-unnecessary-condition': 'warn',
+      // Disabled because when using MongoDB, there aren't many options for
+      // data structures besides JSON objects.
+      '@typescript-eslint/no-dynamic-delete': 'off',
       // Disabled because on the frontend, it isn't always necessary to await
       // a promise.
       '@typescript-eslint/no-floating-promises': 'off',
