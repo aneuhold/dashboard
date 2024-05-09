@@ -54,10 +54,10 @@ export default class DashboardAPIService {
    * - the last initial data fetch was more than {@link SECONDS_TO_WAIT_BEFORE_FETCHING_INITIAL_DATA}
    * ago or it hasn't been fetched yet.
    */
-  static async getInitialDataIfNeeded() {
+  static getInitialDataIfNeeded() {
     if (loginState.get() === LoginState.LoggedIn && LocalData.apiRequestQueue.length === 0) {
       if (!this.lastInitialDataFetchTime) {
-        await this.getInitialData();
+        this.getInitialData();
       } else if (
         this.lastInitialDataFetchTime <
         Date.now() - SECONDS_TO_WAIT_BEFORE_FETCHING_INITIAL_DATA * 1000
@@ -67,7 +67,7 @@ export default class DashboardAPIService {
           SECONDS_TO_WAIT_BEFORE_FETCHING_INITIAL_DATA,
           'seconds since the last fetch and the user reopened the app.'
         );
-        await this.getInitialData();
+        this.getInitialData();
       }
     }
   }
@@ -75,15 +75,15 @@ export default class DashboardAPIService {
   /**
    * Gets initial data as if the user is just logging in.
    */
-  static async getInitialDataForLogin() {
+  static getInitialDataForLogin() {
     this.lastInitialDataFetchTime = null;
-    await this.getInitialData();
+    this.getInitialData();
   }
 
   /**
    * Gets the initial data from the backend and sets the stores accordingly.
    */
-  static async getInitialData(): Promise<void> {
+  static getInitialData(): void {
     console.log('Getting initial data...');
     this.processingFirstInitData = !this.lastInitialDataFetchTime;
     this.lastInitialDataFetchTime = Date.now();
@@ -99,7 +99,7 @@ export default class DashboardAPIService {
     });
   }
 
-  static async updateSettings(updatedConfig: DashboardUserConfig) {
+  static updateSettings(updatedConfig: DashboardUserConfig) {
     console.info('Saving user settings...');
     this.queryApi({
       // Get tasks as well because the collaborators might have changed
@@ -123,7 +123,7 @@ export default class DashboardAPIService {
         }
       }
     });
-    if (result.success && result.data?.userFromUserName) {
+    if (result.success && result.data.userFromUserName) {
       return result.data.userFromUserName;
     } else {
       console.info('Invalid username', result);
@@ -254,24 +254,18 @@ export default class DashboardAPIService {
   private static convertDocumentArrayToMap<T extends BaseDocument>(
     documents: T[]
   ): Record<string, T> {
-    return documents.reduce(
-      (map, document) => {
-        map[document._id.toString()] = document;
-        return map;
-      },
-      {} as Record<string, T>
-    );
+    return documents.reduce<Record<string, T>>((map, document) => {
+      map[document._id.toString()] = document;
+      return map;
+    }, {});
   }
 
   static getCollaboratorsFromResult(data: ProjectDashboardOutput): Record<string, UserCTO> {
     if (data.collaborators) {
-      return data.collaborators.reduce(
-        (collaboratorsMap, userCto) => {
-          collaboratorsMap[userCto._id.toString()] = userCto;
-          return collaboratorsMap;
-        },
-        {} as Record<string, UserCTO>
-      );
+      return data.collaborators.reduce<Record<string, UserCTO>>((collaboratorsMap, userCto) => {
+        collaboratorsMap[userCto._id.toString()] = userCto;
+        return collaboratorsMap;
+      }, {});
     } else {
       return {};
     }

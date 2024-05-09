@@ -237,7 +237,7 @@ export default class LocalData {
       currentlyStoredValue !== 'undefined' &&
       typeof currentlyStoredValue === 'string'
     ) {
-      const jsonObject = EJSON.parse(currentlyStoredValue);
+      const jsonObject: unknown = EJSON.parse(currentlyStoredValue);
       if (typeof jsonObject === 'object') {
         return jsonObject as ObjectType;
       }

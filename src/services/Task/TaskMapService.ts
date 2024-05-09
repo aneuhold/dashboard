@@ -156,7 +156,7 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
     const userConfig = userSettings.get().config;
     if (userConfig.autoTaskDeletionDays < 5 || userConfig.autoTaskDeletionDays > 90) {
       console.error(
-        `User ${userConfig.userId} has an invalid autoTaskDeletionDays ` +
+        `User ${userConfig.userId.toString()} has an invalid autoTaskDeletionDays ` +
           `value of ${userConfig.autoTaskDeletionDays}.`
       );
       return;
