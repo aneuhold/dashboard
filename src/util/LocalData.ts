@@ -5,6 +5,7 @@ import type {
 } from '@aneuhold/core-ts-api-lib';
 import type {
   DashboardTaskMap,
+  DocumentMap,
   NonogramKatanaItem,
   NonogramKatanaUpgrade
 } from '@aneuhold/core-ts-db-lib';
@@ -184,11 +185,11 @@ export default class LocalData {
   }
 
   static setAndGetNonogramKatanaUpgradeMap(
-    newUpgradeMap: Record<string, NonogramKatanaUpgrade>
-  ): Record<string, NonogramKatanaUpgrade> {
+    newUpgradeMap: DocumentMap<NonogramKatanaUpgrade>
+  ): DocumentMap<NonogramKatanaUpgrade> {
     const stringifiedUpgradeMap = EJSON.stringify(newUpgradeMap, { relaxed: false });
     this.storeValue(LocalData.storedKeyNames.nonogramKatanaUpgradeMap, stringifiedUpgradeMap);
-    return EJSON.parse(stringifiedUpgradeMap) as Record<string, NonogramKatanaUpgrade>;
+    return EJSON.parse(stringifiedUpgradeMap) as DocumentMap<NonogramKatanaUpgrade>;
   }
 
   static get nonogramKatanaUpgradeMap(): Record<string, NonogramKatanaUpgrade> | null {

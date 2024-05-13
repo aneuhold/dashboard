@@ -1,5 +1,5 @@
 import { localDataReady } from '$util/LocalData';
-import type { BaseDocument } from '@aneuhold/core-ts-db-lib';
+import type { BaseDocument, DocumentMap } from '@aneuhold/core-ts-db-lib';
 import { writable, type Readable, type Updater, type Writable } from 'svelte/store';
 
 /**
@@ -41,8 +41,11 @@ export interface SetableStore<T> extends Readable<T> {
   set: (value: T) => void;
 }
 
+/**
+ * A store that contains a map of documents with the document ID as the key.
+ */
 export type DocumentMapStore<T extends BaseDocument> = PersistentParentStore<T> &
-  SetableStore<Record<string, T>>;
+  SetableStore<DocumentMap<T>>;
 export type DocumentChildStore<T extends BaseDocument> = PersistentChildStore<T> & Writable<T>;
 export type DocumentStore<T extends BaseDocument> = PersistentChildStore<T> & Writable<T>;
 
@@ -78,14 +81,14 @@ export type DocumentMapStoreSubscriber<T extends BaseDocument> = {
    * A hook that runs before the map is set. This only happens when the entire
    * map is set at once.
    */
-  beforeMapSet?: (oldMap: Record<string, T>, newMap: Record<string, T>) => void;
-  afterMapSet?: (newMap: Record<string, T>) => void;
+  beforeMapSet?: (oldMap: DocumentMap<T>, newMap: DocumentMap<T>) => void;
+  afterMapSet?: (newMap: DocumentMap<T>) => void;
   /**
    * A hook which runs before a document is added to the map. This can be used
    * to modify the document before it is added to the map.
    */
-  beforeDocAddition?: (map: Record<string, T>, newDoc: T) => T;
-  afterDocAddition?: (map: Record<string, T>, newDoc: T) => void;
+  beforeDocAddition?: (map: DocumentMap<T>, newDoc: T) => T;
+  afterDocAddition?: (map: DocumentMap<T>, newDoc: T) => void;
   /**
    * A hook which runs once before a doc is deleted from the map. This can be
    * used to validate that the doc can be deleted or indicate that other docs
@@ -93,9 +96,9 @@ export type DocumentMapStoreSubscriber<T extends BaseDocument> = {
    *
    * This runs before the `beforeDocDeletion` hook.
    */
-  validateDocDeletion?: (map: Record<string, T>, docToDelete: T) => string[];
-  beforeDocDeletion?: (map: Record<string, T>, docToDelete: T) => void;
-  afterDocDeletion?: (map: Record<string, T>, docsDeleted: T[]) => void;
+  validateDocDeletion?: (map: DocumentMap<T>, docToDelete: T) => string[];
+  beforeDocDeletion?: (map: DocumentMap<T>, docToDelete: T) => void;
+  afterDocDeletion?: (map: DocumentMap<T>, docsDeleted: T[]) => void;
   /**
    * A hook which runs before a doc is updated in the map. This can be used to
    * indicate that the update to the doc will require other docs to be updated
@@ -104,14 +107,14 @@ export type DocumentMapStoreSubscriber<T extends BaseDocument> = {
    * This runs before the `beforeDocUpdate` hook.
    */
   validateDocUpdate?: (
-    map: Record<string, T>,
+    map: DocumentMap<T>,
     oldDoc: T | undefined,
     newDoc: T
   ) => UpsertManyInfo<T> | null;
   /**
    * A hook which runs before any doc is updated. The doc can be modified.
    */
-  beforeDocUpdate?: (map: Record<string, T>, oldDoc: T | undefined, newDoc: T) => T;
+  beforeDocUpdate?: (map: DocumentMap<T>, oldDoc: T | undefined, newDoc: T) => T;
 };
 
 /**
@@ -133,10 +136,10 @@ export type DocumentMapStoreSubscriber<T extends BaseDocument> = {
  * - `getMap()`: returns the current `documentMap`
  */
 export default abstract class DocumentMapStoreService<T extends BaseDocument> {
-  protected documentMap: Record<string, T> = {};
+  protected documentMap: DocumentMap<T> = {};
   protected store: DocumentMapStore<T> = this.createMapStore();
-  protected childStores: Record<string, DocumentChildStore<T>> = {};
-  protected previousState: Record<string, T> = {};
+  protected childStores: Record<string, DocumentChildStore<T> | undefined> = {};
+  protected previousState: DocumentMap<T> = {};
   /**
    * This should be refactored to be more specific once things are in a working
    * state. That way the forEach loop can be removed.
@@ -158,50 +161,56 @@ export default abstract class DocumentMapStoreService<T extends BaseDocument> {
    *
    * The implementation should persist the `documentMap` property.
    */
-  protected abstract persistToLocalData(): Record<string, T>;
+  protected abstract persistToLocalData(): DocumentMap<T>;
 
   /**
    * Gets the map from local storage.
    */
-  protected abstract getFromLocalData(): Record<string, T> | null;
+  protected abstract getFromLocalData(): DocumentMap<T> | null;
 
   protected abstract persistToDb(updateInfo: DocumentInsertOrUpdateInfo<T>): void;
 
-  protected getDocStore(docId: string) {
-    if (!this.childStores[docId]) {
-      this.childStores[docId] = this.createDocStore(docId);
+  /**
+   * Gets the store for the specified document ID. If the store does not exist,
+   * it will be created.
+   */
+  protected getDocStore(docId: string): DocumentChildStore<T> {
+    let childStore = this.childStores[docId];
+    if (!childStore) {
+      childStore = this.createDocStore(docId);
+      this.childStores[docId] = childStore;
     }
-    return this.childStores[docId];
+    return childStore;
   }
 
   private createDocStore(docId: string): DocumentChildStore<T> {
-    if (!this.documentMap[docId]) {
+    const document = this.documentMap[docId];
+    if (!document) {
       throw new Error(`Cannot create doc store for doc that does not exist. Doc ID: ${docId}`);
     }
-    const { subscribe, set } = writable<T>(this.documentMap[docId]);
+    const { subscribe, set } = writable<T>(document);
 
-    const updateDoc = (updater: Updater<T>) => {
-      let newDoc = updater(this.documentMap[docId]);
+    const updateDoc = (updater: Updater<T>): void => {
+      let newDoc = updater(document);
       // Check if this update needs to update other docs as well
-      const updateManyArray = this.subscribers.reduce(
-        (updateManyArray, subscriber) => {
-          if (subscriber.validateDocUpdate) {
-            const result = subscriber.validateDocUpdate(
-              this.documentMap,
-              this.previousState[docId],
-              newDoc
-            );
-            if (result) {
-              updateManyArray.push(result);
-            }
-          }
-          return updateManyArray;
-        },
-        [] as {
+      const updateManyArray = this.subscribers.reduce<
+        {
           filter: (currentDoc: T) => boolean;
           updater: Updater<T>;
         }[]
-      );
+      >((updateManyArray, subscriber) => {
+        if (subscriber.validateDocUpdate) {
+          const result = subscriber.validateDocUpdate(
+            this.documentMap,
+            this.previousState[docId],
+            newDoc
+          );
+          if (result) {
+            updateManyArray.push(result);
+          }
+        }
+        return updateManyArray;
+      }, []);
       if (updateManyArray.length > 0) {
         this.store.updateMany(
           (currentDoc) => updateManyArray.some((updateMany) => updateMany.filter(currentDoc)),
@@ -244,7 +253,7 @@ export default abstract class DocumentMapStoreService<T extends BaseDocument> {
   }
 
   private createMapStore(): DocumentMapStore<T> {
-    const { subscribe, set } = writable<Record<string, T>>(this.documentMap);
+    const { subscribe, set } = writable<DocumentMap<T>>(this.documentMap);
 
     localDataReady.subscribe((ready) => {
       const localDataMap = this.getFromLocalData();
@@ -262,31 +271,32 @@ export default abstract class DocumentMapStoreService<T extends BaseDocument> {
     const updateManyWithoutPersist = (
       filter: (currentChild: T) => boolean,
       updater: Updater<T>
-    ) => {
-      const docsToUpdate = Object.values(this.documentMap).filter(filter);
+    ): T[] => {
+      const docsToUpdate = Object.values(this.documentMap).filter(
+        (doc) => doc && filter(doc)
+      ) as T[];
       return docsToUpdate.map((doc) => {
         const docId = doc._id.toString();
-        this.documentMap[docId] = updater(doc);
+        const updatedDoc = updater(doc);
+        this.documentMap[docId] = updatedDoc;
         // Run subscribers
         this.subscribers.forEach((subscriber) => {
           if (subscriber.beforeDocUpdate) {
-            subscriber.beforeDocUpdate(
-              this.documentMap,
-              this.previousState[docId],
-              this.documentMap[docId]
-            );
+            subscriber.beforeDocUpdate(this.documentMap, this.previousState[docId], updatedDoc);
           }
         });
         const childStore = this.childStores[docId];
         if (childStore) {
           // Set the child store without propogating the change to the parent
-          childStore.setWithoutPropogation(this.documentMap[docId]);
+          childStore.setWithoutPropogation(updatedDoc);
         }
-        return this.documentMap[docId];
+        // Return the updated doc, which is in the same memory location as the
+        // original doc in the map
+        return updatedDoc;
       });
     };
 
-    const addManyWithoutPersist = (docsToAdd: T[]) => {
+    const addManyWithoutPersist = (docsToAdd: T[]): T[] => {
       return docsToAdd.map((doc) => {
         const newDoc = this.subscribers.reduce((updateDoc, subscriber) => {
           if (subscriber.beforeDocAddition) {
@@ -299,8 +309,16 @@ export default abstract class DocumentMapStoreService<T extends BaseDocument> {
       });
     };
 
-    const deleteManyDocs = (docIds: string[]) => {
-      const docsToDelete = docIds.map((id) => this.documentMap[id]);
+    const deleteManyDocs = (docIds: string[]): void => {
+      const docsToDelete: T[] = [];
+      docIds.forEach((id) => {
+        const doc = this.documentMap[id];
+        if (!doc) {
+          console.error(`Document with ID ${id} does not exist in the map.`);
+          return;
+        }
+        docsToDelete.push(doc);
+      });
       // Validate deletion to find more to delete
       const docIdsToDelete = this.subscribers.reduce((newDocIdsToDelete, subscriber) => {
         if (subscriber.validateDocDeletion) {
@@ -315,10 +333,15 @@ export default abstract class DocumentMapStoreService<T extends BaseDocument> {
       // Run before deletion hooks
       const allDocsToDelete: T[] = [];
       docIdsToDelete.forEach((id) => {
-        allDocsToDelete.push(this.documentMap[id]);
+        const doc = this.documentMap[id];
+        if (!doc) {
+          console.error(`Document with ID ${id} does not exist in the map.`);
+          return;
+        }
+        allDocsToDelete.push(doc);
         this.subscribers.forEach((subscriber) => {
           if (subscriber.beforeDocDeletion) {
-            subscriber.beforeDocDeletion(this.documentMap, this.documentMap[id]);
+            subscriber.beforeDocDeletion(this.documentMap, doc);
           }
         });
       });
@@ -348,10 +371,11 @@ export default abstract class DocumentMapStoreService<T extends BaseDocument> {
       set: (newMap) => {
         this.documentMap = newMap;
         Object.entries(this.childStores).forEach(([docId, store]) => {
-          if (!this.documentMap[docId]) {
+          const doc = this.documentMap[docId];
+          if (!doc) {
             delete this.childStores[docId];
-          } else {
-            store.setWithoutPropogation(this.documentMap[docId]);
+          } else if (store) {
+            store.setWithoutPropogation(doc);
           }
         });
         setMap();
@@ -363,9 +387,14 @@ export default abstract class DocumentMapStoreService<T extends BaseDocument> {
       },
       persistChild: (childId: string) => {
         this.previousState = this.persistToLocalData();
-        this.persistToDb({
-          update: [this.documentMap[childId]]
-        });
+        const doc = this.documentMap[childId];
+        if (!doc) {
+          console.error(`Document with ID ${childId} does not exist in the map.`);
+        } else {
+          this.persistToDb({
+            update: [doc]
+          });
+        }
       },
       updateMany: (filter: (currentChild: T) => boolean, updater: Updater<T>) => {
         const docsToUpdate = updateManyWithoutPersist(filter, updater);

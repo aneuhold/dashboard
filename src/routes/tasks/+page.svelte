@@ -21,6 +21,7 @@
 
   $: sortAndFilterResult = TaskListService.getTaskIds($taskMap, $userSettings, 'default');
   $: taskId = $page.url.searchParams.get('taskId');
+  $: task = taskId && $taskMap[taskId] ? $taskMap[taskId] : undefined;
 
   function addTask() {
     const newTask = new DashboardTask($userSettings.config.userId);
@@ -30,7 +31,7 @@
 </script>
 
 <svelte:head>
-  <title>{taskId && $taskMap[taskId] ? $taskMap[taskId].title : tasksPageInfo.shortTitle}</title>
+  <title>{task ? task.title : tasksPageInfo.shortTitle}</title>
   <meta name="description" content={tasksPageInfo.description} />
 </svelte:head>
 

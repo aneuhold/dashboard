@@ -21,10 +21,6 @@ Notes for improvement:
   - The result of thinking about this was that there wasn't really a way to do it without making the UI more complicated or ending up in a situation where the user would need to reorder tags on tasks for it to show up correctly.
   - The potential thought was making the order of tags matter to increasingly indent out sections or change the header map result
 
-### Known Issues
-
-- Safari on Mac or iOS currently shows a 500 when the page first loads. This seems to be an [issue in Webkit](https://github.com/sveltejs/kit/issues/7805). More specifically, webkit doesn't seem to be handling top-level awaits correctly. Top level awaits are only used in `bson` and a way couldn't quite be found to address that problem.
-
 ## Architecture
 
 ### Usage of Yarn 4.x

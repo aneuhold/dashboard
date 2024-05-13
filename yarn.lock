@@ -43,6 +43,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@aneuhold/core-ts-db-lib@npm:^1.0.60":
+  version: 1.0.60
+  resolution: "@aneuhold/core-ts-db-lib@npm:1.0.60"
+  dependencies:
+    "@aneuhold/core-ts-lib": "npm:^1.1.10"
+    bson: "npm:^6.2.0"
+  checksum: 10c0/1dbc8fdcd784eb626fe1ca7138d95f58ea9ed0ce99823e3734e5ae35c08ab6a033c3e0499fc076a46cde41e83cfc02cf6b293a9791c76f88a9d590750562c53d
+  languageName: node
+  linkType: hard
+
 "@aneuhold/core-ts-lib@npm:^1.1.10, @aneuhold/core-ts-lib@npm:^1.1.11":
   version: 1.1.11
   resolution: "@aneuhold/core-ts-lib@npm:1.1.11"
@@ -2754,7 +2764,7 @@ __metadata:
   resolution: "dashboard@workspace:."
   dependencies:
     "@aneuhold/core-ts-api-lib": "npm:^1.0.51"
-    "@aneuhold/core-ts-db-lib": "npm:^1.0.58"
+    "@aneuhold/core-ts-db-lib": "npm:^1.0.60"
     "@aneuhold/core-ts-lib": "npm:^1.1.11"
     "@eslint/js": "npm:^9.2.0"
     "@fontsource/fira-mono": "npm:^5.0.13"

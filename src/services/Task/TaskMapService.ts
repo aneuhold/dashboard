@@ -3,7 +3,8 @@ import DashboardTaskAPIService from '$util/api/DashboardTaskAPIService';
 import {
   DashboardTaskService,
   DocumentService,
-  type DashboardTask
+  type DashboardTask,
+  type DocumentMap
 } from '@aneuhold/core-ts-db-lib';
 import { DateService } from '@aneuhold/core-ts-lib';
 import { ObjectId } from 'bson';
@@ -38,7 +39,7 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
     return this.instance.getDocStore(taskId);
   }
 
-  static getMap(): Record<string, DashboardTask> {
+  static getMap(): DocumentMap<DashboardTask> {
     return this.instance.documentMap;
   }
 
@@ -58,8 +59,9 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
       },
       validateDocDeletion(map, docToDelete) {
         const docIdsToDelete: string[] = [docToDelete._id.toString()];
+        const allTasks = Object.values(map).filter((task) => task !== undefined) as DashboardTask[];
         docIdsToDelete.push(
-          ...DashboardTaskService.getChildrenIds(Object.values(map), [docToDelete._id]).map((id) =>
+          ...DashboardTaskService.getChildrenIds(allTasks, [docToDelete._id]).map((id) =>
             id.toString()
           )
         );
@@ -74,10 +76,10 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
     this.subscribers.push(TaskSharingService.getSubscribersForTaskMap());
   }
 
-  protected persistToLocalData(): Record<string, DashboardTask> {
+  protected persistToLocalData(): DocumentMap<DashboardTask> {
     return LocalData.setAndGetTaskMap(this.documentMap);
   }
-  protected getFromLocalData(): Record<string, DashboardTask> | null {
+  protected getFromLocalData(): DocumentMap<DashboardTask> | null {
     return LocalData.taskMap;
   }
   protected persistToDb(updateInfo: DocumentInsertOrUpdateInfo<DashboardTask>): void {
@@ -91,14 +93,21 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
   ): UpsertManyInfo<DashboardTask> {
     const map = this.instance.documentMap;
     const parentTask = map[taskId];
-    const allRelatedTaskIds = DashboardTaskService.getChildrenIds(Object.values(map), [
+    if (!parentTask) {
+      throw new Error(`Task with ID ${taskId} not found while trying to duplicate.`);
+    }
+    const allRelatedTaskIds = DashboardTaskService.getChildrenIds(this.getAllTasks(map), [
       parentTask._id
     ]);
     allRelatedTaskIds.push(parentTask._id);
     const tasksToInsert: DashboardTask[] = [];
     const oldTaskIdToNewTaskId: { [oldId: string]: ObjectId } = {};
     allRelatedTaskIds.forEach((id) => {
-      let newTask = DocumentService.deepCopy(map[id.toString()]);
+      const doc = map[id.toString()];
+      if (!doc) {
+        throw new Error(`Task with ID ${id.toString()} not found while trying to duplicate.`);
+      }
+      let newTask = DocumentService.deepCopy(doc);
       newTask._id = new ObjectId();
       oldTaskIdToNewTaskId[id.toString()] = newTask._id;
       newTask = newTaskUpdater(newTask);
@@ -129,13 +138,20 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
     };
   }
 
+  /**
+   * Gets the update info for a task and all of its children based on the
+   * provided updater.
+   */
   static getUpdateTaskAndAllChildrenInfo(
     taskId: string,
     updater: Updater<DashboardTask>
   ): UpsertManyInfo<DashboardTask> {
     const map = this.instance.documentMap;
     const parentTask = map[taskId];
-    const allRelatedTaskIds = DashboardTaskService.getChildrenIds(Object.values(map), [
+    if (!parentTask) {
+      throw new Error(`Task with ID ${taskId} not found.`);
+    }
+    const allRelatedTaskIds = DashboardTaskService.getChildrenIds(TaskMapService.getAllTasks(map), [
       parentTask._id
     ]);
     allRelatedTaskIds.push(parentTask._id);
@@ -151,7 +167,7 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
    * Auto-deletes tasks that are older than the user's auto task deletion
    * settings.
    */
-  private static autoDeleteTasksPostSet(map: Record<string, DashboardTask>) {
+  private static autoDeleteTasksPostSet(map: DocumentMap<DashboardTask>) {
     // Check for any tasks that need to be auto-deleted.
     const userConfig = userSettings.get().config;
     if (userConfig.autoTaskDeletionDays < 5 || userConfig.autoTaskDeletionDays > 90) {
@@ -164,21 +180,28 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
     const dateThreshold = DateService.addDays(new Date(), -userConfig.autoTaskDeletionDays);
     // Only tasks that don't have a parent, aren't recurring,
     // are completed, and are older than the threshold
-    const taskIdsToDelete = Object.values(map)
-      .filter((task) => {
-        return (
-          task.userId.toString() === userConfig.userId.toString() &&
-          task.completed &&
-          !task.parentTaskId &&
-          !task.parentRecurringTaskInfo &&
-          !task.recurrenceInfo &&
-          task.lastUpdatedDate < dateThreshold
-        );
-      })
-      .map((task) => task._id.toString());
+    const tasksToDelete = Object.values(map).filter((task) => {
+      return (
+        task &&
+        task.userId.toString() === userConfig.userId.toString() &&
+        task.completed &&
+        !task.parentTaskId &&
+        !task.parentRecurringTaskInfo &&
+        !task.recurrenceInfo &&
+        task.lastUpdatedDate < dateThreshold
+      );
+    }) as DashboardTask[];
+    const taskIdsToDelete = tasksToDelete.map((task) => task._id.toString());
     if (taskIdsToDelete.length !== 0) {
       console.log(`Deleting ${taskIdsToDelete.length} tasks due to auto task deletion.`);
       this.getStore().deleteMany(taskIdsToDelete);
     }
+  }
+
+  /**
+   * Simply gets all the tasks in the provided task map excluding any undefined.
+   */
+  private static getAllTasks(map: DocumentMap<DashboardTask>) {
+    return Object.values(map).filter((task) => task !== undefined) as DashboardTask[];
   }
 }
