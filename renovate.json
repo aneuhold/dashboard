@@ -3,6 +3,7 @@
   "extends": ["config:recommended"],
   "timezone": "America/Los_Angeles",
   "prConcurrentLimit": 8,
+  "assigneesFromCodeOwners": true,
   "lockFileMaintenance": {
     "enabled": false
   },
