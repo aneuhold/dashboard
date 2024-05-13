@@ -1,6 +1,6 @@
 <script lang="ts" context="module">
   import PageTitle from '$components/PageTitle.svelte';
-  import { NonogramKatanaItemName } from '@aneuhold/core-ts-db-lib';
+  import { NonogramKatanaItem, NonogramKatanaItemName } from '@aneuhold/core-ts-db-lib';
   import Paper, { Content } from '@smui/paper';
   import { NonogramKatanaItemMapService } from '../../../../services/NonogramKatana/NonogramKatanaItemMapService';
   import NonogramKatanaItemRow from './NonogramKatanaItemRow.svelte';
@@ -14,8 +14,17 @@
   import { slide } from 'svelte/transition';
   import { userSettings } from '../../../../stores/userSettings';
 
-  let itemMap = NonogramKatanaItemMapService.getStore();
-  $: items = Object.values($itemMap).sort((a, b) => b.priority - a.priority);
+  const itemMap = NonogramKatanaItemMapService.getStore();
+  $: items = Object.values($itemMap)
+    .filter((item) => item !== undefined)
+    .sort((a, b) => {
+      if (!a) {
+        return 1;
+      } else if (!b) {
+        return -1;
+      }
+      return b.priority - a.priority;
+    }) as NonogramKatanaItem[];
   $: itemsMissing = items.length < Object.values(NonogramKatanaItemName).length;
 </script>
 

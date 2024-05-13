@@ -61,7 +61,8 @@ const defaultConfig = tseslint.config(
       // types not being recognized in TS files, and vice versa.
       '@typescript-eslint/no-unsafe-member-access': 'off',
       '@typescript-eslint/no-unsafe-call': 'off',
-      '@typescript-eslint/no-unsafe-return': 'off'
+      '@typescript-eslint/no-unsafe-return': 'off',
+      '@typescript-eslint/no-unsafe-assignment': 'off'
     }
   },
   {
@@ -87,10 +88,10 @@ const svelteConfig = tseslint.config({
       project: true
     }
   },
-  // ↓ rule types;  sveltejs/eslint-plugin-svelte #735
+  // Svelte Rules
   /** @type {import('eslint').Linter.RulesRecord} */
   rules: {
-    'svelte/valid-compile': ['warn']
+    // 'svelte/valid-compile': ['warn']
   }
 });
 

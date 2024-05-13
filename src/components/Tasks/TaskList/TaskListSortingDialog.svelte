@@ -17,13 +17,15 @@
 
   let currentSettings: DashboardTaskListSortSettings;
   let previousOpen = false;
-  $: currentSettings = JSON.parse(JSON.stringify(initialSettings));
+  $: currentSettings = JSON.parse(JSON.stringify(initialSettings)) as DashboardTaskListSortSettings;
   $: currentSortList = currentSettings.sortList;
   $: disabledSortSettings = getDisabledSortSettings(currentSettings);
 
   $: {
     if (open !== previousOpen) {
-      currentSettings = JSON.parse(JSON.stringify(initialSettings));
+      currentSettings = JSON.parse(
+        JSON.stringify(initialSettings)
+      ) as DashboardTaskListSortSettings;
       currentSortList = currentSettings.sortList;
       disabledSortSettings = getDisabledSortSettings(currentSettings);
     }
@@ -32,7 +34,7 @@
 
   const dispatch = createEventDispatcher<{
     updateSettings: DashboardTaskListSortSettings;
-    reset: void;
+    reset: unknown;
   }>();
 
   const handleDone = () => {
@@ -82,7 +84,7 @@
    */
   const handleIncrement = (event: CustomEvent<DashboardTaskSortBy>) => {
     const sortBy = event.detail;
-    let sortList = currentSettings.sortList;
+    const sortList = currentSettings.sortList;
     const settingIndex = sortList.findIndex((sortSetting) => sortSetting.sortBy === sortBy);
     if (settingIndex === -1 || settingIndex === 0) return;
     // Swap elements
@@ -90,7 +92,7 @@
   };
   const handleDecrement = (event: CustomEvent<DashboardTaskSortBy>) => {
     const sortBy = event.detail;
-    let sortList = currentSettings.sortList;
+    const sortList = currentSettings.sortList;
     const settingIndex = sortList.findIndex((sortSetting) => sortSetting.sortBy === sortBy);
     if (settingIndex === -1 || settingIndex === sortList.length - 1) return;
     // Swap elements

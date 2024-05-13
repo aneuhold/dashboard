@@ -28,7 +28,7 @@
   export let childTaskIds: string[];
 
   let recurringInfoOpen = false;
-  let taskMap = TaskMapService.getStore();
+  const taskMap = TaskMapService.getStore();
   let previousTaskId = taskId;
   let errorInfoDialogOpen = false;
   let errorInfoDialogTitle = '';
@@ -77,7 +77,9 @@
       // special objects, they are all simple JSON values.
       // The clone is helpful because it makes it so changes across tasks do
       // not reflect to each other.
-      const defaultRecurrenceInfoClone = JSON.parse(JSON.stringify(defaultRecurrenceInfo));
+      const defaultRecurrenceInfoClone = JSON.parse(
+        JSON.stringify(defaultRecurrenceInfo)
+      ) as RecurrenceInfo;
       $task.recurrenceInfo = defaultRecurrenceInfoClone;
       recurringInfoOpen = true;
     }

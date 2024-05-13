@@ -10,7 +10,7 @@
     value: number;
   };
 
-  let defaultChoices: Array<WeekDaySegment> = [
+  const defaultChoices: Array<WeekDaySegment> = [
     {
       name: 'Su',
       selected: false,
@@ -95,6 +95,7 @@
     {segment}
     selected={segment.selected}
     on:click={() => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       handleClick(segment);
     }}
   >

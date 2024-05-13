@@ -38,7 +38,7 @@ export default class TaskService {
         { name: 'Task not found', link: `link not needed` }
       ];
     breadCrumbs.push(...this.getTaskCategoryBreadCrumbs(taskId));
-    let currentTask = task;
+    let currentTask: DashboardTask | undefined = task;
     const parentTaskChain: BreadCrumbArray = [];
     while (currentTask) {
       parentTaskChain.unshift({

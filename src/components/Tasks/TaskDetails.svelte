@@ -31,12 +31,12 @@
 
   export let taskId: string;
 
-  let taskMap = TaskMapService.getStore();
+  const taskMap = TaskMapService.getStore();
   $: task = $taskMap[taskId] ? TaskMapService.getTaskStore(taskId) : undefined;
   $: allChildrenIds = $task
-    ? DashboardTaskService.getChildrenIds(Object.values($taskMap), [$task._id]).map((id) =>
-        id.toString()
-      )
+    ? DashboardTaskService.getChildrenIds(Object.values($taskMap) as DashboardTask[], [
+        $task._id
+      ]).map((id) => id.toString())
     : [];
   $: sortAndFilterResult = TaskListService.getTaskIdsForTask(
     $taskMap,
@@ -104,8 +104,9 @@
             <Button
               variant="outlined"
               class="danger-button"
-              on:click={() =>
-                TaskService.handleDeleteTaskClick(allChildrenIds.length, deleteTask, $task?.title)}
+              on:click={() => {
+                TaskService.handleDeleteTaskClick(allChildrenIds.length, deleteTask, $task?.title);
+              }}
             >
               <Icon class="material-icons">delete</Icon>
               Delete

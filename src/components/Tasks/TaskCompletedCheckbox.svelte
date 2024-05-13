@@ -2,6 +2,7 @@
   import Confetti from '$components/presentational/Confetti.svelte';
   import { snackbar } from '$components/singletons/SingletonSnackbar.svelte';
   import { confirmationDialog } from '$components/singletons/dialogs/SingletonConfirmationDialog.svelte';
+  import { RecurrenceEffect } from '@aneuhold/core-ts-db-lib';
   import Checkbox from '@smui/checkbox';
   import { TaskMapService } from '../../services/Task/TaskMapService';
   import { userSettings } from '../../stores/userSettings';
@@ -18,7 +19,7 @@
     !$task.parentRecurringTaskInfo &&
     !$task.completed &&
     $task.recurrenceInfo &&
-    $task.recurrenceInfo.recurrenceEffect === 'rollOnCompletion';
+    $task.recurrenceInfo.recurrenceEffect === RecurrenceEffect.rollOnCompletion;
 
   function handleCheckboxClick() {
     if (preventDefault) {

@@ -14,18 +14,22 @@
 
   let currentSettings: DashboardTaskListFilterSettings;
   let previousOpen = false;
-  $: currentSettings = JSON.parse(JSON.stringify(initialSettings));
+  $: currentSettings = JSON.parse(
+    JSON.stringify(initialSettings)
+  ) as DashboardTaskListFilterSettings;
 
   $: {
     if (open !== previousOpen) {
-      currentSettings = JSON.parse(JSON.stringify(initialSettings));
+      currentSettings = JSON.parse(
+        JSON.stringify(initialSettings)
+      ) as DashboardTaskListFilterSettings;
     }
     previousOpen = open;
   }
 
   const dispatch = createEventDispatcher<{
     updateSettings: DashboardTaskListFilterSettings;
-    reset: void;
+    reset: unknown;
   }>();
 
   const handleDone = () => {

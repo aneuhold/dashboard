@@ -91,7 +91,7 @@
           rInfo.setWithoutCheck(newRInfo);
         },
         onCancel: () => {
-          rInfo.setWithoutCheck(JSON.parse(previousRInfoString));
+          rInfo.setWithoutCheck(JSON.parse(previousRInfoString) as RecurrenceInfo);
         }
       });
       return true;
@@ -124,7 +124,7 @@
 
   const clearOtherTypes = (newRInfo: RecurrenceInfo) => {
     Object.keys(newRInfo.frequency).forEach((key) => {
-      if (key !== newRInfo.frequency.type && key !== 'type') {
+      if (key !== newRInfo.frequency.type.toString() && key !== 'type') {
         // Little hacky, but does the job
         (newRInfo.frequency as { [key: string]: unknown })[key] = undefined;
       }
@@ -132,7 +132,7 @@
   };
 </script>
 
-<div class={`${disabled ? ' dimmed-color' : ''}`}>
+<div class={disabled ? ' dimmed-color' : ''}>
   <div class="content">
     <div class="flexRowWrap">
       <b>Frequency</b>

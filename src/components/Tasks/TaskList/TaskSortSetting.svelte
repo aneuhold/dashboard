@@ -21,7 +21,7 @@
     iconName: string;
   };
 
-  let sortDirectionChoices: SortDirectionChoice[] = [
+  const sortDirectionChoices: SortDirectionChoice[] = [
     {
       value: DashboardTaskSortDirection.descending,
       iconName: 'arrow_downward'
@@ -117,6 +117,7 @@
                 {segment}
                 title={segment.value}
                 on:click$preventDefault={() => {
+                  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                   sortSetting.sortDirection = segment.value;
                 }}
               >

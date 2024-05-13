@@ -15,12 +15,23 @@
   import { slide } from 'svelte/transition';
   import { userSettings } from '../../../../stores/userSettings';
 
-  const sortFunction: (a: NonogramKatanaUpgrade, b: NonogramKatanaUpgrade) => number = (a, b) =>
-    b.priority - a.priority;
+  const sortFunction: (
+    a: NonogramKatanaUpgrade | undefined,
+    b: NonogramKatanaUpgrade | undefined
+  ) => number = (a, b) => {
+    if (!a) {
+      return 1;
+    } else if (!b) {
+      return -1;
+    }
+    return b.priority - a.priority;
+  };
 
-  let upgradeMap = NonogramKatanaUpgradeMapService.getStore();
+  const upgradeMap = NonogramKatanaUpgradeMapService.getStore();
   let showAll = false;
-  $: allUpgrades = Object.values($upgradeMap).sort(sortFunction);
+  $: allUpgrades = Object.values($upgradeMap)
+    .filter((upgrade) => upgrade !== undefined)
+    .sort(sortFunction) as NonogramKatanaUpgrade[];
   $: workableUpgrades = Object.values(
     NonogramKatanaUpgradeMapService.getWorkableUpgrades($upgradeMap)
   ).sort(sortFunction);

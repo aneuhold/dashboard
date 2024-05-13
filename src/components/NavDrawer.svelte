@@ -50,7 +50,12 @@
           {#if pageInfo.title === settingsPageInfo.title}
             <Separator />
           {/if}
-          <Item on:click={() => setRoute(pageInfo.url)} activated={activeRoute === pageInfo.url}>
+          <Item
+            on:click={() => {
+              setRoute(pageInfo.url);
+            }}
+            activated={activeRoute === pageInfo.url}
+          >
             {#if pageInfo.nestingLevel > 0}
               <span class="nesting-text">{getNestingText(pageInfo)}</span>
             {/if}

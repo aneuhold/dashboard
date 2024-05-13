@@ -33,15 +33,15 @@
    */
   let completeAnimationShouldShow = false;
   let previousTaskCompletedState: boolean;
-  let hasMounted = false;
-  let taskMap = TaskMapService.getStore();
+  const taskMap = TaskMapService.getStore();
 
   $: task = TaskMapService.getTaskStore(taskId);
-  $: allChildrenIds = $task
-    ? DashboardTaskService.getChildrenIds(Object.values($taskMap), [$task._id])
-    : [];
+  $: allChildrenIds = DashboardTaskService.getChildrenIds(
+    Object.values($taskMap).filter((task) => task !== undefined) as DashboardTask[],
+    [$task._id]
+  );
   $: hasExtraTaskInfo = allChildrenIds.length > 0;
-  $: finalSharedParentId = $task ? TaskService.findParentIdWithSameSharedWith($task) : '';
+  $: finalSharedParentId = TaskService.findParentIdWithSameSharedWith($task);
   $: menuItems = getMenuItems($task);
   $: currentStrikeClass =
     completeAnimationShouldShow && $task.completed
@@ -57,7 +57,7 @@
       : $task.description
     : '';
 
-  $: if ($task.completed !== previousTaskCompletedState && hasMounted) {
+  $: if ($task.completed !== previousTaskCompletedState) {
     completeAnimationShouldShow = true;
   }
 
@@ -66,12 +66,14 @@
   }
 
   function handleDuplicateClick() {
+    const currentTask = $task;
     taskMap.upsertMany(
       TaskMapService.getDuplicateTaskUpdateInfo(taskId, (task) => {
         // Conditional to find the original task that is being duplicated
         if (
           !task.parentTaskId ||
-          ($task.parentTaskId && task.parentTaskId.toString() === $task.parentTaskId.toString())
+          (currentTask.parentTaskId &&
+            task.parentTaskId.toString() === currentTask.parentTaskId.toString())
         ) {
           task.title = `${task.title} (Copy)`;
         }
@@ -96,7 +98,7 @@
   }
 
   function getMenuItems(task: DashboardTask) {
-    let menuItems: MenuButtonItem[] = [
+    const menuItems: MenuButtonItem[] = [
       {
         title: 'Edit',
         iconName: 'edit',
@@ -168,7 +170,7 @@
               {#if $task.recurrenceInfo}
                 <Icon class="material-icons dimmed-color small-icon">autorenew</Icon>
               {/if}
-              {#if $task.tags[$currentUserId]?.length > 0}
+              {#if $task.tags[$currentUserId].length > 0}
                 <div class="tagsContainer">
                   <Icon class="material-icons dimmed-color small-icon">sell</Icon>
                   {#each $task.tags[$currentUserId] as tag, index}

@@ -26,26 +26,32 @@
   $: iconComponent = archComponent.icon;
   $: dependencyNames = archComponent.dependencies?.map((component) => component.title);
 
-  let menuItems: MenuButtonItem[] = [];
+  const menuItems: MenuButtonItem[] = [];
   $: if (archComponent.configurationUrl) {
     menuItems.push({
       title: 'Configure',
       iconName: 'build',
-      clickAction: () => openUrl(archComponent.configurationUrl)
+      clickAction: () => {
+        openUrl(archComponent.configurationUrl);
+      }
     });
   }
   $: if (archComponent.docsUrl) {
     menuItems.push({
       title: 'Docs',
       iconName: 'article',
-      clickAction: () => openUrl(archComponent.docsUrl)
+      clickAction: () => {
+        openUrl(archComponent.docsUrl);
+      }
     });
   }
   $: if (archComponent.latestExampleProjectUrl) {
     menuItems.push({
       title: 'Latest Example Project or Code',
       iconName: 'code',
-      clickAction: () => openUrl(archComponent.latestExampleProjectUrl)
+      clickAction: () => {
+        openUrl(archComponent.latestExampleProjectUrl);
+      }
     });
   }
 
