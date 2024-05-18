@@ -17,7 +17,7 @@
     "@aneuhold/core-ts-api-lib": "^1.0.51",
     "@aneuhold/core-ts-db-lib": "^1.0.60",
     "@aneuhold/core-ts-lib": "^1.1.11",
-    "@eslint/js": "^9.2.0",
+    "@eslint/js": "^9.3.0",
     "@fontsource/fira-mono": "^5.0.13",
     "@neoconfetti/svelte": "^2.2.1",
     "@smui-extra/accordion": "^7.0.0",
