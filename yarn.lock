@@ -1838,9 +1838,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sveltejs/kit@npm:^2.5.8":
-  version: 2.5.8
-  resolution: "@sveltejs/kit@npm:2.5.8"
+"@sveltejs/kit@npm:^2.5.9":
+  version: 2.5.9
+  resolution: "@sveltejs/kit@npm:2.5.9"
   dependencies:
     "@types/cookie": "npm:^0.6.0"
     cookie: "npm:^0.6.0"
@@ -1860,7 +1860,7 @@ __metadata:
     vite: ^5.0.3
   bin:
     svelte-kit: svelte-kit.js
-  checksum: 10c0/515f24a68c542f3965046271ab5cbf36d69dc6d80f013aab17a0e68e72b938ff3c6a0c0a8389f96e4431df60f3f9dc2a49480d5f17a5b22a5e1c9d2203ae9fbe
+  checksum: 10c0/c23540b8922a6efa6e61aaf74b7863d289bd49c144f9a702ba04bd73bc5bc1e4d0bbad659e2478aca5423a434b05c32bc8c167b8f0c1f3776188467cb441c2b2
   languageName: node
   linkType: hard
 
@@ -3036,7 +3036,7 @@ __metadata:
     "@smui/tooltip": "npm:^7.0.0"
     "@smui/top-app-bar": "npm:^7.0.0"
     "@sveltejs/adapter-static": "npm:^3.0.1"
-    "@sveltejs/kit": "npm:^2.5.8"
+    "@sveltejs/kit": "npm:^2.5.9"
     "@sveltejs/vite-plugin-svelte": "npm:^3.1.0"
     "@types/cookie": "npm:^0.6.0"
     "@types/node": "npm:^20.12.11"
@@ -3046,10 +3046,10 @@ __metadata:
     eslint: "npm:^9.3.0"
     prettier: "npm:^3.2.5"
     smui-theme: "npm:^7.0.0"
-    svelte: "npm:^4.2.16"
+    svelte: "npm:^4.2.17"
     svelte-check: "npm:^3.7.1"
     svelte-confetti-explosion: "npm:^0.4.0"
-    svelty-picker: "npm:^5.2.7"
+    svelty-picker: "npm:^5.2.9"
     tslib: "npm:^2.6.2"
     typescript: "npm:^5.4.5"
     vite: "npm:^5.2.11"
@@ -6789,9 +6789,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"svelte@npm:^4.2.16":
-  version: 4.2.16
-  resolution: "svelte@npm:4.2.16"
+"svelte@npm:^4.2.17":
+  version: 4.2.17
+  resolution: "svelte@npm:4.2.17"
   dependencies:
     "@ampproject/remapping": "npm:^2.2.1"
     "@jridgewell/sourcemap-codec": "npm:^1.4.15"
@@ -6807,18 +6807,18 @@ __metadata:
     locate-character: "npm:^3.0.0"
     magic-string: "npm:^0.30.4"
     periscopic: "npm:^3.1.0"
-  checksum: 10c0/c863b9bbec673451a9eae5200fd6bf3391bf64a7c76722464d7d5c0ee726a6a16e315bcfa4d5697d1d563deae2dde985898382c0b5e202780994dfbd2d24705f
+  checksum: 10c0/cebf70a608fc5d7a00d230c80f0ec1a9168eb6a4838f74d2e5fd9dd607107b6200732f5c7918ac1850044fcec907f43f9bf7751f485cdabe183e9cffd6e48c83
   languageName: node
   linkType: hard
 
-"svelty-picker@npm:^5.2.7":
-  version: 5.2.7
-  resolution: "svelty-picker@npm:5.2.7"
+"svelty-picker@npm:^5.2.9":
+  version: 5.2.9
+  resolution: "svelty-picker@npm:5.2.9"
   dependencies:
     "@floating-ui/dom": "npm:^1.4"
   peerDependencies:
     svelte: ^3.53.0 || ^4.0.0 || ^5.0.0
-  checksum: 10c0/cf125af901b5980b9281c6bd18cbb1b0ad5cbe03ebfddc381b4bb862ec51170e86183e84cd6b0bfebfa66372f344239a62679acc3653c2a898c17f2aaa0a6efe
+  checksum: 10c0/f459c6699c22bf35e06307b45ae7e5d0e31cc34c10f4830138643f0088093f91d954d3970c6b8044040f31a0d981903c28b140cd1fd6ef7c9cfd90895508c76e
   languageName: node
   linkType: hard
 
