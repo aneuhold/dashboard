@@ -15,9 +15,9 @@
   "type": "module",
   "devDependencies": {
     "@aneuhold/core-ts-api-lib": "^1.0.51",
-    "@aneuhold/core-ts-db-lib": "^1.0.60",
-    "@aneuhold/core-ts-lib": "^1.1.11",
-    "@aneuhold/eslint-config": "^1.0.3",
+    "@aneuhold/core-ts-db-lib": "^1.0.61",
+    "@aneuhold/core-ts-lib": "^1.1.15",
+    "@aneuhold/eslint-config": "^1.0.6",
     "@fontsource/fira-mono": "^5.0.13",
     "@neoconfetti/svelte": "^2.2.1",
     "@smui-extra/accordion": "^7.0.0",

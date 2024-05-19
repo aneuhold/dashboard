@@ -42,6 +42,7 @@
   );
   $: hasExtraTaskInfo = allChildrenIds.length > 0;
   $: finalSharedParentId = TaskService.findParentIdWithSameSharedWith($task);
+  $: usersTaskTags = $task.tags[$currentUserId];
   $: menuItems = getMenuItems($task);
   $: currentStrikeClass =
     completeAnimationShouldShow && $task.completed
@@ -170,12 +171,12 @@
               {#if $task.recurrenceInfo}
                 <Icon class="material-icons dimmed-color small-icon">autorenew</Icon>
               {/if}
-              {#if $task.tags[$currentUserId].length > 0}
+              {#if usersTaskTags && usersTaskTags.length > 0}
                 <div class="tagsContainer">
                   <Icon class="material-icons dimmed-color small-icon">sell</Icon>
-                  {#each $task.tags[$currentUserId] as tag, index}
+                  {#each usersTaskTags as tag, index}
                     <i class="mdc-typography--caption mdc-theme--text-hint-on-background no-before">
-                      {`${tag}${index === $task.tags[$currentUserId].length - 1 ? '' : ', '}`}
+                      {`${tag}${index === usersTaskTags.length - 1 ? '' : ', '}`}
                     </i>
                   {/each}
                 </div>
