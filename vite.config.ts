@@ -1,3 +1,4 @@
+import { sentrySvelteKit } from '@sentry/sveltekit';
 import { sveltekit } from '@sveltejs/kit/vite';
 import type { UserConfig } from 'vite';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
@@ -5,6 +6,13 @@ import { defineConfig, mergeConfig } from 'vitest/config';
 
 const viteConfig: UserConfig = {
   plugins: [
+    // Make sure `sentrySvelteKit` is registered before `sveltekit`
+    sentrySvelteKit({
+      sourceMapsUploadOptions: {
+        org: 'anton-neuhold',
+        project: 'dashboard'
+      }
+    }),
     sveltekit(),
     // Added so that certain node packages work in the browser. The below
     // 3 are needed specifically for crypto it seems.

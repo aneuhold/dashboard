@@ -10,6 +10,7 @@ import MongoDbIcon from '$lib/svgs/MongoDBIcon.svelte';
 import NpmIcon from '$lib/svgs/NPMIcon.svelte';
 import NetlifyIcon from '$lib/svgs/NetlifyIcon.svelte';
 import NodeJsIcon from '$lib/svgs/NodeJSIcon.svelte';
+import SentryIcon from '$lib/svgs/SentryIcon.svelte';
 import SvelteIcon from '$lib/svgs/SvelteIcon.svelte';
 import TypeScriptIcon from '$lib/svgs/TypeScriptIcon.svelte';
 import VitestIcon from '$lib/svgs/VitestIcon.svelte';
@@ -325,6 +326,13 @@ export const devOpsComponents = {
     docsUrl: 'https://docs.github.com/en/actions',
     latestExampleProjectUrl: 'https://github.com/aneuhold/portfolio/tree/main/.github/workflows',
     icon: GitHubIcon
+  },
+  sentry: {
+    title: 'Sentry',
+    type: ArchitectureComponentType.tool,
+    categories: [devOpsCategories.monitoring],
+    docsUrl: 'https://docs.sentry.io/platforms/javascript/',
+    icon: SentryIcon
   },
   googleDomains: {
     title: 'Google Domains',

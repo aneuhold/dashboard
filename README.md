@@ -77,6 +77,7 @@ Some nice pages to have up at the same time:
 - [Svelte Material UI](https://sveltematerialui.com/demo/accordion/)
 - [Material Symbols and Icons](https://fonts.google.com/icons?selected=Material+Symbols+Outlined:fitness_center:FILL@0;wght@400;GRAD@0;opsz@24&icon.query=workout)
 - [Svelty-Picker](https://mskocik.github.io/svelty-picker) if working with that
+- [Simple Icons](https://simpleicons.org/) if some brand icons are needed
 
 ### Adding new Material UI Components
 
