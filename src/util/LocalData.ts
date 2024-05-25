@@ -171,15 +171,15 @@ export default class LocalData {
   }
 
   static setAndGetNonogramKatanaItemMap(
-    newItemMap: Record<string, NonogramKatanaItem>
-  ): Record<string, NonogramKatanaItem> {
+    newItemMap: DocumentMap<NonogramKatanaItem>
+  ): DocumentMap<NonogramKatanaItem> {
     const stringifiedItemMap = EJSON.stringify(newItemMap, { relaxed: false });
     this.storeValue(LocalData.storedKeyNames.nonogramKatanaItemMap, stringifiedItemMap);
-    return EJSON.parse(stringifiedItemMap) as Record<string, NonogramKatanaItem>;
+    return EJSON.parse(stringifiedItemMap) as DocumentMap<NonogramKatanaItem>;
   }
 
-  static get nonogramKatanaItemMap(): Record<string, NonogramKatanaItem> | null {
-    return this.getStoredObject<Record<string, NonogramKatanaItem>>(
+  static get nonogramKatanaItemMap(): DocumentMap<NonogramKatanaItem> | null {
+    return this.getStoredObject<DocumentMap<NonogramKatanaItem>>(
       LocalData.storedKeyNames.nonogramKatanaItemMap
     );
   }

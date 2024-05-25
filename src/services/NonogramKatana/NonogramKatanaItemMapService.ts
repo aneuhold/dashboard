@@ -1,6 +1,10 @@
 import LocalData from '$util/LocalData';
 import DashboardAPIService from '$util/api/DashboardAPIService';
-import { NonogramKatanaItem, NonogramKatanaItemName } from '@aneuhold/core-ts-db-lib';
+import {
+  NonogramKatanaItem,
+  NonogramKatanaItemName,
+  type DocumentMap
+} from '@aneuhold/core-ts-db-lib';
 import type { ObjectId } from 'bson';
 import { nonogramKatanaItemsDisplayInfo } from '../../routes/entertainment/nonogramkatana/items/nonogramKatanaItemsDisplayInfo';
 import type {
@@ -27,7 +31,12 @@ export class NonogramKatanaItemMapService extends DocumentMapStoreService<Nonogr
 
   static getItemStore(itemId: string): DocumentStore<NonogramKatanaItem> {
     const itemStore = this.instance.getDocStore(itemId);
-    this.nameToIdMap[this.getMap()[itemId].itemName] = itemId;
+    const itemDoc = this.getMap()[itemId];
+    if (!itemDoc) {
+      console.error(`No item found for ${itemId}. Something went wrong, this shouldn't happen.`);
+      return itemStore;
+    }
+    this.nameToIdMap[itemDoc.itemName] = itemId;
     return itemStore;
   }
 
@@ -38,7 +47,7 @@ export class NonogramKatanaItemMapService extends DocumentMapStoreService<Nonogr
     return this.getItemStore(this.nameToIdMap[itemName]);
   }
 
-  static getMap(): Record<string, NonogramKatanaItem> {
+  static getMap(): DocumentMap<NonogramKatanaItem> {
     return this.instance.documentMap;
   }
 
@@ -49,7 +58,10 @@ export class NonogramKatanaItemMapService extends DocumentMapStoreService<Nonogr
    */
   static createOrUpdateItems(userId: ObjectId): void {
     const currentMap = this.getMap();
-    const existingItemNames = new Set(Object.values(currentMap).map((item) => item.itemName));
+    const existingItems = Object.values(currentMap).filter(
+      (item) => item !== undefined
+    ) as NonogramKatanaItem[];
+    const existingItemNames = new Set(existingItems.map((item) => item.itemName));
     const itemsToAdd: NonogramKatanaItem[] = [];
     const newItemIds: Set<string> = new Set();
     Object.values(NonogramKatanaItemName).forEach((itemName) => {
@@ -79,10 +91,10 @@ export class NonogramKatanaItemMapService extends DocumentMapStoreService<Nonogr
     });
   }
 
-  protected persistToLocalData(): Record<string, NonogramKatanaItem> {
+  protected persistToLocalData(): DocumentMap<NonogramKatanaItem> {
     return LocalData.setAndGetNonogramKatanaItemMap(this.documentMap);
   }
-  protected getFromLocalData(): Record<string, NonogramKatanaItem> | null {
+  protected getFromLocalData(): DocumentMap<NonogramKatanaItem> | null {
     return LocalData.nonogramKatanaItemMap;
   }
   protected persistToDb(updateInfo: DocumentInsertOrUpdateInfo<NonogramKatanaItem>): void {
@@ -95,9 +107,12 @@ export class NonogramKatanaItemMapService extends DocumentMapStoreService<Nonogr
     });
   }
 
-  private static createItemNameIdMap(map: Record<string, NonogramKatanaItem>) {
+  private static createItemNameIdMap(map: DocumentMap<NonogramKatanaItem>) {
     this.nameToIdMap = {};
     Object.values(map).forEach((item) => {
+      if (!item) {
+        return;
+      }
       this.nameToIdMap[item.itemName] = item._id.toString();
     });
   }

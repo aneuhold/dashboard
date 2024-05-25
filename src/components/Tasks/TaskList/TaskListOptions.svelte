@@ -42,8 +42,9 @@
   });
   $: tagsWithRemovedIds = removedTaskIds.reduce((tagSet, id) => {
     const task = $taskMap[id];
-    if (task && task.tags[$currentUserId]) {
-      task.tags[$currentUserId].forEach((tag) => tagSet.add(tag));
+    const currentUserTags = task?.tags[$currentUserId];
+    if (task && currentUserTags) {
+      currentUserTags.forEach((tag) => tagSet.add(tag));
     }
     return tagSet;
   }, new Set<string>());

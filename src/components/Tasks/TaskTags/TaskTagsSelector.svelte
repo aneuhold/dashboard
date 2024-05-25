@@ -24,8 +24,9 @@
 
   function addTagToTask(tag: string) {
     const newTagsObject = $task.tags;
-    if (!newTagsObject[$currentUserId]) newTagsObject[$currentUserId] = [];
-    newTagsObject[$currentUserId].push(tag);
+    const currentUserTagsArray = newTagsObject[$currentUserId] ?? [];
+    currentUserTagsArray.push(tag);
+    newTagsObject[$currentUserId] = currentUserTagsArray;
     $task.tags = newTagsObject;
   }
 
@@ -46,11 +47,13 @@
    * Handles removal. The actual event is an internal MDC Chip Removal event.
    */
   function handleRemoval(event: CustomEvent<{ chipId: string }>) {
-    $task.tags[$currentUserId] = $task.tags[$currentUserId].filter(
-      (tag) => tag !== event.detail.chipId
-    );
-    if ($task.tags[$currentUserId].length === 0) {
+    let currentUserTags = $task.tags[$currentUserId];
+    if (!currentUserTags) return;
+    currentUserTags = currentUserTags.filter((tag) => tag !== event.detail.chipId);
+    if (currentUserTags.length === 0) {
       delete $task.tags[$currentUserId];
+    } else {
+      $task.tags[$currentUserId] = currentUserTags;
     }
   }
 

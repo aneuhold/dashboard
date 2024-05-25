@@ -16,7 +16,7 @@ import { timeMinute } from '../../stores/timeMinute';
 import type { DocumentMapStoreSubscriber, UpsertManyInfo } from '../DocumentMapStoreService';
 import { TaskMapService } from './TaskMapService';
 
-type TaskRecurrenceSubMap = { [taskId: string]: Unsubscriber };
+type TaskRecurrenceSubMap = { [taskId: string]: Unsubscriber | undefined };
 
 /**
  * A service for handling logic related to recurrence on tasks.
@@ -109,7 +109,9 @@ export default class TaskRecurrenceService {
       // Check if any tasks need to recur after everything has been set
       afterMapSet: (newMap) => {
         Object.values(newMap).forEach((task) => {
-          TaskRecurrenceService.executeRecurrenceIfNeeded(task);
+          if (task) {
+            TaskRecurrenceService.executeRecurrenceIfNeeded(task);
+          }
         });
         TaskRecurrenceService.buildTaskRecurrenceSubMapFresh(newMap);
       },
@@ -231,12 +233,14 @@ export default class TaskRecurrenceService {
   static buildTaskRecurrenceSubMapFresh(taskMap: DashboardTaskMap): void {
     // Clear the current map
     Object.values(this.taskRecurrenceSubMap).forEach((unsub) => {
-      unsub();
+      if (unsub) unsub();
     });
     this.taskRecurrenceSubMap = {};
     // Build the new map
     Object.values(taskMap).forEach((task) => {
-      this.updateOrRemoveTaskTimeSubscription(task);
+      if (task) {
+        this.updateOrRemoveTaskTimeSubscription(task);
+      }
     });
   }
 
@@ -276,8 +280,9 @@ export default class TaskRecurrenceService {
   }
 
   static removeTaskTimeSubscription(taskId: string) {
-    if (this.taskRecurrenceSubMap[taskId]) {
-      this.taskRecurrenceSubMap[taskId]();
+    const unsub = this.taskRecurrenceSubMap[taskId];
+    if (unsub) {
+      unsub();
       delete this.taskRecurrenceSubMap[taskId];
     }
   }
