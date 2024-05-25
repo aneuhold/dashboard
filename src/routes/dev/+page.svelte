@@ -14,13 +14,25 @@
   import DigitalOceanIcon from '$lib/svgs/DigitalOceanIcon.svelte';
   import MongoDbIcon from '$lib/svgs/MongoDBIcon.svelte';
   import NetlifyIcon from '$lib/svgs/NetlifyIcon.svelte';
+  import SentryIcon from '$lib/svgs/SentryIcon.svelte';
   import navInfo from '$util/navInfo';
   import Paper, { Content as PaperContent, Title } from '@smui/paper';
   import { userSettings } from '../../stores/userSettings';
   import { devPageInfo } from './pageInfo';
 
+  console.error('Update link in dev page.svelte');
+
   const architectureLinks: Array<LinkInfo> = [
     navInfo.devArch,
+    {
+      title: 'Sentry',
+      description: 'Logging and error tracking',
+      clickAction: () => {
+        // TODO: Update this link!
+        window.open('https://www.netlify.com/', '_blank');
+      },
+      icon: SentryIcon
+    },
     {
       title: 'Netlify',
       description: 'Static site hosting',

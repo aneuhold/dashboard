@@ -47,6 +47,7 @@ const architectureContextInfo = {
     ],
     devOpsComponents: [
       { component: devOpsComponents.netlify },
+      { component: devOpsComponents.sentry },
       { component: devOpsComponents.githubActions },
       { component: devOpsComponents.googleDomains }
     ]
@@ -95,6 +96,7 @@ const architectureContextInfo = {
     ],
     devOpsComponents: [
       { component: devOpsComponents.netlify },
+      { component: devOpsComponents.sentry },
       { component: devOpsComponents.githubActions },
       { component: devOpsComponents.googleDomains }
     ]
