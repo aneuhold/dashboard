@@ -22,6 +22,14 @@ const viteConfig: UserConfig = {
   },
   css: {
     postcss: {}
+  },
+  build: {
+    target: 'esnext'
+  },
+  optimizeDeps: {
+    esbuildOptions: {
+      target: 'esnext'
+    }
   }
 };
 
