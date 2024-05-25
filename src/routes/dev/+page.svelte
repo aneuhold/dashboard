@@ -20,16 +20,13 @@
   import { userSettings } from '../../stores/userSettings';
   import { devPageInfo } from './pageInfo';
 
-  console.error('Update link in dev page.svelte');
-
   const architectureLinks: Array<LinkInfo> = [
     navInfo.devArch,
     {
       title: 'Sentry',
-      description: 'Logging and error tracking',
+      description: 'Logging and error tracking. Login with GitHub account.',
       clickAction: () => {
-        // TODO: Update this link!
-        window.open('https://www.netlify.com/', '_blank');
+        window.open('https://anton-neuhold.sentry.io/issues/?referrer=sidebar', '_blank');
       },
       icon: SentryIcon
     },
