@@ -15,7 +15,6 @@
   "type": "module",
   "devDependencies": {
     "@aneuhold/core-ts-api-lib": "^1.0.55",
-    "@aneuhold/core-ts-db-lib": "^1.0.67",
     "@aneuhold/core-ts-lib": "^1.1.16",
     "@aneuhold/eslint-config": "^1.0.7",
     "@fontsource/fira-mono": "^5.0.13",
@@ -71,6 +70,6 @@
     "bson@npm:^6.2.0": "patch:bson@npm%3A6.2.0#~/.yarn/patches/bson-npm-6.2.0-3d364484ee.patch"
   },
   "resolutionsComments": {
-    "bson@npm:^6.2.0": "Patched to fix a bug where bson would use top-level await for seemingly no reason. This breaks safari. Just the awaits were removed from bson.mjs."
+    "bson@npm:^6.2.0": "Patched to fix a bug where bson would use top-level await for seemingly no reason. This breaks safari. Just the awaits were removed from bson.mjs. See this GitHub PR: https://github.com/WebKit/WebKit/pull/24122"
   }
 }

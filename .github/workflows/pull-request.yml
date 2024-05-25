@@ -39,6 +39,9 @@ jobs:
       - name: Run Linting
         run: yarn lint
 
+      - name: Run Svelte check
+        run: yarn svelte-check
+
       - name: Build the site
         run: yarn build
 
