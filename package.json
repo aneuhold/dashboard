@@ -49,7 +49,7 @@
     "@types/node": "^20.12.12",
     "@typescript-eslint/eslint-plugin": "^7.10.0",
     "@typescript-eslint/parser": "^7.10.0",
-    "bson": "^6.7.0",
+    "bson": "patch:bson@npm%3A6.2.0#~/.yarn/patches/bson-npm-6.2.0-3d364484ee.patch",
     "eslint": "^9.3.0",
     "prettier": "^3.2.5",
     "smui-theme": "^7.0.0",
@@ -65,5 +65,10 @@
   },
   "devDependenciesComments": {
     "svelte": "Locked at 4.x because 5.x doesn't seem to work with @smui components as of 11/25/2023"
-  }
+  },
+  "resolutions": {
+    "bson@npm:^6.2.0": "patch:bson@npm%3A6.2.0#~/.yarn/patches/bson-npm-6.2.0-3d364484ee.patch"
+  },
+  "resolutionsComments": {
+    "bson@npm:^6.2.0": "Patched to fix a bug where bson would use top-level await for seemingly no reason. This breaks safari. Just the awaits were removed from bson.mjs. See this GitHub PR: https://github.com/WebKit/WebKit/pull/24122"
 }
