@@ -52,6 +52,7 @@
     currentUserTags = currentUserTags.filter((tag) => tag !== event.detail.chipId);
     if (currentUserTags.length === 0) {
       delete $task.tags[$currentUserId];
+      $task.tags = $task.tags;
     } else {
       $task.tags[$currentUserId] = currentUserTags;
     }
