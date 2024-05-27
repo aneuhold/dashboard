@@ -1,6 +1,8 @@
 <script lang="ts">
   import ClickableDiv from '$components/presentational/ClickableDiv.svelte';
   import SquareIconButton from '$components/presentational/SquareIconButton.svelte';
+  import { currentUserId } from '$stores/derived/currentUserId';
+  import { userSettings } from '$stores/userSettings';
   import {
     DashboardTask,
     getDefaultTaskListFilterSettings,
@@ -10,8 +12,6 @@
   import type { DocumentStore } from '../../../services/DocumentMapStoreService';
   import { TaskMapService } from '../../../services/Task/TaskMapService';
   import TaskTagsService from '../../../services/Task/TaskTagsService';
-  import { currentUserId } from '../../../stores/derived/currentUserId';
-  import { userSettings } from '../../../stores/userSettings';
   import TaskListFilterDialog from './TaskListFilterDialog.svelte';
   import TaskListSortingDialog from './TaskListSortingDialog.svelte';
 

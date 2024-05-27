@@ -5,7 +5,7 @@
   import { RecurrenceEffect } from '@aneuhold/core-ts-db-lib';
   import Checkbox from '@smui/checkbox';
   import { TaskMapService } from '../../services/Task/TaskMapService';
-  import { userSettings } from '../../stores/userSettings';
+  import { userSettings } from '$stores/userSettings';
   import ClickableDiv from '../presentational/ClickableDiv.svelte';
 
   export let taskId: string;

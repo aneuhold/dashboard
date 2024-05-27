@@ -1,3 +1,5 @@
+import { appIsVisible } from '$stores/appIsVisible';
+import { timeMinute } from '$stores/timeMinute';
 import DashboardAPIService from '$util/api/DashboardAPIService';
 import {
   DashboardTask,
@@ -11,8 +13,6 @@ import {
 } from '@aneuhold/core-ts-db-lib';
 import { ObjectId } from 'bson';
 import type { Unsubscriber, Updater } from 'svelte/store';
-import { appIsVisible } from '../../stores/appIsVisible';
-import { timeMinute } from '../../stores/timeMinute';
 import type { DocumentMapStoreSubscriber, UpsertManyInfo } from '../DocumentMapStoreService';
 import { TaskMapService } from './TaskMapService';
 

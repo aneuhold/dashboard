@@ -1,6 +1,10 @@
 <script lang="ts">
   import InputBox from '$components/presentational/InputBox.svelte';
-  import LocalData from '$util/LocalData';
+  import { apiKey } from '$stores/apiKey';
+  import { dashboardConfig } from '$stores/dashboardConfig';
+  import { LoginState, loginState } from '$stores/loginState';
+  import { password } from '$stores/password';
+  import LocalData from '$util/LocalData/LocalData';
   import DashboardAPIService from '$util/api/DashboardAPIService';
   import {
     APIService,
@@ -9,17 +13,16 @@
   } from '@aneuhold/core-ts-api-lib';
   import Button, { Label } from '@smui/button';
   import CircularProgress from '@smui/circular-progress';
-  import { apiKey } from '../stores/apiKey';
-  import { dashboardConfig } from '../stores/dashboardConfig';
-  import { LoginState, loginState } from '../stores/loginState';
-  import { password } from '../stores/password';
 
   let typedUserName = LocalData.username;
   let typedPassword = LocalData.password;
   $: processingCredentials = $loginState === LoginState.ProcessingCredentials;
   let invalidCredentials = false;
 
-  function handleSubmit() {
+  function handleSubmit(event: CustomEvent) {
+    // Prevent the page from refreshing
+    event.preventDefault();
+
     $loginState = LoginState.ProcessingCredentials;
     LocalData.username = typedUserName;
     password.set(typedPassword);
@@ -45,6 +48,11 @@
       }
       // This will eventually update the login state
       DashboardAPIService.getInitialDataForLogin();
+    } else if (!validationResponse.success) {
+      $loginState = LoginState.LoggedOut;
+      invalidCredentials = true;
+    } else {
+      console.error('Unexpected response from validateUser', validationResponse);
     }
   }
 </script>
@@ -72,6 +80,7 @@
         class="material-icons dimmed-color"
         on:click={handleSubmit}
         disabled={processingCredentials}
+        data-testid="login-submit-button"
       >
         {#if processingCredentials}
           <CircularProgress style="height: 32px; width: 32px;" indeterminate />

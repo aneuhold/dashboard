@@ -1,19 +1,16 @@
-<script lang="ts" context="module">
+<script lang="ts">
   import PageTitle from '$components/PageTitle.svelte';
+  import SingletonNonogramKatanaUpgradeDialog from '$components/singletons/dialogs/SingletonNonogramKatanaUpgradeDialog.svelte';
+  import { userSettings } from '$stores/userSettings';
   import { NonogramKatanaUpgrade, NonogramKatanaUpgradeName } from '@aneuhold/core-ts-db-lib';
+  import Button from '@smui/button';
+  import Checkbox from '@smui/checkbox';
   import Paper, { Content } from '@smui/paper';
+  import { flip } from 'svelte/animate';
+  import { slide } from 'svelte/transition';
   import { NonogramKatanaUpgradeMapService } from '../../../../services/NonogramKatana/NonogramKatanaUpgradeMapService';
   import NonogramKatanaUpgradeRow from './NonogramKatanaUpgradeRow.svelte';
   import { nonogramKatanaUpgradesPageInfo } from './pageInfo';
-</script>
-
-<script lang="ts">
-  import SingletonNonogramKatanaUpgradeDialog from '$components/singletons/dialogs/SingletonNonogramKatanaUpgradeDialog.svelte';
-  import Button from '@smui/button';
-  import Checkbox from '@smui/checkbox';
-  import { flip } from 'svelte/animate';
-  import { slide } from 'svelte/transition';
-  import { userSettings } from '../../../../stores/userSettings';
 
   const sortFunction: (
     a: NonogramKatanaUpgrade | undefined,

@@ -1,4 +1,4 @@
-import LocalData, { localDataReady } from '$util/LocalData';
+import LocalData, { localDataReady } from '$util/LocalData/LocalData';
 import DashboardAPIService from '$util/api/DashboardAPIService';
 import { writable } from 'svelte/store';
 

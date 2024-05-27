@@ -16,7 +16,7 @@
   import { TaskMapService } from '../../services/Task/TaskMapService';
   import TaskRecurrenceService from '../../services/Task/TaskRecurrenceService';
   import TaskService from '../../services/Task/TaskService';
-  import { currentUserId } from '../../stores/derived/currentUserId';
+  import { currentUserId } from '$stores/derived/currentUserId';
   import TaskCompletedCheckbox from './TaskCompletedCheckbox.svelte';
   import TaskRowDateInfo from './TaskDate/TaskRowDateInfo.svelte';
   import TaskRowTagHeader from './TaskTags/TaskRowTagHeader.svelte';

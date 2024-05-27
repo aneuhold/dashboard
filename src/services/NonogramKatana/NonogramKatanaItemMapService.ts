@@ -1,4 +1,4 @@
-import LocalData from '$util/LocalData';
+import LocalData from '$util/LocalData/LocalData';
 import DashboardAPIService from '$util/api/DashboardAPIService';
 import {
   NonogramKatanaItem,

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { confetti } from '@neoconfetti/svelte';
   import { createEventDispatcher } from 'svelte';
-  import { userSettings } from '../../stores/userSettings';
+  import { userSettings } from '$stores/userSettings';
 
   /**
    * Determines if the confetti should be shown. This should be bound to because

@@ -5,6 +5,9 @@
 -->
 <script lang="ts">
   import TaskRow from '$components/Tasks/TaskRow.svelte';
+  import { TaskMapService } from '$services/Task/TaskMapService';
+  import { currentUserId } from '$stores/derived/currentUserId';
+  import { userSettings } from '$stores/userSettings';
   import {
     DashboardTaskService,
     DashboardTaskSortBy,
@@ -13,9 +16,6 @@
   import type { DashboardTaskFilterAndSortResult } from '@aneuhold/core-ts-db-lib/lib/services/dashboard/Task/TaskService';
   import { flip } from 'svelte/animate';
   import { slide } from 'svelte/transition';
-  import { TaskMapService } from '../../../services/Task/TaskMapService';
-  import { currentUserId } from '../../../stores/derived/currentUserId';
-  import { userSettings } from '../../../stores/userSettings';
   import TaskListOptions from './TaskListOptions.svelte';
 
   export let sortAndFilterResult: DashboardTaskFilterAndSortResult;

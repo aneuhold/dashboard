@@ -1,4 +1,4 @@
-import { localDataReady } from '$util/LocalData';
+import { localDataReady } from '$util/LocalData/LocalData';
 import type { BaseDocument, DocumentMap } from '@aneuhold/core-ts-db-lib';
 import { writable, type Readable, type Updater, type Writable } from 'svelte/store';
 

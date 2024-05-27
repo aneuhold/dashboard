@@ -8,7 +8,7 @@
   import type { LinkInfo } from '$components/LinkListItem.svelte';
   import PageTitle from '$components/PageTitle.svelte';
   import Paper, { Content, Subtitle, Title } from '@smui/paper';
-  import { dashboardConfig } from '../../stores/dashboardConfig';
+  import { dashboardConfig } from '$stores/dashboardConfig';
   import AutomationTrigger from './AutomationTrigger.svelte';
   import { automationPageInfo } from './pageInfo';
 
