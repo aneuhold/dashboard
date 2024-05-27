@@ -2,14 +2,14 @@ import { appIsVisible } from '$stores/appIsVisible';
 import { timeMinute } from '$stores/timeMinute';
 import DashboardAPIService from '$util/api/DashboardAPIService';
 import {
-    DashboardTask,
-    DashboardTaskService,
-    DocumentService,
-    RecurrenceBasis,
-    RecurrenceEffect,
-    type DashboardTaskMap,
-    type ParentRecurringTaskInfo,
-    type RecurrenceInfo
+  DashboardTask,
+  DashboardTaskService,
+  DocumentService,
+  RecurrenceBasis,
+  RecurrenceEffect,
+  type DashboardTaskMap,
+  type ParentRecurringTaskInfo,
+  type RecurrenceInfo
 } from '@aneuhold/core-ts-db-lib';
 import { ObjectId } from 'bson';
 import type { Unsubscriber, Updater } from 'svelte/store';

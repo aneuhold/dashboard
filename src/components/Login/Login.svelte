@@ -19,7 +19,10 @@
   $: processingCredentials = $loginState === LoginState.ProcessingCredentials;
   let invalidCredentials = false;
 
-  function handleSubmit() {
+  function handleSubmit(event: CustomEvent) {
+    // Prevent the page from refreshing
+    event.preventDefault();
+
     $loginState = LoginState.ProcessingCredentials;
     LocalData.username = typedUserName;
     password.set(typedPassword);
@@ -45,6 +48,11 @@
       }
       // This will eventually update the login state
       DashboardAPIService.getInitialDataForLogin();
+    } else if (!validationResponse.success) {
+      $loginState = LoginState.LoggedOut;
+      invalidCredentials = true;
+    } else {
+      console.error('Unexpected response from validateUser', validationResponse);
     }
   }
 </script>
@@ -72,6 +80,7 @@
         class="material-icons dimmed-color"
         on:click={handleSubmit}
         disabled={processingCredentials}
+        data-testid="login-submit-button"
       >
         {#if processingCredentials}
           <CircularProgress style="height: 32px; width: 32px;" indeterminate />

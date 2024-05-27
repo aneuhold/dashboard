@@ -1,14 +1,26 @@
 import { LoginState, loginState } from '$stores/loginState';
 import LocalData from '$util/LocalData/LocalData';
+import { APIService } from '@aneuhold/core-ts-api-lib';
 import type { Meta, StoryObj } from '@storybook/svelte';
-import { spyOn } from '@storybook/test';
+import { expect, spyOn, userEvent, within } from '@storybook/test';
 import Login from './Login.svelte';
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories
 const meta = {
   title: 'Stateful Components/Login',
   component: Login,
-  argTypes: {}
+  argTypes: {},
+  beforeEach: () => {
+    const spy = spyOn(APIService, 'validateUser').mockResolvedValue({
+      success: true,
+      errors: [],
+      data: {}
+    });
+    return () => {
+      loginState.set(LoginState.LoggedOut);
+      spy.mockRestore();
+    };
+  }
 } satisfies Meta<Login>;
 
 export default meta;
@@ -27,8 +39,26 @@ export const FilledIn: Story = {
 export const ProcessingState: Story = {
   beforeEach: () => {
     loginState.set(LoginState.ProcessingCredentials);
-    return () => {
-      loginState.set(LoginState.LoggedOut);
-    };
+  }
+};
+
+export const InvalidCredentialsState: Story = {
+  beforeEach: () => {
+    spyOn(APIService, 'validateUser').mockResolvedValue({
+      success: false,
+      errors: [],
+      data: {}
+    });
+    spyOn(LocalData, 'username', 'get').mockReturnValue('test');
+    spyOn(LocalData, 'password', 'get').mockReturnValue('test');
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const loginButton = canvas.getByTestId('login-submit-button');
+    await expect(loginButton).toBeInTheDocument();
+    console.log(loginButton);
+    await userEvent.click(loginButton);
+    const invalidCredentialsMessage = canvas.getByText(/Invalid username or password/i);
+    await expect(invalidCredentialsMessage).toBeInTheDocument();
   }
 };

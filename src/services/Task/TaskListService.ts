@@ -1,11 +1,11 @@
 import type { UserSettings } from '$stores/userSettings';
 import {
-    DashboardTask,
-    DashboardTaskService,
-    getDefaultTaskListFilterSettings,
-    getDefaultTaskListSortSettings,
-    type DashboardTaskFilterAndSortResult,
-    type DashboardTaskMap
+  DashboardTask,
+  DashboardTaskService,
+  getDefaultTaskListFilterSettings,
+  getDefaultTaskListSortSettings,
+  type DashboardTaskFilterAndSortResult,
+  type DashboardTaskMap
 } from '@aneuhold/core-ts-db-lib';
 
 /**

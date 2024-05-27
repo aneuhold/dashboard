@@ -117,7 +117,6 @@
                 {segment}
                 title={segment.value}
                 on:click$preventDefault={() => {
-                  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                   sortSetting.sortDirection = segment.value;
                 }}
               >
