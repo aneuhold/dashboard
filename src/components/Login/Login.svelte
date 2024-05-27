@@ -9,10 +9,10 @@
   } from '@aneuhold/core-ts-api-lib';
   import Button, { Label } from '@smui/button';
   import CircularProgress from '@smui/circular-progress';
-  import { apiKey } from '../stores/apiKey';
-  import { dashboardConfig } from '../stores/dashboardConfig';
-  import { LoginState, loginState } from '../stores/loginState';
-  import { password } from '../stores/password';
+  import { apiKey } from '../../stores/apiKey';
+  import { dashboardConfig } from '../../stores/dashboardConfig';
+  import { LoginState, loginState } from '../../stores/loginState';
+  import { password } from '../../stores/password';
 
   let typedUserName = LocalData.username;
   let typedPassword = LocalData.password;

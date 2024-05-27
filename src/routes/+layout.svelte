@@ -10,7 +10,7 @@
   import LocalData from '$util/LocalData';
   import CircularProgress from '@smui/circular-progress';
   import { onDestroy, onMount } from 'svelte';
-  import Login from '../components/Login.svelte';
+  import Login from '../components/Login/Login.svelte';
   import NavBar from '../components/NavBar.svelte';
   import '../globalStyles/global.css';
   import { appIsVisible } from '../stores/appIsVisible';
