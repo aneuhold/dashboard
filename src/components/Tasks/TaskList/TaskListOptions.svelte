@@ -7,11 +7,11 @@
     type DashboardTaskListFilterSettings,
     type DashboardTaskListSortSettings
   } from '@aneuhold/core-ts-db-lib';
+  import { currentUserId } from '../$stores/derived/currentUserId';
+  import { userSettings } from '../$stores/userSettings';
   import type { DocumentStore } from '../../../services/DocumentMapStoreService';
   import { TaskMapService } from '../../../services/Task/TaskMapService';
   import TaskTagsService from '../../../services/Task/TaskTagsService';
-  import { currentUserId } from '../../../stores/derived/currentUserId';
-  import { userSettings } from '../../../stores/userSettings';
   import TaskListFilterDialog from './TaskListFilterDialog.svelte';
   import TaskListSortingDialog from './TaskListSortingDialog.svelte';
 

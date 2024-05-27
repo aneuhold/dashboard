@@ -18,7 +18,7 @@ const config: StorybookConfig = {
   },
   async viteFinal(config) {
     const { mergeConfig } = await import('vite');
-    return mergeConfig(config, {
+    const updatedConfig = mergeConfig(config, {
       // Paths here seem to be from the root directory
       server: {
         fs: {
@@ -26,6 +26,8 @@ const config: StorybookConfig = {
         }
       }
     });
+    console.log(updatedConfig);
+    return updatedConfig;
   }
 };
 export default config;

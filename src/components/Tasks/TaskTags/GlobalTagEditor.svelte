@@ -3,8 +3,8 @@
   import SmartDialog from '$components/presentational/SmartDialog.svelte';
   import Button, { Label } from '@smui/button';
   import { Actions, Content, Title } from '@smui/dialog';
+  import { userSettings } from '../$stores/userSettings';
   import TaskTagsService from '../../../services/Task/TaskTagsService';
-  import { userSettings } from '../../../stores/userSettings';
 
   export let open = false;
   /**

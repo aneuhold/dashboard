@@ -5,8 +5,8 @@
   import Card, { Content } from '@smui/card';
   import IconButton, { Icon } from '@smui/icon-button';
   import { createEventDispatcher } from 'svelte';
+  import { userSettings } from '../$stores/userSettings';
   import TaskTagsService from '../../../services/Task/TaskTagsService';
-  import { userSettings } from '../../../stores/userSettings';
 
   export let tagName: string;
   export let maxPriority: number;

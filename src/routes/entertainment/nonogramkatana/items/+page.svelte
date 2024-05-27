@@ -12,7 +12,7 @@
   import Button from '@smui/button';
   import { flip } from 'svelte/animate';
   import { slide } from 'svelte/transition';
-  import { userSettings } from '../../../../stores/userSettings';
+  import { userSettings } from '../../$stores/userSettings';
 
   const itemMap = NonogramKatanaItemMapService.getStore();
   $: items = Object.values($itemMap)

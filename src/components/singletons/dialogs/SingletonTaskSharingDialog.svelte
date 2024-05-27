@@ -12,8 +12,8 @@
   import FormField from '@smui/form-field';
   import type { ObjectId } from 'bson';
   import { writable } from 'svelte/store';
+  import { userSettings } from '../$stores/userSettings';
   import { TaskMapService } from '../../../services/Task/TaskMapService';
-  import { userSettings } from '../../../stores/userSettings';
 
   /**
    * A task sharing dialog which can be used anywhere in the app.

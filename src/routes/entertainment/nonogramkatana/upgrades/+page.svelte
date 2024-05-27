@@ -13,7 +13,7 @@
   import Checkbox from '@smui/checkbox';
   import { flip } from 'svelte/animate';
   import { slide } from 'svelte/transition';
-  import { userSettings } from '../../../../stores/userSettings';
+  import { userSettings } from '../../$stores/userSettings';
 
   const sortFunction: (
     a: NonogramKatanaUpgrade | undefined,

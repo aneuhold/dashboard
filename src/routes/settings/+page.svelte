@@ -10,6 +10,7 @@
   import Confetti from '$components/presentational/Confetti.svelte';
   import InputBox from '$components/presentational/InputBox.svelte';
   import { snackbar } from '$components/singletons/SingletonSnackbar.svelte';
+  import { userSettings } from '$stores/userSettings';
   import DashboardAPIService from '$util/api/DashboardAPIService';
   import Button from '@smui/button';
   import Checkbox from '@smui/checkbox';
@@ -17,7 +18,6 @@
   import CircularProgress from '@smui/circular-progress';
   import FormField from '@smui/form-field';
   import Paper, { Content } from '@smui/paper';
-  import { userSettings } from '../../stores/userSettings';
   import { settingsPageInfo } from './pageInfo';
 
   let searchingForUser = false;

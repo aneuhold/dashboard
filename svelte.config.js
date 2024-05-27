@@ -20,7 +20,8 @@ const config = {
       // Prefix all of these with $ to avoid conflicts with built-in packages.
       $components: 'src/components',
       $util: 'src/util',
-      $actions: 'src/actions'
+      $actions: 'src/actions',
+      $stores: 'src/stores'
     }
   }
 };

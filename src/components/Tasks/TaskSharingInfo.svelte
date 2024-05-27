@@ -4,8 +4,8 @@
   Sharing information for use in the Task Details component.
 -->
 <script lang="ts">
+  import { userSettings } from '$stores/userSettings';
   import { TaskMapService } from '../../services/Task/TaskMapService';
-  import { userSettings } from '../../stores/userSettings';
 
   export let taskId: string;
 
@@ -18,7 +18,7 @@
     .map((id) => id.toString())
     .filter((id) => $userSettings.collaborators[id]);
   $: collaborators = $userSettings.collaborators;
-  $: userIsNotOwner = $task?.userId.toString() !== $userSettings.config.userId.toString();
+  $: userIsNotOwner = $task.userId.toString() !== $userSettings.config.userId.toString();
 </script>
 
 <div class="container">

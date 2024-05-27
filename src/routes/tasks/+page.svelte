@@ -14,7 +14,7 @@
   import TaskListService from '../../services/Task/TaskListService';
   import { TaskMapService } from '../../services/Task/TaskMapService';
   import TaskService from '../../services/Task/TaskService';
-  import { userSettings } from '../../stores/userSettings';
+  import { userSettings } from '$stores/userSettings';
   import { tasksPageInfo } from './pageInfo';
 
   const taskMap = TaskMapService.getStore();

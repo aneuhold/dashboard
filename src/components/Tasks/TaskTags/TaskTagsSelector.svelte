@@ -6,9 +6,9 @@
 <script lang="ts">
   import Autocomplete from '@smui-extra/autocomplete';
   import Chip, { Set, Text, TrailingAction } from '@smui/chips';
+  import { currentUserId } from '../$stores/derived/currentUserId';
   import { TaskMapService } from '../../../services/Task/TaskMapService';
   import TaskTagsService from '../../../services/Task/TaskTagsService';
-  import { currentUserId } from '../../../stores/derived/currentUserId';
 
   export let taskId: string;
 

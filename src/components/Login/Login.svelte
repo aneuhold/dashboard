@@ -1,6 +1,10 @@
 <script lang="ts">
   import InputBox from '$components/presentational/InputBox.svelte';
-  import LocalData from '$util/LocalData';
+  import { apiKey } from '$stores/apiKey';
+  import { dashboardConfig } from '$stores/dashboardConfig';
+  import { LoginState, loginState } from '$stores/loginState';
+  import { password } from '$stores/password';
+  import LocalData from '$util/LocalData/LocalData';
   import DashboardAPIService from '$util/api/DashboardAPIService';
   import {
     APIService,
@@ -9,10 +13,6 @@
   } from '@aneuhold/core-ts-api-lib';
   import Button, { Label } from '@smui/button';
   import CircularProgress from '@smui/circular-progress';
-  import { apiKey } from '../../stores/apiKey';
-  import { dashboardConfig } from '../../stores/dashboardConfig';
-  import { LoginState, loginState } from '../../stores/loginState';
-  import { password } from '../../stores/password';
 
   let typedUserName = LocalData.username;
   let typedPassword = LocalData.password;
