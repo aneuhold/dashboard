@@ -22,14 +22,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aneuhold/core-ts-api-lib@npm:^1.0.60":
-  version: 1.0.60
-  resolution: "@aneuhold/core-ts-api-lib@npm:1.0.60"
+"@aneuhold/core-ts-api-lib@npm:^1.0.61":
+  version: 1.0.61
+  resolution: "@aneuhold/core-ts-api-lib@npm:1.0.61"
   dependencies:
     "@aneuhold/core-ts-db-lib": "npm:^1.0.69"
     "@aneuhold/core-ts-lib": "npm:^1.1.17"
     bson: "npm:^6.2.0"
-  checksum: 10c0/ae9c6841298ddee88c2e8a8d2fd056ad133c9665ef7869b6a567a833cbb0b41af51ccfeaa5bd01e52b2c03600bf9d6c341d8d1338c53d5432d9bccab1a723367
+  checksum: 10c0/85a38c0e1a4cad4f158147a04eb2e61b4b1ad02848009b0ceab463fc2251b965fce3f1779c5390a36a149215e86f60d6d4311f0e27205c5aab2130cefaa8dda4
   languageName: node
   linkType: hard
 
@@ -50,10 +50,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aneuhold/core-ts-lib@npm:^1.1.18":
-  version: 1.1.18
-  resolution: "@aneuhold/core-ts-lib@npm:1.1.18"
-  checksum: 10c0/605750b061281b8a3e1f84657163c5516c2765fc7cf67966b9876f0142dea9f0023f4a01861b2ac4d6dbaa3eb1993e8d132fb0e2b674c5c6eda4a9e1d35ee464
+"@aneuhold/core-ts-lib@npm:^1.1.19":
+  version: 1.1.19
+  resolution: "@aneuhold/core-ts-lib@npm:1.1.19"
+  checksum: 10c0/c4c18066f5865d812da8fa566a617e740b279c2bbf3a2615870dfc5cf7b45d67eace25cff80bb7a02c93ddbd841e4e66d8d9d1f31e45982ae5061da01eb9c99e
   languageName: node
   linkType: hard
 
@@ -6999,8 +6999,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "dashboard@workspace:."
   dependencies:
-    "@aneuhold/core-ts-api-lib": "npm:^1.0.60"
-    "@aneuhold/core-ts-lib": "npm:^1.1.18"
+    "@aneuhold/core-ts-api-lib": "npm:^1.0.61"
+    "@aneuhold/core-ts-lib": "npm:^1.1.19"
     "@aneuhold/eslint-config": "npm:^1.0.9"
     "@chromatic-com/storybook": "npm:^1.4.0"
     "@fontsource/fira-mono": "npm:^5.0.13"
