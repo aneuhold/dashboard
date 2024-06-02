@@ -56,7 +56,7 @@
     "@sveltejs/kit": "^2.5.10",
     "@sveltejs/vite-plugin-svelte": "^3.1.0",
     "@types/cookie": "^0.6.0",
-    "@types/node": "^20.12.12",
+    "@types/node": "^20.14.0",
     "@typescript-eslint/eslint-plugin": "^7.11.0",
     "@typescript-eslint/parser": "^7.11.0",
     "bson": "patch:bson@npm%3A6.2.0#~/.yarn/patches/bson-npm-6.2.0-3d364484ee.patch",
@@ -70,7 +70,7 @@
     "svelty-picker": "^5.2.9",
     "tslib": "^2.6.2",
     "typescript": "^5.4.5",
-    "vite": "^5.2.11",
+    "vite": "^5.2.12",
     "vite-plugin-node-polyfills": "^0.22.0",
     "vitest": "^1.6.0"
   },
