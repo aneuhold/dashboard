@@ -16,7 +16,7 @@
   "packageManager": "yarn@4.2.2",
   "type": "module",
   "devDependencies": {
-    "@aneuhold/core-ts-api-lib": "^1.0.61",
+    "@aneuhold/core-ts-api-lib": "^1.0.62",
     "@aneuhold/core-ts-lib": "^1.1.19",
     "@aneuhold/eslint-config": "^1.0.9",
     "@chromatic-com/storybook": "^1.4.0",
