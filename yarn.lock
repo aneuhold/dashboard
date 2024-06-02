@@ -22,31 +22,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aneuhold/core-ts-api-lib@npm:^1.0.61":
-  version: 1.0.61
-  resolution: "@aneuhold/core-ts-api-lib@npm:1.0.61"
+"@aneuhold/core-ts-api-lib@npm:^1.0.62":
+  version: 1.0.62
+  resolution: "@aneuhold/core-ts-api-lib@npm:1.0.62"
   dependencies:
-    "@aneuhold/core-ts-db-lib": "npm:^1.0.69"
-    "@aneuhold/core-ts-lib": "npm:^1.1.17"
+    "@aneuhold/core-ts-db-lib": "npm:^1.0.73"
+    "@aneuhold/core-ts-lib": "npm:^1.1.19"
     bson: "npm:^6.2.0"
-  checksum: 10c0/85a38c0e1a4cad4f158147a04eb2e61b4b1ad02848009b0ceab463fc2251b965fce3f1779c5390a36a149215e86f60d6d4311f0e27205c5aab2130cefaa8dda4
+  checksum: 10c0/7d559bb8a054ac8f1c623fb0244280d41c0b15d6c3f5de4ceb009748dd5e8f75aec2d486d98843484c4dc088d890404951f025c93a8ba89096670397483a40b4
   languageName: node
   linkType: hard
 
-"@aneuhold/core-ts-db-lib@npm:^1.0.69":
-  version: 1.0.69
-  resolution: "@aneuhold/core-ts-db-lib@npm:1.0.69"
+"@aneuhold/core-ts-db-lib@npm:^1.0.73":
+  version: 1.0.73
+  resolution: "@aneuhold/core-ts-db-lib@npm:1.0.73"
   dependencies:
-    "@aneuhold/core-ts-lib": "npm:^1.1.17"
+    "@aneuhold/core-ts-lib": "npm:^1.1.19"
     bson: "npm:^6.2.0"
-  checksum: 10c0/e32642d3141a6c4e553f6228002f6392f91c3baad6d6bb572500eae9dc318b50beec019d180bfb88d7629246e9709e297e04693bcb22d1b476658a495aadb476
-  languageName: node
-  linkType: hard
-
-"@aneuhold/core-ts-lib@npm:^1.1.17":
-  version: 1.1.17
-  resolution: "@aneuhold/core-ts-lib@npm:1.1.17"
-  checksum: 10c0/ff239d43a2dd4db05cdf3dbac5b3cb7136975581a916cea48c3ae3466a240e0ac45855fd7b06730458ba6be6e6ec850ae5c14072435df16ec58aa5255541b1b7
+  checksum: 10c0/7c6500a8c339a30a990b3978550f2df1ee3da2f15d24c138ec7f5e99f27c55fc1e7100ae7d7eea54c7f060119330e5b5f5601c3ba919dd9eae27f028b9e43009
   languageName: node
   linkType: hard
 
@@ -6999,7 +6992,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "dashboard@workspace:."
   dependencies:
-    "@aneuhold/core-ts-api-lib": "npm:^1.0.61"
+    "@aneuhold/core-ts-api-lib": "npm:^1.0.62"
     "@aneuhold/core-ts-lib": "npm:^1.1.19"
     "@aneuhold/eslint-config": "npm:^1.0.9"
     "@chromatic-com/storybook": "npm:^1.4.0"
