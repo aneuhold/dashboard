@@ -50,6 +50,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@aneuhold/core-ts-lib@npm:^1.1.22":
+  version: 1.1.22
+  resolution: "@aneuhold/core-ts-lib@npm:1.1.22"
+  checksum: 10c0/4a3d718d95b9a1f3b11bcd24cc5a72da4a0eb5b48a5987c56f1ee0f3fb2799ebff439e04aa7055489406b075b6377eaf1c15dcfe2c1a308993cb6d26ff473763
+  languageName: node
+  linkType: hard
+
 "@aneuhold/eslint-config@npm:^1.0.11":
   version: 1.0.11
   resolution: "@aneuhold/eslint-config@npm:1.0.11"
@@ -6886,7 +6893,7 @@ __metadata:
   resolution: "dashboard@workspace:."
   dependencies:
     "@aneuhold/core-ts-api-lib": "npm:^1.0.67"
-    "@aneuhold/core-ts-lib": "npm:^1.1.21"
+    "@aneuhold/core-ts-lib": "npm:^1.1.22"
     "@aneuhold/eslint-config": "npm:^1.0.11"
     "@chromatic-com/storybook": "npm:^1.5.0"
     "@fontsource/fira-mono": "npm:^5.0.13"

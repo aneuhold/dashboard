@@ -17,7 +17,7 @@
   "type": "module",
   "devDependencies": {
     "@aneuhold/core-ts-api-lib": "^1.0.67",
-    "@aneuhold/core-ts-lib": "^1.1.21",
+    "@aneuhold/core-ts-lib": "^1.1.22",
     "@aneuhold/eslint-config": "^1.0.11",
     "@chromatic-com/storybook": "^1.5.0",
     "@fontsource/fira-mono": "^5.0.13",
