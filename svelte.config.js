@@ -18,11 +18,14 @@ const config = {
       // this will match a directory and its contents
       // (`my-directory/x` resolves to `path/to/my-directory/x`)
       // Prefix all of these with $ to avoid conflicts with built-in packages.
+      // Use a slash at the end if it doesn't automatically treat it like a
+      // directory (the built tsconfig doesn't have a dir/* alias)
       $components: 'src/components',
       $util: 'src/util',
       $actions: 'src/actions',
       $stores: 'src/stores',
-      $services: 'src/services'
+      $services: 'src/services',
+      $storybook: '.storybook/'
     }
   }
 };

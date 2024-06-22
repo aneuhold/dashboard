@@ -12,7 +12,7 @@
   import { goto } from '$app/navigation';
   import BreadCrumb from '$components/BreadCrumb.svelte';
   import PageTitle from '$components/PageTitle.svelte';
-  import FabButton from '$components/presentational/FabButton.svelte';
+  import FabButton from '$components/presentational/FabButton/FabButton.svelte';
   import InputBox from '$components/presentational/InputBox.svelte';
   import { userSettings } from '$stores/userSettings';
   import { DashboardTask, DashboardTaskService } from '@aneuhold/core-ts-db-lib';
