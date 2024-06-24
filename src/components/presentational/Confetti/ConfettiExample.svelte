@@ -3,9 +3,11 @@
 
   export let numButtons = 1;
 
-  $: confettiButtonInfo = Array(numButtons).fill({
-    showConfetti: false
-  });
+  $: confettiButtonInfo = Array(numButtons)
+    .fill(null)
+    .map(() => ({
+      showConfetti: false
+    }));
 
   $: {
     console.log(confettiButtonInfo);
@@ -19,9 +21,7 @@
       <button
         class="exampleConfettiButton"
         on:click={() => {
-          console.log('This was triggered');
           confettiInfo.showConfetti = true;
-          console.log(confettiButtonInfo);
         }}
       >
         Click me
