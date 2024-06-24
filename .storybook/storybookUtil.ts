@@ -43,3 +43,11 @@ export function createInvisibleArgTypes(...args: string[]) {
 export function createTextArgTypes(...args: string[]) {
   return args.reduce((acc, arg) => ({ ...acc, [arg]: { control: { type: 'text' } } }), {});
 }
+
+export function createBoolArgTypes(...args: string[]) {
+  return args.reduce((acc, arg) => ({ ...acc, [arg]: { control: { type: 'boolean' } } }), {});
+}
+
+export function createNumberArgTypes(...args: string[]) {
+  return args.reduce((acc, arg) => ({ ...acc, [arg]: { control: { type: 'number' } } }), {});
+}

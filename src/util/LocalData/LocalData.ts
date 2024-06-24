@@ -1,14 +1,14 @@
-import type { UserSettings } from '$stores/userSettings';
+import type { UserSettings } from '$stores/userSettings/userSettings';
 import type {
-  DashboardConfig,
-  ProjectDashboardOptions,
-  Translations
+    DashboardConfig,
+    ProjectDashboardOptions,
+    Translations
 } from '@aneuhold/core-ts-api-lib';
 import type {
-  DashboardTaskMap,
-  DocumentMap,
-  NonogramKatanaItem,
-  NonogramKatanaUpgrade
+    DashboardTaskMap,
+    DocumentMap,
+    NonogramKatanaItem,
+    NonogramKatanaUpgrade
 } from '@aneuhold/core-ts-db-lib';
 import { sleep } from '@aneuhold/core-ts-lib';
 import { EJSON } from 'bson';

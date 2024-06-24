@@ -14,7 +14,7 @@
   import PageTitle from '$components/PageTitle.svelte';
   import FabButton from '$components/presentational/FabButton/FabButton.svelte';
   import InputBox from '$components/presentational/InputBox.svelte';
-  import { userSettings } from '$stores/userSettings';
+  import { userSettings } from '$stores/userSettings/userSettings';
   import { DashboardTask, DashboardTaskService } from '@aneuhold/core-ts-db-lib';
   import Button, { Icon } from '@smui/button';
   import Paper, { Content } from '@smui/paper';

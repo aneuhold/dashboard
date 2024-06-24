@@ -1,11 +1,11 @@
 <script lang="ts">
-  import Confetti from '$components/presentational/Confetti.svelte';
+  import Confetti from '$components/presentational/Confetti/Confetti.svelte';
   import { snackbar } from '$components/singletons/SingletonSnackbar.svelte';
   import { confirmationDialog } from '$components/singletons/dialogs/SingletonConfirmationDialog.svelte';
+  import { userSettings } from '$stores/userSettings/userSettings';
   import { RecurrenceEffect } from '@aneuhold/core-ts-db-lib';
   import Checkbox from '@smui/checkbox';
   import { TaskMapService } from '../../services/Task/TaskMapService';
-  import { userSettings } from '$stores/userSettings';
   import ClickableDiv from '../presentational/ClickableDiv.svelte';
 
   export let taskId: string;

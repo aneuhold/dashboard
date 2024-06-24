@@ -15,9 +15,9 @@
   import MongoDbIcon from '$lib/svgs/MongoDBIcon.svelte';
   import NetlifyIcon from '$lib/svgs/NetlifyIcon.svelte';
   import SentryIcon from '$lib/svgs/SentryIcon.svelte';
+  import { userSettings } from '$stores/userSettings/userSettings';
   import navInfo from '$util/navInfo';
   import Paper, { Content as PaperContent, Title } from '@smui/paper';
-  import { userSettings } from '$stores/userSettings';
   import { devPageInfo } from './pageInfo';
 
   const architectureLinks: Array<LinkInfo> = [

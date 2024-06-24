@@ -4,7 +4,7 @@
   Sharing information for use in the Task Details component.
 -->
 <script lang="ts">
-  import { userSettings } from '$stores/userSettings';
+  import { userSettings } from '$stores/userSettings/userSettings';
   import { TaskMapService } from '../../services/Task/TaskMapService';
 
   export let taskId: string;

@@ -3,12 +3,12 @@ import { apiKey } from '$stores/apiKey';
 import { dashboardConfig } from '$stores/dashboardConfig';
 import { LoginState, loginState } from '$stores/loginState';
 import { translations } from '$stores/translations';
-import { userSettings } from '$stores/userSettings';
+import { userSettings } from '$stores/userSettings/userSettings';
 import LocalData from '$util/LocalData/LocalData';
 import {
-  APIService,
-  type ProjectDashboardOptions,
-  type ProjectDashboardOutput
+    APIService,
+    type ProjectDashboardOptions,
+    type ProjectDashboardOutput
 } from '@aneuhold/core-ts-api-lib';
 import type { BaseDocument, DashboardUserConfig, UserCTO } from '@aneuhold/core-ts-db-lib';
 import type { UUID } from 'crypto';

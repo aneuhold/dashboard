@@ -1,20 +1,20 @@
-import { userSettings } from '$stores/userSettings';
+import { userSettings } from '$stores/userSettings/userSettings';
 import LocalData from '$util/LocalData/LocalData';
 import DashboardTaskAPIService from '$util/api/DashboardTaskAPIService';
 import {
-  DashboardTaskService,
-  DocumentService,
-  type DashboardTask,
-  type DocumentMap
+    DashboardTaskService,
+    DocumentService,
+    type DashboardTask,
+    type DocumentMap
 } from '@aneuhold/core-ts-db-lib';
 import { DateService } from '@aneuhold/core-ts-lib';
 import { ObjectId } from 'bson';
 import type { Updater } from 'svelte/store';
 import type {
-  DocumentInsertOrUpdateInfo,
-  DocumentMapStore,
-  DocumentStore,
-  UpsertManyInfo
+    DocumentInsertOrUpdateInfo,
+    DocumentMapStore,
+    DocumentStore,
+    UpsertManyInfo
 } from '../DocumentMapStoreService';
 import DocumentMapStoreService from '../DocumentMapStoreService';
 import TaskRecurrenceService from './TaskRecurrenceService';
@@ -59,7 +59,7 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
       },
       validateDocDeletion(map, docToDelete) {
         const docIdsToDelete: string[] = [docToDelete._id.toString()];
-        const allTasks = Object.values(map).filter((task) => task !== undefined) as DashboardTask[];
+        const allTasks = Object.values(map).filter((task) => task !== undefined);
         docIdsToDelete.push(
           ...DashboardTaskService.getChildrenIds(allTasks, [docToDelete._id]).map((id) =>
             id.toString()
@@ -202,6 +202,6 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
    * Simply gets all the tasks in the provided task map excluding any undefined.
    */
   private static getAllTasks(map: DocumentMap<DashboardTask>) {
-    return Object.values(map).filter((task) => task !== undefined) as DashboardTask[];
+    return Object.values(map).filter((task) => task !== undefined);
   }
 }

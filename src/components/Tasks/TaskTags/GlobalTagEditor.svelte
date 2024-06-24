@@ -1,7 +1,7 @@
 <script lang="ts">
   import InputBox from '$components/presentational/InputBox.svelte';
   import SmartDialog from '$components/presentational/SmartDialog.svelte';
-  import { userSettings } from '$stores/userSettings';
+  import { userSettings } from '$stores/userSettings/userSettings';
   import Button, { Label } from '@smui/button';
   import { Actions, Content, Title } from '@smui/dialog';
   import TaskTagsService from '../../../services/Task/TaskTagsService';

@@ -7,7 +7,7 @@
   import TaskRow from '$components/Tasks/TaskRow.svelte';
   import { TaskMapService } from '$services/Task/TaskMapService';
   import { currentUserId } from '$stores/derived/currentUserId';
-  import { userSettings } from '$stores/userSettings';
+  import { userSettings } from '$stores/userSettings/userSettings';
   import {
     DashboardTaskService,
     DashboardTaskSortBy,

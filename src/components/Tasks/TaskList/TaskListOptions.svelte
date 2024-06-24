@@ -2,7 +2,7 @@
   import ClickableDiv from '$components/presentational/ClickableDiv.svelte';
   import SquareIconButton from '$components/presentational/SquareIconButton.svelte';
   import { currentUserId } from '$stores/derived/currentUserId';
-  import { userSettings } from '$stores/userSettings';
+  import { userSettings } from '$stores/userSettings/userSettings';
   import {
     DashboardTask,
     getDefaultTaskListFilterSettings,

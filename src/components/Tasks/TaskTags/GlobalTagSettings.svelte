@@ -1,6 +1,6 @@
 <script lang="ts">
   import InfoIcon from '$components/InfoIcon.svelte';
-  import { userSettings } from '$stores/userSettings';
+  import { userSettings } from '$stores/userSettings/userSettings';
   import Button from '@smui/button';
   import { flip } from 'svelte/animate';
   import GlobalTagEditor from './GlobalTagEditor.svelte';

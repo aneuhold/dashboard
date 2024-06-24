@@ -1,7 +1,7 @@
 <script lang="ts">
   import PageTitle from '$components/PageTitle.svelte';
   import SingletonNonogramKatanaUpgradeDialog from '$components/singletons/dialogs/SingletonNonogramKatanaUpgradeDialog.svelte';
-  import { userSettings } from '$stores/userSettings';
+  import { userSettings } from '$stores/userSettings/userSettings';
   import { NonogramKatanaUpgrade, NonogramKatanaUpgradeName } from '@aneuhold/core-ts-db-lib';
   import Button from '@smui/button';
   import Checkbox from '@smui/checkbox';
@@ -28,7 +28,7 @@
   let showAll = false;
   $: allUpgrades = Object.values($upgradeMap)
     .filter((upgrade) => upgrade !== undefined)
-    .sort(sortFunction) as NonogramKatanaUpgrade[];
+    .sort(sortFunction);
   $: workableUpgrades = Object.values(
     NonogramKatanaUpgradeMapService.getWorkableUpgrades($upgradeMap)
   ).sort(sortFunction);

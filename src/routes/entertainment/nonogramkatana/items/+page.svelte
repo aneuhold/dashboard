@@ -1,6 +1,6 @@
 <script lang="ts" context="module">
   import PageTitle from '$components/PageTitle.svelte';
-  import { NonogramKatanaItem, NonogramKatanaItemName } from '@aneuhold/core-ts-db-lib';
+  import { NonogramKatanaItemName } from '@aneuhold/core-ts-db-lib';
   import Paper, { Content } from '@smui/paper';
   import { NonogramKatanaItemMapService } from '../../../../services/NonogramKatana/NonogramKatanaItemMapService';
   import NonogramKatanaItemRow from './NonogramKatanaItemRow.svelte';
@@ -9,7 +9,7 @@
 
 <script lang="ts">
   import SingletonNonogramKatanaItemDialog from '$components/singletons/dialogs/SingletonNonogramKatanaItemDialog.svelte';
-  import { userSettings } from '$stores/userSettings';
+  import { userSettings } from '$stores/userSettings/userSettings';
   import Button from '@smui/button';
   import { flip } from 'svelte/animate';
   import { slide } from 'svelte/transition';
@@ -24,7 +24,7 @@
         return -1;
       }
       return b.priority - a.priority;
-    }) as NonogramKatanaItem[];
+    });
   $: itemsMissing = items.length < Object.values(NonogramKatanaItemName).length;
 </script>
 
