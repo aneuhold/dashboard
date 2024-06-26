@@ -4,6 +4,6 @@ import { ObjectId } from 'bson';
 export default class StorybookMockData {
   static currentUserCto: UserCTO = {
     _id: new ObjectId(),
-    userName: 'Test User'
+    userName: 'storybookUser'
   };
 }

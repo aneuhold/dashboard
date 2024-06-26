@@ -80,7 +80,6 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
     return LocalData.setAndGetTaskMap(this.documentMap);
   }
   protected getFromLocalData(): DocumentMap<DashboardTask> | null {
-    console.log('trying to get from local data');
     return LocalData.taskMap;
   }
   protected persistToDb(updateInfo: DocumentInsertOrUpdateInfo<DashboardTask>): void {
