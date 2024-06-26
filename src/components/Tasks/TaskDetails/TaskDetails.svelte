@@ -18,16 +18,16 @@
   import { DashboardTask, DashboardTaskService } from '@aneuhold/core-ts-db-lib';
   import Button, { Icon } from '@smui/button';
   import Paper, { Content } from '@smui/paper';
-  import TaskListService from '../../services/Task/TaskListService';
-  import { TaskMapService } from '../../services/Task/TaskMapService';
-  import TaskService from '../../services/Task/TaskService';
-  import TaskCompletedCheckbox from './TaskCompletedCheckbox.svelte';
-  import TaskDateInfo from './TaskDate/TaskDateInfo.svelte';
-  import TaskList from './TaskList/TaskList.svelte';
-  import TaskRecurrenceInfo from './TaskRecurrence/TaskRecurrenceInfo.svelte';
-  import TaskShareButton from './TaskShareButton.svelte';
-  import TaskSharingInfo from './TaskSharingInfo.svelte';
-  import TaskTagsSelector from './TaskTags/TaskTagsSelector.svelte';
+  import TaskListService from '../../../services/Task/TaskListService';
+  import { TaskMapService } from '../../../services/Task/TaskMapService/TaskMapService';
+  import TaskService from '../../../services/Task/TaskService';
+  import TaskCompletedCheckbox from '../TaskCompletedCheckbox.svelte';
+  import TaskDateInfo from '../TaskDate/TaskDateInfo.svelte';
+  import TaskList from '../TaskList/TaskList.svelte';
+  import TaskRecurrenceInfo from '../TaskRecurrence/TaskRecurrenceInfo.svelte';
+  import TaskShareButton from '../TaskShareButton.svelte';
+  import TaskSharingInfo from '../TaskSharingInfo.svelte';
+  import TaskTagsSelector from '../TaskTags/TaskTagsSelector.svelte';
 
   export let taskId: string;
 

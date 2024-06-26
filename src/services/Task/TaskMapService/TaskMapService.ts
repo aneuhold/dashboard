@@ -2,24 +2,24 @@ import { userSettings } from '$stores/userSettings/userSettings';
 import LocalData from '$util/LocalData/LocalData';
 import DashboardTaskAPIService from '$util/api/DashboardTaskAPIService';
 import {
-    DashboardTaskService,
-    DocumentService,
-    type DashboardTask,
-    type DocumentMap
+  DashboardTaskService,
+  DocumentService,
+  type DashboardTask,
+  type DocumentMap
 } from '@aneuhold/core-ts-db-lib';
 import { DateService } from '@aneuhold/core-ts-lib';
 import { ObjectId } from 'bson';
 import type { Updater } from 'svelte/store';
 import type {
-    DocumentInsertOrUpdateInfo,
-    DocumentMapStore,
-    DocumentStore,
-    UpsertManyInfo
-} from '../DocumentMapStoreService';
-import DocumentMapStoreService from '../DocumentMapStoreService';
-import TaskRecurrenceService from './TaskRecurrenceService';
-import TaskSharingService from './TaskSharingService';
-import TaskTagsService from './TaskTagsService';
+  DocumentInsertOrUpdateInfo,
+  DocumentMapStore,
+  DocumentStore,
+  UpsertManyInfo
+} from '../../DocumentMapStoreService';
+import DocumentMapStoreService from '../../DocumentMapStoreService';
+import TaskRecurrenceService from '../TaskRecurrenceService';
+import TaskSharingService from '../TaskSharingService';
+import TaskTagsService from '../TaskTagsService';
 
 /**
  * The main task map service.
@@ -59,7 +59,7 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
       },
       validateDocDeletion(map, docToDelete) {
         const docIdsToDelete: string[] = [docToDelete._id.toString()];
-        const allTasks = Object.values(map).filter((task) => task !== undefined);
+        const allTasks = TaskMapService.getAllTasks(map);
         docIdsToDelete.push(
           ...DashboardTaskService.getChildrenIds(allTasks, [docToDelete._id]).map((id) =>
             id.toString()
@@ -201,7 +201,7 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
   /**
    * Simply gets all the tasks in the provided task map excluding any undefined.
    */
-  private static getAllTasks(map: DocumentMap<DashboardTask>) {
-    return Object.values(map).filter((task) => task !== undefined);
+  private static getAllTasks(map: DocumentMap<DashboardTask>): DashboardTask[] {
+    return Object.values(map).filter((task): task is DashboardTask => task !== undefined);
   }
 }

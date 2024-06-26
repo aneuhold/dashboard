@@ -10,7 +10,7 @@
     type DashboardTaskListSortSettings
   } from '@aneuhold/core-ts-db-lib';
   import type { DocumentStore } from '../../../services/DocumentMapStoreService';
-  import { TaskMapService } from '../../../services/Task/TaskMapService';
+  import { TaskMapService } from '../../../services/Task/TaskMapService/TaskMapService';
   import TaskTagsService from '../../../services/Task/TaskTagsService';
   import TaskListFilterDialog from './TaskListFilterDialog.svelte';
   import TaskListSortingDialog from './TaskListSortingDialog.svelte';

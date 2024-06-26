@@ -5,7 +5,7 @@
 -->
 <script lang="ts">
   import TaskRow from '$components/Tasks/TaskRow.svelte';
-  import { TaskMapService } from '$services/Task/TaskMapService';
+  import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
   import { currentUserId } from '$stores/derived/currentUserId';
   import { userSettings } from '$stores/userSettings/userSettings';
   import {

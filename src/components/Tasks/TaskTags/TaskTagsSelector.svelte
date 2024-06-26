@@ -7,7 +7,7 @@
   import { currentUserId } from '$stores/derived/currentUserId';
   import Autocomplete from '@smui-extra/autocomplete';
   import Chip, { Set, Text, TrailingAction } from '@smui/chips';
-  import { TaskMapService } from '../../../services/Task/TaskMapService';
+  import { TaskMapService } from '../../../services/Task/TaskMapService/TaskMapService';
   import TaskTagsService from '../../../services/Task/TaskTagsService';
 
   export let taskId: string;

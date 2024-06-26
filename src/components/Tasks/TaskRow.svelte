@@ -10,13 +10,13 @@
   import MenuButton from '$components/presentational/MenuButton.svelte';
   import { confirmationDialog } from '$components/singletons/dialogs/SingletonConfirmationDialog.svelte';
   import { taskSharingDialog } from '$components/singletons/dialogs/SingletonTaskSharingDialog.svelte';
+  import { currentUserId } from '$stores/derived/currentUserId';
   import { DashboardTask, DashboardTaskService, RecurrenceEffect } from '@aneuhold/core-ts-db-lib';
   import Card, { Content as CardContent } from '@smui/card';
   import { Icon } from '@smui/icon-button';
-  import { TaskMapService } from '../../services/Task/TaskMapService';
+  import { TaskMapService } from '../../services/Task/TaskMapService/TaskMapService';
   import TaskRecurrenceService from '../../services/Task/TaskRecurrenceService';
   import TaskService from '../../services/Task/TaskService';
-  import { currentUserId } from '$stores/derived/currentUserId';
   import TaskCompletedCheckbox from './TaskCompletedCheckbox.svelte';
   import TaskRowDateInfo from './TaskDate/TaskRowDateInfo.svelte';
   import TaskRowTagHeader from './TaskTags/TaskRowTagHeader.svelte';
@@ -37,7 +37,7 @@
 
   $: task = TaskMapService.getTaskStore(taskId);
   $: allChildrenIds = DashboardTaskService.getChildrenIds(
-    Object.values($taskMap).filter((task) => task !== undefined) as DashboardTask[],
+    Object.values($taskMap).filter((task) => task !== undefined),
     [$task._id]
   );
   $: hasExtraTaskInfo = allChildrenIds.length > 0;

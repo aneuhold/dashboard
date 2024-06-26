@@ -14,7 +14,7 @@ import {
 import { ObjectId } from 'bson';
 import type { Unsubscriber, Updater } from 'svelte/store';
 import type { DocumentMapStoreSubscriber, UpsertManyInfo } from '../DocumentMapStoreService';
-import { TaskMapService } from './TaskMapService';
+import { TaskMapService } from './TaskMapService/TaskMapService';
 
 type TaskRecurrenceSubMap = { [taskId: string]: Unsubscriber | undefined };
 

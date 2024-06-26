@@ -5,7 +5,7 @@
 -->
 <script lang="ts">
   import { userSettings } from '$stores/userSettings/userSettings';
-  import { TaskMapService } from '../../services/Task/TaskMapService';
+  import { TaskMapService } from '../../services/Task/TaskMapService/TaskMapService';
 
   export let taskId: string;
 

@@ -4,7 +4,7 @@ import type { DashboardTagSettings } from '@aneuhold/core-ts-db-lib/lib/embedded
 import { ArrayService } from '@aneuhold/core-ts-lib';
 import { writable, type Unsubscriber, type Writable } from 'svelte/store';
 import type { DocumentMapStoreSubscriber } from '../DocumentMapStoreService';
-import { TaskMapService } from './TaskMapService';
+import { TaskMapService } from './TaskMapService/TaskMapService';
 
 /**
  * A service responsible for managing tags for tasks.

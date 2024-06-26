@@ -1,6 +1,6 @@
 import type { DashboardTask } from '@aneuhold/core-ts-db-lib';
 import type { DocumentMapStoreSubscriber } from '../DocumentMapStoreService';
-import { TaskMapService } from './TaskMapService';
+import { TaskMapService } from './TaskMapService/TaskMapService';
 
 export default class TaskSharingService {
   static getSubscribersForTaskMap(): DocumentMapStoreSubscriber<DashboardTask> {
