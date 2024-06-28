@@ -52,8 +52,8 @@
     "@storybook/svelte": "^8.1.6",
     "@storybook/sveltekit": "^8.1.6",
     "@storybook/test": "^8.1.6",
-    "@sveltejs/adapter-static": "^3.0.1",
-    "@sveltejs/kit": "^2.5.10",
+    "@sveltejs/adapter-static": "^3.0.2",
+    "@sveltejs/kit": "^2.5.17",
     "@sveltejs/vite-plugin-svelte": "^3.1.1",
     "@types/cookie": "^0.6.0",
     "@types/node": "^20.14.0",
@@ -64,8 +64,8 @@
     "prettier": "^3.3.2",
     "smui-theme": "^7.0.0",
     "storybook": "^8.1.6",
-    "svelte": "^4.2.17",
-    "svelte-check": "^3.8.0",
+    "svelte": "^4.2.18",
+    "svelte-check": "^3.8.4",
     "svelte-confetti-explosion": "^0.4.0",
     "svelty-picker": "^5.2.9",
     "tslib": "^2.6.2",
@@ -86,6 +86,6 @@
     "globals": "This is a temporary fix for the globals package due to this issue: https://github.com/eslint/eslint/discussions/17868. Once other packages pull 15+ then should be able to remove this"
   },
   "dependencies": {
-    "@sentry/sveltekit": "^8.7.0"
+    "@sentry/sveltekit": "^8.13.0"
   }
 }
