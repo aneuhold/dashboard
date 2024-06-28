@@ -1,7 +1,14 @@
 import * as Sentry from '@sentry/sveltekit';
 import { captureConsoleIntegration, handleErrorWithSentry } from '@sentry/sveltekit';
 
-if (window.location.hostname !== 'localhost') {
+const debugSentry = false;
+const initalizeSentry = window.location.hostname !== 'localhost' || debugSentry;
+
+/**
+ * Username is set in the `loginState` store. That seemed like the best source
+ * of truth because it is always called on startup and when logging in.
+ */
+if (initalizeSentry) {
   Sentry.init({
     dsn: 'https://066b7653e6f6c6e9807b46d94be88628@o4507319328702464.ingest.us.sentry.io/4507319334273024',
     tracesSampleRate: 1.0,
@@ -13,7 +20,6 @@ if (window.location.hostname !== 'localhost') {
     replaysOnErrorSampleRate: 1.0,
     // If you don't want to use Session Replay, just remove the line below:
     // integrations: [replayIntegration()]
-    denyUrls: ['localhost'],
     integrations: [
       captureConsoleIntegration({
         levels: ['error']
