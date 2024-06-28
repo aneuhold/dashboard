@@ -1,3 +1,4 @@
+import ConfettiSbDecorator from '$components/singletons/Confetti/ConfettiSBDecorator.svelte';
 import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
 import StorybookMockData from '$storybook/globalMockData';
 import { createInvisibleArgTypes } from '$storybook/storybookUtil';
@@ -13,6 +14,7 @@ let mainTask: DashboardTask = new DashboardTask(StorybookMockData.currentUserCto
 const meta = {
   title: 'Stateful Components/TaskDetails',
   component: TaskDetails,
+  decorators: [() => ({ Component: ConfettiSbDecorator, svelteVersion: 4 })],
   argTypes: {
     ...createInvisibleArgTypes('taskId')
   },

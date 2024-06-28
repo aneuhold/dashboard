@@ -12,7 +12,6 @@
     <button
       class="exampleConfettiButton"
       on:click={(event) => {
-        console.log('did it get here?');
         triggerConfetti(event.clientX, event.clientY);
       }}
     >
@@ -27,6 +26,6 @@
     flex-direction: column;
   }
   .exampleConfettiButton {
-    margin-right: auto;
+    margin: auto;
   }
 </style>

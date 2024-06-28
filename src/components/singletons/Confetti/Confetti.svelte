@@ -74,7 +74,8 @@
       use:confetti={{
         stageWidth: window.innerWidth,
         stageHeight: window.innerHeight,
-        duration: $confettiSettings.durationMs ?? 3000
+        duration: $confettiSettings.durationMs,
+        destroyAfterDone: false
       }}
     ></div>
   </div>
@@ -86,6 +87,7 @@
     pointer-events: none;
     width: 100vw;
     height: 100vh;
+    z-index: 1;
   }
   .confetti {
     position: absolute;

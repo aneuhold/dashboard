@@ -1,22 +1,19 @@
 import { userSettings } from '$stores/userSettings/userSettings';
-import { mockUserSettings } from '$stores/userSettings/userSettings.mock';
 import { createNumberArgTypes } from '$storybook/storybookUtil';
 import type { Meta, StoryObj } from '@storybook/svelte';
-import ConfettiExample from './ConfettiExample.svelte';
+import ConfettiExample from './ConfettiSBExample.svelte';
 
 const meta = {
-  title: 'Presentational Components/Confetti',
+  title: 'Singleton Components/Confetti',
   component: ConfettiExample,
   argTypes: {
     ...createNumberArgTypes('numButtons')
   },
   beforeEach: () => {
-    mockUserSettings.config.enabledFeatures.useConfettiForTasks = true;
-    userSettings.setWithoutPropogation(mockUserSettings);
-    return () => {
-      mockUserSettings.config.enabledFeatures.useConfettiForTasks = false;
-      userSettings.setWithoutPropogation(mockUserSettings);
-    };
+    userSettings.update((settings) => {
+      settings.config.enabledFeatures.useConfettiForTasks = true;
+      return settings;
+    });
   }
 } satisfies Meta<ConfettiExample>;
 
@@ -31,6 +28,6 @@ export const Default: Story = {
 
 export const MultipleConfetti: Story = {
   args: {
-    numButtons: 3
+    numButtons: 55
   }
 };

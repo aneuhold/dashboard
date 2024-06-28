@@ -4,6 +4,7 @@
   The root of the application.
 -->
 <script lang="ts">
+  import Confetti from '$components/singletons/Confetti/Confetti.svelte';
   import SingletonSnackbar from '$components/singletons/SingletonSnackbar.svelte';
   import SingletonConfirmationDialog from '$components/singletons/dialogs/SingletonConfirmationDialog.svelte';
   import SingletonTaskSharingDialog from '$components/singletons/dialogs/SingletonTaskSharingDialog.svelte';
@@ -51,6 +52,7 @@
     <Login />
   {:else}
     <main>
+      <Confetti />
       <NavBar>
         <div class="content">
           <slot />

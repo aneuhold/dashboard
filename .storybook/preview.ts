@@ -1,22 +1,30 @@
 import { page } from '$app/stores';
-import { userSettings } from '$stores/userSettings/userSettings';
-import { DashboardUserConfig } from '@aneuhold/core-ts-db-lib';
 import type { Preview } from '@storybook/svelte';
 import { spyOn } from '@storybook/test';
 import type { Unsubscriber } from 'svelte/store';
 import StorybookMockData from './globalMockData';
 
+import { setupMockUserSettings } from '$stores/userSettings/userSettings.mock';
 import '../src/globalStyles/global.css';
+
+// Hide the warning about SlotDecorator. This happens whenever a decorator
+// is used.
+//
+// This might be a cool thing to fix by contributing to Storybook.
+const originalConsoleWarn = console.warn;
+console.warn = (...args) => {
+  if (args[0]?.includes(`SlotDecorator> was created without expected prop 'svelteVersion'`)) {
+    return;
+  }
+  originalConsoleWarn(...args);
+};
 
 const preview: Preview = {
   beforeEach: () => {
     // Global mocks
     spyOn(page, 'subscribe').mockResolvedValue(null as unknown as Unsubscriber);
     // Global setup for stores
-    userSettings.setWithoutPropogation({
-      config: new DashboardUserConfig(StorybookMockData.currentUserCto._id),
-      collaborators: {}
-    });
+    setupMockUserSettings(StorybookMockData.currentUserCto._id);
   },
   parameters: {
     controls: {

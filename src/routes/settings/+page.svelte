@@ -7,8 +7,8 @@
   import PageTitle from '$components/PageTitle.svelte';
   import TaskDeletionSettings from '$components/Tasks/TaskDeletionSettings.svelte';
   import GlobalTagSettings from '$components/Tasks/TaskTags/GlobalTagSettings.svelte';
-  import Confetti from '$components/presentational/Confetti/Confetti.svelte';
   import InputBox from '$components/presentational/InputBox.svelte';
+  import Confetti from '$components/singletons/Confetti/Confetti.svelte';
   import { snackbar } from '$components/singletons/SingletonSnackbar.svelte';
   import { userSettings } from '$stores/userSettings/userSettings';
   import DashboardAPIService from '$util/api/DashboardAPIService';
