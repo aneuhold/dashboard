@@ -58,9 +58,7 @@ export class NonogramKatanaItemMapService extends DocumentMapStoreService<Nonogr
    */
   static createOrUpdateItems(userId: ObjectId): void {
     const currentMap = this.getMap();
-    const existingItems = Object.values(currentMap).filter(
-      (item) => item !== undefined
-    ) as NonogramKatanaItem[];
+    const existingItems = Object.values(currentMap).filter((item) => item !== undefined);
     const existingItemNames = new Set(existingItems.map((item) => item.itemName));
     const itemsToAdd: NonogramKatanaItem[] = [];
     const newItemIds: Set<string> = new Set();

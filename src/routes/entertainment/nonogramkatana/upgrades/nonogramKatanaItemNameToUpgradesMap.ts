@@ -18,7 +18,7 @@ const nonogramKatanaItemNameToUpgradesMap: NonogramKatanaItemNameToUpgradesMap =
     if (!acc[itemName]) {
       acc[itemName] = [];
     }
-    acc[itemName]?.push(upgradeName as NonogramKatanaUpgradeName);
+    acc[itemName].push(upgradeName as NonogramKatanaUpgradeName);
   });
   return acc;
 }, {});
