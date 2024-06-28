@@ -3,7 +3,7 @@ import { apiKey } from '$stores/apiKey';
 import { dashboardConfig } from '$stores/dashboardConfig';
 import { LoginState, loginState } from '$stores/loginState';
 import { translations } from '$stores/translations';
-import { userSettings } from '$stores/userSettings';
+import { userSettings } from '$stores/userSettings/userSettings';
 import LocalData from '$util/LocalData/LocalData';
 import {
   APIService,
@@ -14,7 +14,7 @@ import type { BaseDocument, DashboardUserConfig, UserCTO } from '@aneuhold/core-
 import type { UUID } from 'crypto';
 import { NonogramKatanaItemMapService } from '../../services/NonogramKatana/NonogramKatanaItemMapService';
 import { NonogramKatanaUpgradeMapService } from '../../services/NonogramKatana/NonogramKatanaUpgradeMapService';
-import { TaskMapService } from '../../services/Task/TaskMapService';
+import { TaskMapService } from '../../services/Task/TaskMapService/TaskMapService';
 
 const SECONDS_TO_WAIT_BEFORE_FETCHING_INITIAL_DATA = 10;
 

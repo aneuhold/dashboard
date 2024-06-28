@@ -1,4 +1,4 @@
-import type { UserSettings } from '$stores/userSettings';
+import type { UserSettings } from '$stores/userSettings/userSettings';
 import type {
   DashboardConfig,
   ProjectDashboardOptions,

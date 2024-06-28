@@ -4,12 +4,7 @@ import type { DocumentInsertOrUpdateInfo } from '../../services/DocumentMapStore
 import DashboardAPIService from './DashboardAPIService';
 
 /**
- * This service is used to insert or update tasks in the backend. It is
- * responsible for batching the requests and retrying if there is an error.
- *
- * It also stores the currently processing task and the task queue in local
- * storage so that the user can refresh the page and the tasks will still be
- * processed.
+ * The API service for tasks in the dashboard.
  */
 export default class DashboardTaskAPIService {
   /**

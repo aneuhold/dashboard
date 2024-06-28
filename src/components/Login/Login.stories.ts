@@ -56,7 +56,6 @@ export const InvalidCredentialsState: Story = {
     const canvas = within(canvasElement);
     const loginButton = canvas.getByTestId('login-submit-button');
     await expect(loginButton).toBeInTheDocument();
-    console.log(loginButton);
     await userEvent.click(loginButton);
     const invalidCredentialsMessage = canvas.getByText(/Invalid username or password/i);
     await expect(invalidCredentialsMessage).toBeInTheDocument();

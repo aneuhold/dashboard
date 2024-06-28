@@ -68,7 +68,6 @@ function createUserSettingsStore() {
     },
     /**
      * Sets the user settings without updating the backend.
-     * @param newSettings
      */
     setWithoutPropogation: (newSettings: UserSettings) => {
       updateUserSettings(() => newSettings);

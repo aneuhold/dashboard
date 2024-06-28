@@ -17,7 +17,7 @@
   import { DateService } from '@aneuhold/core-ts-lib';
   import Select, { Option } from '@smui/select';
   import { writable, type Updater } from 'svelte/store';
-  import { TaskMapService } from '../../../services/Task/TaskMapService';
+  import { TaskMapService } from '../../../services/Task/TaskMapService/TaskMapService';
   import TaskRecurrenceService from '../../../services/Task/TaskRecurrenceService';
   import TaskRecurrenceInfoIcon from './TaskRecurrenceInfoIcon.svelte';
   import TaskRecurrenceUpdateExample from './TaskRecurrenceUpdateExample.svelte';

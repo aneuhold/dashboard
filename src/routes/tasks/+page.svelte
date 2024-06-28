@@ -7,14 +7,14 @@
   import { goto } from '$app/navigation';
   import { page } from '$app/stores';
   import PageTitle from '$components/PageTitle.svelte';
-  import TaskDetails from '$components/Tasks/TaskDetails.svelte';
+  import TaskDetails from '$components/Tasks/TaskDetails/TaskDetails.svelte';
   import TaskList from '$components/Tasks/TaskList/TaskList.svelte';
-  import FabButton from '$components/presentational/FabButton.svelte';
+  import FabButton from '$components/presentational/FabButton/FabButton.svelte';
+  import { userSettings } from '$stores/userSettings/userSettings';
   import { DashboardTask } from '@aneuhold/core-ts-db-lib';
   import TaskListService from '../../services/Task/TaskListService';
-  import { TaskMapService } from '../../services/Task/TaskMapService';
+  import { TaskMapService } from '../../services/Task/TaskMapService/TaskMapService';
   import TaskService from '../../services/Task/TaskService';
-  import { userSettings } from '$stores/userSettings';
   import { tasksPageInfo } from './pageInfo';
 
   const taskMap = TaskMapService.getStore();

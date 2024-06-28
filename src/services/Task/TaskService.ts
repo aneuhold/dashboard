@@ -2,7 +2,7 @@ import type { BreadCrumbArray } from '$components/BreadCrumb.svelte';
 import { confirmationDialog } from '$components/singletons/dialogs/SingletonConfirmationDialog.svelte';
 import type { DashboardTask } from '@aneuhold/core-ts-db-lib';
 import { ArrayService } from '@aneuhold/core-ts-lib';
-import { TaskMapService } from './TaskMapService';
+import { TaskMapService } from './TaskMapService/TaskMapService';
 
 /**
  * The main task utility service.

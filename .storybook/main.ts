@@ -5,8 +5,8 @@ const config: StorybookConfig = {
   addons: [
     '@storybook/addon-links',
     '@storybook/addon-essentials',
-    '@chromatic-com/storybook',
-    '@storybook/addon-interactions'
+    '@storybook/addon-interactions',
+    '@storybook/addon-actions'
   ],
   framework: {
     name: '@storybook/sveltekit',
@@ -26,7 +26,6 @@ const config: StorybookConfig = {
         }
       }
     });
-    console.log(updatedConfig);
     return updatedConfig;
   }
 };

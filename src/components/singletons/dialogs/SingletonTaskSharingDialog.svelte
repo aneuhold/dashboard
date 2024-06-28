@@ -6,8 +6,8 @@
 -->
 <script lang="ts" context="module">
   import SmartDialog from '$components/presentational/SmartDialog.svelte';
-  import { TaskMapService } from '$services/Task/TaskMapService';
-  import { userSettings } from '$stores/userSettings';
+  import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
+  import { userSettings } from '$stores/userSettings/userSettings';
   import Button, { Label } from '@smui/button';
   import Checkbox from '@smui/checkbox';
   import { Actions, Content, Title } from '@smui/dialog';

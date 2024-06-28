@@ -2,7 +2,7 @@
   import ClickableDiv from '$components/presentational/ClickableDiv.svelte';
   import SquareIconButton from '$components/presentational/SquareIconButton.svelte';
   import { currentUserId } from '$stores/derived/currentUserId';
-  import { userSettings } from '$stores/userSettings';
+  import { userSettings } from '$stores/userSettings/userSettings';
   import {
     DashboardTask,
     getDefaultTaskListFilterSettings,
@@ -10,7 +10,7 @@
     type DashboardTaskListSortSettings
   } from '@aneuhold/core-ts-db-lib';
   import type { DocumentStore } from '../../../services/DocumentMapStoreService';
-  import { TaskMapService } from '../../../services/Task/TaskMapService';
+  import { TaskMapService } from '../../../services/Task/TaskMapService/TaskMapService';
   import TaskTagsService from '../../../services/Task/TaskTagsService';
   import TaskListFilterDialog from './TaskListFilterDialog.svelte';
   import TaskListSortingDialog from './TaskListSortingDialog.svelte';

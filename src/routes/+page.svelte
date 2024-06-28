@@ -4,7 +4,7 @@
   import type { LinkInfo } from '$components/LinkListItem.svelte';
   import PageTitle from '$components/PageTitle.svelte';
   import Paper, { Content, Title } from '@smui/paper';
-  import { userSettings } from '../stores/userSettings';
+  import { userSettings } from '../stores/userSettings/userSettings';
   import { enabledPages } from '../stores/visual/enabledPages';
   import { homePageInfo } from './pageInfo';
 

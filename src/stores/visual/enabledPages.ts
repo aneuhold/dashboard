@@ -1,6 +1,6 @@
 import navInfo, { type PageInfo } from '$util/navInfo';
 import { writable } from 'svelte/store';
-import { userSettings } from '../userSettings';
+import { userSettings } from '../userSettings/userSettings';
 
 function createEnabledPagesStore() {
   const { subscribe, set } = writable<PageInfo[]>(Object.values(navInfo));

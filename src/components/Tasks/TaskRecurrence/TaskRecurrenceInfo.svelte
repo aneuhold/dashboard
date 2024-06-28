@@ -19,7 +19,7 @@
   import Checkbox from '@smui/checkbox';
   import { Actions, Content as DialogContent, Title } from '@smui/dialog';
   import IconButton, { Icon } from '@smui/icon-button';
-  import { TaskMapService } from '../../../services/Task/TaskMapService';
+  import { TaskMapService } from '../../../services/Task/TaskMapService/TaskMapService';
   import TaskRecurrenceService from '../../../services/Task/TaskRecurrenceService';
   import TaskService from '../../../services/Task/TaskService';
   import TaskRecurrenceDetails from './TaskRecurrenceDetails.svelte';

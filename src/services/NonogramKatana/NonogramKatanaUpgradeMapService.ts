@@ -161,9 +161,7 @@ export class NonogramKatanaUpgradeMapService extends DocumentMapStoreService<Non
    */
   static createOrUpdateUpgrades(userId: ObjectId): void {
     const currentMap = this.getMap();
-    const existingUpgrades = Object.values(currentMap).filter(
-      (upgrade) => upgrade !== undefined
-    ) as NonogramKatanaUpgrade[];
+    const existingUpgrades = Object.values(currentMap).filter((upgrade) => upgrade !== undefined);
     const existingUpgradeNames = new Set(existingUpgrades.map((upgrade) => upgrade.upgradeName));
     const upgradesToAdd: NonogramKatanaUpgrade[] = [];
     const newUpgradeIds: Set<string> = new Set();

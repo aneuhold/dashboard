@@ -7,10 +7,10 @@
   import PageTitle from '$components/PageTitle.svelte';
   import TaskDeletionSettings from '$components/Tasks/TaskDeletionSettings.svelte';
   import GlobalTagSettings from '$components/Tasks/TaskTags/GlobalTagSettings.svelte';
-  import Confetti from '$components/presentational/Confetti.svelte';
   import InputBox from '$components/presentational/InputBox.svelte';
+  import { triggerConfetti } from '$components/singletons/Confetti/Confetti.svelte';
   import { snackbar } from '$components/singletons/SingletonSnackbar.svelte';
-  import { userSettings } from '$stores/userSettings';
+  import { userSettings } from '$stores/userSettings/userSettings';
   import DashboardAPIService from '$util/api/DashboardAPIService';
   import Button from '@smui/button';
   import Checkbox from '@smui/checkbox';
@@ -22,7 +22,6 @@
 
   let searchingForUser = false;
   let userNameSearchValue = '';
-  let showConfetti = false;
   let previousUseConfetti = $userSettings.config.enabledFeatures.useConfettiForTasks;
 
   $: collaboratorUserNames = Object.values($userSettings.collaborators).map(
@@ -45,6 +44,17 @@
 
   function handleCollaboratorRemoval(event: CustomEvent<{ chipId: string }>) {
     userSettings.removeCollaborator(event.detail.chipId);
+  }
+
+  function handleEnableConfetti(event: CustomEvent) {
+    if (!previousUseConfetti) {
+      if (event instanceof PointerEvent) {
+        triggerConfetti(event.clientX, event.clientY);
+      }
+      previousUseConfetti = true;
+    } else {
+      previousUseConfetti = false;
+    }
   }
 </script>
 
@@ -123,18 +133,9 @@
         </div>
         <hr class="sectionSeparator" />
         <FormField>
-          <Confetti bind:show={showConfetti} />
           <Checkbox
             bind:checked={$userSettings.config.enabledFeatures.useConfettiForTasks}
-            on:click={() => {
-              if (!previousUseConfetti) {
-                showConfetti = true;
-                previousUseConfetti = true;
-              } else {
-                previousUseConfetti = false;
-                showConfetti = false;
-              }
-            }}
+            on:click={handleEnableConfetti}
             touch
           />
           <span slot="label">Enable confetti for tasks</span>
