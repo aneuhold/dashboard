@@ -12,6 +12,9 @@ if (process.env.SENTRY_AUTH_TOKEN && process.env.SENTRY_AUTH_TOKEN !== '') {
   const env = loadEnv('', process.cwd(), 'SENTRY_AUTH_TOKEN');
   sentryAuthToken = env.SENTRY_AUTH_TOKEN;
 }
+if (!sentryAuthToken) {
+  console.error('No Sentry Auth Token found in the environment variables.');
+}
 
 const viteConfig: UserConfig = {
   plugins: [
