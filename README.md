@@ -5,10 +5,7 @@
 Notes for improvement:
 
 - Little things
-  - Fix up the sentry logging
-    - Make it so localhost doesn't report
-    - Add the username to the logs somehow
-  - Fix issue with BSON error
+  - Fix issue with BSON error once another error comes in
   - Maybe a progress bar for sub-task completion?
 - Storybook improvements
   - Add more specific stories for task details
