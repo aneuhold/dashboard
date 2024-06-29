@@ -1,5 +1,6 @@
 import LocalData, { localDataReady } from '$util/LocalData/LocalData';
 import DashboardAPIService from '$util/api/DashboardAPIService';
+import * as Sentry from '@sentry/sveltekit';
 import { writable } from 'svelte/store';
 
 export enum LoginState {
@@ -15,6 +16,10 @@ function createLoginStateStore() {
 
   function setLoginState(newState: LoginState) {
     _loginState = newState;
+    // Add the Sentry info for the user here
+    if (newState === LoginState.LoggedIn) {
+      Sentry.setUser({ username: LocalData.username });
+    }
     set(_loginState);
   }
 

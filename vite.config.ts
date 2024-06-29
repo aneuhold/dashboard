@@ -1,8 +1,20 @@
 import { sentrySvelteKit } from '@sentry/sveltekit';
 import { sveltekit } from '@sveltejs/kit/vite';
-import type { UserConfig } from 'vite';
+import { loadEnv, type UserConfig } from 'vite';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import { defineConfig, mergeConfig } from 'vitest/config';
+
+// Setup the Sentry Auth Token
+let sentryAuthToken = '';
+if (process.env.SENTRY_AUTH_TOKEN && process.env.SENTRY_AUTH_TOKEN !== '') {
+  sentryAuthToken = process.env.SENTRY_AUTH_TOKEN;
+} else {
+  const env = loadEnv('', process.cwd(), 'SENTRY_AUTH_TOKEN');
+  sentryAuthToken = env.SENTRY_AUTH_TOKEN;
+}
+if (!sentryAuthToken) {
+  console.error('No Sentry Auth Token found in the environment variables.');
+}
 
 const viteConfig: UserConfig = {
   plugins: [
@@ -10,7 +22,8 @@ const viteConfig: UserConfig = {
     sentrySvelteKit({
       sourceMapsUploadOptions: {
         org: 'anton-neuhold',
-        project: 'dashboard'
+        project: 'dashboard',
+        authToken: sentryAuthToken
       }
     }),
     sveltekit(),

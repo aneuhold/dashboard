@@ -5,10 +5,13 @@
 Notes for improvement:
 
 - Little things
-  - neoconfetti/svelte usage on task completion
-  - Design for completed tasks
-  - Auto-focus the task title when creating a new one
+  - Fix issue with BSON error once another error comes in
   - Maybe a progress bar for sub-task completion?
+- Storybook improvements
+  - Add more specific stories for task details
+  - Add story for task row, or task list
+- Add JSDoc ESLint configuration
+- Add task assignment feature
 - See if it can be made to work offline with [this guide](https://developers.google.com/codelabs/pwa-training/pwa03--going-offline#1)
 
 ## Overview
