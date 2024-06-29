@@ -1,11 +1,11 @@
 import { userSettings } from '$stores/userSettings/userSettings';
 import { createNumberArgTypes } from '$storybook/storybookUtil';
 import type { Meta, StoryObj } from '@storybook/svelte';
-import ConfettiExample from './ConfettiSBExample.svelte';
+import SbConfettiExample from './SBConfettiExample.svelte';
 
 const meta = {
   title: 'Singleton Components/Confetti',
-  component: ConfettiExample,
+  component: SbConfettiExample,
   argTypes: {
     ...createNumberArgTypes('numButtons')
   },
@@ -15,7 +15,7 @@ const meta = {
       return settings;
     });
   }
-} satisfies Meta<ConfettiExample>;
+} satisfies Meta<SbConfettiExample>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
