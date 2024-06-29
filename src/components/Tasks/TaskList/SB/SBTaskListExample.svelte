@@ -2,7 +2,7 @@
   import TaskListService from '$services/Task/TaskListService';
   import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
   import { userSettings } from '$stores/userSettings/userSettings';
-  import TaskList from './TaskList.svelte';
+  import TaskList from '../TaskList.svelte';
 
   const taskMap = TaskMapService.getStore();
 

@@ -1,11 +1,8 @@
 import ConfettiSbDecorator from '$components/singletons/Confetti/SBConfettiDecorator.svelte';
-import TaskMapServiceMock from '$services/Task/TaskMapService/TaskMapService.mock';
-import StorybookMockData from '$storybook/globalMockData';
+import SBMockData from '$storybook/globalMockData';
 import { createInvisibleArgTypes } from '$storybook/storybookUtil';
 import type { Meta, StoryObj } from '@storybook/svelte';
 import TaskDetails from './TaskDetails.svelte';
-
-const taskMapMock = new TaskMapServiceMock(StorybookMockData.currentUserCto._id);
 
 const meta = {
   title: 'Stateful Components/TaskDetails',
@@ -16,7 +13,7 @@ const meta = {
   },
   beforeEach: () => {
     // Reset the main task
-    taskMapMock.reset();
+    SBMockData.taskMapServiceMock.reset();
   }
 } satisfies Meta<TaskDetails>;
 
@@ -31,7 +28,7 @@ const defaultStory: Story = {
 
 export const Default: Story = {
   beforeEach: (context) => {
-    const mainTask = taskMapMock.addTask('Test Task');
+    const mainTask = SBMockData.taskMapServiceMock.addTask('Test Task');
     context.args.taskId = mainTask._id.toString();
   },
   args: defaultStory.args

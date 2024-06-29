@@ -2,7 +2,7 @@ import { page } from '$app/stores';
 import type { Preview } from '@storybook/svelte';
 import { spyOn } from '@storybook/test';
 import type { Unsubscriber } from 'svelte/store';
-import StorybookMockData from './globalMockData';
+import SBMockData from './globalMockData';
 
 import { setupMockUserSettings } from '$stores/userSettings/userSettings.mock';
 import { APIService } from '@aneuhold/core-ts-api-lib';
@@ -33,7 +33,7 @@ const preview: Preview = {
       });
     });
     // Global setup for stores
-    setupMockUserSettings(StorybookMockData.currentUserCto._id);
+    setupMockUserSettings(SBMockData.currentUserCto._id);
   },
   parameters: {
     controls: {

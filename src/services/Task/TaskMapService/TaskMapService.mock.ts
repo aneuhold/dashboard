@@ -6,7 +6,7 @@ import { TaskMapService } from './TaskMapService';
 
 /**
  * A mock provider for the TaskMapService. This depends on the backend API
- * being mocked already so it doesnt try to contact the server.
+ * being mocked already so it doesn't try to contact the server.
  */
 export default class TaskMapServiceMock {
   constructor(private userId: ObjectId) {}
