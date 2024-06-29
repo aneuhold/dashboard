@@ -28,7 +28,7 @@ const defaultStory: Story = {
 
 export const Default: Story = {
   beforeEach: (context) => {
-    const mainTask = SBMockData.taskMapServiceMock.addTask('Test Task');
+    const mainTask = SBMockData.taskMapServiceMock.addTask({ title: 'Test Task' });
     context.args.taskId = mainTask._id.toString();
   },
   args: defaultStory.args

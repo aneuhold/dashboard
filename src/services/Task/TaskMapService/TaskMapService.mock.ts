@@ -4,6 +4,18 @@ import type { ObjectId } from 'bson';
 import TaskListService from '../TaskListService';
 import { TaskMapService } from './TaskMapService';
 
+type AddTaskInfo = {
+  title: string;
+  startDate?: Date;
+  dueDate?: Date;
+};
+
+type AddTasksInfo = {
+  numTasks: number;
+  includeStartDates?: boolean;
+  includeDueDates?: boolean;
+};
+
 /**
  * A mock provider for the TaskMapService. This depends on the backend API
  * being mocked already so it doesn't try to contact the server.
@@ -31,14 +43,14 @@ export default class TaskMapServiceMock {
     });
   }
 
-  addTask(title: string) {
-    const task = this.createTask(title);
+  addTask(options: AddTaskInfo): DashboardTask {
+    const task = this.createTask(options);
     TaskMapService.getStore().addDoc(task);
     return task;
   }
 
-  addTasks(numTasks: number): void {
-    const tasks = this.createTasks(numTasks);
+  addTasks(options: AddTasksInfo): void {
+    const tasks = this.createTasks(options);
     TaskMapService.getStore().upsertMany({
       filter: () => true,
       updater: (doc) => doc,
@@ -46,17 +58,38 @@ export default class TaskMapServiceMock {
     });
   }
 
-  private createTasks(numTasks: number): DashboardTask[] {
+  private createTasks(options: AddTasksInfo): DashboardTask[] {
     const tasks: DashboardTask[] = [];
-    for (let i = 0; i < numTasks; i++) {
-      tasks.push(this.createTask(`Test Task ${i + 1}`));
+    for (let i = 0; i < options.numTasks; i++) {
+      // Initialize task info with title
+      const taskInfo: AddTaskInfo = { title: `Test Task ${i + 1}` };
+
+      // If includeStartDates is true, randomly decide to add a start date to half of the tasks
+      if (options.includeStartDates && Math.random() < 0.5) {
+        const pastDays = Math.floor(Math.random() * 30);
+        const startDate = new Date();
+        startDate.setDate(startDate.getDate() - pastDays);
+        taskInfo.startDate = startDate;
+      }
+
+      // If includeDueDates is true, randomly decide to add a due date to half of the tasks
+      if (options.includeDueDates && Math.random() < 0.5) {
+        const futureDays = Math.floor(Math.random() * 30 + 1);
+        const dueDate = new Date();
+        dueDate.setDate(dueDate.getDate() + futureDays);
+        taskInfo.dueDate = dueDate;
+      }
+
+      tasks.push(this.createTask(taskInfo));
     }
     return tasks;
   }
 
-  private createTask(title: string): DashboardTask {
+  private createTask(options: AddTaskInfo): DashboardTask {
     const task = new DashboardTask(this.userId);
-    task.title = title;
+    task.title = options.title;
+    task.startDate = options.startDate;
+    task.dueDate = options.dueDate;
     return task;
   }
 }
