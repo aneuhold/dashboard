@@ -69,6 +69,10 @@ sequenceDiagram
   parentStore->>db: Update DB
 ```
 
+### Logging
+
+Logging is done via Sentry. Configuration is setup in `hooks.client.ts` primarily.
+
 ## Developing
 
 To start working on the project simply run:

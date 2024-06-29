@@ -2,7 +2,9 @@ import * as Sentry from '@sentry/sveltekit';
 import { captureConsoleIntegration, handleErrorWithSentry } from '@sentry/sveltekit';
 
 const debugSentry = false;
-const initalizeSentry = window.location.hostname !== 'localhost' || debugSentry;
+const initalizeSentry =
+  (window.location.hostname !== 'localhost' && !window.location.hostname.includes('netlify.app')) ||
+  debugSentry;
 
 /**
  * Username is set in the `loginState` store. That seemed like the best source
