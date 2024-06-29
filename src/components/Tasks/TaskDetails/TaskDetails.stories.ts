@@ -1,15 +1,11 @@
-import ConfettiSbDecorator from '$components/singletons/Confetti/ConfettiSBDecorator.svelte';
-import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
+import ConfettiSbDecorator from '$components/singletons/Confetti/SBConfettiDecorator.svelte';
+import TaskMapServiceMock from '$services/Task/TaskMapService/TaskMapService.mock';
 import StorybookMockData from '$storybook/globalMockData';
 import { createInvisibleArgTypes } from '$storybook/storybookUtil';
-import { APIService } from '@aneuhold/core-ts-api-lib';
-import { DashboardTask, type DocumentMap } from '@aneuhold/core-ts-db-lib';
 import type { Meta, StoryObj } from '@storybook/svelte';
-import { spyOn } from '@storybook/test';
 import TaskDetails from './TaskDetails.svelte';
 
-let mockedTaskMap: DocumentMap<DashboardTask> = {};
-let mainTask: DashboardTask = new DashboardTask(StorybookMockData.currentUserCto._id);
+const taskMapMock = new TaskMapServiceMock(StorybookMockData.currentUserCto._id);
 
 const meta = {
   title: 'Stateful Components/TaskDetails',
@@ -18,38 +14,30 @@ const meta = {
   argTypes: {
     ...createInvisibleArgTypes('taskId')
   },
-  beforeEach: (context) => {
+  beforeEach: () => {
     // Reset the main task
-    mainTask = new DashboardTask(StorybookMockData.currentUserCto._id);
-    context.args.taskId = mainTask._id.toString();
-    // Setup spys
-    spyOn(APIService, 'callDashboardAPI').mockImplementation((input) => {
-      console.log('mocked', input);
-      return Promise.resolve({
-        success: true,
-        errors: [],
-        data: {}
-      });
-    });
+    taskMapMock.reset();
   }
 } satisfies Meta<TaskDetails>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
-  beforeEach: () => {
-    mainTask.title = 'Test Task';
-    mockedTaskMap = {
-      [mainTask._id.toString()]: mainTask
-    };
-    console.log(mainTask);
-    TaskMapService.getStore().set(mockedTaskMap);
-    return () => {
-      mockedTaskMap = {};
-    };
-  },
+const defaultStory: Story = {
   args: {
     taskId: 'this doesnt actually get used in the story'
   }
+};
+
+export const Default: Story = {
+  beforeEach: (context) => {
+    const mainTask = taskMapMock.addTask('Test Task');
+    context.args.taskId = mainTask._id.toString();
+  },
+  args: defaultStory.args
+};
+
+export const TaskNotFound: Story = {
+  beforeEach: () => {},
+  args: defaultStory.args
 };

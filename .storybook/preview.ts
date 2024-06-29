@@ -5,6 +5,7 @@ import type { Unsubscriber } from 'svelte/store';
 import StorybookMockData from './globalMockData';
 
 import { setupMockUserSettings } from '$stores/userSettings/userSettings.mock';
+import { APIService } from '@aneuhold/core-ts-api-lib';
 import '../src/globalStyles/global.css';
 
 // Hide the warning about SlotDecorator. This happens whenever a decorator
@@ -23,6 +24,14 @@ const preview: Preview = {
   beforeEach: () => {
     // Global mocks
     spyOn(page, 'subscribe').mockResolvedValue(null as unknown as Unsubscriber);
+    spyOn(APIService, 'callDashboardAPI').mockImplementation((input) => {
+      console.log('mocked', input);
+      return Promise.resolve({
+        success: true,
+        errors: [],
+        data: {}
+      });
+    });
     // Global setup for stores
     setupMockUserSettings(StorybookMockData.currentUserCto._id);
   },
