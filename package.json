@@ -16,9 +16,9 @@
   "packageManager": "yarn@4.3.1",
   "type": "module",
   "devDependencies": {
-    "@aneuhold/core-ts-api-lib": "^1.0.78",
-    "@aneuhold/core-ts-lib": "^1.1.28",
-    "@aneuhold/eslint-config": "^1.0.17",
+    "@aneuhold/core-ts-api-lib": "^1.0.80",
+    "@aneuhold/core-ts-lib": "^1.1.30",
+    "@aneuhold/eslint-config": "^1.0.18",
     "@fontsource/fira-mono": "^5.0.13",
     "@neoconfetti/svelte": "^2.2.1",
     "@smui-extra/accordion": "^7.0.0",
