@@ -1,6 +1,7 @@
 <script lang="ts">
   import TaskListService from '$services/Task/TaskListService';
   import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
+  import { MockTaskSharedWith } from '$services/Task/TaskMapService/TaskMapService.mock';
   import { userSettings } from '$stores/userSettings/userSettings';
   import SBMockData from '$storybook/globalMockData';
   import TaskList from '../TaskList.svelte';
@@ -10,6 +11,7 @@
   export let includeStartDatesInFuture = false;
   export let includeDueDates = false;
   export let includeOverDueDates = false;
+  export let sharedWith: MockTaskSharedWith | undefined = undefined;
 
   $: {
     SBMockData.taskMapServiceMock.reset();
@@ -18,7 +20,8 @@
       includeStartDates,
       includeStartDatesInFuture,
       includeDueDates,
-      includeOverDueDates
+      includeOverDueDates,
+      sharedWith
     });
   }
 

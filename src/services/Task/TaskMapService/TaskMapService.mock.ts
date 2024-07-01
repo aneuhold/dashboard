@@ -1,4 +1,5 @@
 import { userSettings } from '$stores/userSettings/userSettings';
+import SBMockData from '$storybook/globalMockData';
 import { DashboardTask, type DashboardTaskFilterAndSortResult } from '@aneuhold/core-ts-db-lib';
 import type { ObjectId } from 'bson';
 import TaskListService from '../TaskListService';
@@ -8,6 +9,8 @@ type AddTaskInfo = {
   title: string;
   startDate?: Date;
   dueDate?: Date;
+  sharedWith?: ObjectId[];
+  ownerId?: ObjectId;
 };
 
 type AddTasksInfo = {
@@ -19,7 +22,17 @@ type AddTasksInfo = {
    * If set to true, it will make half of the due dates overdue.
    */
   includeOverDueDates?: boolean;
+  sharedWith?: MockTaskSharedWith;
 };
+
+/**
+ * Represents the different ways a task can be shared with others in the mock.
+ */
+export enum MockTaskSharedWith {
+  withMe,
+  withMultiplePeople,
+  withSinglePerson
+}
 
 /**
  * A mock provider for the TaskMapService. This depends on the backend API
@@ -69,43 +82,50 @@ export default class TaskMapServiceMock {
       // Initialize task info with title
       const taskInfo: AddTaskInfo = { title: `Test Task ${i + 1}` };
 
-      // If includeStartDates is true, randomly decide to add a start date to half of the tasks
-      if ((options.includeStartDates || options.includeStartDatesInFuture) && Math.random() < 0.5) {
-        const pastDays = Math.floor(Math.random() * 30);
-        const startDate = new Date();
-        startDate.setDate(startDate.getDate() - pastDays);
-        taskInfo.startDate = startDate;
+      // Decide on start date
+      if (options.includeStartDates || options.includeStartDatesInFuture) {
+        if (Math.random() < 0.5) {
+          taskInfo.startDate = this.getRandomDate(30, options.includeStartDatesInFuture ?? false);
+        }
       }
 
-      // If includeStartDatesInFuture is true, randomly decide to make tasks
-      // with an existing start date to be in the future
-      if (options.includeStartDatesInFuture && taskInfo.startDate && Math.random() < 0.5) {
-        const futureDays = Math.floor(Math.random() * 30 + 1);
-        const newStartDate = new Date();
-        newStartDate.setDate(newStartDate.getDate() + futureDays);
-        taskInfo.startDate = newStartDate;
+      // Decide on due date
+      if (options.includeDueDates || options.includeOverDueDates) {
+        if (Math.random() < 0.5) {
+          taskInfo.dueDate = this.getRandomDate(30, !options.includeOverDueDates);
+        }
       }
 
-      // If includeDueDates is true, randomly decide to add a due date to half of the tasks
-      if ((options.includeDueDates || options.includeOverDueDates) && Math.random() < 0.5) {
-        const futureDays = Math.floor(Math.random() * 30 + 1);
-        const dueDate = new Date();
-        dueDate.setDate(dueDate.getDate() + futureDays);
-        taskInfo.dueDate = dueDate;
-      }
-
-      // If includeOverDueDates is true, randomly decide to make tasks with
-      // an existing due date to be in the past
-      // Update this with GitHub copilot to allow for some in-between to work
-      // between the existing start date and the due date.
+      // Adjust due date if it should be between the start date and now
       if (
         options.includeOverDueDates &&
         taskInfo.dueDate &&
-        !taskInfo.startDate &&
+        taskInfo.startDate &&
         Math.random() < 0.5
       ) {
-        const pastDays = Math.floor(Math.random() * 30);
-        taskInfo.dueDate.setDate(taskInfo.dueDate.getDate() - pastDays);
+        const startDate = taskInfo.startDate.getTime();
+        const now = Date.now();
+        const timeDiff = now - startDate;
+        if (timeDiff > 0) {
+          // Set due date to a random time between start date and now
+          taskInfo.dueDate = new Date(startDate + Math.random() * timeDiff);
+        }
+      }
+
+      // Add sharedWith if provided
+      if (options.sharedWith !== undefined) {
+        switch (options.sharedWith) {
+          case MockTaskSharedWith.withMe:
+            taskInfo.sharedWith = [this.userId];
+            taskInfo.ownerId = SBMockData.collaborator1._id;
+            break;
+          case MockTaskSharedWith.withSinglePerson:
+            taskInfo.sharedWith = [SBMockData.collaborator1._id];
+            break;
+          case MockTaskSharedWith.withMultiplePeople:
+            taskInfo.sharedWith = [SBMockData.collaborator1._id, SBMockData.collaborator2._id];
+            break;
+        }
       }
 
       tasks.push(this.createTask(taskInfo));
@@ -118,6 +138,15 @@ export default class TaskMapServiceMock {
     task.title = options.title;
     task.startDate = options.startDate;
     task.dueDate = options.dueDate;
+    task.userId = options.ownerId ?? this.userId;
+    task.sharedWith = options.sharedWith ?? [];
     return task;
+  }
+
+  private getRandomDate(days: number, future: boolean): Date {
+    const date = new Date();
+    const modifier = future ? 1 : -1;
+    date.setDate(date.getDate() + modifier * Math.floor(Math.random() * days + 1));
+    return date;
   }
 }
