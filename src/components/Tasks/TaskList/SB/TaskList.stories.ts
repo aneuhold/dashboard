@@ -6,8 +6,15 @@ import SbTaskListExample from './SBTaskListExample.svelte';
 const sbTaskListMeta = {
   title: 'Stateful Components/TaskList',
   component: SbTaskListExample,
-  decorators: [() => ({ Component: SbConfettiDecorator, svelteVersion: 4 })],
+  decorators: [() => ({ Component: SbConfettiDecorator })],
   argTypes: {},
+  args: {
+    numTasks: 20,
+    includeDueDates: false,
+    includeOverDueDates: false,
+    includeStartDates: false,
+    includeStartDatesInFuture: false
+  },
   beforeEach: () => {
     // Reset the mock
     SBMockData.taskMapServiceMock.reset();
