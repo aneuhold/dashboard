@@ -7,7 +7,7 @@
   import Confetti from '$components/singletons/Confetti/Confetti.svelte';
   import SingletonSnackbar from '$components/singletons/SingletonSnackbar.svelte';
   import SingletonConfirmationDialog from '$components/singletons/dialogs/SingletonConfirmationDialog.svelte';
-  import SingletonTaskSharingDialog from '$components/singletons/dialogs/SingletonTaskSharingDialog.svelte';
+  import SingletonTaskSharingDialog from '$components/singletons/dialogs/SingletonTaskSharingDialog/SingletonTaskSharingDialog.svelte';
   import LocalData from '$util/LocalData/LocalData';
   import CircularProgress from '@smui/circular-progress';
   import { onDestroy, onMount } from 'svelte';

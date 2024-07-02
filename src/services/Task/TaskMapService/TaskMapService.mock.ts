@@ -29,6 +29,7 @@ type AddTasksInfo = {
  * Represents the different ways a task can be shared with others in the mock.
  */
 export enum MockTaskSharedWith {
+  none,
   withMe,
   withMultiplePeople,
   withSinglePerson

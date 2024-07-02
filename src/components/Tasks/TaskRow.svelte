@@ -9,7 +9,7 @@
   import type { MenuButtonItem } from '$components/presentational/MenuButton.svelte';
   import MenuButton from '$components/presentational/MenuButton.svelte';
   import { confirmationDialog } from '$components/singletons/dialogs/SingletonConfirmationDialog.svelte';
-  import { taskSharingDialog } from '$components/singletons/dialogs/SingletonTaskSharingDialog.svelte';
+  import { taskSharingDialog } from '$components/singletons/dialogs/SingletonTaskSharingDialog/SingletonTaskSharingDialog.svelte';
   import { currentUserId } from '$stores/derived/currentUserId';
   import { DashboardTask, DashboardTaskService, RecurrenceEffect } from '@aneuhold/core-ts-db-lib';
   import Card, { Content as CardContent } from '@smui/card';
