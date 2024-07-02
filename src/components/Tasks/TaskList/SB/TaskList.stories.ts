@@ -21,7 +21,8 @@ const sbTaskListMeta = {
     includeOverDueDates: false,
     includeStartDates: false,
     includeStartDatesInFuture: false,
-    sharedWith: MockTaskSharedWith.none
+    sharedWith: MockTaskSharedWith.none,
+    tags: []
   }
 } satisfies Meta<SbTaskListExample>;
 export default sbTaskListMeta;

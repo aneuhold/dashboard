@@ -12,6 +12,7 @@
   export let includeDueDates = false;
   export let includeOverDueDates = false;
   export let sharedWith: MockTaskSharedWith = MockTaskSharedWith.none;
+  export let tags: string[] = [];
 
   $: {
     SBMockData.taskMapServiceMock.reset();
@@ -21,7 +22,8 @@
       includeStartDatesInFuture,
       includeDueDates,
       includeOverDueDates,
-      sharedWith
+      sharedWith,
+      tags
     });
   }
 

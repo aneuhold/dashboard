@@ -3,6 +3,7 @@ import SBMockData from '$storybook/globalMockData';
 import { DashboardTask, type DashboardTaskFilterAndSortResult } from '@aneuhold/core-ts-db-lib';
 import type { ObjectId } from 'bson';
 import TaskListService from '../TaskListService';
+import TaskTagsService from '../TaskTagsService';
 import { TaskMapService } from './TaskMapService';
 
 type AddTaskInfo = {
@@ -11,6 +12,7 @@ type AddTaskInfo = {
   dueDate?: Date;
   sharedWith?: ObjectId[];
   ownerId?: ObjectId;
+  tags?: string[];
 };
 
 type AddTasksInfo = {
@@ -23,6 +25,7 @@ type AddTasksInfo = {
    */
   includeOverDueDates?: boolean;
   sharedWith?: MockTaskSharedWith;
+  tags?: string[];
 };
 
 /**
@@ -114,7 +117,7 @@ export default class TaskMapServiceMock {
       }
 
       // Add sharedWith if provided
-      if (options.sharedWith !== undefined) {
+      if (options.sharedWith !== undefined && options.sharedWith !== MockTaskSharedWith.none) {
         switch (options.sharedWith) {
           case MockTaskSharedWith.withMe:
             taskInfo.sharedWith = [this.userId];
@@ -129,6 +132,14 @@ export default class TaskMapServiceMock {
         }
       }
 
+      // Add tags
+      if (options.tags) {
+        taskInfo.tags = options.tags;
+        options.tags.forEach((tag) => {
+          TaskTagsService.addTagForUser(tag);
+        });
+      }
+
       tasks.push(this.createTask(taskInfo));
     }
     return tasks;
@@ -141,6 +152,7 @@ export default class TaskMapServiceMock {
     task.dueDate = options.dueDate;
     task.userId = options.ownerId ?? this.userId;
     task.sharedWith = options.sharedWith ?? [];
+    task.tags = { [this.userId.toString()]: options.tags ?? [] };
     return task;
   }
 
