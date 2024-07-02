@@ -1,6 +1,9 @@
 import SbConfettiDecorator from '$components/singletons/Confetti/SBConfettiDecorator.svelte';
 import SbSingletonTaskSharingDialogDecorator from '$components/singletons/dialogs/SingletonTaskSharingDialog/SBSingletonTaskSharingDialogDecorator.svelte';
-import { MockTaskSharedWith } from '$services/Task/TaskMapService/TaskMapService.mock';
+import {
+  MockTaskDescription,
+  MockTaskSharedWith
+} from '$services/Task/TaskMapService/TaskMapService.mock';
 import { createEnumArgType } from '$storybook/storybookUtil';
 import type { Meta } from '@storybook/svelte';
 import SbTaskListExample from './SBTaskListExample.svelte';
@@ -13,7 +16,8 @@ const sbTaskListMeta = {
     () => ({ Component: SbSingletonTaskSharingDialogDecorator })
   ],
   argTypes: {
-    sharedWith: createEnumArgType(MockTaskSharedWith)
+    sharedWith: createEnumArgType(MockTaskSharedWith),
+    descriptions: createEnumArgType(MockTaskDescription)
   },
   args: {
     numTasks: 20,
@@ -22,7 +26,8 @@ const sbTaskListMeta = {
     includeStartDates: false,
     includeStartDatesInFuture: false,
     sharedWith: MockTaskSharedWith.none,
-    tags: []
+    tags: [],
+    descriptions: MockTaskDescription.none
   }
 } satisfies Meta<SbTaskListExample>;
 export default sbTaskListMeta;

@@ -13,6 +13,7 @@ type AddTaskInfo = {
   sharedWith?: ObjectId[];
   ownerId?: ObjectId;
   tags?: string[];
+  description?: string;
 };
 
 type AddTasksInfo = {
@@ -26,6 +27,7 @@ type AddTasksInfo = {
   includeOverDueDates?: boolean;
   sharedWith?: MockTaskSharedWith;
   tags?: string[];
+  descriptions?: MockTaskDescription;
 };
 
 /**
@@ -36,6 +38,12 @@ export enum MockTaskSharedWith {
   withMe,
   withMultiplePeople,
   withSinglePerson
+}
+
+export enum MockTaskDescription {
+  none,
+  short,
+  long
 }
 
 /**
@@ -140,6 +148,19 @@ export default class TaskMapServiceMock {
         });
       }
 
+      // Add a description
+      if (options.descriptions) {
+        switch (options.descriptions) {
+          case MockTaskDescription.short:
+            taskInfo.description = 'This is a short description.';
+            break;
+          case MockTaskDescription.long:
+            taskInfo.description =
+              'This is a long description. It contains more details about the task, its objectives, and how it should be accomplished.\nThis might include links to resources, expected outcomes, and any other relevant information that can help in the completion of the task.';
+            break;
+        }
+      }
+
       tasks.push(this.createTask(taskInfo));
     }
     return tasks;
@@ -153,6 +174,7 @@ export default class TaskMapServiceMock {
     task.userId = options.ownerId ?? this.userId;
     task.sharedWith = options.sharedWith ?? [];
     task.tags = { [this.userId.toString()]: options.tags ?? [] };
+    task.description = options.description ?? '';
     return task;
   }
 
