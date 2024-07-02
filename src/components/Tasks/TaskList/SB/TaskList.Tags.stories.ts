@@ -4,27 +4,29 @@ import sbTaskListMeta from './TaskList.stories';
 
 const meta = {
   ...sbTaskListMeta,
-  title: 'Stateful Components/TaskList/Dates'
+  title: 'Stateful Components/TaskList/Tags'
 } satisfies Meta<SbTaskListExample>;
 export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const DueDates: Story = {
+export const SingleTag: Story = {
   args: {
-    includeDueDates: true
+    numTasks: 1,
+    tags: ['tag1']
   }
 };
 
-export const StartDates: Story = {
+export const ThreeTags: Story = {
   args: {
-    includeStartDates: true
+    numTasks: 1,
+    tags: ['tag1', 'tag2', 'tag3']
   }
 };
 
-export const BothDates: Story = {
+export const ManyTags: Story = {
   args: {
-    includeDueDates: true,
-    includeStartDates: true
+    numTasks: 1,
+    tags: ['tag1', 'tag2', 'tag3', 'Some Really Long Tag Name', 'Tag5', 'Tag6']
   }
 };

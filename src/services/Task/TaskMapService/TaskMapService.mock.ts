@@ -1,20 +1,50 @@
 import { userSettings } from '$stores/userSettings/userSettings';
+import SBMockData from '$storybook/globalMockData';
 import { DashboardTask, type DashboardTaskFilterAndSortResult } from '@aneuhold/core-ts-db-lib';
 import type { ObjectId } from 'bson';
 import TaskListService from '../TaskListService';
+import TaskTagsService from '../TaskTagsService';
 import { TaskMapService } from './TaskMapService';
 
 type AddTaskInfo = {
   title: string;
   startDate?: Date;
   dueDate?: Date;
+  sharedWith?: ObjectId[];
+  ownerId?: ObjectId;
+  tags?: string[];
+  description?: string;
 };
 
 type AddTasksInfo = {
   numTasks: number;
   includeStartDates?: boolean;
+  includeStartDatesInFuture?: boolean;
   includeDueDates?: boolean;
+  /**
+   * If set to true, it will make half of the due dates overdue.
+   */
+  includeOverDueDates?: boolean;
+  sharedWith?: MockTaskSharedWith;
+  tags?: string[];
+  descriptions?: MockTaskDescription;
 };
+
+/**
+ * Represents the different ways a task can be shared with others in the mock.
+ */
+export enum MockTaskSharedWith {
+  none,
+  withMe,
+  withMultiplePeople,
+  withSinglePerson
+}
+
+export enum MockTaskDescription {
+  none,
+  short,
+  long
+}
 
 /**
  * A mock provider for the TaskMapService. This depends on the backend API
@@ -64,20 +94,71 @@ export default class TaskMapServiceMock {
       // Initialize task info with title
       const taskInfo: AddTaskInfo = { title: `Test Task ${i + 1}` };
 
-      // If includeStartDates is true, randomly decide to add a start date to half of the tasks
-      if (options.includeStartDates && Math.random() < 0.5) {
-        const pastDays = Math.floor(Math.random() * 30);
-        const startDate = new Date();
-        startDate.setDate(startDate.getDate() - pastDays);
-        taskInfo.startDate = startDate;
+      // Decide on start date
+      if (options.includeStartDates || options.includeStartDatesInFuture) {
+        if (Math.random() < 0.5) {
+          taskInfo.startDate = this.getRandomDate(30, options.includeStartDatesInFuture ?? false);
+        }
       }
 
-      // If includeDueDates is true, randomly decide to add a due date to half of the tasks
-      if (options.includeDueDates && Math.random() < 0.5) {
-        const futureDays = Math.floor(Math.random() * 30 + 1);
-        const dueDate = new Date();
-        dueDate.setDate(dueDate.getDate() + futureDays);
-        taskInfo.dueDate = dueDate;
+      // Decide on due date
+      if (options.includeDueDates || options.includeOverDueDates) {
+        if (Math.random() < 0.5) {
+          taskInfo.dueDate = this.getRandomDate(30, !options.includeOverDueDates);
+        }
+      }
+
+      // Adjust due date if it should be between the start date and now
+      if (
+        options.includeOverDueDates &&
+        taskInfo.dueDate &&
+        taskInfo.startDate &&
+        Math.random() < 0.5
+      ) {
+        const startDate = taskInfo.startDate.getTime();
+        const now = Date.now();
+        const timeDiff = now - startDate;
+        if (timeDiff > 0) {
+          // Set due date to a random time between start date and now
+          taskInfo.dueDate = new Date(startDate + Math.random() * timeDiff);
+        }
+      }
+
+      // Add sharedWith if provided
+      if (options.sharedWith !== undefined && options.sharedWith !== MockTaskSharedWith.none) {
+        switch (options.sharedWith) {
+          case MockTaskSharedWith.withMe:
+            taskInfo.sharedWith = [this.userId];
+            taskInfo.ownerId = SBMockData.collaborator1._id;
+            break;
+          case MockTaskSharedWith.withSinglePerson:
+            taskInfo.sharedWith = [SBMockData.collaborator1._id];
+            break;
+          case MockTaskSharedWith.withMultiplePeople:
+            taskInfo.sharedWith = [SBMockData.collaborator1._id, SBMockData.collaborator2._id];
+            break;
+        }
+      }
+
+      // Add tags
+      if (options.tags) {
+        taskInfo.tags = options.tags;
+        options.tags.forEach((tag) => {
+          TaskTagsService.addTagForUser(tag);
+        });
+      }
+
+      // Add a description
+      if (options.descriptions) {
+        switch (options.descriptions) {
+          case MockTaskDescription.short:
+            taskInfo.description = 'This is a short description.';
+            break;
+          case MockTaskDescription.long:
+            taskInfo.description =
+              'This is a long description. It contains more details about the task, its objectives, and how it should be accomplished.\nThis might include links to resources, expected outcomes, and any other relevant information that can help in the completion of the task.';
+            break;
+        }
       }
 
       tasks.push(this.createTask(taskInfo));
@@ -90,6 +171,17 @@ export default class TaskMapServiceMock {
     task.title = options.title;
     task.startDate = options.startDate;
     task.dueDate = options.dueDate;
+    task.userId = options.ownerId ?? this.userId;
+    task.sharedWith = options.sharedWith ?? [];
+    task.tags = { [this.userId.toString()]: options.tags ?? [] };
+    task.description = options.description ?? '';
     return task;
+  }
+
+  private getRandomDate(days: number, future: boolean): Date {
+    const date = new Date();
+    const modifier = future ? 1 : -1;
+    date.setDate(date.getDate() + modifier * Math.floor(Math.random() * days + 1));
+    return date;
   }
 }

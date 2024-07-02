@@ -1,4 +1,3 @@
-import SBMockData from '$storybook/globalMockData';
 import type { Meta, StoryObj } from '@storybook/svelte';
 import type SbTaskListExample from './SBTaskListExample.svelte';
 import sbTaskListMeta from './TaskList.stories';
@@ -12,17 +11,15 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const SingleTask: Story = {
-  beforeEach: () => {
-    SBMockData.taskMapServiceMock.addTask({ title: 'Test Task' });
+  args: {
+    numTasks: 1
   }
 };
 
 export const NoTasks: Story = {
-  beforeEach: () => {}
-};
-
-export const MultipleTasks: Story = {
-  beforeEach: () => {
-    SBMockData.taskMapServiceMock.addTasks({ numTasks: 20 });
+  args: {
+    numTasks: 0
   }
 };
+
+export const MultipleTasks: Story = {};
