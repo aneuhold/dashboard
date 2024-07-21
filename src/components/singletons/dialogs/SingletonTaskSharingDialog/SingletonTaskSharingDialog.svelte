@@ -26,7 +26,25 @@
   };
 
   const currentTaskId = writable<string | null>(null);
-  const open = writable(false);
+  const open = createOpenStore();
+
+  function createOpenStore() {
+    const { subscribe, set } = writable(false);
+
+    return {
+      subscribe,
+      set: (value: boolean) => {
+        if (value) {
+          set(value);
+        } else {
+          // Reset the current task id when the dialog is closed. This helps
+          // prevent errors if the task is deleted after the dialog is closed.
+          currentTaskId.set(null);
+          set(value);
+        }
+      }
+    };
+  }
 </script>
 
 <script lang="ts">

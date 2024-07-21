@@ -3,7 +3,7 @@
   import Snackbar, { Actions, Label } from '@smui/snackbar';
   import { writable } from 'svelte/store';
 
-  let snackBarRef: Snackbar;
+  let snackBarRef: Snackbar | undefined;
 
   const openSnackBar = () => {
     if (snackBarRef) {
