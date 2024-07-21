@@ -1,17 +1,22 @@
-# Personal Dashboard
-
-[![Netlify Status](https://api.netlify.com/api/v1/badges/2e7125fe-8ccd-4abf-ac69-b4acae3e3483/deploy-status)](https://app.netlify.com/sites/celadon-kataifi-627143/deploys)
+# ⚙️ Personal Dashboard ⚙️
 
 Notes for improvement:
 
 - Little things
   - Fix issue with BSON error once another error comes in
   - Maybe a progress bar for sub-task completion?
-- Storybook improvements
-  - Add more specific stories for task details
-  - Add story for task row, or task list
 - Add JSDoc ESLint configuration
 - Add task assignment feature
+  - For the task list view, put it under the start date, and highlight in green if it is assigned to the current user
+  - For the task details, put "Assigned To" under "Shared With".
+    - If the current user is the owner, and the task is already shared, then change the share button to "Assign / Share"
+    - If the current user is not the owner, change the share button to "Assign"
+    - If the current user is the owner and the task is not shared, the button should stay as "Share"
+- Update "Show all children view" for Task List
+  - Make it so that it has breadcrumbs to the parent task for each task shown
+- Add Activity feature
+  - Put the activity dropdown inbetween the "share" + "delete" and done rows but make it hard to tap so it isn't accidentally hit. Actually, just put the drop-down button on the left.
+  - Group activity by the last person that made updates over the past day. Still need to think of a data structure to do this but doesn't seem too tough
 - See if it can be made to work offline with [this guide](https://developers.google.com/codelabs/pwa-training/pwa03--going-offline#1)
 
 ## Overview
