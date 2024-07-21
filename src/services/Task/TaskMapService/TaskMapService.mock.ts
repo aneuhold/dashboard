@@ -167,7 +167,7 @@ export default class TaskMapServiceMock {
   }
 
   private createTask(options: AddTaskInfo): DashboardTask {
-    const task = new DashboardTask(this.userId);
+    const task = new DashboardTask(options.ownerId ?? this.userId);
     task.title = options.title;
     task.startDate = options.startDate;
     task.dueDate = options.dueDate;

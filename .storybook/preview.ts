@@ -38,6 +38,8 @@ const preview: Preview = {
     SBMockData.taskMapServiceMock.reset();
     SBMockData.userSettingsMock.reset();
     SBMockData.userSettingsMock.enableConfetti();
+    SBMockData.userSettingsMock.addCollaborator(SBMockData.collaborator1);
+    SBMockData.userSettingsMock.addCollaborator(SBMockData.collaborator2);
   },
   parameters: {
     controls: {
