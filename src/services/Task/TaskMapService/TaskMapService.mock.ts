@@ -11,6 +11,7 @@ type AddTaskInfo = {
   startDate?: Date;
   dueDate?: Date;
   sharedWith?: ObjectId[];
+  assignedTo?: ObjectId;
   ownerId?: ObjectId;
   tags?: string[];
   description?: string;
@@ -38,6 +39,12 @@ export enum MockTaskSharedWith {
   withMe,
   withMultiplePeople,
   withSinglePerson
+}
+
+export enum MockTaskAssignment {
+  none,
+  toMe,
+  toOther
 }
 
 export enum MockTaskDescription {
@@ -173,6 +180,7 @@ export default class TaskMapServiceMock {
     task.dueDate = options.dueDate;
     task.userId = options.ownerId ?? this.userId;
     task.sharedWith = options.sharedWith ?? [];
+    task.assignedTo = options.assignedTo;
     task.tags = { [this.userId.toString()]: options.tags ?? [] };
     task.description = options.description ?? '';
     return task;

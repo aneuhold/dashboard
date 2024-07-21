@@ -25,9 +25,10 @@
   import TaskDateInfo from '../TaskDate/TaskDateInfo.svelte';
   import TaskList from '../TaskList/TaskList.svelte';
   import TaskRecurrenceInfo from '../TaskRecurrence/TaskRecurrenceInfo.svelte';
-  import TaskShareButton from '../TaskShareButton.svelte';
-  import TaskSharingInfo from '../TaskSharingInfo.svelte';
   import TaskTagsSelector from '../TaskTags/TaskTagsSelector.svelte';
+  import TaskAssignmentInfo from './TaskAssignmentInfo.svelte';
+  import TaskShareButton from './TaskShareButton.svelte';
+  import TaskSharingInfo from './TaskSharingInfo.svelte';
 
   export let taskId: string;
 
@@ -97,7 +98,10 @@
           <TaskRecurrenceInfo {taskId} childTaskIds={allChildrenIds} />
           <div class="extraTaskInfo">
             <TaskTagsSelector {taskId} />
-            <TaskSharingInfo {taskId} />
+            <div>
+              <TaskSharingInfo {taskId} />
+              <TaskAssignmentInfo {taskId} />
+            </div>
           </div>
           <div class="taskButtons">
             <TaskShareButton {taskId} />

@@ -1,5 +1,8 @@
 <script lang="ts">
-  import { MockTaskSharedWith } from '$services/Task/TaskMapService/TaskMapService.mock';
+  import {
+    MockTaskAssignment,
+    MockTaskSharedWith
+  } from '$services/Task/TaskMapService/TaskMapService.mock';
   import SBMockData from '$storybook/globalMockData';
   import { DashboardTask } from '@aneuhold/core-ts-db-lib';
   import { ObjectId } from 'bson';
@@ -7,6 +10,7 @@
 
   export let mainTaskExists = true;
   export let sharedWith: MockTaskSharedWith = MockTaskSharedWith.none;
+  export let assignedTo: MockTaskAssignment = MockTaskAssignment.none;
 
   let mainTask: DashboardTask | undefined;
   $: taskId = mainTask ? mainTask._id.toString() : 'nonExistentTaskId';
@@ -33,10 +37,24 @@
           break;
       }
 
+      // assignedTo setup
+      let assignedToId: ObjectId | undefined;
+      switch (assignedTo) {
+        case MockTaskAssignment.none:
+          break;
+        case MockTaskAssignment.toMe:
+          assignedToId = SBMockData.currentUserCto._id;
+          break;
+        case MockTaskAssignment.toOther:
+          assignedToId = SBMockData.collaborator1._id;
+          break;
+      }
+
       mainTask = SBMockData.taskMapServiceMock.addTask({
         title: 'TestTask',
         sharedWith: sharedWithArray,
-        ownerId: mainTaskOwnerId
+        ownerId: mainTaskOwnerId,
+        assignedTo: assignedToId
       });
     }
   }

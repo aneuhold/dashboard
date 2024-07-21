@@ -3,8 +3,8 @@
   import { taskSharingDialog } from '$components/singletons/dialogs/SingletonTaskSharingDialog/SingletonTaskSharingDialog.svelte';
   import { userSettings } from '$stores/userSettings/userSettings';
   import Button, { Icon } from '@smui/button';
-  import { TaskMapService } from '../../services/Task/TaskMapService/TaskMapService';
-  import TaskService from '../../services/Task/TaskService';
+  import { TaskMapService } from '../../../services/Task/TaskMapService/TaskMapService';
+  import TaskService from '../../../services/Task/TaskService';
 
   export let taskId: string;
 
