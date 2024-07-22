@@ -27,8 +27,8 @@
 {#if assignedUser}
   <div class="container">
     <span>Assigned To</span>
-    <span class={assignedUserIsCurrentuser ? 'currentUserText' : ''}>
-      {assignedUser.userName}
+    <span class={assignedUserIsCurrentuser ? 'currentUserText' : 'dimmed-color'}>
+      {assignedUserIsCurrentuser ? 'Me' : assignedUser.userName}
     </span>
   </div>
 {/if}

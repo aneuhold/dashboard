@@ -55,5 +55,6 @@
     margin-top: 0px;
     margin-left: 0px;
     padding-inline-start: 24px;
+    margin-block-end: 0px;
   }
 </style>

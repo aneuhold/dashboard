@@ -6,7 +6,7 @@ Notes for improvement:
   - Fix issue with BSON error once another error comes in
   - Maybe a progress bar for sub-task completion?
 - Add JSDoc ESLint configuration
-- Add task assignment feature
+- Add task assignment feature 👉 Left off needing to build a currrentUser store
   - For the task list view, put it under the start date, and highlight in green if it is assigned to the current user
   - For the task details, put "Assigned To" under "Shared With".
     - If the current user is the owner, and the task is already shared, then change the share button to "Assign / Share"
