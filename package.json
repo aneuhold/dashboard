@@ -13,7 +13,7 @@
     "upgrade:smui": "yarn up '@smui/*'",
     "storybook": "yarn theme && storybook dev -p 6006"
   },
-  "packageManager": "yarn@4.3.1",
+  "packageManager": "yarn@4.4.0",
   "type": "module",
   "devDependencies": {
     "@aneuhold/core-ts-api-lib": "^1.0.95",
@@ -56,7 +56,7 @@
     "@sveltejs/kit": "^2.5.17",
     "@sveltejs/vite-plugin-svelte": "^3.1.1",
     "@types/cookie": "^0.6.0",
-    "@types/node": "^20.14.9",
+    "@types/node": "^20.15.0",
     "@typescript-eslint/eslint-plugin": "^8.0.0",
     "@typescript-eslint/parser": "^8.0.0",
     "bson": "patch:bson@npm%3A6.2.0#~/.yarn/patches/bson-npm-6.2.0-3d364484ee.patch",
@@ -69,10 +69,10 @@
     "svelte-confetti-explosion": "^0.4.0",
     "svelty-picker": "^5.2.9",
     "tslib": "^2.6.3",
-    "typescript": "^5.5.2",
-    "vite": "^5.3.2",
+    "typescript": "^5.5.4",
+    "vite": "^5.4.1",
     "vite-plugin-node-polyfills": "^0.22.0",
-    "vitest": "^1.6.0"
+    "vitest": "^2.0.5"
   },
   "devDependenciesComments": {
     "svelte": "Locked at 4.x because 5.x doesn't seem to work with @smui components as of 11/25/2023"
