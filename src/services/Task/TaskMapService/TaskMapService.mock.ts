@@ -116,7 +116,8 @@ export default class TaskMapServiceMock {
         title: `Test Task ${i + 1}`,
         sharedWith: options.sharedWith,
         tags: options.tags,
-        description: options.descriptions
+        description: options.descriptions,
+        assignedTo: options.assignedTo
       };
 
       // Decide on start date
