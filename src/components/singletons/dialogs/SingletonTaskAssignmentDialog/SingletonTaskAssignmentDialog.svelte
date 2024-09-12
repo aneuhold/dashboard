@@ -7,7 +7,6 @@
 <script lang="ts" context="module">
   import SmartDialog from '$components/presentational/SmartDialog.svelte';
   import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
-  import { currentUserId } from '$stores/derived/currentUserId';
   import { userSettings } from '$stores/userSettings/userSettings';
   import Button, { Label } from '@smui/button';
   import Checkbox from '@smui/checkbox';
@@ -17,9 +16,9 @@
   import { writable } from 'svelte/store';
 
   /**
-   * A task sharing dialog which can be used anywhere in the app.
+   * A task assignment dialog which can be used anywhere in the app.
    */
-  export const taskSharingDialog = {
+  export const taskAssignmentDialog = {
     open: (taskId: string) => {
       currentTaskId.set(taskId);
       open.set(true);
@@ -52,21 +51,20 @@
   $: task = $currentTaskId ? TaskMapService.getTaskStore($currentTaskId) : null;
   $: sharedWithIds = $task ? $task.sharedWith.map((id) => id.toString()) : [];
   $: collaborators = $userSettings.collaborators;
-  $: currentUserIsOwner = $task ? $task.userId.toString() === $currentUserId : false;
-  $: title = $task ? `Share "${$task.title}"` : 'There was an error, please tell Tony';
+  $: sharedWithUsers = [
+    { _id: $userSettings.config.userId, userName: 'Me' },
+    ...Object.values(collaborators).filter((collaborator) => {
+      return sharedWithIds.includes(collaborator._id.toString());
+    })
+  ];
+  $: title = 'Task Assignment';
 
-  function toggleSharedWith(id: ObjectId) {
+  function toggleAssignment(id: ObjectId) {
     if (!$task) return;
-    if (sharedWithIds.includes(id.toString())) {
-      $task.sharedWith = $task.sharedWith.filter((sharedWithId) => {
-        return sharedWithId.toString() !== id.toString();
-      });
-      if ($task.assignedTo?.toString() === id.toString() || $task.sharedWith.length === 0) {
-        $task.assignedTo = undefined;
-      }
+    if (id.toString() === $task.assignedTo?.toString()) {
+      $task.assignedTo = undefined;
     } else {
-      $task.sharedWith.push(id);
-      $task.sharedWith = $task.sharedWith;
+      $task.assignedTo = id;
     }
   }
 </script>
@@ -79,19 +77,18 @@
         {#if Object.values(collaborators).length === 0}
           <i class="mdc-typography--body1 dimmed-color">No collaborators</i>
           <a href="/settings">Add one in settings here!</a>
-        {:else if currentUserIsOwner}
-          <span class="sectionTitle mdc-typography--body1">Share With</span>
-          <span>Note that sharing automatically applies to all sub-tasks if enabled.</span>
-          {#each Object.values(collaborators) as collaborator}
+        {:else if sharedWithIds.length > 0}
+          <span class="sectionTitle mdc-typography--body1">Assign To</span>
+          {#each Object.values(sharedWithUsers) as sharedWithUser}
             <FormField>
               <Checkbox
-                checked={sharedWithIds.includes(collaborator._id.toString())}
+                checked={$task.assignedTo?.toString() === sharedWithUser._id.toString()}
                 on:click={() => {
-                  toggleSharedWith(collaborator._id);
+                  toggleAssignment(sharedWithUser._id);
                 }}
               />
               <span slot="label">
-                {collaborator.userName}
+                {sharedWithUser.userName}
               </span>
             </FormField>
           {/each}

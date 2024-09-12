@@ -40,5 +40,6 @@
   .container {
     display: flex;
     flex-direction: column;
+    align-items: flex-end;
   }
 </style>

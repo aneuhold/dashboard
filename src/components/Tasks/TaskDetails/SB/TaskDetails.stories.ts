@@ -1,4 +1,5 @@
 import SbConfettiDecorator from '$components/singletons/Confetti/SBConfettiDecorator.svelte';
+import SbSingletonTaskAssignmentDialog from '$components/singletons/dialogs/SingletonTaskAssignmentDialog/SBSingletonTaskAssignmentDialog.svelte';
 import SbSingletonTaskSharingDialogDecorator from '$components/singletons/dialogs/SingletonTaskSharingDialog/SBSingletonTaskSharingDialogDecorator.svelte';
 import {
   MockTaskAssignment,
@@ -13,7 +14,8 @@ const sbTaskDetailsMeta = {
   component: SbTaskDetailsExample,
   decorators: [
     () => ({ Component: SbConfettiDecorator }),
-    () => ({ Component: SbSingletonTaskSharingDialogDecorator })
+    () => ({ Component: SbSingletonTaskSharingDialogDecorator }),
+    () => ({ Component: SbSingletonTaskAssignmentDialog })
   ],
   argTypes: {
     sharedWith: createEnumArgType(MockTaskSharedWith),

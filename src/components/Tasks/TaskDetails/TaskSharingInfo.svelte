@@ -45,6 +45,7 @@
   .container {
     display: flex;
     flex-direction: column;
+    align-items: flex-end;
   }
   .taskOwnerTitle {
     display: flex;
