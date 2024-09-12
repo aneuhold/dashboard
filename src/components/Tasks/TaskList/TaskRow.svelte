@@ -9,8 +9,10 @@
   import type { MenuButtonItem } from '$components/presentational/MenuButton.svelte';
   import MenuButton from '$components/presentational/MenuButton.svelte';
   import { confirmationDialog } from '$components/singletons/dialogs/SingletonConfirmationDialog.svelte';
+  import { taskAssignmentDialog } from '$components/singletons/dialogs/SingletonTaskAssignmentDialog/SingletonTaskAssignmentDialog.svelte';
   import { taskSharingDialog } from '$components/singletons/dialogs/SingletonTaskSharingDialog/SingletonTaskSharingDialog.svelte';
   import { currentUserId } from '$stores/derived/currentUserId';
+  import { userSettings } from '$stores/userSettings/userSettings';
   import { DashboardTask, DashboardTaskService, RecurrenceEffect } from '@aneuhold/core-ts-db-lib';
   import Card, { Content as CardContent } from '@smui/card';
   import { Icon } from '@smui/icon-button';
@@ -20,6 +22,7 @@
   import TaskCompletedCheckbox from '../TaskCompletedCheckbox.svelte';
   import TaskRowDateInfo from '../TaskDate/TaskRowDateInfo.svelte';
   import TaskRowTagHeader from '../TaskTags/TaskRowTagHeader.svelte';
+  import TaskRowSubtaskInfo from './TaskRowSubtaskInfo.svelte';
 
   export let taskId: string;
   /**
@@ -40,7 +43,7 @@
     Object.values($taskMap).filter((task) => task !== undefined),
     [$task._id]
   );
-  $: hasExtraTaskInfo = allChildrenIds.length > 0;
+  $: hasExtraTaskInfo = allChildrenIds.length > 0 || $task.assignedTo;
   $: finalSharedParentId = TaskService.findParentIdWithSameSharedWith($task);
   $: usersTaskTags = $task.tags[$currentUserId];
   $: menuItems = getMenuItems($task);
@@ -56,6 +59,12 @@
     ? $task.description.length > 100
       ? `${$task.description.substring(0, 100)}...`
       : $task.description
+    : '';
+  $: assignedToMe = $task.assignedTo ? $task.assignedTo.toString() === $currentUserId : false;
+  $: assignedToName = $task.assignedTo
+    ? assignedToMe
+      ? 'Me'
+      : $userSettings.collaborators[$task.assignedTo.toString()].userName
     : '';
 
   $: if ($task.completed !== previousTaskCompletedState) {
@@ -127,6 +136,15 @@
         }
       });
     }
+    if (task.sharedWith.length > 0) {
+      menuItems.push({
+        title: 'Assign',
+        iconName: 'assignment_ind',
+        clickAction: () => {
+          taskAssignmentDialog.open(taskId);
+        }
+      });
+    }
     menuItems.push({
       title: 'Duplicate',
       iconName: 'content_copy',
@@ -192,8 +210,14 @@
               <div
                 class="mdc-typography--caption mdc-theme--text-hint-on-background no-before extraTaskInfo"
               >
+                {#if $task.assignedTo}
+                  <span>
+                    Assigned To:
+                    <span class={assignedToMe ? `assignedToMe` : ''}>{assignedToName}</span>
+                  </span>
+                {/if}
                 {#if allChildrenIds.length > 0}
-                  {allChildrenIds.length} child task{allChildrenIds.length > 1 ? 's' : ''}
+                  <TaskRowSubtaskInfo {allChildrenIds} />
                 {/if}
               </div>
             {/if}
@@ -231,6 +255,8 @@
   .extraTaskInfo {
     margin-top: 2px;
     margin-bottom: 0px;
+    display: flex;
+    flex-direction: column;
   }
   .title {
     margin-top: 0px;
@@ -251,6 +277,9 @@
   .card-content {
     display: grid;
     grid-template-columns: min-content 1fr min-content;
+  }
+  .assignedToMe {
+    color: var(--mdc-theme-primary);
   }
   .dim {
     opacity: 0.3;

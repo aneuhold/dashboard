@@ -1,6 +1,8 @@
 import {
+  MockTaskAssignment,
   MockTaskDescription,
-  MockTaskSharedWith
+  MockTaskSharedWith,
+  MockTaskSubTasks
 } from '$services/Task/TaskMapService/TaskMapService.mock';
 import type { Meta, StoryObj } from '@storybook/svelte';
 import type SbTaskListExample from './SBTaskListExample.svelte';
@@ -22,7 +24,9 @@ export const AllOptions: Story = {
     includeStartDates: true,
     includeStartDatesInFuture: true,
     sharedWith: MockTaskSharedWith.withMultiplePeople,
+    assignedTo: MockTaskAssignment.toMe,
     tags: ['tag1', 'tag2', 'tag3', 'Some Really Long Tag Name', 'Tag5', 'Tag6'],
-    descriptions: MockTaskDescription.long
+    descriptions: MockTaskDescription.long,
+    subtasks: MockTaskSubTasks.allVariations
   }
 };

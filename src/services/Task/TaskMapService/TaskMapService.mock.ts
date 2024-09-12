@@ -14,6 +14,8 @@ type AddTaskInfo = {
   description?: MockTaskDescription;
   assignedTo?: MockTaskAssignment;
   tags?: string[];
+  subtasks?: AddTaskInfo[];
+  completed?: boolean;
 };
 
 type AddTasksInfo = {
@@ -26,8 +28,10 @@ type AddTasksInfo = {
    */
   includeOverDueDates?: boolean;
   sharedWith?: MockTaskSharedWith;
+  assignedTo?: MockTaskAssignment;
   tags?: string[];
   descriptions?: MockTaskDescription;
+  subtasks?: MockTaskSubTasks;
 };
 
 /**
@@ -50,6 +54,16 @@ export enum MockTaskDescription {
   none,
   short,
   long
+}
+
+export enum MockTaskSubTasks {
+  none,
+  someCompleted,
+  someIncomplete,
+  someCompleteAndIncomplete,
+  someAssignedToMeAndComplete,
+  someAssignedToMeAndIncomplete,
+  allVariations
 }
 
 /**
@@ -102,7 +116,8 @@ export default class TaskMapServiceMock {
         title: `Test Task ${i + 1}`,
         sharedWith: options.sharedWith,
         tags: options.tags,
-        description: options.descriptions
+        description: options.descriptions,
+        assignedTo: options.assignedTo
       };
 
       // Decide on start date
@@ -135,6 +150,112 @@ export default class TaskMapServiceMock {
         }
       }
 
+      // Add subtasks according to enum
+      switch (options.subtasks ? options.subtasks : MockTaskSubTasks.none) {
+        case MockTaskSubTasks.none:
+          break;
+        case MockTaskSubTasks.someCompleted:
+          taskInfo.subtasks = [
+            { title: 'Subtask 1', completed: true },
+            { title: 'Subtask 2', completed: true },
+            { title: 'Subtask 3', completed: false }
+          ];
+          break;
+        case MockTaskSubTasks.someIncomplete:
+          taskInfo.subtasks = [
+            { title: 'Subtask 1', completed: false },
+            { title: 'Subtask 2', completed: false },
+            { title: 'Subtask 3', completed: true }
+          ];
+          break;
+        case MockTaskSubTasks.someCompleteAndIncomplete:
+          taskInfo.subtasks = [
+            { title: 'Subtask 1', completed: true },
+            { title: 'Subtask 2', completed: false },
+            { title: 'Subtask 3', completed: true }
+          ];
+          break;
+        case MockTaskSubTasks.someAssignedToMeAndComplete:
+          if (options.sharedWith !== MockTaskSharedWith.none) {
+            taskInfo.subtasks = [
+              {
+                title: 'Subtask 1',
+                completed: true,
+                sharedWith: options.sharedWith,
+                assignedTo: MockTaskAssignment.toMe
+              },
+              {
+                title: 'Subtask 2',
+                completed: true,
+                sharedWith: options.sharedWith,
+                assignedTo: MockTaskAssignment.toMe
+              },
+              {
+                title: 'Subtask 3',
+                completed: false,
+                sharedWith: options.sharedWith,
+                assignedTo: MockTaskAssignment.toMe
+              }
+            ];
+          }
+
+          break;
+        case MockTaskSubTasks.someAssignedToMeAndIncomplete:
+          if (options.sharedWith !== MockTaskSharedWith.none) {
+            taskInfo.subtasks = [
+              {
+                title: 'Subtask 1',
+                completed: false,
+                sharedWith: options.sharedWith,
+                assignedTo: MockTaskAssignment.toMe
+              },
+              {
+                title: 'Subtask 2',
+                completed: false,
+                sharedWith: options.sharedWith,
+                assignedTo: MockTaskAssignment.toMe
+              },
+              {
+                title: 'Subtask 3',
+                completed: true,
+                sharedWith: options.sharedWith,
+                assignedTo: MockTaskAssignment.toMe
+              }
+            ];
+          }
+          break;
+        case MockTaskSubTasks.allVariations:
+          if (options.sharedWith !== MockTaskSharedWith.none) {
+            taskInfo.subtasks = [
+              {
+                title: 'Subtask 1',
+                completed: true,
+                sharedWith: options.sharedWith,
+                assignedTo: MockTaskAssignment.toMe
+              },
+              {
+                title: 'Subtask 2',
+                completed: false,
+                sharedWith: options.sharedWith,
+                assignedTo: MockTaskAssignment.toMe
+              },
+              {
+                title: 'Subtask 3',
+                completed: true,
+                sharedWith: options.sharedWith,
+                assignedTo: MockTaskAssignment.toOther
+              },
+              {
+                title: 'Subtask 4',
+                completed: false,
+                sharedWith: options.sharedWith,
+                assignedTo: MockTaskAssignment.toOther
+              }
+            ];
+          }
+          break;
+      }
+
       tasks.push(this.createTask(taskInfo));
     }
     return tasks;
@@ -145,6 +266,7 @@ export default class TaskMapServiceMock {
     task.title = options.title;
     task.startDate = options.startDate;
     task.dueDate = options.dueDate;
+    task.completed = options.completed ?? false;
 
     // tags setup
     task.tags = { [this.userId.toString()]: options.tags ?? [] };
@@ -192,6 +314,15 @@ export default class TaskMapServiceMock {
         task.description =
           'This is a long description. It contains more details about the task, its objectives, and how it should be accomplished.\nThis might include links to resources, expected outcomes, and any other relevant information that can help in the completion of the task.';
         break;
+    }
+
+    // subtasks setup
+    if (options.subtasks) {
+      options.subtasks.forEach((subtaskOptions) => {
+        const subtask = this.createTask(subtaskOptions);
+        subtask.parentTaskId = task._id;
+        TaskMapService.getStore().addDoc(subtask);
+      });
     }
 
     return task;

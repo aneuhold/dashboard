@@ -2,8 +2,10 @@
   import TaskListService from '$services/Task/TaskListService';
   import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
   import {
+    MockTaskAssignment,
     MockTaskDescription,
-    MockTaskSharedWith
+    MockTaskSharedWith,
+    MockTaskSubTasks
   } from '$services/Task/TaskMapService/TaskMapService.mock';
   import { userSettings } from '$stores/userSettings/userSettings';
   import SBMockData from '$storybook/globalMockData';
@@ -15,8 +17,10 @@
   export let includeDueDates = false;
   export let includeOverDueDates = false;
   export let sharedWith: MockTaskSharedWith = MockTaskSharedWith.none;
+  export let assignedTo: MockTaskAssignment = MockTaskAssignment.none;
   export let tags: string[] = [];
   export let descriptions: MockTaskDescription = MockTaskDescription.none;
+  export let subtasks: MockTaskSubTasks = MockTaskSubTasks.none;
 
   $: {
     SBMockData.taskMapServiceMock.reset();
@@ -27,8 +31,10 @@
       includeDueDates,
       includeOverDueDates,
       sharedWith,
+      assignedTo,
       tags,
-      descriptions
+      descriptions,
+      subtasks
     });
   }
 
