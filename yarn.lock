@@ -2677,7 +2677,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/addon-actions@npm:8.3.0, @storybook/addon-actions@npm:^8.2.5":
+"@storybook/addon-actions@npm:8.3.0, @storybook/addon-actions@npm:^8.3.0":
   version: 8.3.0
   resolution: "@storybook/addon-actions@npm:8.3.0"
   dependencies:
@@ -2741,7 +2741,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/addon-essentials@npm:^8.2.5":
+"@storybook/addon-essentials@npm:^8.3.0":
   version: 8.3.0
   resolution: "@storybook/addon-essentials@npm:8.3.0"
   dependencies:
@@ -2772,7 +2772,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/addon-interactions@npm:^8.2.5":
+"@storybook/addon-interactions@npm:^8.3.0":
   version: 8.3.0
   resolution: "@storybook/addon-interactions@npm:8.3.0"
   dependencies:
@@ -2787,7 +2787,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/addon-links@npm:^8.2.5":
+"@storybook/addon-links@npm:^8.3.0":
   version: 8.3.0
   resolution: "@storybook/addon-links@npm:8.3.0"
   dependencies:
@@ -2848,7 +2848,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/blocks@npm:8.3.0, @storybook/blocks@npm:^8.2.5":
+"@storybook/blocks@npm:8.3.0, @storybook/blocks@npm:^8.3.0":
   version: 8.3.0
   resolution: "@storybook/blocks@npm:8.3.0"
   dependencies:
@@ -3035,7 +3035,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/svelte@npm:8.3.0, @storybook/svelte@npm:^8.2.5":
+"@storybook/svelte@npm:8.3.0, @storybook/svelte@npm:^8.3.0":
   version: 8.3.0
   resolution: "@storybook/svelte@npm:8.3.0"
   dependencies:
@@ -3054,7 +3054,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/sveltekit@npm:^8.2.5":
+"@storybook/sveltekit@npm:^8.3.0":
   version: 8.3.0
   resolution: "@storybook/sveltekit@npm:8.3.0"
   dependencies:
@@ -3070,7 +3070,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/test@npm:8.3.0, @storybook/test@npm:^8.2.5":
+"@storybook/test@npm:8.3.0, @storybook/test@npm:^8.3.0":
   version: 8.3.0
   resolution: "@storybook/test@npm:8.3.0"
   dependencies:
@@ -4632,14 +4632,14 @@ __metadata:
     "@smui/textfield": "npm:^7.0.0"
     "@smui/tooltip": "npm:^7.0.0"
     "@smui/top-app-bar": "npm:^7.0.0"
-    "@storybook/addon-actions": "npm:^8.2.5"
-    "@storybook/addon-essentials": "npm:^8.2.5"
-    "@storybook/addon-interactions": "npm:^8.2.5"
-    "@storybook/addon-links": "npm:^8.2.5"
-    "@storybook/blocks": "npm:^8.2.5"
-    "@storybook/svelte": "npm:^8.2.5"
-    "@storybook/sveltekit": "npm:^8.2.5"
-    "@storybook/test": "npm:^8.2.5"
+    "@storybook/addon-actions": "npm:^8.3.0"
+    "@storybook/addon-essentials": "npm:^8.3.0"
+    "@storybook/addon-interactions": "npm:^8.3.0"
+    "@storybook/addon-links": "npm:^8.3.0"
+    "@storybook/blocks": "npm:^8.3.0"
+    "@storybook/svelte": "npm:^8.3.0"
+    "@storybook/sveltekit": "npm:^8.3.0"
+    "@storybook/test": "npm:^8.3.0"
     "@sveltejs/adapter-static": "npm:^3.0.2"
     "@sveltejs/kit": "npm:^2.5.17"
     "@sveltejs/vite-plugin-svelte": "npm:^3.1.1"
@@ -4651,7 +4651,7 @@ __metadata:
     eslint: "npm:^9.8.0"
     prettier: "npm:^3.3.3"
     smui-theme: "npm:^7.0.0"
-    storybook: "npm:^8.2.5"
+    storybook: "npm:^8.3.0"
     svelte: "npm:^4.2.18"
     svelte-check: "npm:^3.8.4"
     svelte-confetti-explosion: "npm:^0.4.0"
@@ -9082,7 +9082,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"storybook@npm:^8.2.5":
+"storybook@npm:^8.3.0":
   version: 8.3.0
   resolution: "storybook@npm:8.3.0"
   dependencies:
