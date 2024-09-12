@@ -13,7 +13,7 @@
     "upgrade:smui": "yarn up '@smui/*'",
     "storybook": "yarn theme && storybook dev -p 6006"
   },
-  "packageManager": "yarn@4.4.0",
+  "packageManager": "yarn@4.4.1",
   "type": "module",
   "devDependencies": {
     "@aneuhold/core-ts-api-lib": "^1.0.96",
