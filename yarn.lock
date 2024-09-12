@@ -709,10 +709,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fontsource/fira-mono@npm:^5.0.13":
-  version: 5.0.15
-  resolution: "@fontsource/fira-mono@npm:5.0.15"
-  checksum: 10c0/838fba6507592b23197d3a53c34882eccf8fb342f1478bda54832855537ef476dabb45a3f81a65f2b6287ba5148f8675e35af5469e51612cc99979e38470687a
+"@fontsource/fira-mono@npm:^5.1.0":
+  version: 5.1.0
+  resolution: "@fontsource/fira-mono@npm:5.1.0"
+  checksum: 10c0/ff0667bffd1bb32ad29e1d777e7bb7416be101f1c764fbf624973d38eaffb1748e063c0efd606b6801e9d7d2e0e72f7b1bf8019af95d81e04e4472c542b1d520
   languageName: node
   linkType: hard
 
@@ -4606,7 +4606,7 @@ __metadata:
     "@aneuhold/core-ts-api-lib": "npm:^1.0.96"
     "@aneuhold/core-ts-lib": "npm:^1.1.39"
     "@aneuhold/eslint-config": "npm:^1.0.27"
-    "@fontsource/fira-mono": "npm:^5.0.13"
+    "@fontsource/fira-mono": "npm:^5.1.0"
     "@neoconfetti/svelte": "npm:^2.2.1"
     "@sentry/sveltekit": "npm:^8.13.0"
     "@smui-extra/accordion": "npm:^7.0.0"

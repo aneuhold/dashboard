@@ -19,7 +19,7 @@
     "@aneuhold/core-ts-api-lib": "^1.0.96",
     "@aneuhold/core-ts-lib": "^1.1.39",
     "@aneuhold/eslint-config": "^1.0.27",
-    "@fontsource/fira-mono": "^5.0.13",
+    "@fontsource/fira-mono": "^5.1.0",
     "@neoconfetti/svelte": "^2.2.1",
     "@smui-extra/accordion": "^7.0.0",
     "@smui-extra/autocomplete": "^7.0.0",
