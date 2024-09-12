@@ -1,5 +1,6 @@
 <script lang="ts">
   import PageTitle from '$components/PageTitle.svelte';
+  import InputBox from '$components/presentational/InputBox.svelte';
   import SingletonNonogramKatanaUpgradeDialog from '$components/singletons/dialogs/SingletonNonogramKatanaUpgradeDialog.svelte';
   import { userSettings } from '$stores/userSettings/userSettings';
   import { NonogramKatanaUpgrade, NonogramKatanaUpgradeName } from '@aneuhold/core-ts-db-lib';
@@ -7,7 +8,6 @@
   import Checkbox from '@smui/checkbox';
   import Paper, { Content } from '@smui/paper';
   import { flip } from 'svelte/animate';
-  import { slide } from 'svelte/transition';
   import { NonogramKatanaUpgradeMapService } from '../../../../services/NonogramKatana/NonogramKatanaUpgradeMapService';
   import NonogramKatanaUpgradeRow from './NonogramKatanaUpgradeRow.svelte';
   import { nonogramKatanaUpgradesPageInfo } from './pageInfo';
@@ -26,14 +26,18 @@
 
   const upgradeMap = NonogramKatanaUpgradeMapService.getStore();
   let showAll = false;
+  let searchInput = '';
   $: allUpgrades = Object.values($upgradeMap)
     .filter((upgrade) => upgrade !== undefined)
     .sort(sortFunction);
   $: workableUpgrades = Object.values(
     NonogramKatanaUpgradeMapService.getWorkableUpgrades($upgradeMap)
   ).sort(sortFunction);
-  $: currentlyShownUpgrades = showAll ? allUpgrades : workableUpgrades;
-  $: upgradesMissing = allUpgrades.length < Object.values(NonogramKatanaUpgradeName).length;
+  $: currentlyShownUpgrades = (showAll ? allUpgrades : workableUpgrades).filter((upgrade) =>
+    upgrade.upgradeName.toLowerCase().includes(searchInput.toLowerCase().trim())
+  );
+  $: upgradesMissing =
+    Object.values($upgradeMap).length < Object.values(NonogramKatanaUpgradeName).length;
 </script>
 
 <svelte:head>
@@ -63,9 +67,12 @@
           <Checkbox bind:checked={showAll} touch />
         </div>
       </div>
+      <div class="searchBox">
+        <InputBox label="Search" bind:inputValue={searchInput} />
+      </div>
       {#if currentlyShownUpgrades.length > 0}
         {#each currentlyShownUpgrades as upgrade (upgrade.upgradeName)}
-          <div transition:slide animate:flip={{ duration: 200 }}>
+          <div animate:flip={{ duration: 200 }}>
             <NonogramKatanaUpgradeRow upgradeName={upgrade.upgradeName} />
           </div>
         {/each}
@@ -92,5 +99,10 @@
     display: flex;
     flex-direction: row;
     align-items: center;
+  }
+  .searchBox {
+    margin: 0px 16px 16px 16px;
+    display: flex;
+    flex-direction: column;
   }
 </style>

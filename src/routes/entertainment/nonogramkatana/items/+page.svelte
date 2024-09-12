@@ -1,22 +1,23 @@
-<script lang="ts" context="module">
+<script lang="ts">
   import PageTitle from '$components/PageTitle.svelte';
-  import { NonogramKatanaItemName } from '@aneuhold/core-ts-db-lib';
+  import InputBox from '$components/presentational/InputBox.svelte';
+  import SingletonNonogramKatanaItemDialog from '$components/singletons/dialogs/SingletonNonogramKatanaItemDialog.svelte';
+  import { userSettings } from '$stores/userSettings/userSettings';
+  import { NonogramKatanaItem, NonogramKatanaItemName } from '@aneuhold/core-ts-db-lib';
+  import Button from '@smui/button';
   import Paper, { Content } from '@smui/paper';
+  import { flip } from 'svelte/animate';
   import { NonogramKatanaItemMapService } from '../../../../services/NonogramKatana/NonogramKatanaItemMapService';
   import NonogramKatanaItemRow from './NonogramKatanaItemRow.svelte';
   import { nonogramKatanaItemsPageInfo } from './pageInfo';
-</script>
-
-<script lang="ts">
-  import SingletonNonogramKatanaItemDialog from '$components/singletons/dialogs/SingletonNonogramKatanaItemDialog.svelte';
-  import { userSettings } from '$stores/userSettings/userSettings';
-  import Button from '@smui/button';
-  import { flip } from 'svelte/animate';
-  import { slide } from 'svelte/transition';
 
   const itemMap = NonogramKatanaItemMapService.getStore();
+  let searchInput = '';
   $: items = Object.values($itemMap)
-    .filter((item) => item !== undefined)
+    .filter(
+      (item) =>
+        item !== undefined && item.itemName.toLowerCase().includes(searchInput.toLowerCase().trim())
+    )
     .sort((a, b) => {
       if (!a) {
         return 1;
@@ -24,8 +25,8 @@
         return -1;
       }
       return b.priority - a.priority;
-    });
-  $: itemsMissing = items.length < Object.values(NonogramKatanaItemName).length;
+    }) as NonogramKatanaItem[];
+  $: itemsMissing = Object.values($itemMap).length < Object.values(NonogramKatanaItemName).length;
 </script>
 
 <svelte:head>
@@ -49,9 +50,12 @@
           Add / Update Items with defaults
         </Button>
       {/if}
+      <div class="searchBox">
+        <InputBox label="Search" bind:inputValue={searchInput} />
+      </div>
       {#if items.length > 0}
         {#each items as item (item._id.toString())}
-          <div transition:slide animate:flip={{ duration: 200 }}>
+          <div animate:flip={{ duration: 200 }}>
             <NonogramKatanaItemRow itemId={item._id.toString()} />
           </div>
         {/each}
@@ -66,5 +70,10 @@
     display: flex;
     flex-direction: column;
     gap: 16px;
+  }
+  .searchBox {
+    margin: 0px 16px 16px 16px;
+    display: flex;
+    flex-direction: column;
   }
 </style>
