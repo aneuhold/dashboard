@@ -9,6 +9,7 @@
   import type { MenuButtonItem } from '$components/presentational/MenuButton.svelte';
   import MenuButton from '$components/presentational/MenuButton.svelte';
   import { confirmationDialog } from '$components/singletons/dialogs/SingletonConfirmationDialog.svelte';
+  import { taskAssignmentDialog } from '$components/singletons/dialogs/SingletonTaskAssignmentDialog/SingletonTaskAssignmentDialog.svelte';
   import { taskSharingDialog } from '$components/singletons/dialogs/SingletonTaskSharingDialog/SingletonTaskSharingDialog.svelte';
   import { currentUserId } from '$stores/derived/currentUserId';
   import { DashboardTask, DashboardTaskService, RecurrenceEffect } from '@aneuhold/core-ts-db-lib';
@@ -124,6 +125,15 @@
         iconName: 'share',
         clickAction: () => {
           taskSharingDialog.open(taskId);
+        }
+      });
+    }
+    if (task.sharedWith.length > 0) {
+      menuItems.push({
+        title: 'Assign',
+        iconName: 'assignment_ind',
+        clickAction: () => {
+          taskAssignmentDialog.open(taskId);
         }
       });
     }
