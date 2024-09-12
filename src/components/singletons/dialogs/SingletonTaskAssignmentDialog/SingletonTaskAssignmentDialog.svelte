@@ -54,7 +54,10 @@
   $: sharedWithUsers = [
     { _id: $userSettings.config.userId, userName: 'Me' },
     ...Object.values(collaborators).filter((collaborator) => {
-      return sharedWithIds.includes(collaborator._id.toString());
+      return (
+        sharedWithIds.includes(collaborator._id.toString()) ||
+        collaborator._id.toString() === $task?.userId.toString()
+      );
     })
   ];
   $: title = 'Task Assignment';
