@@ -2258,7 +2258,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/sveltekit@npm:^8.13.0":
+"@sentry/sveltekit@npm:^8.30.0":
   version: 8.30.0
   resolution: "@sentry/sveltekit@npm:8.30.0"
   dependencies:
@@ -4608,7 +4608,7 @@ __metadata:
     "@aneuhold/eslint-config": "npm:^1.0.23"
     "@fontsource/fira-mono": "npm:^5.0.13"
     "@neoconfetti/svelte": "npm:^2.2.1"
-    "@sentry/sveltekit": "npm:^8.13.0"
+    "@sentry/sveltekit": "npm:^8.30.0"
     "@smui-extra/accordion": "npm:^7.0.0"
     "@smui-extra/autocomplete": "npm:^7.0.0"
     "@smui/button": "npm:^7.0.0"
