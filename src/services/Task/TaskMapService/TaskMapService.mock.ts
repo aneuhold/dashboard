@@ -244,6 +244,12 @@ export default class TaskMapServiceMock {
                 completed: true,
                 sharedWith: options.sharedWith,
                 assignedTo: MockTaskAssignment.toOther
+              },
+              {
+                title: 'Subtask 4',
+                completed: false,
+                sharedWith: options.sharedWith,
+                assignedTo: MockTaskAssignment.toOther
               }
             ];
           }

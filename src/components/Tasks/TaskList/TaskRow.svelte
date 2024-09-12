@@ -22,6 +22,7 @@
   import TaskCompletedCheckbox from '../TaskCompletedCheckbox.svelte';
   import TaskRowDateInfo from '../TaskDate/TaskRowDateInfo.svelte';
   import TaskRowTagHeader from '../TaskTags/TaskRowTagHeader.svelte';
+  import TaskRowSubtaskInfo from './TaskRowSubtaskInfo.svelte';
 
   export let taskId: string;
   /**
@@ -216,9 +217,7 @@
                   </span>
                 {/if}
                 {#if allChildrenIds.length > 0}
-                  <span>
-                    {allChildrenIds.length} child task{allChildrenIds.length > 1 ? 's' : ''}
-                  </span>
+                  <TaskRowSubtaskInfo {allChildrenIds} />
                 {/if}
               </div>
             {/if}
