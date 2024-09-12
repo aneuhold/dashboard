@@ -4,7 +4,8 @@
   import {
     MockTaskAssignment,
     MockTaskDescription,
-    MockTaskSharedWith
+    MockTaskSharedWith,
+    MockTaskSubTasks
   } from '$services/Task/TaskMapService/TaskMapService.mock';
   import { userSettings } from '$stores/userSettings/userSettings';
   import SBMockData from '$storybook/globalMockData';
@@ -19,6 +20,7 @@
   export let assignedTo: MockTaskAssignment = MockTaskAssignment.none;
   export let tags: string[] = [];
   export let descriptions: MockTaskDescription = MockTaskDescription.none;
+  export let subtasks: MockTaskSubTasks = MockTaskSubTasks.none;
 
   $: {
     SBMockData.taskMapServiceMock.reset();
@@ -31,7 +33,8 @@
       sharedWith,
       assignedTo,
       tags,
-      descriptions
+      descriptions,
+      subtasks
     });
   }
 
