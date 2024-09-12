@@ -4648,7 +4648,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": "npm:^8.0.0"
     "@typescript-eslint/parser": "npm:^8.0.0"
     bson: "patch:bson@npm%3A6.2.0#~/.yarn/patches/bson-npm-6.2.0-3d364484ee.patch"
-    eslint: "npm:^9.8.0"
+    eslint: "npm:^9.10.0"
     prettier: "npm:^3.3.3"
     smui-theme: "npm:^7.0.0"
     storybook: "npm:^8.2.5"
@@ -5574,7 +5574,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:^9.8.0":
+"eslint@npm:^9.10.0":
   version: 9.10.0
   resolution: "eslint@npm:9.10.0"
   dependencies:
