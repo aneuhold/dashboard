@@ -25,9 +25,11 @@
   import TaskDateInfo from '../TaskDate/TaskDateInfo.svelte';
   import TaskList from '../TaskList/TaskList.svelte';
   import TaskRecurrenceInfo from '../TaskRecurrence/TaskRecurrenceInfo.svelte';
-  import TaskShareButton from '../TaskShareButton.svelte';
-  import TaskSharingInfo from '../TaskSharingInfo.svelte';
   import TaskTagsSelector from '../TaskTags/TaskTagsSelector.svelte';
+  import TaskAssignmentButton from './TaskAssignmentButton.svelte';
+  import TaskAssignmentInfo from './TaskAssignmentInfo.svelte';
+  import TaskShareButton from './TaskShareButton.svelte';
+  import TaskSharingInfo from './TaskSharingInfo.svelte';
 
   export let taskId: string;
 
@@ -82,7 +84,7 @@
 
 <div class="content">
   <BreadCrumb {breadCrumbArray} />
-  {#if !$task}
+  {#if !task || !$task}
     <PageTitle includeBreadcrumb={false} title="Task not found 🥺" />
   {:else}
     <Paper>
@@ -97,10 +99,14 @@
           <TaskRecurrenceInfo {taskId} childTaskIds={allChildrenIds} />
           <div class="extraTaskInfo">
             <TaskTagsSelector {taskId} />
-            <TaskSharingInfo {taskId} />
+            <div>
+              <TaskSharingInfo {taskId} />
+              <TaskAssignmentInfo {taskId} />
+            </div>
           </div>
+
           <div class="taskButtons">
-            <TaskShareButton {taskId} />
+            <TaskShareButton {task} />
             <Button
               variant="outlined"
               class="danger-button"
@@ -112,6 +118,13 @@
               Delete
             </Button>
           </div>
+
+          {#if $task.sharedWith.length > 0}
+            <div class="assignButton">
+              <TaskAssignmentButton {task} />
+            </div>
+          {/if}
+
           <div class="doneButton">
             <Button
               on:click={() => goto(parentRoute)}
@@ -178,6 +191,10 @@
     flex-wrap: wrap;
     gap: 16px;
     justify-content: space-between;
+  }
+  .assignButton {
+    display: flex;
+    flex-direction: row;
   }
   .doneButton {
     display: flex;

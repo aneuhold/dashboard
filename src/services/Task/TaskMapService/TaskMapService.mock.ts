@@ -10,10 +10,10 @@ type AddTaskInfo = {
   title: string;
   startDate?: Date;
   dueDate?: Date;
-  sharedWith?: ObjectId[];
-  ownerId?: ObjectId;
+  sharedWith?: MockTaskSharedWith;
+  description?: MockTaskDescription;
+  assignedTo?: MockTaskAssignment;
   tags?: string[];
-  description?: string;
 };
 
 type AddTasksInfo = {
@@ -38,6 +38,12 @@ export enum MockTaskSharedWith {
   withMe,
   withMultiplePeople,
   withSinglePerson
+}
+
+export enum MockTaskAssignment {
+  none,
+  toMe,
+  toOther
 }
 
 export enum MockTaskDescription {
@@ -92,7 +98,12 @@ export default class TaskMapServiceMock {
     const tasks: DashboardTask[] = [];
     for (let i = 0; i < options.numTasks; i++) {
       // Initialize task info with title
-      const taskInfo: AddTaskInfo = { title: `Test Task ${i + 1}` };
+      const taskInfo: AddTaskInfo = {
+        title: `Test Task ${i + 1}`,
+        sharedWith: options.sharedWith,
+        tags: options.tags,
+        description: options.descriptions
+      };
 
       // Decide on start date
       if (options.includeStartDates || options.includeStartDatesInFuture) {
@@ -124,43 +135,6 @@ export default class TaskMapServiceMock {
         }
       }
 
-      // Add sharedWith if provided
-      if (options.sharedWith !== undefined && options.sharedWith !== MockTaskSharedWith.none) {
-        switch (options.sharedWith) {
-          case MockTaskSharedWith.withMe:
-            taskInfo.sharedWith = [this.userId];
-            taskInfo.ownerId = SBMockData.collaborator1._id;
-            break;
-          case MockTaskSharedWith.withSinglePerson:
-            taskInfo.sharedWith = [SBMockData.collaborator1._id];
-            break;
-          case MockTaskSharedWith.withMultiplePeople:
-            taskInfo.sharedWith = [SBMockData.collaborator1._id, SBMockData.collaborator2._id];
-            break;
-        }
-      }
-
-      // Add tags
-      if (options.tags) {
-        taskInfo.tags = options.tags;
-        options.tags.forEach((tag) => {
-          TaskTagsService.addTagForUser(tag);
-        });
-      }
-
-      // Add a description
-      if (options.descriptions) {
-        switch (options.descriptions) {
-          case MockTaskDescription.short:
-            taskInfo.description = 'This is a short description.';
-            break;
-          case MockTaskDescription.long:
-            taskInfo.description =
-              'This is a long description. It contains more details about the task, its objectives, and how it should be accomplished.\nThis might include links to resources, expected outcomes, and any other relevant information that can help in the completion of the task.';
-            break;
-        }
-      }
-
       tasks.push(this.createTask(taskInfo));
     }
     return tasks;
@@ -171,10 +145,55 @@ export default class TaskMapServiceMock {
     task.title = options.title;
     task.startDate = options.startDate;
     task.dueDate = options.dueDate;
-    task.userId = options.ownerId ?? this.userId;
-    task.sharedWith = options.sharedWith ?? [];
+
+    // tags setup
     task.tags = { [this.userId.toString()]: options.tags ?? [] };
-    task.description = options.description ?? '';
+    options.tags?.forEach((tag) => {
+      TaskTagsService.addTagForUser(tag);
+    });
+
+    // sharedWith setup
+    task.sharedWith = [];
+    switch (options.sharedWith ? options.sharedWith : MockTaskSharedWith.none) {
+      case MockTaskSharedWith.none:
+        break;
+      case MockTaskSharedWith.withMe:
+        task.sharedWith.push(SBMockData.currentUserCto._id);
+        task.userId = SBMockData.collaborator1._id;
+        break;
+      case MockTaskSharedWith.withSinglePerson:
+        task.sharedWith.push(SBMockData.collaborator1._id);
+        break;
+      case MockTaskSharedWith.withMultiplePeople:
+        task.sharedWith.push(SBMockData.collaborator1._id, SBMockData.collaborator2._id);
+        break;
+    }
+
+    // assignedTo setup
+    switch (options.assignedTo ? options.assignedTo : MockTaskAssignment.none) {
+      case MockTaskAssignment.none:
+        break;
+      case MockTaskAssignment.toMe:
+        task.assignedTo = SBMockData.currentUserCto._id;
+        break;
+      case MockTaskAssignment.toOther:
+        task.assignedTo = SBMockData.collaborator1._id;
+        break;
+    }
+
+    // description setup
+    switch (options.description ? options.description : MockTaskDescription.none) {
+      case MockTaskDescription.none:
+        break;
+      case MockTaskDescription.short:
+        task.description = 'This is a short description.';
+        break;
+      case MockTaskDescription.long:
+        task.description =
+          'This is a long description. It contains more details about the task, its objectives, and how it should be accomplished.\nThis might include links to resources, expected outcomes, and any other relevant information that can help in the completion of the task.';
+        break;
+    }
+
     return task;
   }
 

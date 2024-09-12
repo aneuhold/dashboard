@@ -1,16 +1,17 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
   import { taskSharingDialog } from '$components/singletons/dialogs/SingletonTaskSharingDialog/SingletonTaskSharingDialog.svelte';
+  import type { DocumentStore } from '$services/DocumentMapStoreService';
   import { userSettings } from '$stores/userSettings/userSettings';
+  import { DashboardTask } from '@aneuhold/core-ts-db-lib';
   import Button, { Icon } from '@smui/button';
-  import { TaskMapService } from '../../services/Task/TaskMapService/TaskMapService';
-  import TaskService from '../../services/Task/TaskService';
+  import TaskService from '../../../services/Task/TaskService';
 
-  export let taskId: string;
+  export let task: DocumentStore<DashboardTask>;
 
-  $: task = TaskMapService.getTaskStore(taskId);
   $: sharingDisabled = $task.userId.toString() !== $userSettings.config.userId.toString();
   $: finalParentId = TaskService.findParentIdWithSameSharedWith($task);
+  $: taskId = $task._id.toString();
   $: buttonText = finalParentId === taskId || sharingDisabled ? 'Share' : 'Configure Sharing';
 
   function handleClick() {

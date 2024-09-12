@@ -5,7 +5,7 @@
 -->
 <script lang="ts">
   import { userSettings } from '$stores/userSettings/userSettings';
-  import { TaskMapService } from '../../services/Task/TaskMapService/TaskMapService';
+  import { TaskMapService } from '../../../services/Task/TaskMapService/TaskMapService';
 
   export let taskId: string;
 
@@ -45,6 +45,7 @@
   .container {
     display: flex;
     flex-direction: column;
+    align-items: flex-end;
   }
   .taskOwnerTitle {
     display: flex;
@@ -55,5 +56,6 @@
     margin-top: 0px;
     margin-left: 0px;
     padding-inline-start: 24px;
+    margin-block-end: 0px;
   }
 </style>

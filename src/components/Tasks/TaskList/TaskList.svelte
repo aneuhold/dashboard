@@ -4,7 +4,7 @@
   A list of tasks.
 -->
 <script lang="ts">
-  import TaskRow from '$components/Tasks/TaskRow.svelte';
+  import TaskRow from '$components/Tasks/TaskList/TaskRow.svelte';
   import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
   import { currentUserId } from '$stores/derived/currentUserId';
   import { userSettings } from '$stores/userSettings/userSettings';

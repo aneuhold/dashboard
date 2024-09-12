@@ -7,6 +7,7 @@
   import Confetti from '$components/singletons/Confetti/Confetti.svelte';
   import SingletonSnackbar from '$components/singletons/SingletonSnackbar.svelte';
   import SingletonConfirmationDialog from '$components/singletons/dialogs/SingletonConfirmationDialog.svelte';
+  import SingletonTaskAssignmentDialog from '$components/singletons/dialogs/SingletonTaskAssignmentDialog/SingletonTaskAssignmentDialog.svelte';
   import SingletonTaskSharingDialog from '$components/singletons/dialogs/SingletonTaskSharingDialog/SingletonTaskSharingDialog.svelte';
   import LocalData from '$util/LocalData/LocalData';
   import CircularProgress from '@smui/circular-progress';
@@ -62,6 +63,7 @@
       <SingletonSnackbar />
       <SingletonConfirmationDialog />
       <SingletonTaskSharingDialog />
+      <SingletonTaskAssignmentDialog />
     </main>
   {/if}
 </div>

@@ -14,12 +14,12 @@
   import { DashboardTask, DashboardTaskService, RecurrenceEffect } from '@aneuhold/core-ts-db-lib';
   import Card, { Content as CardContent } from '@smui/card';
   import { Icon } from '@smui/icon-button';
-  import { TaskMapService } from '../../services/Task/TaskMapService/TaskMapService';
-  import TaskRecurrenceService from '../../services/Task/TaskRecurrenceService';
-  import TaskService from '../../services/Task/TaskService';
-  import TaskCompletedCheckbox from './TaskCompletedCheckbox.svelte';
-  import TaskRowDateInfo from './TaskDate/TaskRowDateInfo.svelte';
-  import TaskRowTagHeader from './TaskTags/TaskRowTagHeader.svelte';
+  import { TaskMapService } from '../../../services/Task/TaskMapService/TaskMapService';
+  import TaskRecurrenceService from '../../../services/Task/TaskRecurrenceService';
+  import TaskService from '../../../services/Task/TaskService';
+  import TaskCompletedCheckbox from '../TaskCompletedCheckbox.svelte';
+  import TaskRowDateInfo from '../TaskDate/TaskRowDateInfo.svelte';
+  import TaskRowTagHeader from '../TaskTags/TaskRowTagHeader.svelte';
 
   export let taskId: string;
   /**
