@@ -56,7 +56,7 @@
     "@sveltejs/kit": "^2.5.17",
     "@sveltejs/vite-plugin-svelte": "^3.1.1",
     "@types/cookie": "^0.6.0",
-    "@types/node": "^20.15.0",
+    "@types/node": "^20.16.5",
     "@typescript-eslint/eslint-plugin": "^8.0.0",
     "@typescript-eslint/parser": "^8.0.0",
     "bson": "patch:bson@npm%3A6.2.0#~/.yarn/patches/bson-npm-6.2.0-3d364484ee.patch",
@@ -68,11 +68,11 @@
     "svelte-check": "^3.8.4",
     "svelte-confetti-explosion": "^0.4.0",
     "svelty-picker": "^5.2.9",
-    "tslib": "^2.6.3",
-    "typescript": "^5.5.4",
-    "vite": "^5.4.1",
+    "tslib": "^2.7.0",
+    "typescript": "^5.6.2",
+    "vite": "^5.4.4",
     "vite-plugin-node-polyfills": "^0.22.0",
-    "vitest": "^2.0.5"
+    "vitest": "^2.1.0"
   },
   "devDependenciesComments": {
     "svelte": "Locked at 4.x because 5.x doesn't seem to work with @smui components as of 11/25/2023"
