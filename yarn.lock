@@ -3466,7 +3466,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/eslint-plugin@npm:8.5.0, @typescript-eslint/eslint-plugin@npm:^8.0.0":
+"@typescript-eslint/eslint-plugin@npm:8.5.0, @typescript-eslint/eslint-plugin@npm:^8.0.0, @typescript-eslint/eslint-plugin@npm:^8.5.0":
   version: 8.5.0
   resolution: "@typescript-eslint/eslint-plugin@npm:8.5.0"
   dependencies:
@@ -3489,7 +3489,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/parser@npm:8.5.0, @typescript-eslint/parser@npm:^8.0.0":
+"@typescript-eslint/parser@npm:8.5.0, @typescript-eslint/parser@npm:^8.0.0, @typescript-eslint/parser@npm:^8.5.0":
   version: 8.5.0
   resolution: "@typescript-eslint/parser@npm:8.5.0"
   dependencies:
@@ -4645,8 +4645,8 @@ __metadata:
     "@sveltejs/vite-plugin-svelte": "npm:^3.1.1"
     "@types/cookie": "npm:^0.6.0"
     "@types/node": "npm:^20.15.0"
-    "@typescript-eslint/eslint-plugin": "npm:^8.0.0"
-    "@typescript-eslint/parser": "npm:^8.0.0"
+    "@typescript-eslint/eslint-plugin": "npm:^8.5.0"
+    "@typescript-eslint/parser": "npm:^8.5.0"
     bson: "patch:bson@npm%3A6.2.0#~/.yarn/patches/bson-npm-6.2.0-3d364484ee.patch"
     eslint: "npm:^9.8.0"
     prettier: "npm:^3.3.3"
