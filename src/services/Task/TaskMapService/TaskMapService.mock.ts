@@ -26,6 +26,7 @@ type AddTasksInfo = {
    */
   includeOverDueDates?: boolean;
   sharedWith?: MockTaskSharedWith;
+  assignedTo?: MockTaskAssignment;
   tags?: string[];
   descriptions?: MockTaskDescription;
 };

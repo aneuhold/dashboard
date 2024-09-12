@@ -1,4 +1,5 @@
 import {
+  MockTaskAssignment,
   MockTaskDescription,
   MockTaskSharedWith
 } from '$services/Task/TaskMapService/TaskMapService.mock';
@@ -22,6 +23,7 @@ export const AllOptions: Story = {
     includeStartDates: true,
     includeStartDatesInFuture: true,
     sharedWith: MockTaskSharedWith.withMultiplePeople,
+    assignedTo: MockTaskAssignment.toMe,
     tags: ['tag1', 'tag2', 'tag3', 'Some Really Long Tag Name', 'Tag5', 'Tag6'],
     descriptions: MockTaskDescription.long
   }

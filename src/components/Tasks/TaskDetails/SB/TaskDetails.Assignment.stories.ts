@@ -38,6 +38,6 @@ export const AssignedToOtherAndOtherOwner: Story = {
 export const AssignedToOtherAndAmOwner: Story = {
   args: {
     sharedWith: MockTaskSharedWith.withSinglePerson,
-    assignedTo: MockTaskAssignment.toMe
+    assignedTo: MockTaskAssignment.toOther
   }
 };

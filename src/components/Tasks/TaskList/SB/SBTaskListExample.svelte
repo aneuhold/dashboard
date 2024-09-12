@@ -2,6 +2,7 @@
   import TaskListService from '$services/Task/TaskListService';
   import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
   import {
+    MockTaskAssignment,
     MockTaskDescription,
     MockTaskSharedWith
   } from '$services/Task/TaskMapService/TaskMapService.mock';
@@ -15,6 +16,7 @@
   export let includeDueDates = false;
   export let includeOverDueDates = false;
   export let sharedWith: MockTaskSharedWith = MockTaskSharedWith.none;
+  export let assignedTo: MockTaskAssignment = MockTaskAssignment.none;
   export let tags: string[] = [];
   export let descriptions: MockTaskDescription = MockTaskDescription.none;
 
@@ -27,6 +29,7 @@
       includeDueDates,
       includeOverDueDates,
       sharedWith,
+      assignedTo,
       tags,
       descriptions
     });
