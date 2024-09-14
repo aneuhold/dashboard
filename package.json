@@ -53,7 +53,7 @@
     "@storybook/sveltekit": "^8.3.0",
     "@storybook/test": "^8.3.0",
     "@sveltejs/adapter-static": "^3.0.4",
-    "@sveltejs/kit": "^2.5.26",
+    "@sveltejs/kit": "^2.5.27",
     "@sveltejs/vite-plugin-svelte": "^3.1.2",
     "@types/cookie": "^0.6.0",
     "@types/node": "^20.16.5",
