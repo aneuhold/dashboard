@@ -70,9 +70,9 @@
     "svelty-picker": "^5.2.9",
     "tslib": "^2.7.0",
     "typescript": "^5.6.2",
-    "vite": "^5.4.4",
+    "vite": "^5.4.5",
     "vite-plugin-node-polyfills": "^0.22.0",
-    "vitest": "^2.1.0"
+    "vitest": "^2.1.1"
   },
   "devDependenciesComments": {
     "svelte": "Locked at 4.x because 5.x doesn't seem to work with @smui components as of 11/25/2023"
