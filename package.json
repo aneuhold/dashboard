@@ -70,7 +70,7 @@
     "svelty-picker": "^5.2.9",
     "tslib": "^2.7.0",
     "typescript": "^5.6.2",
-    "vite": "^5.4.5",
+    "vite": "^5.4.7",
     "vite-plugin-node-polyfills": "^0.22.0",
     "vitest": "^2.1.1"
   },
