@@ -22,24 +22,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aneuhold/core-ts-api-lib@npm:^1.0.111":
-  version: 1.0.111
-  resolution: "@aneuhold/core-ts-api-lib@npm:1.0.111"
+"@aneuhold/core-ts-api-lib@npm:^1.0.112":
+  version: 1.0.112
+  resolution: "@aneuhold/core-ts-api-lib@npm:1.0.112"
   dependencies:
-    "@aneuhold/core-ts-db-lib": "npm:^1.0.117"
-    "@aneuhold/core-ts-lib": "npm:^1.1.49"
+    "@aneuhold/core-ts-db-lib": "npm:^1.0.118"
+    "@aneuhold/core-ts-lib": "npm:^1.1.50"
     bson: "npm:^6.2.0"
-  checksum: 10c0/716f53d4d295708139c664c88f1ddf89113854b31db17ff8d98ba237e74906f132cbc5c00bf38a914573d3c5f3b87849caca62bf4c4844fd139a67a574f938f9
+  checksum: 10c0/39142f4455c6ce9571266c97cf981bc72e3c3e14765b7696c2dca0ef88521a6bf70d2c2ea631ea934bf9bce56bb80fc9225074c749433ab4aa44544a8c162168
   languageName: node
   linkType: hard
 
-"@aneuhold/core-ts-db-lib@npm:^1.0.117":
-  version: 1.0.117
-  resolution: "@aneuhold/core-ts-db-lib@npm:1.0.117"
+"@aneuhold/core-ts-db-lib@npm:^1.0.118":
+  version: 1.0.118
+  resolution: "@aneuhold/core-ts-db-lib@npm:1.0.118"
   dependencies:
     "@aneuhold/core-ts-lib": "npm:^1.1.49"
     bson: "npm:^6.2.0"
-  checksum: 10c0/96408c0282e9c91b4c230ce4f9f140f373129ae625b8228223083310ac3fb2bd80ae25a6bb082f4868349281bef01efd1599a9cee67418128cb8dcec028a6fc1
+  checksum: 10c0/cc0b255875764a00f935d82f6410731a4b2db63ec50f8865bfb51103e606d6f8251ff74398c475c780a87cdda63c18b73ec1ea92780b8b2c994eb713dd789d95
   languageName: node
   linkType: hard
 
@@ -47,6 +47,13 @@ __metadata:
   version: 1.1.49
   resolution: "@aneuhold/core-ts-lib@npm:1.1.49"
   checksum: 10c0/76829d462caf687ee08b0a956f22be686b4a1789808f8ed9c8e80bfd9e3cca27568ef0ab75f9d3300525bdd6cccacd373ddeb9860855306d3bcdbfdda802cc14
+  languageName: node
+  linkType: hard
+
+"@aneuhold/core-ts-lib@npm:^1.1.50":
+  version: 1.1.50
+  resolution: "@aneuhold/core-ts-lib@npm:1.1.50"
+  checksum: 10c0/cba61ff8bbafa75acd8812ae0133595e4f1a0e5c6c79c19461f539f32a870b7e2d420ad0cd7ad40091f541730db571cff267eb967cc2236a35c60d167bfb6ad1
   languageName: node
   linkType: hard
 
@@ -4769,8 +4776,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "dashboard@workspace:."
   dependencies:
-    "@aneuhold/core-ts-api-lib": "npm:^1.0.111"
-    "@aneuhold/core-ts-lib": "npm:^1.1.49"
+    "@aneuhold/core-ts-api-lib": "npm:^1.0.112"
+    "@aneuhold/core-ts-lib": "npm:^1.1.50"
     "@aneuhold/eslint-config": "npm:^1.0.35"
     "@fontsource/fira-mono": "npm:^5.1.0"
     "@neoconfetti/svelte": "npm:^2.2.1"
