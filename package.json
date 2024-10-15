@@ -16,7 +16,7 @@
   "packageManager": "yarn@4.5.0",
   "type": "module",
   "devDependencies": {
-    "@aneuhold/core-ts-api-lib": "^1.0.112",
+    "@aneuhold/core-ts-api-lib": "^1.0.113",
     "@aneuhold/core-ts-lib": "^1.1.50",
     "@aneuhold/eslint-config": "^1.0.35",
     "@fontsource/fira-mono": "^5.1.0",

@@ -22,31 +22,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aneuhold/core-ts-api-lib@npm:^1.0.112":
-  version: 1.0.112
-  resolution: "@aneuhold/core-ts-api-lib@npm:1.0.112"
+"@aneuhold/core-ts-api-lib@npm:^1.0.113":
+  version: 1.0.113
+  resolution: "@aneuhold/core-ts-api-lib@npm:1.0.113"
   dependencies:
-    "@aneuhold/core-ts-db-lib": "npm:^1.0.118"
+    "@aneuhold/core-ts-db-lib": "npm:^1.0.119"
     "@aneuhold/core-ts-lib": "npm:^1.1.50"
     bson: "npm:^6.2.0"
-  checksum: 10c0/39142f4455c6ce9571266c97cf981bc72e3c3e14765b7696c2dca0ef88521a6bf70d2c2ea631ea934bf9bce56bb80fc9225074c749433ab4aa44544a8c162168
+  checksum: 10c0/898f755bf94ba8f0c0dc932f4906a1afc7a846dff68bd69c2dfc650c19830dbd272a16706ca182ed83cb5ce9d10b5e05b55d4ac821ac5c004c41912f9d482681
   languageName: node
   linkType: hard
 
-"@aneuhold/core-ts-db-lib@npm:^1.0.118":
-  version: 1.0.118
-  resolution: "@aneuhold/core-ts-db-lib@npm:1.0.118"
+"@aneuhold/core-ts-db-lib@npm:^1.0.119":
+  version: 1.0.119
+  resolution: "@aneuhold/core-ts-db-lib@npm:1.0.119"
   dependencies:
-    "@aneuhold/core-ts-lib": "npm:^1.1.49"
+    "@aneuhold/core-ts-lib": "npm:^1.1.50"
     bson: "npm:^6.2.0"
-  checksum: 10c0/cc0b255875764a00f935d82f6410731a4b2db63ec50f8865bfb51103e606d6f8251ff74398c475c780a87cdda63c18b73ec1ea92780b8b2c994eb713dd789d95
-  languageName: node
-  linkType: hard
-
-"@aneuhold/core-ts-lib@npm:^1.1.49":
-  version: 1.1.49
-  resolution: "@aneuhold/core-ts-lib@npm:1.1.49"
-  checksum: 10c0/76829d462caf687ee08b0a956f22be686b4a1789808f8ed9c8e80bfd9e3cca27568ef0ab75f9d3300525bdd6cccacd373ddeb9860855306d3bcdbfdda802cc14
+  checksum: 10c0/57a06192acc74dc66e87aaacfa68c831419a6a2b647feac7cf4cdb2639193a567ce78496dd2c27fc442900bdf70e64230da9a710871c6b6efbd8ce1dcda6c2a3
   languageName: node
   linkType: hard
 
@@ -4776,7 +4769,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "dashboard@workspace:."
   dependencies:
-    "@aneuhold/core-ts-api-lib": "npm:^1.0.112"
+    "@aneuhold/core-ts-api-lib": "npm:^1.0.113"
     "@aneuhold/core-ts-lib": "npm:^1.1.50"
     "@aneuhold/eslint-config": "npm:^1.0.35"
     "@fontsource/fira-mono": "npm:^5.1.0"
