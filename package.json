@@ -20,7 +20,7 @@
     "@aneuhold/core-ts-lib": "^1.1.52",
     "@aneuhold/eslint-config": "^1.0.37",
     "@fontsource/fira-mono": "^5.1.0",
-    "@neoconfetti/svelte": "^2.2.1",
+    "@neoconfetti/svelte": "^2.2.2",
     "@smui-extra/accordion": "^7.0.0",
     "@smui-extra/autocomplete": "^7.0.0",
     "@smui/button": "^7.0.0",

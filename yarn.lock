@@ -1430,10 +1430,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@neoconfetti/svelte@npm:^2.2.1":
-  version: 2.2.1
-  resolution: "@neoconfetti/svelte@npm:2.2.1"
-  checksum: 10c0/f69f498039bb03910e765d7f097b0068f62a7b1e934f633abd2b8cfb4e6678999098e9bab83830bc41435a35c582a3f542c3057cd25f4b8d5e1ecea1037d091b
+"@neoconfetti/svelte@npm:^2.2.2":
+  version: 2.2.2
+  resolution: "@neoconfetti/svelte@npm:2.2.2"
+  peerDependencies:
+    svelte: ^3.0.0 || ^4.0.0 || ^5.0.0
+  checksum: 10c0/9373d63a211904e079dde12add2b6523be8f9895b2d6836f7df78ee3fa47e9ef1fd24640c817fe4dc73111fcb62a377cd185628171754239bcd59713135e0cb3
   languageName: node
   linkType: hard
 
@@ -4903,7 +4905,7 @@ __metadata:
     "@aneuhold/core-ts-lib": "npm:^1.1.52"
     "@aneuhold/eslint-config": "npm:^1.0.37"
     "@fontsource/fira-mono": "npm:^5.1.0"
-    "@neoconfetti/svelte": "npm:^2.2.1"
+    "@neoconfetti/svelte": "npm:^2.2.2"
     "@sentry/sveltekit": "npm:^8.33.0"
     "@smui-extra/accordion": "npm:^7.0.0"
     "@smui-extra/autocomplete": "npm:^7.0.0"
