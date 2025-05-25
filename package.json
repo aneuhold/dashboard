@@ -19,7 +19,7 @@
     "@aneuhold/core-ts-api-lib": "^1.0.115",
     "@aneuhold/core-ts-lib": "^1.1.52",
     "@aneuhold/eslint-config": "^1.0.37",
-    "@fontsource/fira-mono": "^5.1.0",
+    "@fontsource/fira-mono": "^5.2.6",
     "@neoconfetti/svelte": "^2.2.1",
     "@smui-extra/accordion": "^7.0.0",
     "@smui-extra/autocomplete": "^7.0.0",
@@ -52,9 +52,9 @@
     "@storybook/svelte": "^8.3.6",
     "@storybook/sveltekit": "^8.3.6",
     "@storybook/test": "^8.3.6",
-    "@sveltejs/adapter-static": "^3.0.5",
-    "@sveltejs/kit": "^2.6.1",
-    "@sveltejs/vite-plugin-svelte": "^3.1.2",
+    "@sveltejs/adapter-static": "^3.0.8",
+    "@sveltejs/kit": "^2.21.1",
+    "@sveltejs/vite-plugin-svelte": "^5.0.3",
     "@types/cookie": "^0.6.0",
     "@types/node": "^20.17.0",
     "@typescript-eslint/eslint-plugin": "^8.13.0",
@@ -64,10 +64,10 @@
     "prettier": "^3.3.3",
     "smui-theme": "^7.0.0",
     "storybook": "^8.3.6",
-    "svelte": "^4.2.19",
-    "svelte-check": "^4.0.4",
+    "svelte": "^5.33.2",
+    "svelte-check": "^4.2.1",
     "svelte-confetti-explosion": "^0.4.0",
-    "svelty-picker": "^5.2.9",
+    "svelty-picker": "^6.1.5",
     "tslib": "^2.8.0",
     "typescript": "^5.6.3",
     "vite": "^5.4.10",
@@ -86,6 +86,6 @@
     "globals": "This is a temporary fix for the globals package due to this issue: https://github.com/eslint/eslint/discussions/17868. Once other packages pull 15+ then should be able to remove this"
   },
   "dependencies": {
-    "@sentry/sveltekit": "^8.33.0"
+    "@sentry/sveltekit": "^9.22.0"
   }
 }
