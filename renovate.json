@@ -1,4 +1,5 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["github>aneuhold/renovate-config"]
+  "extends": ["github>aneuhold/renovate-config"],
+  "enabled": false
 }
