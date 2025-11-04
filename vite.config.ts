@@ -39,6 +39,18 @@ const viteConfig: UserConfig = {
   ssr: {
     noExternal: [/^@aneuhold\//]
   },
+  build: {
+    rollupOptions: {
+      external: [
+        // Ensure Node.js built-ins are not bundled for the browser
+        'fs',
+        'fs/promises',
+        'path',
+        'child_process',
+        'vm'
+      ]
+    }
+  },
   resolve: {
     dedupe: ['svelte']
   },

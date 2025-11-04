@@ -86,6 +86,6 @@
     "globals": "This is a temporary fix for the globals package due to this issue: https://github.com/eslint/eslint/discussions/17868. Once other packages pull 15+ then should be able to remove this"
   },
   "dependencies": {
-    "@sentry/sveltekit": "^8.33.0"
+    "@sentry/sveltekit": "^10.22.0"
   }
 }
