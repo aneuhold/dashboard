@@ -33,11 +33,12 @@ const viteConfig: UserConfig = {
       include: ['crypto', 'util', 'stream']
     })
   ],
-  /* This was disabled because it was causing a bunch of build output errors
-  It could potentially be turned back on if needed.
+  // Doing this because I am dumb and put code that requires node APIs in my core libraries 
+  // *smh meme*. That code SHOULD be tree-shaken out, but Vite needs to be told to not externalize
+  // I think.
   ssr: {
-    noExternal: [/^@material\//]
-  },*/
+    noExternal: [/^@aneuhold\//]
+  },
   resolve: {
     dedupe: ['svelte']
   },

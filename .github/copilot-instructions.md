@@ -1,6 +1,6 @@
 # Repo-specific instructions for AI coding agents
 
-This repository is a SvelteKit + Vite app (Svelte 4) managed with Yarn 4. The goal of this file is to give actionable, project-specific guidance so an AI agent can be productive immediately.
+This repository is a SvelteKit app (Svelte 4) managed with Yarn 4.
 
 - Quick commands (use `yarn`):
 
@@ -8,9 +8,7 @@ This repository is a SvelteKit + Vite app (Svelte 4) managed with Yarn 4. The go
   - Build: `yarn build` (runs `yarn theme` then `vite build`)
   - Preview: `yarn preview`
   - Storybook: `yarn storybook` (also runs `yarn theme`)
-  - Tests: `yarn test` (Vitest)
   - Lint: `yarn lint` (ESLint)
-  - Theme compile (important): `yarn theme` (runs `smui-theme compile static/smui.css -i src/globalStyles`)
 
 - Important project files to consult:
 
