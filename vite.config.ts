@@ -33,12 +33,6 @@ const viteConfig: UserConfig = {
       include: ['crypto', 'util', 'stream']
     })
   ],
-  // Doing this because I am dumb and put code that requires node APIs in my core libraries 
-  // *smh meme*. That code SHOULD be tree-shaken out, but Vite needs to be told to not externalize
-  // I think.
-  ssr: {
-    noExternal: [/^@aneuhold\//]
-  },
   build: {
     rollupOptions: {
       external: [
