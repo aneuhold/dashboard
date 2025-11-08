@@ -22,14 +22,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aneuhold/core-ts-api-lib@npm:2.2.6-20251108174943812":
-  version: 2.2.6-20251108174943812
-  resolution: "@aneuhold/core-ts-api-lib@npm:2.2.6-20251108174943812"
+"@aneuhold/core-ts-api-lib@npm:^2.2.7":
+  version: 2.2.7
+  resolution: "@aneuhold/core-ts-api-lib@npm:2.2.7"
   dependencies:
     "@aneuhold/core-ts-db-lib": "npm:*"
     "@aneuhold/core-ts-lib": "npm:*"
     bson: "npm:^7.0.0"
-  checksum: 10c0/584635c27a1d932415cc188ef14cef47a88631c4767f046d8e64f8d1c007d4aeade0abeaef08204c570996b6109abcd50cb6508d07a587a6cd5709fba9a4f364
+  checksum: 10c0/9316e7b3e62c65e949c91484efc543d53ebdc73f795956b093c2957d1e9b125639b49daf2c9eec454d75cf34e617fd11251d2ec3ce26ca54d550835a518f500b
   languageName: node
   linkType: hard
 
@@ -43,10 +43,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aneuhold/core-ts-lib@npm:*, @aneuhold/core-ts-lib@npm:^2.3.7":
+"@aneuhold/core-ts-lib@npm:*":
   version: 2.3.7
   resolution: "@aneuhold/core-ts-lib@npm:2.3.7"
   checksum: 10c0/708b12651350c80bd1aa7a81965ac0b9644358a6b54d2db565d464cbbcb2d58309d84924d7aa67ec616f17b2082e440f19aea09626788f744c53e0b8b60d1ebc
+  languageName: node
+  linkType: hard
+
+"@aneuhold/core-ts-lib@npm:^2.3.8":
+  version: 2.3.8
+  resolution: "@aneuhold/core-ts-lib@npm:2.3.8"
+  checksum: 10c0/03a1a3f8edfa379d34243bdf7c1c73b1aa707252329f3b01bbe5b2bd7b813d5d1000b8f170bbbf3aea23196bfd7178530f5fbffbe8edbbcade3667b4d59fd8f2
   languageName: node
   linkType: hard
 
@@ -80,12 +87,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aneuhold/local-npm-registry@npm:^0.2.14":
-  version: 0.2.14
-  resolution: "@aneuhold/local-npm-registry@npm:0.2.14"
+"@aneuhold/local-npm-registry@npm:^0.2.15":
+  version: 0.2.15
+  resolution: "@aneuhold/local-npm-registry@npm:0.2.15"
   dependencies:
     "@aneuhold/core-ts-lib": "npm:*"
-    commander: "npm:^14.0.1"
+    commander: "npm:^14.0.2"
     execa: "npm:^9.6.0"
     fs-extra: "npm:^11.3.2"
     js-yaml: "npm:^4.1.0"
@@ -93,7 +100,7 @@ __metadata:
     verdaccio: "npm:^6.2.1"
   bin:
     local-npm: lib/index.js
-  checksum: 10c0/a54ae88f3af1e55b8faf3a21ced8f49e09f63750068fd86a076a685316acf5679e835e5f3987634166068c5115161361a08d27a04079f14c920b68200e4941b8
+  checksum: 10c0/2cc3da7f5399ddd6d4c7621f43aa6de75d9c37aa844a72f37010c9184a2754aa99a58ad363495b43721dbe3c0b290e4583a3058fa0de9f83328bf7af167f870c
   languageName: node
   linkType: hard
 
@@ -5497,7 +5504,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"commander@npm:^14.0.1":
+"commander@npm:^14.0.2":
   version: 14.0.2
   resolution: "commander@npm:14.0.2"
   checksum: 10c0/245abd1349dbad5414cb6517b7b5c584895c02c4f7836ff5395f301192b8566f9796c82d7bd6c92d07eba8775fe4df86602fca5d86d8d10bcc2aded1e21c2aeb
@@ -5729,10 +5736,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "dashboard@workspace:."
   dependencies:
-    "@aneuhold/core-ts-api-lib": "npm:2.2.6-20251108174943812"
-    "@aneuhold/core-ts-lib": "npm:^2.3.7"
+    "@aneuhold/core-ts-api-lib": "npm:^2.2.7"
+    "@aneuhold/core-ts-lib": "npm:^2.3.8"
     "@aneuhold/eslint-config": "npm:^1.3.14"
-    "@aneuhold/local-npm-registry": "npm:^0.2.14"
+    "@aneuhold/local-npm-registry": "npm:^0.2.15"
     "@fontsource/fira-mono": "npm:^5.1.0"
     "@neoconfetti/svelte": "npm:^2.2.1"
     "@sentry/sveltekit": "npm:^10.22.0"
