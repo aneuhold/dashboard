@@ -133,7 +133,7 @@ export default class DashboardAPIService {
 
   static checkOrSetupDashboardAPI(): UUID {
     if (!this.dashboardAPIUrlSet) {
-      const url = dashboardConfig.get()?.projectDashboardFunctionUrl;
+      const url = dashboardConfig.get()?.gcloudBackendUrl;
       if (!url) {
         throw new Error('Dashboard API URL not set!');
       }

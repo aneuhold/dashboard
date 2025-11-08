@@ -19,6 +19,7 @@ if (!sentryAuthToken) {
 const viteConfig: UserConfig = {
   plugins: [
     // Make sure `sentrySvelteKit` is registered before `sveltekit`
+    process.env.CI === 'true' && 
     sentrySvelteKit({
       sourceMapsUploadOptions: {
         org: 'anton-neuhold',
@@ -33,18 +34,6 @@ const viteConfig: UserConfig = {
       include: ['crypto', 'util', 'stream']
     })
   ],
-  build: {
-    rollupOptions: {
-      external: [
-        // Ensure Node.js built-ins are not bundled for the browser
-        'fs',
-        'fs/promises',
-        'path',
-        'child_process',
-        'vm'
-      ]
-    }
-  },
   resolve: {
     dedupe: ['svelte']
   },
