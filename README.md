@@ -84,6 +84,10 @@ Some nice pages to have up at the same time:
 - [Svelty-Picker](https://mskocik.github.io/svelty-picker) if working with that
 - [Simple Icons](https://simpleicons.org/) if some brand icons are needed
 
+### To use the backend locally
+
+Modify the [localOverride.ts](src/util/localOverride.ts) file so that it is set to true.
+
 ### Adding new Material UI Components
 
 To use new Material UI components, add the package needed from [the documentation here](https://sveltematerialui.com/demo/accordion/). Then restart the dev server.
