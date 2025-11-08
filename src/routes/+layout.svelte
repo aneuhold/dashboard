@@ -10,6 +10,7 @@
   import SingletonTaskAssignmentDialog from '$components/singletons/dialogs/SingletonTaskAssignmentDialog/SingletonTaskAssignmentDialog.svelte';
   import SingletonTaskSharingDialog from '$components/singletons/dialogs/SingletonTaskSharingDialog/SingletonTaskSharingDialog.svelte';
   import LocalData from '$util/LocalData/LocalData';
+  import localOverride from '$util/localOverride';
   import CircularProgress from '@smui/circular-progress';
   import { onDestroy, onMount } from 'svelte';
   import Login from '../components/Login/Login.svelte';
@@ -22,6 +23,9 @@
 
   // Top-level initialization of local data. This should only be done here.
   LocalData.initialize();
+
+  // Override if wanted for local development
+  localOverride();
 
   // Without this, the layout fluctuates a lot when the page is starting up.
   onMount(() => {
