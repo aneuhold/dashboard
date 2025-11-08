@@ -23,25 +23,13 @@
   import TaskRecurrenceUpdateExample from './TaskRecurrenceUpdateExample.svelte';
   import TaskRecurrenceWeekdayOfMonth from './TaskRecurrenceWeekdayOfMonth.svelte';
 
-  export let taskId: string;
-  export let recurrenceInfo: RecurrenceInfo;
+  interface Props {
+    taskId: string;
+    recurrenceInfo: RecurrenceInfo;
+  }
 
-  $: task = TaskMapService.getTaskStore(taskId);
-  /**
-   * Stored so that the changes can be reverted
-   */
-  $: previousRInfoString = JSON.stringify(recurrenceInfo);
-  $: disabled = !$task.recurrenceInfo || !!$task.parentRecurringTaskInfo;
-  $: startDate = $task.startDate;
-  $: dueDate = $task.dueDate;
-  $: parentRecurringTaskInfo = $task.parentRecurringTaskInfo;
-  $: exampleOfRecurrence = TaskRecurrenceService.createExampleOfRecurrence(
-    startDate,
-    dueDate,
-    recurrenceInfo,
-    parentRecurringTaskInfo
-  );
-  $: rInfo = createRInfoStore(recurrenceInfo);
+  let { taskId, recurrenceInfo }: Props = $props();
+
 
   function createRInfoStore(initialRInfo: RecurrenceInfo) {
     let currentFrequencyType = initialRInfo.frequency.type;
@@ -130,6 +118,22 @@
       }
     });
   };
+  let task = $derived(TaskMapService.getTaskStore(taskId));
+  /**
+   * Stored so that the changes can be reverted
+   */
+  let previousRInfoString = $derived(JSON.stringify(recurrenceInfo));
+  let disabled = $derived(!$task.recurrenceInfo || !!$task.parentRecurringTaskInfo);
+  let startDate = $derived($task.startDate);
+  let dueDate = $derived($task.dueDate);
+  let parentRecurringTaskInfo = $derived($task.parentRecurringTaskInfo);
+  let exampleOfRecurrence = $derived(TaskRecurrenceService.createExampleOfRecurrence(
+    startDate,
+    dueDate,
+    recurrenceInfo,
+    parentRecurringTaskInfo
+  ));
+  let rInfo = $derived(createRInfoStore(recurrenceInfo));
 </script>
 
 <div class={disabled ? ' dimmed-color' : ''}>

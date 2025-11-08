@@ -4,11 +4,23 @@
   A grouping of architecture items.
 -->
 <script lang="ts">
-  export let direction: 'row' | 'column' = 'row';
-  export let borderTop = true;
-  export let borderLeft = false;
-  export let borderRight = false;
-  export let borderBottom = false;
+  interface Props {
+    direction?: 'row' | 'column';
+    borderTop?: boolean;
+    borderLeft?: boolean;
+    borderRight?: boolean;
+    borderBottom?: boolean;
+    children?: import('svelte').Snippet<[any]>;
+  }
+
+  let {
+    direction = 'row',
+    borderTop = true,
+    borderLeft = false,
+    borderRight = false,
+    borderBottom = false,
+    children
+  }: Props = $props();
 
   const className = `grouping ${direction} ${borderTop ? 'border-top' : ''} ${
     borderLeft ? 'border-left' : ''
@@ -16,7 +28,7 @@
 </script>
 
 <div class={className}>
-  <slot class="something" />
+  {@render children?.({ class: "something", })}
 </div>
 
 <style>

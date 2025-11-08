@@ -4,10 +4,14 @@
   import Checkbox from '@smui/checkbox';
   import { createEventDispatcher } from 'svelte';
 
-  export let settingName: string;
-  export let enabled: boolean;
+  interface Props {
+    settingName: string;
+    enabled: boolean;
+  }
 
-  $: tagContentClass = enabled ? 'card-content colorWhite' : 'card-content dimmed-color';
+  let { settingName, enabled }: Props = $props();
+
+  let tagContentClass = $derived(enabled ? 'card-content colorWhite' : 'card-content dimmed-color');
 
   const dispatch = createEventDispatcher();
 

@@ -20,13 +20,13 @@
   import Paper, { Content } from '@smui/paper';
   import { settingsPageInfo } from './pageInfo';
 
-  let searchingForUser = false;
-  let userNameSearchValue = '';
+  let searchingForUser = $state(false);
+  let userNameSearchValue = $state('');
   let previousUseConfetti = $userSettings.config.enabledFeatures.useConfettiForTasks;
 
-  $: collaboratorUserNames = Object.values($userSettings.collaborators).map(
+  let collaboratorUserNames = $derived(Object.values($userSettings.collaborators).map(
     (userCto) => userCto.userName
-  );
+  ));
 
   function handleSearchForUser() {
     if (userNameSearchValue === '') return;
@@ -72,36 +72,42 @@
         <h6 class="sectionTitle mdc-typography--subtitle1">General Settings</h6>
         <FormField>
           <Checkbox bind:checked={$userSettings.config.enableDevMode} touch />
-          <span slot="label">
-            Enable dev mode
-            <span class="mdc-theme--text-hint-on-background checkBoxText">
-              Enables some development features on the site
+          {#snippet label()}
+                    <span >
+              Enable dev mode
+              <span class="mdc-theme--text-hint-on-background checkBoxText">
+                Enables some development features on the site
+              </span>
             </span>
-          </span>
+                  {/snippet}
         </FormField>
         <FormField>
           <Checkbox bind:checked={$userSettings.config.enabledFeatures.catImageOnHomePage} touch />
-          <span slot="label">
-            Enable cat image on home page 🐈
-            <span class="mdc-theme--text-hint-on-background checkBoxText">
-              Just adds a random cat image to the home page
+          {#snippet label()}
+                    <span >
+              Enable cat image on home page 🐈
+              <span class="mdc-theme--text-hint-on-background checkBoxText">
+                Just adds a random cat image to the home page
+              </span>
             </span>
-          </span>
+                  {/snippet}
         </FormField>
         <hr class="sectionSeparator" />
         <h6 class="sectionTitle mdc-typography--subtitle1">Collaborators</h6>
         <div class="collaboratorsContainer">
           <Set
             chips={collaboratorUserNames}
-            let:chip
+            
             input
             on:SMUIChip:removal={handleCollaboratorRemoval}
           >
-            <Chip {chip}>
-              <Text>{chip}</Text>
-              <TrailingAction icon$class="material-icons">cancel</TrailingAction>
-            </Chip>
-          </Set>
+            {#snippet children({ chip })}
+                        <Chip {chip}>
+                <Text>{chip}</Text>
+                <TrailingAction icon$class="material-icons">cancel</TrailingAction>
+              </Chip>
+                                  {/snippet}
+                    </Set>
 
           <div class="userNameSearch">
             <div>
@@ -138,7 +144,9 @@
             on:click={handleEnableConfetti}
             touch
           />
-          <span slot="label">Enable confetti for tasks</span>
+          {#snippet label()}
+                    <span >Enable confetti for tasks</span>
+                  {/snippet}
         </FormField>
         <hr class="sectionSeparator" />
         <TaskDeletionSettings />

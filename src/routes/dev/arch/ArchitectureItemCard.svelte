@@ -10,6 +10,8 @@
   in styles when using the menu component.
 -->
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import type { MenuButtonItem } from '$components/presentational/MenuButton.svelte';
   import MenuButton from '$components/presentational/MenuButton.svelte';
   import ArchitectureInfo from '$util/ArchitectureInfo/ArchitectureInfo';
@@ -18,46 +20,57 @@
   import { Icon } from '@smui/icon-button';
   import Tooltip, { Wrapper } from '@smui/tooltip';
 
-  export let archComponent: ArchitectureComponent;
+  interface Props {
+    archComponent: ArchitectureComponent;
+    children?: import('svelte').Snippet;
+  }
 
-  $: title = archComponent.title;
-  $: categories = archComponent.categories;
-  $: archComponentType = archComponent.type;
-  $: iconComponent = archComponent.icon;
-  $: dependencyNames = archComponent.dependencies?.map((component) => component.title);
+  let { archComponent, children }: Props = $props();
+
 
   const menuItems: MenuButtonItem[] = [];
-  $: if (archComponent.configurationUrl) {
-    menuItems.push({
-      title: 'Configure',
-      iconName: 'build',
-      clickAction: () => {
-        openUrl(archComponent.configurationUrl);
-      }
-    });
-  }
-  $: if (archComponent.docsUrl) {
-    menuItems.push({
-      title: 'Docs',
-      iconName: 'article',
-      clickAction: () => {
-        openUrl(archComponent.docsUrl);
-      }
-    });
-  }
-  $: if (archComponent.latestExampleProjectUrl) {
-    menuItems.push({
-      title: 'Latest Example Project or Code',
-      iconName: 'code',
-      clickAction: () => {
-        openUrl(archComponent.latestExampleProjectUrl);
-      }
-    });
-  }
 
   function openUrl(url: string | undefined) {
     if (url) window.open(url, '_blank');
   }
+  let title = $derived(archComponent.title);
+  let categories = $derived(archComponent.categories);
+  let archComponentType = $derived(archComponent.type);
+  let iconComponent = $derived(archComponent.icon);
+  let dependencyNames = $derived(archComponent.dependencies?.map((component) => component.title));
+  run(() => {
+    if (archComponent.configurationUrl) {
+      menuItems.push({
+        title: 'Configure',
+        iconName: 'build',
+        clickAction: () => {
+          openUrl(archComponent.configurationUrl);
+        }
+      });
+    }
+  });
+  run(() => {
+    if (archComponent.docsUrl) {
+      menuItems.push({
+        title: 'Docs',
+        iconName: 'article',
+        clickAction: () => {
+          openUrl(archComponent.docsUrl);
+        }
+      });
+    }
+  });
+  run(() => {
+    if (archComponent.latestExampleProjectUrl) {
+      menuItems.push({
+        title: 'Latest Example Project or Code',
+        iconName: 'code',
+        clickAction: () => {
+          openUrl(archComponent.latestExampleProjectUrl);
+        }
+      });
+    }
+  });
 </script>
 
 <div class="container">
@@ -66,7 +79,8 @@
       <div class="card-content">
         <div class="left-side">
           {#if iconComponent}
-            <Icon class="material-icons"><svelte:component this={iconComponent} size={30} /></Icon>
+            <Icon class="material-icons">{@const SvelteComponent = iconComponent}
+            <Icon class="material-icons"><SvelteComponent size={30} /></Icon>
           {/if}
           <div>
             <h4 class="mdc-typography--body1 title">
@@ -88,9 +102,9 @@
                 {/each}
               </div>
             {/if}
-            {#if $$slots.default}
+            {#if children}
               <div class="mdc-deprecated-list-item__secondary-text subtitle no-before">
-                <slot />
+                {@render children?.()}
               </div>
             {/if}
             {#if dependencyNames}

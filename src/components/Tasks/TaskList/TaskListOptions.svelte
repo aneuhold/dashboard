@@ -15,52 +15,30 @@
   import TaskListFilterDialog from './TaskListFilterDialog.svelte';
   import TaskListSortingDialog from './TaskListSortingDialog.svelte';
 
-  export let category: string;
-  export let parentTask: DocumentStore<DashboardTask> | undefined = undefined;
-  export let parentTaskSortSettings: DashboardTaskListSortSettings | undefined = undefined;
-  export let userTaskSortSettings: DashboardTaskListSortSettings | undefined = undefined;
-  export let currentSortSettings: DashboardTaskListSortSettings;
-  export let removedTaskIds: string[];
+  interface Props {
+    category: string;
+    parentTask?: DocumentStore<DashboardTask> | undefined;
+    parentTaskSortSettings?: DashboardTaskListSortSettings | undefined;
+    userTaskSortSettings?: DashboardTaskListSortSettings | undefined;
+    currentSortSettings: DashboardTaskListSortSettings;
+    removedTaskIds: string[];
+  }
+
+  let {
+    category,
+    parentTask = undefined,
+    parentTaskSortSettings = undefined,
+    userTaskSortSettings = undefined,
+    currentSortSettings,
+    removedTaskIds
+  }: Props = $props();
 
   const globalTags = TaskTagsService.getStore();
   const taskMap = TaskMapService.getStore();
 
-  $: parentTaskFilterSettings = $parentTask
-    ? $parentTask.filterSettings[$currentUserId]
-    : undefined;
-  $: userTaskFilterSettings = $userSettings.config.taskListFilterSettings[category];
-  $: currentFilterSettings =
-    parentTaskFilterSettings ??
-    userTaskFilterSettings ??
-    getDefaultTaskListFilterSettings($currentUserId);
-  $: sortingDimmed = $parentTask ? !parentTaskSortSettings : !userTaskSortSettings;
-  $: filterDimmed = $parentTask ? !parentTaskFilterSettings : !userTaskFilterSettings;
-  $: taskSpecificText = getTaskSpecificText({
-    parentTask: $parentTask,
-    parentTaskSortSettings,
-    parentTaskFilterSettings
-  });
-  $: tagsWithRemovedIds = removedTaskIds.reduce((tagSet, id) => {
-    const task = $taskMap[id];
-    const currentUserTags = task?.tags[$currentUserId];
-    if (task && currentUserTags) {
-      currentUserTags.forEach((tag) => tagSet.add(tag));
-    }
-    return tagSet;
-  }, new Set<string>());
-  /**
-   * Tags that are hidden, but only those that actually have tasks with removed
-   * ids.
-   */
-  $: hiddenTags = $globalTags.filter(
-    (tag) =>
-      currentFilterSettings.tags[tag] &&
-      !currentFilterSettings.tags[tag].show &&
-      tagsWithRemovedIds.has(tag)
-  );
 
-  let sortingDialogOpen = false;
-  let filterDialogOpen = false;
+  let sortingDialogOpen = $state(false);
+  let filterDialogOpen = $state(false);
 
   const getTaskSpecificText = (settingsInfo: {
     parentTask?: DashboardTask;
@@ -118,6 +96,39 @@
       $userSettings.config.taskListFilterSettings = filterSettings;
     }
   };
+  let parentTaskFilterSettings = $derived($parentTask
+    ? $parentTask.filterSettings[$currentUserId]
+    : undefined);
+  let userTaskFilterSettings = $derived($userSettings.config.taskListFilterSettings[category]);
+  let currentFilterSettings =
+    $derived(parentTaskFilterSettings ??
+    userTaskFilterSettings ??
+    getDefaultTaskListFilterSettings($currentUserId));
+  let sortingDimmed = $derived($parentTask ? !parentTaskSortSettings : !userTaskSortSettings);
+  let filterDimmed = $derived($parentTask ? !parentTaskFilterSettings : !userTaskFilterSettings);
+  let taskSpecificText = $derived(getTaskSpecificText({
+    parentTask: $parentTask,
+    parentTaskSortSettings,
+    parentTaskFilterSettings
+  }));
+  let tagsWithRemovedIds = $derived(removedTaskIds.reduce((tagSet, id) => {
+    const task = $taskMap[id];
+    const currentUserTags = task?.tags[$currentUserId];
+    if (task && currentUserTags) {
+      currentUserTags.forEach((tag) => tagSet.add(tag));
+    }
+    return tagSet;
+  }, new Set<string>()));
+  /**
+   * Tags that are hidden, but only those that actually have tasks with removed
+   * ids.
+   */
+  let hiddenTags = $derived($globalTags.filter(
+    (tag) =>
+      currentFilterSettings.tags[tag] &&
+      !currentFilterSettings.tags[tag].show &&
+      tagsWithRemovedIds.has(tag)
+  ));
 </script>
 
 <div class="container">

@@ -7,19 +7,23 @@
   import TaskRecurrenceService from '../../../services/Task/TaskRecurrenceService';
   import TaskDateButton from './TaskDateButton.svelte';
 
-  export let taskId: string;
-  $: task = TaskMapService.getTaskStore(taskId);
+  interface Props {
+    taskId: string;
+  }
 
-  let currentlyChosenDateType: 'start' | 'due' = 'start';
-  let datePickerOpen = false;
-  $: dateName = currentlyChosenDateType === 'start' ? 'Start Date' : 'Due Date';
-  $: currentlyChosenDate = currentlyChosenDateType === 'start' ? $task.startDate : $task.dueDate;
-  $: oppositeDate = currentlyChosenDateType === 'start' ? $task.dueDate : $task.startDate;
-  $: oppositeDateName = currentlyChosenDateType === 'start' ? 'Due Date' : 'Start Date';
-  $: basisIsSameAsChosenDate =
-    currentlyChosenDateType === 'start'
+  let { taskId }: Props = $props();
+  let task = $derived(TaskMapService.getTaskStore(taskId));
+
+  let currentlyChosenDateType: 'start' | 'due' = $state('start');
+  let datePickerOpen = $state(false);
+  let dateName = $derived(currentlyChosenDateType === 'start' ? 'Start Date' : 'Due Date');
+  let currentlyChosenDate = $derived(currentlyChosenDateType === 'start' ? $task.startDate : $task.dueDate);
+  let oppositeDate = $derived(currentlyChosenDateType === 'start' ? $task.dueDate : $task.startDate);
+  let oppositeDateName = $derived(currentlyChosenDateType === 'start' ? 'Due Date' : 'Start Date');
+  let basisIsSameAsChosenDate =
+    $derived(currentlyChosenDateType === 'start'
       ? $task.recurrenceInfo?.recurrenceBasis === RecurrenceBasis.startDate
-      : $task.recurrenceInfo?.recurrenceBasis === RecurrenceBasis.dueDate;
+      : $task.recurrenceInfo?.recurrenceBasis === RecurrenceBasis.dueDate);
 
   function handleStartDateClick() {
     currentlyChosenDateType = 'start';

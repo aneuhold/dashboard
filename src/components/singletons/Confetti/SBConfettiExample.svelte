@@ -1,9 +1,13 @@
 <script lang="ts">
   import Confetti, { triggerConfetti } from './Confetti.svelte';
 
-  export let numButtons = 1;
+  interface Props {
+    numButtons?: number;
+  }
 
-  $: confettiButtonInfo = Array(numButtons).fill(null);
+  let { numButtons = 1 }: Props = $props();
+
+  let confettiButtonInfo = $derived(Array(numButtons).fill(null));
 </script>
 
 <div class="exampleContainer">
@@ -11,7 +15,7 @@
   {#each confettiButtonInfo as _}
     <button
       class="exampleConfettiButton"
-      on:click={(event) => {
+      onclick={(event) => {
         triggerConfetti(event.clientX, event.clientY);
       }}
     >

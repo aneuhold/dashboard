@@ -1,8 +1,14 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import SegmentedButton, { Label, Segment } from '@smui/segmented-button';
 
-  export let weekDaySetOrChoice: Array<number> | number;
-  export let disabled = false;
+  interface Props {
+    weekDaySetOrChoice: Array<number> | number;
+    disabled?: boolean;
+  }
+
+  let { weekDaySetOrChoice = $bindable(), disabled = false }: Props = $props();
 
   type WeekDaySegment = {
     name: string;
@@ -48,8 +54,7 @@
     }
   ];
 
-  let choices: Array<WeekDaySegment>;
-  $: choices = getChoices(weekDaySetOrChoice);
+  let choices: Array<WeekDaySegment> = $state();
 
   function getChoices(updatedWeekDaySet: Array<number> | number) {
     const weekDayChoiceIsNumber = typeof updatedWeekDaySet === 'number';
@@ -83,22 +88,27 @@
     }
     choices = choices;
   }
+  run(() => {
+    choices = getChoices(weekDaySetOrChoice);
+  });
 </script>
 
-<SegmentedButton segments={choices} let:segment key={(segment) => segment.name}>
-  <!--
-      When the selected prop is provided, Segment will no longer fire a "selected"
-      event.
-    -->
-  <Segment
-    {disabled}
-    {segment}
-    selected={segment.selected}
-    on:click={() => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      handleClick(segment);
-    }}
-  >
-    <Label>{segment.name}</Label>
-  </Segment>
+<SegmentedButton segments={choices}  key={(segment) => segment.name}>
+  {#snippet children({ segment })}
+    <!--
+        When the selected prop is provided, Segment will no longer fire a "selected"
+        event.
+      -->
+    <Segment
+      {disabled}
+      {segment}
+      selected={segment.selected}
+      on:click={() => {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+        handleClick(segment);
+      }}
+    >
+      <Label>{segment.name}</Label>
+    </Segment>
+  {/snippet}
 </SegmentedButton>

@@ -4,6 +4,8 @@
   A page for Financial info.
 -->
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import LinkList from '$components/LinkList.svelte';
   import type { LinkInfo } from '$components/LinkListItem.svelte';
   import PageTitle from '$components/PageTitle.svelte';
@@ -11,8 +13,10 @@
   import Paper, { Content, Title } from '@smui/paper';
   import { financePageInfo } from './pageInfo';
 
-  let tr = new TR($translations);
-  $: tr = new TR($translations);
+  let tr = $state(new TR($translations));
+  run(() => {
+    tr = new TR($translations);
+  });
 
   const bankingAndFinanceStorageLinks: Array<LinkInfo> = [
     {

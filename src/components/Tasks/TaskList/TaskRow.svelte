@@ -4,6 +4,8 @@
   A single task that can be displayed in a row format.
 -->
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import { goto } from '$app/navigation';
   import ClickableDiv from '$components/presentational/ClickableDiv.svelte';
   import type { MenuButtonItem } from '$components/presentational/MenuButton.svelte';
@@ -24,52 +26,26 @@
   import TaskRowTagHeader from '../TaskTags/TaskRowTagHeader.svelte';
   import TaskRowSubtaskInfo from './TaskRowSubtaskInfo.svelte';
 
-  export let taskId: string;
-  /**
+  
+  interface Props {
+    taskId: string;
+    /**
    * If set, it will display the tag as a header above the task.
    */
-  export let tagHeaderName: string | undefined = undefined;
+    tagHeaderName?: string | undefined;
+  }
+
+  let { taskId, tagHeaderName = undefined }: Props = $props();
 
   /**
    * Used so that the animation doesn't play every time the task shows up,
    * only when completed is clicked.
    */
-  let completeAnimationShouldShow = false;
+  let completeAnimationShouldShow = $state(false);
   let previousTaskCompletedState: boolean;
   const taskMap = TaskMapService.getStore();
 
-  $: task = TaskMapService.getTaskStore(taskId);
-  $: allChildrenIds = DashboardTaskService.getChildrenIds(
-    Object.values($taskMap).filter((task) => task !== undefined),
-    [$task._id]
-  );
-  $: hasExtraTaskInfo = allChildrenIds.length > 0 || $task.assignedTo;
-  $: finalSharedParentId = TaskService.findParentIdWithSameSharedWith($task);
-  $: usersTaskTags = $task.tags[$currentUserId];
-  $: menuItems = getMenuItems($task);
-  $: currentStrikeClass =
-    completeAnimationShouldShow && $task.completed
-      ? ' strikeAnimate'
-      : $task.completed
-        ? ' strike'
-        : '';
-  $: currentDimClass =
-    completeAnimationShouldShow && $task.completed ? ' dimAnimate' : $task.completed ? ' dim' : '';
-  $: trimmedTaskDescription = $task.description
-    ? $task.description.length > 100
-      ? `${$task.description.substring(0, 100)}...`
-      : $task.description
-    : '';
-  $: assignedToMe = $task.assignedTo ? $task.assignedTo.toString() === $currentUserId : false;
-  $: assignedToName = $task.assignedTo
-    ? assignedToMe
-      ? 'Me'
-      : $userSettings.collaborators[$task.assignedTo.toString()].userName
-    : '';
 
-  $: if ($task.completed !== previousTaskCompletedState) {
-    completeAnimationShouldShow = true;
-  }
 
   function goToTask() {
     goto(TaskService.getTaskRoute(taskId));
@@ -165,6 +141,39 @@
     });
     return menuItems;
   }
+  let task = $derived(TaskMapService.getTaskStore(taskId));
+  let allChildrenIds = $derived(DashboardTaskService.getChildrenIds(
+    Object.values($taskMap).filter((task) => task !== undefined),
+    [$task._id]
+  ));
+  let hasExtraTaskInfo = $derived(allChildrenIds.length > 0 || $task.assignedTo);
+  let finalSharedParentId = $derived(TaskService.findParentIdWithSameSharedWith($task));
+  let usersTaskTags = $derived($task.tags[$currentUserId]);
+  let menuItems = $derived(getMenuItems($task));
+  run(() => {
+    if ($task.completed !== previousTaskCompletedState) {
+      completeAnimationShouldShow = true;
+    }
+  });
+  let currentStrikeClass =
+    $derived(completeAnimationShouldShow && $task.completed
+      ? ' strikeAnimate'
+      : $task.completed
+        ? ' strike'
+        : '');
+  let currentDimClass =
+    $derived(completeAnimationShouldShow && $task.completed ? ' dimAnimate' : $task.completed ? ' dim' : '');
+  let trimmedTaskDescription = $derived($task.description
+    ? $task.description.length > 100
+      ? `${$task.description.substring(0, 100)}...`
+      : $task.description
+    : '');
+  let assignedToMe = $derived($task.assignedTo ? $task.assignedTo.toString() === $currentUserId : false);
+  let assignedToName = $derived($task.assignedTo
+    ? assignedToMe
+      ? 'Me'
+      : $userSettings.collaborators[$task.assignedTo.toString()].userName
+    : '');
 </script>
 
 {#if tagHeaderName}

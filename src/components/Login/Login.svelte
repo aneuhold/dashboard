@@ -14,10 +14,10 @@
   import Button, { Label } from '@smui/button';
   import CircularProgress from '@smui/circular-progress';
 
-  let typedUserName = LocalData.username;
-  let typedPassword = LocalData.password;
-  $: processingCredentials = $loginState === LoginState.ProcessingCredentials;
-  let invalidCredentials = false;
+  let typedUserName = $state(LocalData.username);
+  let typedPassword = $state(LocalData.password);
+  let processingCredentials = $derived($loginState === LoginState.ProcessingCredentials);
+  let invalidCredentials = $state(false);
 
   function handleSubmit(event: CustomEvent) {
     // Prevent the page from refreshing

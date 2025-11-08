@@ -6,16 +6,17 @@
   import { Actions, Content, Title } from '@smui/dialog';
   import TaskTagsService from '../../../services/Task/TaskTagsService';
 
-  export let open = false;
-  /**
+  
+  interface Props {
+    open?: boolean;
+    /**
    * The tag name to update. If not provided, the editor will be in "add" mode.
    */
-  export let tagName: string | undefined = undefined;
+    tagName?: string | undefined;
+  }
 
-  $: tagEditorValue = tagName ?? '';
-  $: tagValueIsValid = validateTagEditorValue(tagEditorValue);
-  $: buttonIsDisabled = !tagValueIsValid || tagEditorValue === tagName;
-  $: tagEditorTitle = tagName ? `Edit "${tagName}" Tag` : 'Add New Tag';
+  let { open = $bindable(false), tagName = undefined }: Props = $props();
+
 
   const handleCancel = () => {
     open = false;
@@ -35,6 +36,10 @@
     if (tagEditorValue === '') return false;
     return tagEditorValue === tagName || !$userSettings.config.tagSettings[value];
   };
+  let tagEditorValue = $derived(tagName ?? '');
+  let tagValueIsValid = $derived(validateTagEditorValue(tagEditorValue));
+  let buttonIsDisabled = $derived(!tagValueIsValid || tagEditorValue === tagName);
+  let tagEditorTitle = $derived(tagName ? `Edit "${tagName}" Tag` : 'Add New Tag');
 </script>
 
 <SmartDialog bind:open>

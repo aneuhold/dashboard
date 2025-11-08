@@ -4,7 +4,11 @@
   import { DashboardTask } from '@aneuhold/core-ts-db-lib';
   import Button, { Icon } from '@smui/button';
 
-  export let task: DocumentStore<DashboardTask>;
+  interface Props {
+    task: DocumentStore<DashboardTask>;
+  }
+
+  let { task }: Props = $props();
 
   function handleClick() {
     taskAssignmentDialog.open($task._id.toString());

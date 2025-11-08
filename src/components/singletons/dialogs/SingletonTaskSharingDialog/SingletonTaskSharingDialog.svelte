@@ -4,7 +4,7 @@
   This component is a singleton, and should only ever be used once. Use the
   exported functions to show the dialog.
 -->
-<script lang="ts" context="module">
+<script lang="ts" module>
   import SmartDialog from '$components/presentational/SmartDialog.svelte';
   import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
   import { currentUserId } from '$stores/derived/currentUserId';
@@ -49,11 +49,11 @@
 </script>
 
 <script lang="ts">
-  $: task = $currentTaskId ? TaskMapService.getTaskStore($currentTaskId) : null;
-  $: sharedWithIds = $task ? $task.sharedWith.map((id) => id.toString()) : [];
-  $: collaborators = $userSettings.collaborators;
-  $: currentUserIsOwner = $task ? $task.userId.toString() === $currentUserId : false;
-  $: title = $task ? `Share "${$task.title}"` : 'There was an error, please tell Tony';
+  let task = $derived($currentTaskId ? TaskMapService.getTaskStore($currentTaskId) : null);
+  let sharedWithIds = $derived($task ? $task.sharedWith.map((id) => id.toString()) : []);
+  let collaborators = $derived($userSettings.collaborators);
+  let currentUserIsOwner = $derived($task ? $task.userId.toString() === $currentUserId : false);
+  let title = $derived($task ? `Share "${$task.title}"` : 'There was an error, please tell Tony');
 
   function toggleSharedWith(id: ObjectId) {
     if (!$task) return;
@@ -90,9 +90,11 @@
                   toggleSharedWith(collaborator._id);
                 }}
               />
-              <span slot="label">
-                {collaborator.userName}
-              </span>
+              {#snippet label()}
+                                <span >
+                  {collaborator.userName}
+                </span>
+                              {/snippet}
             </FormField>
           {/each}
         {/if}

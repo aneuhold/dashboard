@@ -19,9 +19,9 @@
 
   const taskMap = TaskMapService.getStore();
 
-  $: sortAndFilterResult = TaskListService.getTaskIds($taskMap, $userSettings, 'default');
-  $: taskId = $page.url.searchParams.get('taskId');
-  $: task = taskId && $taskMap[taskId] ? $taskMap[taskId] : undefined;
+  let sortAndFilterResult = $derived(TaskListService.getTaskIds($taskMap, $userSettings, 'default'));
+  let taskId = $derived($page.url.searchParams.get('taskId'));
+  let task = $derived(taskId && $taskMap[taskId] ? $taskMap[taskId] : undefined);
 
   function addTask() {
     const newTask = new DashboardTask($userSettings.config.userId);

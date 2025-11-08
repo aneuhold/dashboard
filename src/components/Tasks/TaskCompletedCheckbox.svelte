@@ -7,18 +7,22 @@
   import { TaskMapService } from '../../services/Task/TaskMapService/TaskMapService';
   import ClickableDiv, { type ClickEvent } from '../presentational/ClickableDiv.svelte';
 
-  export let taskId: string;
+  interface Props {
+    taskId: string;
+  }
+
+  let { taskId }: Props = $props();
 
   // X and Y of the most recent click event for use in confetti
   let clickX = 0;
   let clickY = 0;
 
-  $: task = TaskMapService.getTaskStore(taskId);
-  $: preventDefault =
-    !$task.parentRecurringTaskInfo &&
+  let task = $derived(TaskMapService.getTaskStore(taskId));
+  let preventDefault =
+    $derived(!$task.parentRecurringTaskInfo &&
     !$task.completed &&
     $task.recurrenceInfo &&
-    $task.recurrenceInfo.recurrenceEffect === RecurrenceEffect.rollOnCompletion;
+    $task.recurrenceInfo.recurrenceEffect === RecurrenceEffect.rollOnCompletion);
 
   function handleCheckboxClick(event?: ClickEvent) {
     if (event) {

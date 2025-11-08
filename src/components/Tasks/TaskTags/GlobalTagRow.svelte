@@ -8,11 +8,13 @@
   import { createEventDispatcher } from 'svelte';
   import TaskTagsService from '../../../services/Task/TaskTagsService';
 
-  export let tagName: string;
-  export let maxPriority: number;
+  interface Props {
+    tagName: string;
+    maxPriority: number;
+  }
 
-  $: tagSettings = $userSettings.config.tagSettings[tagName];
-  $: menuItems = getMenuItems(tagSettings);
+  let { tagName, maxPriority }: Props = $props();
+
 
   const dispatch = createEventDispatcher<{
     openEditor: string;
@@ -112,6 +114,8 @@
       return settings;
     });
   };
+  let tagSettings = $derived($userSettings.config.tagSettings[tagName]);
+  let menuItems = $derived(getMenuItems(tagSettings));
 </script>
 
 <div>

@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
   export type BreadCrumbArray = Array<{
     name: string;
     /**
@@ -11,11 +11,15 @@
 <script lang="ts">
   import { page } from '$app/stores';
 
-  export let breadCrumbArray: BreadCrumbArray | null = null;
+  interface Props {
+    breadCrumbArray?: BreadCrumbArray | null;
+  }
 
-  let activeRoute: string = '/';
-  let previousLink: string | undefined;
-  $: routeArray = breadCrumbArray
+  let { breadCrumbArray = null }: Props = $props();
+
+  let activeRoute: string = $state('/');
+  let previousLink: string | undefined = $state();
+  let routeArray = $derived(breadCrumbArray
     ? breadCrumbArray
     : activeRoute
         .split('/')
@@ -24,7 +28,7 @@
           const routeLink = previousLink ? previousLink + '/' + route : route;
           previousLink = routeLink;
           return { name: route, link: routeLink };
-        });
+        }));
 
   page.subscribe((pageData) => {
     if (pageData.route.id) {

@@ -2,10 +2,19 @@
   import Button, { Icon } from '@smui/button';
   import { createEventDispatcher } from 'svelte';
 
-  export let variant: 'outlined' | 'raised' | undefined = undefined;
-  export let disabled: boolean = false;
-  export let color: 'primary' | 'secondary' = 'primary';
-  export let iconName: string;
+  interface Props {
+    variant?: 'outlined' | 'raised' | undefined;
+    disabled?: boolean;
+    color?: 'primary' | 'secondary';
+    iconName: string;
+  }
+
+  let {
+    variant = undefined,
+    disabled = false,
+    color = 'primary',
+    iconName
+  }: Props = $props();
 
   const dispatch = createEventDispatcher();
 </script>

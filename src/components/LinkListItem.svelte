@@ -4,7 +4,7 @@
   A list item that contains a link to some site or another page. This depends
   on there being a parent List component with `twoLines` set to true.
 -->
-<script lang="ts" context="module">
+<script lang="ts" module>
   import { Icon } from '@smui/icon-button';
   import { Graphic, Item, PrimaryText, SecondaryText, Text } from '@smui/list';
   import type { ComponentType } from 'svelte';
@@ -15,16 +15,21 @@
     iconName?: string;
     icon?: ComponentType;
     clickAction: () => void;
-    /**
-     * Determines if the link is internal to the site or not. If it isn't,
-     * then a link icon will be next to the title.
-     */
+    
     isInternalLink?: boolean;
   }
 </script>
 
 <script lang="ts">
-  export let linkInfo: LinkInfo;
+  interface Props {
+    /**
+     * Determines if the link is internal to the site or not. If it isn't,
+     * then a link icon will be next to the title.
+     */
+    linkInfo: LinkInfo;
+  }
+
+  let { linkInfo }: Props = $props();
 </script>
 
 <Item on:SMUI:action={linkInfo.clickAction}>
@@ -32,7 +37,7 @@
     <Graphic><Icon class="material-icons">{linkInfo.iconName}</Icon></Graphic>
   {/if}
   {#if linkInfo.icon}
-    <Graphic><svelte:component this={linkInfo.icon} /></Graphic>
+    <Graphic><linkInfo.icon /></Graphic>
   {/if}
   <Text>
     <PrimaryText>

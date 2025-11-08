@@ -7,8 +7,13 @@
   import { LoginState, loginState } from '../stores/loginState';
   import { navDrawerOpen } from '../stores/visual/navDrawerOpen';
   import NavDrawer from './NavDrawer.svelte';
+  interface Props {
+    children?: import('svelte').Snippet;
+  }
 
-  let topAppBar: TopAppBar;
+  let { children }: Props = $props();
+
+  let topAppBar: TopAppBar = $state();
 
   function handleLogOut() {
     apiKey.set(null);
@@ -43,7 +48,7 @@
           window.open('https://github.com/aneuhold?tab=repositories', '_blank');
         }}
       >
-        <Icon><svelte:component this={GitHubIcon} size={24} /></Icon>
+        <Icon><GitHubIcon size={24} /></Icon>
       </IconButton>
       <IconButton class="material-icons" aria-label="Log Out" on:click={handleLogOut}>
         logout
@@ -54,7 +59,7 @@
 
 <AutoAdjust {topAppBar}>
   <NavDrawer />
-  <slot />
+  {@render children?.()}
 </AutoAdjust>
 
 <style>

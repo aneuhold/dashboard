@@ -4,7 +4,7 @@
   This component is a singleton, and should only ever be used once. Use the
   exported functions to show the dialog.
 -->
-<script lang="ts" context="module">
+<script lang="ts" module>
   import SmartDialog from '$components/presentational/SmartDialog.svelte';
   import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
   import { userSettings } from '$stores/userSettings/userSettings';
@@ -48,10 +48,10 @@
 </script>
 
 <script lang="ts">
-  $: task = $currentTaskId ? TaskMapService.getTaskStore($currentTaskId) : null;
-  $: sharedWithIds = $task ? $task.sharedWith.map((id) => id.toString()) : [];
-  $: collaborators = $userSettings.collaborators;
-  $: sharedWithUsers = [
+  let task = $derived($currentTaskId ? TaskMapService.getTaskStore($currentTaskId) : null);
+  let sharedWithIds = $derived($task ? $task.sharedWith.map((id) => id.toString()) : []);
+  let collaborators = $derived($userSettings.collaborators);
+  let sharedWithUsers = $derived([
     { _id: $userSettings.config.userId, userName: 'Me' },
     ...Object.values(collaborators).filter((collaborator) => {
       return (
@@ -59,8 +59,8 @@
         collaborator._id.toString() === $task?.userId.toString()
       );
     })
-  ];
-  $: title = 'Task Assignment';
+  ]);
+  
 
   function toggleAssignment(id: ObjectId) {
     if (!$task) return;
@@ -90,9 +90,11 @@
                   toggleAssignment(sharedWithUser._id);
                 }}
               />
-              <span slot="label">
-                {sharedWithUser.userName}
-              </span>
+              {#snippet label()}
+                                <span >
+                  {sharedWithUser.userName}
+                </span>
+                              {/snippet}
             </FormField>
           {/each}
         {/if}

@@ -7,18 +7,22 @@
   import { userSettings } from '$stores/userSettings/userSettings';
   import { TaskMapService } from '../../../services/Task/TaskMapService/TaskMapService';
 
-  export let taskId: string;
+  interface Props {
+    taskId: string;
+  }
 
-  $: task = TaskMapService.getTaskStore(taskId);
+  let { taskId }: Props = $props();
+
+  let task = $derived(TaskMapService.getTaskStore(taskId));
   /**
    * Only inlcudes the ids of the users that the current user is a collaborator
    * with.
    */
-  $: sharedWithIds = $task.sharedWith
+  let sharedWithIds = $derived($task.sharedWith
     .map((id) => id.toString())
-    .filter((id) => $userSettings.collaborators[id]);
-  $: collaborators = $userSettings.collaborators;
-  $: userIsNotOwner = $task.userId.toString() !== $userSettings.config.userId.toString();
+    .filter((id) => $userSettings.collaborators[id]));
+  let collaborators = $derived($userSettings.collaborators);
+  let userIsNotOwner = $derived($task.userId.toString() !== $userSettings.config.userId.toString());
 </script>
 
 <div class="container">

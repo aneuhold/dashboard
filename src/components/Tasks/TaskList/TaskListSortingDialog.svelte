@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import SmartDialog from '$components/presentational/SmartDialog.svelte';
   import {
     DashboardTaskSortBy,
@@ -12,25 +14,16 @@
   import { slide } from 'svelte/transition';
   import TaskSortSetting from './TaskSortSetting.svelte';
 
-  export let open: boolean;
-  export let initialSettings: DashboardTaskListSortSettings;
-
-  let currentSettings: DashboardTaskListSortSettings;
-  let previousOpen = false;
-  $: currentSettings = JSON.parse(JSON.stringify(initialSettings)) as DashboardTaskListSortSettings;
-  $: currentSortList = currentSettings.sortList;
-  $: disabledSortSettings = getDisabledSortSettings(currentSettings);
-
-  $: {
-    if (open !== previousOpen) {
-      currentSettings = JSON.parse(
-        JSON.stringify(initialSettings)
-      ) as DashboardTaskListSortSettings;
-      currentSortList = currentSettings.sortList;
-      disabledSortSettings = getDisabledSortSettings(currentSettings);
-    }
-    previousOpen = open;
+  interface Props {
+    open: boolean;
+    initialSettings: DashboardTaskListSortSettings;
   }
+
+  let { open = $bindable(), initialSettings }: Props = $props();
+
+  let currentSettings: DashboardTaskListSortSettings = $state();
+  let previousOpen = $state(false);
+
 
   const dispatch = createEventDispatcher<{
     updateSettings: DashboardTaskListSortSettings;
@@ -107,6 +100,21 @@
     currentSettings.sortList = sortList;
     currentSortList = sortList;
   };
+  run(() => {
+    currentSettings = JSON.parse(JSON.stringify(initialSettings)) as DashboardTaskListSortSettings;
+  });
+  run(() => {
+    if (open !== previousOpen) {
+      currentSettings = JSON.parse(
+        JSON.stringify(initialSettings)
+      ) as DashboardTaskListSortSettings;
+      currentSortList = currentSettings.sortList;
+      disabledSortSettings = getDisabledSortSettings(currentSettings);
+    }
+    previousOpen = open;
+  });
+  let currentSortList = $derived(currentSettings.sortList);
+  let disabledSortSettings = $derived(getDisabledSortSettings(currentSettings));
 </script>
 
 <SmartDialog bind:open>

@@ -18,22 +18,26 @@
   import { slide } from 'svelte/transition';
   import TaskListOptions from './TaskListOptions.svelte';
 
-  export let sortAndFilterResult: DashboardTaskFilterAndSortResult;
-  export let category: string;
-  export let parentTaskId: string | undefined = undefined;
+  interface Props {
+    sortAndFilterResult: DashboardTaskFilterAndSortResult;
+    category: string;
+    parentTaskId?: string | undefined;
+  }
+
+  let { sortAndFilterResult, category, parentTaskId = undefined }: Props = $props();
 
   const taskMap = TaskMapService.getStore();
-  $: parentTask = parentTaskId ? TaskMapService.getTaskStore(parentTaskId) : undefined;
-  $: parentTaskSortSettings = $parentTask ? $parentTask.sortSettings[$currentUserId] : undefined;
-  $: userTaskSortSettings = $userSettings.config.taskListSortSettings[category];
-  $: currentSortSettings =
-    parentTaskSortSettings ??
+  let parentTask = $derived(parentTaskId ? TaskMapService.getTaskStore(parentTaskId) : undefined);
+  let parentTaskSortSettings = $derived($parentTask ? $parentTask.sortSettings[$currentUserId] : undefined);
+  let userTaskSortSettings = $derived($userSettings.config.taskListSortSettings[category]);
+  let currentSortSettings =
+    $derived(parentTaskSortSettings ??
     userTaskSortSettings ??
-    getDefaultTaskListSortSettings($currentUserId);
-  $: isSortedByTagsFirst =
-    currentSortSettings.sortList.length !== 0 &&
-    currentSortSettings.sortList[0].sortBy === DashboardTaskSortBy.tags;
-  $: tagHeaderMap = isSortedByTagsFirst
+    getDefaultTaskListSortSettings($currentUserId));
+  let isSortedByTagsFirst =
+    $derived(currentSortSettings.sortList.length !== 0 &&
+    currentSortSettings.sortList[0].sortBy === DashboardTaskSortBy.tags);
+  let tagHeaderMap = $derived(isSortedByTagsFirst
     ? DashboardTaskService.getTagHeaderMap(
         $taskMap,
         sortAndFilterResult.filteredAndSortedIds,
@@ -42,7 +46,7 @@
         'No Priority',
         currentSortSettings.sortList[0].sortDirection
       )
-    : undefined;
+    : undefined);
 </script>
 
 <div class="content">

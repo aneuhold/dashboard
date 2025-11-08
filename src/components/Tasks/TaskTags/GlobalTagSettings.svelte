@@ -6,20 +6,20 @@
   import GlobalTagEditor from './GlobalTagEditor.svelte';
   import GlobalTagRow from './GlobalTagRow.svelte';
 
-  $: tagSettings = $userSettings.config.tagSettings;
-  $: sortableTagList = Object.keys(tagSettings)
+  let tagSettings = $derived($userSettings.config.tagSettings);
+  let sortableTagList = $derived(Object.keys(tagSettings)
     .filter((tagName) => {
       return tagSettings[tagName].priority !== 0;
     })
     .sort((a, b) => {
       return tagSettings[b].priority - tagSettings[a].priority;
-    });
-  $: nonSortableTagList = Object.keys(tagSettings).filter((tagName) => {
+    }));
+  let nonSortableTagList = $derived(Object.keys(tagSettings).filter((tagName) => {
     return tagSettings[tagName].priority === 0;
-  });
+  }));
 
-  let editorOpen = false;
-  let editorOpenForTag: string | undefined = '';
+  let editorOpen = $state(false);
+  let editorOpenForTag: string | undefined = $state('');
 
   const handleOpenEditor = (event: CustomEvent<string>) => {
     editorOpenForTag = event.detail;

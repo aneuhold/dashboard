@@ -16,7 +16,11 @@
   import { enabledPages } from '../stores/visual/enabledPages';
   import { navDrawerOpen } from '../stores/visual/navDrawerOpen';
 
-  export let activeRoute: string = '/';
+  interface Props {
+    activeRoute?: string;
+  }
+
+  let { activeRoute = $bindable('/') }: Props = $props();
 
   function setRoute(newRoute: string) {
     $navDrawerOpen = false;
@@ -65,7 +69,7 @@
               </Graphic>
             {/if}
             {#if pageInfo.icon}
-              <Graphic><svelte:component this={pageInfo.icon} /></Graphic>
+              <Graphic><pageInfo.icon /></Graphic>
             {/if}
             <Text>{pageInfo.shortTitle}</Text>
           </Item>

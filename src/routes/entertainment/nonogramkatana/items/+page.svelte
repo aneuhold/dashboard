@@ -12,8 +12,8 @@
   import { nonogramKatanaItemsPageInfo } from './pageInfo';
 
   const itemMap = NonogramKatanaItemMapService.getStore();
-  let searchInput = '';
-  $: items = Object.values($itemMap)
+  let searchInput = $state('');
+  let items = $derived(Object.values($itemMap)
     .filter(
       (item) =>
         item !== undefined && item.itemName.toLowerCase().includes(searchInput.toLowerCase().trim())
@@ -25,8 +25,8 @@
         return -1;
       }
       return b.priority - a.priority;
-    }) as NonogramKatanaItem[];
-  $: itemsMissing = Object.values($itemMap).length < Object.values(NonogramKatanaItemName).length;
+    }) as NonogramKatanaItem[]);
+  let itemsMissing = $derived(Object.values($itemMap).length < Object.values(NonogramKatanaItemName).length);
 </script>
 
 <svelte:head>

@@ -4,6 +4,8 @@
   Reccurence information for use in the Task Details component.
 -->
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import ClickableDiv from '$components/presentational/ClickableDiv.svelte';
   import SmartDialog from '$components/presentational/SmartDialog.svelte';
   import {
@@ -24,23 +26,20 @@
   import TaskService from '../../../services/Task/TaskService';
   import TaskRecurrenceDetails from './TaskRecurrenceDetails.svelte';
 
-  export let taskId: string;
-  export let childTaskIds: string[];
+  interface Props {
+    taskId: string;
+    childTaskIds: string[];
+  }
 
-  let recurringInfoOpen = false;
+  let { taskId, childTaskIds }: Props = $props();
+
+  let recurringInfoOpen = $state(false);
   const taskMap = TaskMapService.getStore();
-  let previousTaskId = taskId;
-  let errorInfoDialogOpen = false;
-  let errorInfoDialogTitle = '';
-  let errorInfoDialogContent = '';
-  let defaultRecurrenceInfo: RecurrenceInfo;
-  $: task = TaskMapService.getTaskStore(taskId);
-  $: isRecurring = !!$task.recurrenceInfo;
-  $: hasParentRecurringTask = !!$task.parentRecurringTaskInfo;
-  $: hasChildRecurringTask = childTaskIds.some(
-    (childTaskId) => !!$taskMap[childTaskId]?.recurrenceInfo
-  );
-  $: defaultRecurrenceInfo = {
+  let previousTaskId = $state(taskId);
+  let errorInfoDialogOpen = $state(false);
+  let errorInfoDialogTitle = $state('');
+  let errorInfoDialogContent = $state('');
+  let defaultRecurrenceInfo: RecurrenceInfo = $derived({
     frequency: {
       type: RecurrenceFrequencyType.everyXTimeUnit,
       everyXTimeUnit: {
@@ -50,19 +49,28 @@
     },
     recurrenceBasis: $task.dueDate ? RecurrenceBasis.dueDate : RecurrenceBasis.startDate,
     recurrenceEffect: RecurrenceEffect.rollOnCompletion
-  };
+  });
+  let task = $derived(TaskMapService.getTaskStore(taskId));
+  let isRecurring = $derived(!!$task.recurrenceInfo);
+  let hasParentRecurringTask = $derived(!!$task.parentRecurringTaskInfo);
+  let hasChildRecurringTask = $derived(childTaskIds.some(
+    (childTaskId) => !!$taskMap[childTaskId]?.recurrenceInfo
+  ));
+  
 
   /**
    * This is purposefully not synced to the task store, so that updates
    * can happen separately.
    */
-  $: currentRecurrenceInfo = $task.recurrenceInfo ?? defaultRecurrenceInfo;
+  let currentRecurrenceInfo = $derived($task.recurrenceInfo ?? defaultRecurrenceInfo);
 
   // Auto-close the accordion when switching tasks
-  $: if (previousTaskId !== taskId) {
-    previousTaskId = taskId;
-    recurringInfoOpen = false;
-  }
+  run(() => {
+    if (previousTaskId !== taskId) {
+      previousTaskId = taskId;
+      recurringInfoOpen = false;
+    }
+  });
 
   const handleRecurringClick = () => {
     if (isRecurring) {

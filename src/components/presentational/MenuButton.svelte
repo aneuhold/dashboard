@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
   export type MenuButtonItem = {
     title: string;
     iconName: string;
@@ -17,8 +17,12 @@
   import List, { Graphic, Item, Text } from '@smui/list';
   import MenuSurface from '@smui/menu-surface';
 
-  export let menuItems: MenuButtonItem[];
-  export let alignCenterVertically = false;
+  interface Props {
+    menuItems: MenuButtonItem[];
+    alignCenterVertically?: boolean;
+  }
+
+  let { menuItems, alignCenterVertically = false }: Props = $props();
 
   function handleItemClick(clickAction: () => void) {
     menu.setOpen(false);
@@ -27,8 +31,8 @@
     setTimeout(clickAction, 50);
   }
 
-  let menu: MenuSurface;
-  let anchor: HTMLDivElement;
+  let menu: MenuSurface = $state();
+  let anchor: HTMLDivElement = $state();
 </script>
 
 <!--The extra div is required to keep the bounds of the menu contained -->

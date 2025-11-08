@@ -10,11 +10,13 @@
   import SegmentedButton, { Segment } from '@smui/segmented-button';
   import { createEventDispatcher } from 'svelte';
 
-  export let sortSetting: DashboardTaskSortSetting;
-  export let disabled: boolean;
+  interface Props {
+    sortSetting: DashboardTaskSortSetting;
+    disabled: boolean;
+  }
 
-  $: sortName = getSortName(sortSetting.sortBy);
-  $: tagContentClass = disabled ? 'card-content dimmed-color' : 'card-content colorWhite';
+  let { sortSetting = $bindable(), disabled }: Props = $props();
+
 
   type SortDirectionChoice = {
     value: DashboardTaskSortDirection;
@@ -31,9 +33,6 @@
       iconName: 'arrow_upward'
     }
   ];
-  $: sortDirectionChoice = sortDirectionChoices.find(
-    (choice) => choice.value === sortSetting.sortDirection
-  );
 
   const dispatch = createEventDispatcher<{
     enable: DashboardTaskSortBy;
@@ -72,6 +71,11 @@
         return 'Unknown';
     }
   };
+  let sortName = $derived(getSortName(sortSetting.sortBy));
+  let tagContentClass = $derived(disabled ? 'card-content dimmed-color' : 'card-content colorWhite');
+  let sortDirectionChoice = $derived(sortDirectionChoices.find(
+    (choice) => choice.value === sortSetting.sortDirection
+  ));
 </script>
 
 <div>
@@ -107,22 +111,24 @@
           <div class="iconSet">
             <SegmentedButton
               segments={sortDirectionChoices}
-              let:segment
+              
               singleSelect
               selected={sortDirectionChoice}
               key={(segment) => segment.value}
               class="tagSegmentedButton"
             >
-              <Segment
-                {segment}
-                title={segment.value}
-                on:click$preventDefault={() => {
-                  sortSetting.sortDirection = segment.value;
-                }}
-              >
-                <Icon class="material-icons">{segment.iconName}</Icon>
-              </Segment>
-            </SegmentedButton>
+              {#snippet children({ segment })}
+                            <Segment
+                  {segment}
+                  title={segment.value}
+                  on:click$preventDefault={() => {
+                    sortSetting.sortDirection = segment.value;
+                  }}
+                >
+                  <Icon class="material-icons">{segment.iconName}</Icon>
+                </Segment>
+                                        {/snippet}
+                        </SegmentedButton>
           </div>
         {/if}
       </div>

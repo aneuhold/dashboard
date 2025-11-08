@@ -16,95 +16,129 @@
   to adjust it's min height.
 -->
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import Textfield from '@smui/textfield';
   import HelperText from '@smui/textfield/helper-text';
   import { createEventDispatcher } from 'svelte';
 
-  export let disable: boolean = false;
-  /**
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+  interface Props {
+    disable?: boolean;
+    /**
    * The input type for the `InputBox`.
    */
-  export let inputType = 'text';
-  /**
+    inputType?: string;
+    /**
    * The minimum value if the input type is a number.
    */
-  export let min: number | undefined = undefined;
-  /**
+    min?: number | undefined;
+    /**
    * The maximum value if the input type is a number.
    */
-  export let max: number | undefined = undefined;
-  /**
+    max?: number | undefined;
+    /**
    * Determines if the input is a text area instead of just a single line.
    */
-  export let isTextArea = false;
-  /**
+    isTextArea?: boolean;
+    /**
    * This will show in the input box as a label when the text is empty,
    * and move to the top when the user starts typing.
    */
-  export let label: string | undefined = undefined;
-  /**
+    label?: string | undefined;
+    /**
    * The value of the input box when the user blurs the input. This also acts
    * as the initial value. It will only be updated when the user leaves the
    * input box.
    */
-  export let onBlurValue: string | number = '';
-  /**
+    onBlurValue?: string | number;
+    /**
    * The value of the `InputBox`. This will update automatically and can be
    * bound to. Alternatively, the onBlurValue can be bound to to only get
    * updates when the user blurs the input.
    */
-  export let inputValue: string | number = onBlurValue;
-  /**
+    inputValue?: string | number;
+    /**
    * If set, it will use the browser auto-complete features for the specified
    * label. For example `password`. If auto-complete is not desired, do not
    * set this.
    */
-  export let autocompleteLabel: string | null = null;
-  /**
+    autocompleteLabel?: string | null;
+    /**
    * The helper text to show below the input box. If null, no helper text will
    * be shown.
    */
-  export let helperText: string | null = null;
-  /**
+    helperText?: string | null;
+    /**
    * Variant for when this is not a text area. If it is a text area, this will
    * be ignored.
    */
-  export let variant: 'filled' | 'outlined' | 'standard' = 'standard';
-  /**
+    variant?: 'filled' | 'outlined' | 'standard';
+    /**
    * If false spell check will be disabled. Defaults to true.
    */
-  export let spellCheck: boolean = true;
-
-  /**
+    spellCheck?: boolean;
+    /**
    * If the input box should be small. This only applies to non-textarea
    * input boxes.
    */
-  export let isSmall = false;
-
-  /**
+    isSmall?: boolean;
+    /**
    * Optional validation value that can be set. If it is set, the input box
    * will be invalid.
    */
-  export let isValid = true;
+    isValid?: boolean;
+  }
 
-  let previousOnBlurValue = onBlurValue;
+  let {
+    disable = $bindable(false),
+    inputType = 'text',
+    min = undefined,
+    max = undefined,
+    isTextArea = false,
+    label = undefined,
+    onBlurValue = $bindable(''),
+    inputValue = $bindable(onBlurValue),
+    autocompleteLabel = null,
+    helperText = null,
+    variant = 'standard',
+    spellCheck = true,
+    isSmall = false,
+    isValid = true
+  }: Props = $props();
+
+  let previousOnBlurValue = $state(onBlurValue);
 
   /**
    * Indicates if the input has been touched and edited. Might be useful
    * later.
    */
-  let dirty = false;
+  let dirty = $state(false);
   /**
    * Only used for number validation at the moment, but it's built to block
    * the onBlurValue from being updated if the input is invalid so could be
    * quite useful in the future.
    */
-  $: invalid =
-    !isValid ||
+  let invalid =
+    $derived(!isValid ||
     (typeof inputValue === 'number' &&
       (isNaN(inputValue) ||
         (min !== undefined && inputValue < min) ||
-        (max !== undefined && inputValue > max)));
+        (max !== undefined && inputValue > max))));
 
   const dispatch = createEventDispatcher();
 
@@ -124,17 +158,19 @@
 
   // Check if the onBlurValue is null or undefined and set it to an empty
   // string if it is. This fixes graphical issues with the input box.
-  $: if (onBlurValue === null || onBlurValue === undefined) {
-    onBlurValue = '';
-    previousOnBlurValue = onBlurValue;
-    inputValue = onBlurValue;
-    // Detect when the onBlurValue is changed outside the component.
-  } else if (onBlurValue !== previousOnBlurValue && onBlurValue !== inputValue) {
-    inputValue = onBlurValue;
-    previousOnBlurValue = onBlurValue;
-  } else if (onBlurValue !== previousOnBlurValue) {
-    previousOnBlurValue = onBlurValue;
-  }
+  run(() => {
+    if (onBlurValue === null || onBlurValue === undefined) {
+      onBlurValue = '';
+      previousOnBlurValue = onBlurValue;
+      inputValue = onBlurValue;
+      // Detect when the onBlurValue is changed outside the component.
+    } else if (onBlurValue !== previousOnBlurValue && onBlurValue !== inputValue) {
+      inputValue = onBlurValue;
+      previousOnBlurValue = onBlurValue;
+    } else if (onBlurValue !== previousOnBlurValue) {
+      previousOnBlurValue = onBlurValue;
+    }
+  });
 </script>
 
 <Textfield
@@ -159,11 +195,13 @@
   on:keydown={handleKeyDown}
   on:blur={handleBlur}
 >
-  <svelte:fragment slot="helper">
-    {#if helperText}
-      <HelperText persistent>{helperText}</HelperText>
-    {/if}
-  </svelte:fragment>
+  {#snippet helper()}
+  
+      {#if helperText}
+        <HelperText persistent>{helperText}</HelperText>
+      {/if}
+    
+  {/snippet}
 </Textfield>
 
 <style>

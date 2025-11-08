@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
   import IconButton from '@smui/icon-button';
   import Snackbar, { Actions, Label } from '@smui/snackbar';
   import { writable } from 'svelte/store';

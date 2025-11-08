@@ -4,7 +4,7 @@
   This component is a singleton, and should only ever be used once. Use the
   exported functions to show the dialog.
 -->
-<script lang="ts" context="module">
+<script lang="ts" module>
   import SmartDialog from '$components/presentational/SmartDialog.svelte';
   import Button, { Label } from '@smui/button';
   import { Actions, Content, Title } from '@smui/dialog';
@@ -58,7 +58,9 @@
 </script>
 
 <script lang="ts">
-  let previousOpen = $open;
+  import { run } from 'svelte/legacy';
+
+  let previousOpen = $state($open);
 
   function handleConfirm() {
     $open = false;
@@ -70,7 +72,7 @@
     $open = false;
   }
 
-  $: {
+  run(() => {
     // So that if the dialog is closed by any other means, it will trigger the
     // onCancel function
     if (previousOpen !== $open) {
@@ -79,7 +81,7 @@
       }
       previousOpen = $open;
     }
-  }
+  });
 </script>
 
 <SmartDialog bind:open={$open}>

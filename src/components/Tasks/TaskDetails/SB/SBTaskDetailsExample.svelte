@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import {
     MockTaskAssignment,
     MockTaskSharedWith
@@ -7,14 +9,18 @@
   import { DashboardTask } from '@aneuhold/core-ts-db-lib';
   import TaskDetails from '../TaskDetails.svelte';
 
-  export let mainTaskExists = true;
-  export let sharedWith: MockTaskSharedWith = MockTaskSharedWith.none;
-  export let assignedTo: MockTaskAssignment = MockTaskAssignment.none;
+  interface Props {
+    mainTaskExists?: boolean;
+    sharedWith?: MockTaskSharedWith;
+    assignedTo?: MockTaskAssignment;
+  }
 
-  let mainTask: DashboardTask | undefined;
-  $: taskId = mainTask ? mainTask._id.toString() : 'nonExistentTaskId';
+  let { mainTaskExists = true, sharedWith = MockTaskSharedWith.none, assignedTo = MockTaskAssignment.none }: Props = $props();
 
-  $: {
+  let mainTask: DashboardTask | undefined = $state();
+  let taskId = $derived(mainTask ? mainTask._id.toString() : 'nonExistentTaskId');
+
+  run(() => {
     SBMockData.taskMapServiceMock.reset();
     if (mainTaskExists) {
       mainTask = SBMockData.taskMapServiceMock.addTask({
@@ -23,7 +29,7 @@
         assignedTo: assignedTo
       });
     }
-  }
+  });
 </script>
 
 <TaskDetails {taskId} />

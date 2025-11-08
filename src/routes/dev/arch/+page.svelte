@@ -6,7 +6,7 @@
   Implementation notes:
   - SVG icons: https://worldvectorlogo.com/
 -->
-<script lang="ts" context="module">
+<script lang="ts" module>
 </script>
 
 <script lang="ts">
@@ -23,7 +23,7 @@
   import ArchitectureSection from './ArchitectureSection.svelte';
   import { archPageInfo } from './pageInfo';
 
-  let archContext: ArchitectureContext | null = null;
+  let archContext: ArchitectureContext | null = $state(null);
 
   const unsub = page.subscribe((pageData) => {
     archContext = ArchitectureInfo.getContextFromSearchParams(pageData.url.searchParams);

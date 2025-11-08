@@ -8,6 +8,8 @@
   it gets used more than just on the TaskDetails component, then it should.
 -->
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import { DateService } from '@aneuhold/core-ts-lib';
   import Button, { Label } from '@smui/button';
   import Checkbox from '@smui/checkbox';
@@ -17,24 +19,38 @@
   import SveltyPicker from 'svelty-picker';
   import SmartDialog from './SmartDialog.svelte';
 
-  export let title: string = 'Pick a date';
-  export let open: boolean;
-  /**
+  
+  
+  
+  interface Props {
+    title?: string;
+    open: boolean;
+    /**
    * Determines if the date is an end date. If it is, and time is not
    * specified by the user, the time will automatically be set to 23:59:59.
    */
-  export let dateIsEndDate: boolean = false;
-  export let initialDate: Date | undefined = undefined;
-  /**
+    dateIsEndDate?: boolean;
+    initialDate?: Date | undefined;
+    /**
    * The first date that should be available for selection. This can be setup
    * with a time attached in the same date too.
    */
-  export let startDate: Date | undefined = undefined;
-  /**
+    startDate?: Date | undefined;
+    /**
    * The last date that should be available for selection. This can be setup
    * with a time attached in the same date too.
    */
-  export let endDate: Date | undefined = undefined;
+    endDate?: Date | undefined;
+  }
+
+  let {
+    title = 'Pick a date',
+    open = $bindable(),
+    dateIsEndDate = false,
+    initialDate = undefined,
+    startDate = undefined,
+    endDate = undefined
+  }: Props = $props();
 
   /**
    * This is the actual dialog open state. This is needed so that svelty-picker
@@ -45,29 +61,33 @@
    * manually updating or clearing the value as well as restting the
    * initialDate. None of these worked.
    */
-  let dialogOpen = false;
-  let sveltyPickerVisible = false;
-  let previousOpen = false;
-  let mode: 'date' | 'datetime';
-  $: mode = initialDate ? (DateService.dateHasTime(initialDate) ? 'datetime' : 'date') : 'date';
-  $: currentlySelectedDate = initialDate;
+  let dialogOpen = $state(false);
+  let sveltyPickerVisible = $state(false);
+  let previousOpen = $state(false);
+  let mode: 'date' | 'datetime' = $state();
+  run(() => {
+    mode = initialDate ? (DateService.dateHasTime(initialDate) ? 'datetime' : 'date') : 'date';
+  });
+  let currentlySelectedDate = $derived(initialDate);
 
   // Main reactivity logic for opening and closing the dialog
-  $: if (open && previousOpen !== open) {
-    previousOpen = open;
-    sveltyPickerVisible = true;
-    currentlySelectedDate = initialDate;
-    tick().then(() => {
-      dialogOpen = true;
-    });
-  } else if (!open && previousOpen !== open) {
-    previousOpen = open;
-    dialogOpen = false;
-    // 200ms seemed like a good amount of time for the dialog to go away.
-    setTimeout(() => {
-      sveltyPickerVisible = false;
-    }, 200);
-  }
+  run(() => {
+    if (open && previousOpen !== open) {
+      previousOpen = open;
+      sveltyPickerVisible = true;
+      currentlySelectedDate = initialDate;
+      tick().then(() => {
+        dialogOpen = true;
+      });
+    } else if (!open && previousOpen !== open) {
+      previousOpen = open;
+      dialogOpen = false;
+      // 200ms seemed like a good amount of time for the dialog to go away.
+      setTimeout(() => {
+        sveltyPickerVisible = false;
+      }, 200);
+    }
+  });
 
   const dispatch = createEventDispatcher<{
     selected: Date | null;
@@ -110,7 +130,9 @@
     {/if}
     <FormField>
       <Checkbox checked={mode === 'datetime'} on:click={handleTimeBoxClicked} touch />
-      <span slot="label">Use Time</span>
+      {#snippet label()}
+            <span >Use Time</span>
+          {/snippet}
     </FormField>
   </Content>
   <Actions>

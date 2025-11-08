@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
   import { writable } from 'svelte/store';
 
   export const triggerConfetti = (centerX: number, centerY: number, durationMs?: number) => {
@@ -62,8 +62,8 @@
   import { confetti } from '@neoconfetti/svelte';
   import { tick } from 'svelte';
 
-  $: confettiEnabled = $userSettings.config.enabledFeatures.useConfettiForTasks;
-  $: showConfetti = $confettiSettings.show && confettiEnabled;
+  let confettiEnabled = $derived($userSettings.config.enabledFeatures.useConfettiForTasks);
+  let showConfetti = $derived($confettiSettings.show && confettiEnabled);
 </script>
 
 {#if showConfetti}

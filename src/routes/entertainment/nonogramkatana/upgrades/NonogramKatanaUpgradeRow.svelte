@@ -10,9 +10,13 @@
   import NonogramKatanaRequiredUpgrade from './NonogramKatanaRequiredUpgrade.svelte';
   import { nonogramKatanaUpgradesDisplayInfo } from './nonogramKatanaUpgradesDisplayInfo';
 
-  export let upgradeName: NonogramKatanaUpgradeName;
-  $: upgrade = NonogramKatanaUpgradeMapService.getUpgradeStoreByName(upgradeName);
-  $: displayInfo = nonogramKatanaUpgradesDisplayInfo[upgradeName];
+  interface Props {
+    upgradeName: NonogramKatanaUpgradeName;
+  }
+
+  let { upgradeName }: Props = $props();
+  let upgrade = $derived(NonogramKatanaUpgradeMapService.getUpgradeStoreByName(upgradeName));
+  let displayInfo = $derived(nonogramKatanaUpgradesDisplayInfo[upgradeName]);
 </script>
 
 <div class="container">
@@ -23,7 +27,7 @@
           <Checkbox bind:checked={$upgrade.completed} touch />
           {#if displayInfo.icon}
             <Icon class="material-icons">
-              <svelte:component this={displayInfo.icon} size={30} />
+              <displayInfo.icon size={30} />
             </Icon>
           {/if}
           <div>

@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import SmartDialog from '$components/presentational/SmartDialog.svelte';
   import type { DashboardTaskListFilterSettings } from '@aneuhold/core-ts-db-lib';
   import Button, { Label } from '@smui/button';
@@ -7,25 +9,31 @@
   import TaskTagsService from '../../../services/Task/TaskTagsService';
   import TaskFilterSetting from './TaskFilterSetting.svelte';
 
-  export let open: boolean;
-  export let initialSettings: DashboardTaskListFilterSettings;
+  interface Props {
+    open: boolean;
+    initialSettings: DashboardTaskListFilterSettings;
+  }
+
+  let { open = $bindable(), initialSettings }: Props = $props();
 
   const userTags = TaskTagsService.getStore();
 
-  let currentSettings: DashboardTaskListFilterSettings;
-  let previousOpen = false;
-  $: currentSettings = JSON.parse(
-    JSON.stringify(initialSettings)
-  ) as DashboardTaskListFilterSettings;
+  let currentSettings: DashboardTaskListFilterSettings = $state();
+  let previousOpen = $state(false);
+  run(() => {
+    currentSettings = JSON.parse(
+      JSON.stringify(initialSettings)
+    ) as DashboardTaskListFilterSettings;
+  });
 
-  $: {
+  run(() => {
     if (open !== previousOpen) {
       currentSettings = JSON.parse(
         JSON.stringify(initialSettings)
       ) as DashboardTaskListFilterSettings;
     }
     previousOpen = open;
-  }
+  });
 
   const dispatch = createEventDispatcher<{
     updateSettings: DashboardTaskListFilterSettings;

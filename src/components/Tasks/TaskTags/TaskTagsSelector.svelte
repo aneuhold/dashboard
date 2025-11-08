@@ -10,17 +10,21 @@
   import { TaskMapService } from '../../../services/Task/TaskMapService/TaskMapService';
   import TaskTagsService from '../../../services/Task/TaskTagsService';
 
-  export let taskId: string;
+  interface Props {
+    taskId: string;
+  }
 
-  $: task = TaskMapService.getTaskStore(taskId);
-  $: globalTags = TaskTagsService.getStore();
-  $: unselectedTags = $globalTags.filter((tag) => !$task.tags[$currentUserId]?.includes(tag));
+  let { taskId }: Props = $props();
+
+  let task = $derived(TaskMapService.getTaskStore(taskId));
+  let globalTags = $derived(TaskTagsService.getStore());
+  let unselectedTags = $derived($globalTags.filter((tag) => !$task.tags[$currentUserId]?.includes(tag)));
   // This needs to be redirected like this so that the Set component doesn't
   // make a small write on startup.
-  $: currentUserTags = $task.tags[$currentUserId] ?? [];
+  let currentUserTags = $derived($task.tags[$currentUserId] ?? []);
 
-  let currentAutoCompleteValue = '';
-  let selector: Autocomplete;
+  let currentAutoCompleteValue = $state('');
+  let selector: Autocomplete = $state();
 
   function addTagToTask(tag: string) {
     const newTagsObject = $task.tags;
@@ -76,12 +80,14 @@
       <i class="mdc-typography--body2 subTasksTitle dimmed-color">No tags</i>
     {:else}
       <span>Tags</span>
-      <Set bind:chips={currentUserTags} on:SMUIChip:removal={handleRemoval} let:chip>
-        <Chip {chip}>
-          <Text>{chip}</Text>
-          <TrailingAction icon$class="material-icons">cancel</TrailingAction>
-        </Chip>
-      </Set>
+      <Set bind:chips={currentUserTags} on:SMUIChip:removal={handleRemoval} >
+        {#snippet children({ chip })}
+                <Chip {chip}>
+            <Text>{chip}</Text>
+            <TrailingAction icon$class="material-icons">cancel</TrailingAction>
+          </Chip>
+                      {/snippet}
+            </Set>
     {/if}
   </div>
 
@@ -98,7 +104,8 @@
     on:SMUIAutocomplete:noMatchesAction={handleNewSelection}
     on:SMUIAutocomplete:selected={handleSelection}
   >
-    <div slot="no-matches">
+    <!-- @migration-task: migrate this slot by hand, `no-matches` is an invalid identifier -->
+  <div slot="no-matches">
       {#if currentUserTags.includes(currentAutoCompleteValue)}
         <Text>Tag "{currentAutoCompleteValue}" already added</Text>
       {:else}

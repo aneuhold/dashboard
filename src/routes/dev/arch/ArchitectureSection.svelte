@@ -8,9 +8,13 @@
   import ArchitectureItemCard from './ArchitectureItemCard.svelte';
   import type { ArchitectureContextComponent } from '../../../util/ArchitectureInfo/architectureContextInfo';
 
-  export let title: string;
-  export let subtitle: string | null = null;
-  export let components: ArchitectureContextComponent[];
+  interface Props {
+    title: string;
+    subtitle?: string | null;
+    components: ArchitectureContextComponent[];
+  }
+
+  let { title, subtitle = null, components }: Props = $props();
 </script>
 
 <Paper>

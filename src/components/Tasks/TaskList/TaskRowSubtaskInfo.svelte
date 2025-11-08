@@ -9,16 +9,20 @@ Info about subtasks within a task row.
   import { DashboardTask } from '@aneuhold/core-ts-db-lib';
   import type { ObjectId } from 'bson';
 
-  export let allChildrenIds: ObjectId[];
+  interface Props {
+    allChildrenIds: ObjectId[];
+  }
 
-  $: allChildTasks = allChildrenIds.map(
+  let { allChildrenIds }: Props = $props();
+
+  let allChildTasks = $derived(allChildrenIds.map(
     (id) => TaskMapService.getMap()[id.toString()]
-  ) as DashboardTask[];
-  $: allCompletedTasks = allChildTasks.filter((task) => task.completed);
-  $: allIncompleteTasks = allChildTasks.filter((task) => !task.completed);
-  $: allIncompleteTasksAssignedToMe = allIncompleteTasks.filter(
+  ) as DashboardTask[]);
+  let allCompletedTasks = $derived(allChildTasks.filter((task) => task.completed));
+  let allIncompleteTasks = $derived(allChildTasks.filter((task) => !task.completed));
+  let allIncompleteTasksAssignedToMe = $derived(allIncompleteTasks.filter(
     (task) => task.assignedTo?.toString() === $currentUserId
-  );
+  ));
 </script>
 
 <!--Left at the root so that the parent can style it-->

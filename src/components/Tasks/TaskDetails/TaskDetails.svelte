@@ -31,27 +31,31 @@
   import TaskShareButton from './TaskShareButton.svelte';
   import TaskSharingInfo from './TaskSharingInfo.svelte';
 
-  export let taskId: string;
+  interface Props {
+    taskId: string;
+  }
+
+  let { taskId }: Props = $props();
 
   const taskMap = TaskMapService.getStore();
-  $: task = $taskMap[taskId] ? TaskMapService.getTaskStore(taskId) : undefined;
-  $: allChildrenIds = $task
+  let task = $derived($taskMap[taskId] ? TaskMapService.getTaskStore(taskId) : undefined);
+  let allChildrenIds = $derived($task
     ? DashboardTaskService.getChildrenIds(Object.values($taskMap) as DashboardTask[], [
         $task._id
       ]).map((id) => id.toString())
-    : [];
-  $: sortAndFilterResult = TaskListService.getTaskIdsForTask(
+    : []);
+  let sortAndFilterResult = $derived(TaskListService.getTaskIdsForTask(
     $taskMap,
     $userSettings,
     allChildrenIds,
     $task
-  );
+  ));
   // Explicitly include `task` so that it reactively updates
-  $: breadCrumbArray = TaskService.getBreadCrumbArray($task ? $task._id.toString() : taskId);
-  $: parentTaskId = $task ? $task.parentTaskId : undefined;
-  $: parentRoute = parentTaskId
+  let breadCrumbArray = $derived(TaskService.getBreadCrumbArray($task ? $task._id.toString() : taskId));
+  let parentTaskId = $derived($task ? $task.parentTaskId : undefined);
+  let parentRoute = $derived(parentTaskId
     ? TaskService.getTaskRoute(parentTaskId.toString())
-    : TaskService.getTaskCategoryRoute(taskId);
+    : TaskService.getTaskCategoryRoute(taskId));
 
   function addSubTask() {
     if (!$task) return;

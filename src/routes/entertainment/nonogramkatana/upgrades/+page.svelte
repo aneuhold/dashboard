@@ -25,19 +25,19 @@
   };
 
   const upgradeMap = NonogramKatanaUpgradeMapService.getStore();
-  let showAll = false;
-  let searchInput = '';
-  $: allUpgrades = Object.values($upgradeMap)
+  let showAll = $state(false);
+  let searchInput = $state('');
+  let allUpgrades = $derived(Object.values($upgradeMap)
     .filter((upgrade) => upgrade !== undefined)
-    .sort(sortFunction);
-  $: workableUpgrades = Object.values(
+    .sort(sortFunction));
+  let workableUpgrades = $derived(Object.values(
     NonogramKatanaUpgradeMapService.getWorkableUpgrades($upgradeMap)
-  ).sort(sortFunction);
-  $: currentlyShownUpgrades = (showAll ? allUpgrades : workableUpgrades).filter((upgrade) =>
+  ).sort(sortFunction));
+  let currentlyShownUpgrades = $derived((showAll ? allUpgrades : workableUpgrades).filter((upgrade) =>
     upgrade.upgradeName.toLowerCase().includes(searchInput.toLowerCase().trim())
-  );
-  $: upgradesMissing =
-    Object.values($upgradeMap).length < Object.values(NonogramKatanaUpgradeName).length;
+  ));
+  let upgradesMissing =
+    $derived(Object.values($upgradeMap).length < Object.values(NonogramKatanaUpgradeName).length);
 </script>
 
 <svelte:head>

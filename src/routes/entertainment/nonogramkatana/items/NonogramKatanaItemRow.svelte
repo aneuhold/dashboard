@@ -9,14 +9,18 @@
   import NonogramKatanaRelatedUpgrade from './NonogramKatanaRelatedUpgrade.svelte';
   import { nonogramKatanaItemsDisplayInfo } from './nonogramKatanaItemsDisplayInfo';
 
-  export let itemId: string;
+  interface Props {
+    itemId: string;
+  }
 
-  $: item = NonogramKatanaItemMapService.getItemStore(itemId);
-  $: displayInfo = nonogramKatanaItemsDisplayInfo[$item.itemName];
-  $: upgradesThatRequireThisItem = NonogramKatanaUpgradeMapService.getUpgradeStoresByItemName(
+  let { itemId }: Props = $props();
+
+  let item = $derived(NonogramKatanaItemMapService.getItemStore(itemId));
+  let displayInfo = $derived(nonogramKatanaItemsDisplayInfo[$item.itemName]);
+  let upgradesThatRequireThisItem = $derived(NonogramKatanaUpgradeMapService.getUpgradeStoresByItemName(
     $item.itemName
-  );
-  $: amountThatCanBeSpent = $item.currentAmount - ($item.minDesired ?? 0);
+  ));
+  let amountThatCanBeSpent = $derived($item.currentAmount - ($item.minDesired ?? 0));
 </script>
 
 <div class="container">
@@ -26,7 +30,7 @@
         <div class="left-side">
           {#if displayInfo.icon}
             <Icon class="material-icons">
-              <svelte:component this={displayInfo.icon} size={30} />
+              <displayInfo.icon size={30} />
             </Icon>
           {/if}
           <div>

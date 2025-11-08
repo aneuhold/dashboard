@@ -4,10 +4,19 @@
   import Card, { Content } from '@smui/card';
   import { Icon } from '@smui/icon-button';
 
-  export let iconName: string;
-  export let title: string;
-  export let description: string;
-  export let automationTriggerUrl: string | undefined;
+  interface Props {
+    iconName: string;
+    title: string;
+    description: string;
+    automationTriggerUrl: string | undefined;
+  }
+
+  let {
+    iconName,
+    title,
+    description,
+    automationTriggerUrl
+  }: Props = $props();
 
   function handleButtonClick() {
     if (automationTriggerUrl) {

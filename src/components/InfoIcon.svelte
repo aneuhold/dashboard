@@ -16,9 +16,14 @@
   import IconButton, { Icon } from '@smui/icon-button';
   import SmartDialog from './presentational/SmartDialog.svelte';
 
-  export let title: string;
+  interface Props {
+    title: string;
+    children?: import('svelte').Snippet;
+  }
 
-  let open = false;
+  let { title, children }: Props = $props();
+
+  let open = $state(false);
 </script>
 
 <IconButton
@@ -33,7 +38,7 @@
 <SmartDialog bind:open>
   <!-- Title cannot contain leading whitespace due to mdc-typography-baseline-top() -->
   <Title>{title}</Title>
-  <Content><slot /></Content>
+  <Content>{@render children?.()}</Content>
   <Actions>
     <Button
       on:click={() => {

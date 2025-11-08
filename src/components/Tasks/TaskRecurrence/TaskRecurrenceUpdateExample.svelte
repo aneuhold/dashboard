@@ -1,22 +1,34 @@
 <script lang="ts">
   import { DateService } from '@aneuhold/core-ts-lib';
 
-  export let originalStartDate: Date | undefined = undefined;
-  export let originalDueDate: Date | undefined = undefined;
-  export let newStartDate: Date | undefined = undefined;
-  export let newDueDate: Date | undefined = undefined;
-  export let recurrenceIsRemoved: boolean = false;
-  export let recurrenceIsAdded: boolean = false;
-  export let completedRemoved: boolean = false;
+  interface Props {
+    originalStartDate?: Date | undefined;
+    originalDueDate?: Date | undefined;
+    newStartDate?: Date | undefined;
+    newDueDate?: Date | undefined;
+    recurrenceIsRemoved?: boolean;
+    recurrenceIsAdded?: boolean;
+    completedRemoved?: boolean;
+  }
 
-  $: noChangesAtAll =
-    !originalStartDate &&
+  let {
+    originalStartDate = undefined,
+    originalDueDate = undefined,
+    newStartDate = undefined,
+    newDueDate = undefined,
+    recurrenceIsRemoved = false,
+    recurrenceIsAdded = false,
+    completedRemoved = false
+  }: Props = $props();
+
+  let noChangesAtAll =
+    $derived(!originalStartDate &&
     !originalDueDate &&
     !newStartDate &&
     !newDueDate &&
     !recurrenceIsRemoved &&
     !recurrenceIsAdded &&
-    !completedRemoved;
+    !completedRemoved);
 </script>
 
 {#if noChangesAtAll}

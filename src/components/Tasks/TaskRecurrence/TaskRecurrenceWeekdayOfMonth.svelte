@@ -2,9 +2,13 @@
   import WeekdaySegmentedButton from '$components/WeekdaySegmentedButton.svelte';
   import Select, { Option } from '@smui/select';
 
-  export let weekDay: number;
-  export let weekOfMonth: number | 'last';
-  export let disabled = false;
+  interface Props {
+    weekDay: number;
+    weekOfMonth: number | 'last';
+    disabled?: boolean;
+  }
+
+  let { weekDay = $bindable(), weekOfMonth = $bindable(), disabled = false }: Props = $props();
 </script>
 
 <div class="container">

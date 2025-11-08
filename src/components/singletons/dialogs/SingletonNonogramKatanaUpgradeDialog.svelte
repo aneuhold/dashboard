@@ -4,7 +4,7 @@
   This component is a singleton, and should only ever be used once. Use the
   exported functions to show the dialog.
 -->
-<script lang="ts" context="module">
+<script lang="ts" module>
   import InputBox from '$components/presentational/InputBox.svelte';
   import SmartDialog from '$components/presentational/SmartDialog.svelte';
   import Button, { Label } from '@smui/button';
@@ -32,10 +32,10 @@
 <script lang="ts">
   import { NonogramKatanaItemName } from '@aneuhold/core-ts-db-lib';
 
-  $: upgrade = $currentUpgradeId
+  let upgrade = $derived($currentUpgradeId
     ? NonogramKatanaUpgradeMapService.getUpgradeStore($currentUpgradeId)
-    : null;
-  $: displayInfo = $upgrade ? nonogramKatanaUpgradesDisplayInfo[$upgrade.upgradeName] : null;
+    : null);
+  let displayInfo = $derived($upgrade ? nonogramKatanaUpgradesDisplayInfo[$upgrade.upgradeName] : null);
 
   function getItemAmount(itemName: NonogramKatanaItemName) {
     return $upgrade ? $upgrade.currentItemAmounts[itemName] : 0;

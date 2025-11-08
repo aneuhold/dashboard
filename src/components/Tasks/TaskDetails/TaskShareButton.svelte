@@ -7,12 +7,16 @@
   import Button, { Icon } from '@smui/button';
   import TaskService from '../../../services/Task/TaskService';
 
-  export let task: DocumentStore<DashboardTask>;
+  interface Props {
+    task: DocumentStore<DashboardTask>;
+  }
 
-  $: sharingDisabled = $task.userId.toString() !== $userSettings.config.userId.toString();
-  $: finalParentId = TaskService.findParentIdWithSameSharedWith($task);
-  $: taskId = $task._id.toString();
-  $: buttonText = finalParentId === taskId || sharingDisabled ? 'Share' : 'Configure Sharing';
+  let { task }: Props = $props();
+
+  let sharingDisabled = $derived($task.userId.toString() !== $userSettings.config.userId.toString());
+  let finalParentId = $derived(TaskService.findParentIdWithSameSharedWith($task));
+  let taskId = $derived($task._id.toString());
+  let buttonText = $derived(finalParentId === taskId || sharingDisabled ? 'Share' : 'Configure Sharing');
 
   function handleClick() {
     if (finalParentId === taskId) {
