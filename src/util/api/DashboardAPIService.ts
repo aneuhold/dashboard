@@ -1,6 +1,5 @@
 import { snackbar } from '$components/singletons/SingletonSnackbar.svelte';
 import { apiKey } from '$stores/apiKey';
-import { dashboardConfig } from '$stores/dashboardConfig';
 import { LoginState, loginState } from '$stores/loginState';
 import { translations } from '$stores/translations';
 import { userSettings } from '$stores/userSettings/userSettings';
@@ -17,7 +16,6 @@ import { NonogramKatanaUpgradeMapService } from '../../services/NonogramKatana/N
 import { TaskMapService } from '../../services/Task/TaskMapService/TaskMapService';
 
 const SECONDS_TO_WAIT_BEFORE_FETCHING_INITIAL_DATA = 10;
-const API_BASE_URL_OVERRIDE: string | null = null;
 
 export default class DashboardAPIService {
   /**
@@ -28,7 +26,6 @@ export default class DashboardAPIService {
    */
   private static processingFirstInitData = false;
   static lastInitialDataFetchTime: number | null = null;
-  private static dashboardAPIUrlSet = false;
   private static processingRequestQueue = false;
 
   /**
@@ -133,20 +130,6 @@ export default class DashboardAPIService {
   }
 
   static checkOrSetupDashboardAPI(): UUID {
-    if (!this.dashboardAPIUrlSet) {
-      const url = dashboardConfig.get()?.gcloudBackendUrl;
-      if (!url) {
-        throw new Error('Dashboard API URL not set!');
-      }
-      if (API_BASE_URL_OVERRIDE) {
-        console.warn(
-          'Overriding dashboard API URL with override value:',
-          API_BASE_URL_OVERRIDE
-        );
-        APIService.setAPIUrl(API_BASE_URL_OVERRIDE);
-      }
-      this.dashboardAPIUrlSet = true;
-    }
     const apiKeyValue = apiKey.get();
     if (!apiKeyValue) {
       throw new Error('API Key not set!');
