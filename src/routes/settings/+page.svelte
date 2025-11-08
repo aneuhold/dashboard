@@ -24,9 +24,9 @@
   let userNameSearchValue = $state('');
   let previousUseConfetti = $userSettings.config.enabledFeatures.useConfettiForTasks;
 
-  let collaboratorUserNames = $derived(Object.values($userSettings.collaborators).map(
-    (userCto) => userCto.userName
-  ));
+  let collaboratorUserNames = $derived(
+    Object.values($userSettings.collaborators).map((userCto) => userCto.userName)
+  );
 
   function handleSearchForUser() {
     if (userNameSearchValue === '') return;
@@ -73,41 +73,36 @@
         <FormField>
           <Checkbox bind:checked={$userSettings.config.enableDevMode} touch />
           {#snippet label()}
-                    <span >
+            <span>
               Enable dev mode
               <span class="mdc-theme--text-hint-on-background checkBoxText">
                 Enables some development features on the site
               </span>
             </span>
-                  {/snippet}
+          {/snippet}
         </FormField>
         <FormField>
           <Checkbox bind:checked={$userSettings.config.enabledFeatures.catImageOnHomePage} touch />
           {#snippet label()}
-                    <span >
+            <span>
               Enable cat image on home page 🐈
               <span class="mdc-theme--text-hint-on-background checkBoxText">
                 Just adds a random cat image to the home page
               </span>
             </span>
-                  {/snippet}
+          {/snippet}
         </FormField>
         <hr class="sectionSeparator" />
         <h6 class="sectionTitle mdc-typography--subtitle1">Collaborators</h6>
         <div class="collaboratorsContainer">
-          <Set
-            chips={collaboratorUserNames}
-            
-            input
-            on:SMUIChip:removal={handleCollaboratorRemoval}
-          >
+          <Set chips={collaboratorUserNames} input on:SMUIChip:removal={handleCollaboratorRemoval}>
             {#snippet children({ chip })}
-                        <Chip {chip}>
+              <Chip {chip}>
                 <Text>{chip}</Text>
                 <TrailingAction icon$class="material-icons">cancel</TrailingAction>
               </Chip>
-                                  {/snippet}
-                    </Set>
+            {/snippet}
+          </Set>
 
           <div class="userNameSearch">
             <div>
@@ -145,8 +140,8 @@
             touch
           />
           {#snippet label()}
-                    <span >Enable confetti for tasks</span>
-                  {/snippet}
+            <span>Enable confetti for tasks</span>
+          {/snippet}
         </FormField>
         <hr class="sectionSeparator" />
         <TaskDeletionSettings />

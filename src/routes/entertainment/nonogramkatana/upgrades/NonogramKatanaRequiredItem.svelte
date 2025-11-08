@@ -13,10 +13,12 @@
 
   let item = $derived(NonogramKatanaItemMapService.getItemStoreByName(itemName));
   let itemDisplayInfo = $derived(nonogramKatanaItemsDisplayInfo[itemName]);
-  let amountThatCanBeSpent = $derived(Math.min(
-    Math.max(0, $item.currentAmount - ($item.minDesired ?? 0)),
-    requiredAmount - currentAmount
-  ));
+  let amountThatCanBeSpent = $derived(
+    Math.min(
+      Math.max(0, $item.currentAmount - ($item.minDesired ?? 0)),
+      requiredAmount - currentAmount
+    )
+  );
 </script>
 
 <li>

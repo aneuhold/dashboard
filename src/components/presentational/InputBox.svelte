@@ -22,85 +22,70 @@
   import HelperText from '@smui/textfield/helper-text';
   import { createEventDispatcher } from 'svelte';
 
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-
-  
-
-  
   interface Props {
     disable?: boolean;
     /**
-   * The input type for the `InputBox`.
-   */
+     * The input type for the `InputBox`.
+     */
     inputType?: string;
     /**
-   * The minimum value if the input type is a number.
-   */
+     * The minimum value if the input type is a number.
+     */
     min?: number | undefined;
     /**
-   * The maximum value if the input type is a number.
-   */
+     * The maximum value if the input type is a number.
+     */
     max?: number | undefined;
     /**
-   * Determines if the input is a text area instead of just a single line.
-   */
+     * Determines if the input is a text area instead of just a single line.
+     */
     isTextArea?: boolean;
     /**
-   * This will show in the input box as a label when the text is empty,
-   * and move to the top when the user starts typing.
-   */
+     * This will show in the input box as a label when the text is empty,
+     * and move to the top when the user starts typing.
+     */
     label?: string | undefined;
     /**
-   * The value of the input box when the user blurs the input. This also acts
-   * as the initial value. It will only be updated when the user leaves the
-   * input box.
-   */
+     * The value of the input box when the user blurs the input. This also acts
+     * as the initial value. It will only be updated when the user leaves the
+     * input box.
+     */
     onBlurValue?: string | number;
     /**
-   * The value of the `InputBox`. This will update automatically and can be
-   * bound to. Alternatively, the onBlurValue can be bound to to only get
-   * updates when the user blurs the input.
-   */
+     * The value of the `InputBox`. This will update automatically and can be
+     * bound to. Alternatively, the onBlurValue can be bound to to only get
+     * updates when the user blurs the input.
+     */
     inputValue?: string | number;
     /**
-   * If set, it will use the browser auto-complete features for the specified
-   * label. For example `password`. If auto-complete is not desired, do not
-   * set this.
-   */
+     * If set, it will use the browser auto-complete features for the specified
+     * label. For example `password`. If auto-complete is not desired, do not
+     * set this.
+     */
     autocompleteLabel?: string | null;
     /**
-   * The helper text to show below the input box. If null, no helper text will
-   * be shown.
-   */
+     * The helper text to show below the input box. If null, no helper text will
+     * be shown.
+     */
     helperText?: string | null;
     /**
-   * Variant for when this is not a text area. If it is a text area, this will
-   * be ignored.
-   */
+     * Variant for when this is not a text area. If it is a text area, this will
+     * be ignored.
+     */
     variant?: 'filled' | 'outlined' | 'standard';
     /**
-   * If false spell check will be disabled. Defaults to true.
-   */
+     * If false spell check will be disabled. Defaults to true.
+     */
     spellCheck?: boolean;
     /**
-   * If the input box should be small. This only applies to non-textarea
-   * input boxes.
-   */
+     * If the input box should be small. This only applies to non-textarea
+     * input boxes.
+     */
     isSmall?: boolean;
     /**
-   * Optional validation value that can be set. If it is set, the input box
-   * will be invalid.
-   */
+     * Optional validation value that can be set. If it is set, the input box
+     * will be invalid.
+     */
     isValid?: boolean;
   }
 
@@ -133,12 +118,13 @@
    * the onBlurValue from being updated if the input is invalid so could be
    * quite useful in the future.
    */
-  let invalid =
-    $derived(!isValid ||
-    (typeof inputValue === 'number' &&
-      (isNaN(inputValue) ||
-        (min !== undefined && inputValue < min) ||
-        (max !== undefined && inputValue > max))));
+  let invalid = $derived(
+    !isValid ||
+      (typeof inputValue === 'number' &&
+        (isNaN(inputValue) ||
+          (min !== undefined && inputValue < min) ||
+          (max !== undefined && inputValue > max)))
+  );
 
   const dispatch = createEventDispatcher();
 
@@ -196,11 +182,9 @@
   on:blur={handleBlur}
 >
   {#snippet helper()}
-  
-      {#if helperText}
-        <HelperText persistent>{helperText}</HelperText>
-      {/if}
-    
+    {#if helperText}
+      <HelperText persistent>{helperText}</HelperText>
+    {/if}
   {/snippet}
 </Textfield>
 

@@ -18,9 +18,9 @@
 
 <div class="container">
   <span class={`mdc-typography--body2${date ? '' : ' dimmed-color'}`}>{dateTitle}</span>
-  <Set chips={['one']} >
+  <Set chips={['one']}>
     {#snippet children({ chip })}
-        <Chip
+      <Chip
         {chip}
         class={date ? '' : 'dimmed-color'}
         shouldRemoveOnTrailingIconClick={false}
@@ -29,8 +29,8 @@
         <LeadingIcon class="material-icons">event</LeadingIcon>
         <Text>{dateValue}</Text>
       </Chip>
-          {/snippet}
-    </Set>
+    {/snippet}
+  </Set>
 </div>
 
 <style>

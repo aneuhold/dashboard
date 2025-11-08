@@ -229,6 +229,8 @@ export default class LocalData {
   /**
    * Gets a stored object with some basic validation. This should be setup
    * to use type guards.
+   *
+   * @param key
    */
   private static getStoredObject<ObjectType>(key: string): ObjectType | null {
     const currentlyStoredValue = this.getValue(key);

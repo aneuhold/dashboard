@@ -15,7 +15,6 @@
 
   let { tagName, maxPriority }: Props = $props();
 
-
   const dispatch = createEventDispatcher<{
     openEditor: string;
   }>();

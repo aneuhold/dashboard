@@ -15,7 +15,11 @@
     assignedTo?: MockTaskAssignment;
   }
 
-  let { mainTaskExists = true, sharedWith = MockTaskSharedWith.none, assignedTo = MockTaskAssignment.none }: Props = $props();
+  let {
+    mainTaskExists = true,
+    sharedWith = MockTaskSharedWith.none,
+    assignedTo = MockTaskAssignment.none
+  }: Props = $props();
 
   let mainTask: DashboardTask | undefined = $state();
   let taskId = $derived(mainTask ? mainTask._id.toString() : 'nonExistentTaskId');

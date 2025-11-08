@@ -6,17 +6,15 @@
   import { Actions, Content, Title } from '@smui/dialog';
   import TaskTagsService from '../../../services/Task/TaskTagsService';
 
-  
   interface Props {
     open?: boolean;
     /**
-   * The tag name to update. If not provided, the editor will be in "add" mode.
-   */
+     * The tag name to update. If not provided, the editor will be in "add" mode.
+     */
     tagName?: string | undefined;
   }
 
   let { open = $bindable(false), tagName = undefined }: Props = $props();
-
 
   const handleCancel = () => {
     open = false;

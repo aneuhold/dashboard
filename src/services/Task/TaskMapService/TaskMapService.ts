@@ -141,6 +141,9 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
   /**
    * Gets the update info for a task and all of its children based on the
    * provided updater.
+   *
+   * @param taskId
+   * @param updater
    */
   static getUpdateTaskAndAllChildrenInfo(
     taskId: string,
@@ -166,6 +169,8 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
   /**
    * Auto-deletes tasks that are older than the user's auto task deletion
    * settings.
+   *
+   * @param map
    */
   private static autoDeleteTasksPostSet(map: DocumentMap<DashboardTask>) {
     // Check for any tasks that need to be auto-deleted.
@@ -200,6 +205,8 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
 
   /**
    * Simply gets all the tasks in the provided task map excluding any undefined.
+   *
+   * @param map
    */
   private static getAllTasks(map: DocumentMap<DashboardTask>): DashboardTask[] {
     return Object.values(map).filter((task): task is DashboardTask => task !== undefined);

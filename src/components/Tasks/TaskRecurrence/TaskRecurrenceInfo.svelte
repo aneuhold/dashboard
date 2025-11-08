@@ -53,10 +53,9 @@
   let task = $derived(TaskMapService.getTaskStore(taskId));
   let isRecurring = $derived(!!$task.recurrenceInfo);
   let hasParentRecurringTask = $derived(!!$task.parentRecurringTaskInfo);
-  let hasChildRecurringTask = $derived(childTaskIds.some(
-    (childTaskId) => !!$taskMap[childTaskId]?.recurrenceInfo
-  ));
-  
+  let hasChildRecurringTask = $derived(
+    childTaskIds.some((childTaskId) => !!$taskMap[childTaskId]?.recurrenceInfo)
+  );
 
   /**
    * This is purposefully not synced to the task store, so that updates

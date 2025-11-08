@@ -26,12 +26,11 @@
   import TaskRowTagHeader from '../TaskTags/TaskRowTagHeader.svelte';
   import TaskRowSubtaskInfo from './TaskRowSubtaskInfo.svelte';
 
-  
   interface Props {
     taskId: string;
     /**
-   * If set, it will display the tag as a header above the task.
-   */
+     * If set, it will display the tag as a header above the task.
+     */
     tagHeaderName?: string | undefined;
   }
 
@@ -44,8 +43,6 @@
   let completeAnimationShouldShow = $state(false);
   let previousTaskCompletedState: boolean;
   const taskMap = TaskMapService.getStore();
-
-
 
   function goToTask() {
     goto(TaskService.getTaskRoute(taskId));
@@ -142,10 +139,12 @@
     return menuItems;
   }
   let task = $derived(TaskMapService.getTaskStore(taskId));
-  let allChildrenIds = $derived(DashboardTaskService.getChildrenIds(
-    Object.values($taskMap).filter((task) => task !== undefined),
-    [$task._id]
-  ));
+  let allChildrenIds = $derived(
+    DashboardTaskService.getChildrenIds(
+      Object.values($taskMap).filter((task) => task !== undefined),
+      [$task._id]
+    )
+  );
   let hasExtraTaskInfo = $derived(allChildrenIds.length > 0 || $task.assignedTo);
   let finalSharedParentId = $derived(TaskService.findParentIdWithSameSharedWith($task));
   let usersTaskTags = $derived($task.tags[$currentUserId]);
@@ -155,25 +154,33 @@
       completeAnimationShouldShow = true;
     }
   });
-  let currentStrikeClass =
-    $derived(completeAnimationShouldShow && $task.completed
+  let currentStrikeClass = $derived(
+    completeAnimationShouldShow && $task.completed
       ? ' strikeAnimate'
       : $task.completed
         ? ' strike'
-        : '');
-  let currentDimClass =
-    $derived(completeAnimationShouldShow && $task.completed ? ' dimAnimate' : $task.completed ? ' dim' : '');
-  let trimmedTaskDescription = $derived($task.description
-    ? $task.description.length > 100
-      ? `${$task.description.substring(0, 100)}...`
-      : $task.description
-    : '');
-  let assignedToMe = $derived($task.assignedTo ? $task.assignedTo.toString() === $currentUserId : false);
-  let assignedToName = $derived($task.assignedTo
-    ? assignedToMe
-      ? 'Me'
-      : $userSettings.collaborators[$task.assignedTo.toString()].userName
-    : '');
+        : ''
+  );
+  let currentDimClass = $derived(
+    completeAnimationShouldShow && $task.completed ? ' dimAnimate' : $task.completed ? ' dim' : ''
+  );
+  let trimmedTaskDescription = $derived(
+    $task.description
+      ? $task.description.length > 100
+        ? `${$task.description.substring(0, 100)}...`
+        : $task.description
+      : ''
+  );
+  let assignedToMe = $derived(
+    $task.assignedTo ? $task.assignedTo.toString() === $currentUserId : false
+  );
+  let assignedToName = $derived(
+    $task.assignedTo
+      ? assignedToMe
+        ? 'Me'
+        : $userSettings.collaborators[$task.assignedTo.toString()].userName
+      : ''
+  );
 </script>
 
 {#if tagHeaderName}

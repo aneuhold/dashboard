@@ -17,9 +17,10 @@
   let { itemName, relatedUpgrade }: Props = $props();
 
   let upgradeDisplayInfo = $derived(nonogramKatanaUpgradesDisplayInfo[$relatedUpgrade.upgradeName]);
-  let requiredItemAmount = $derived(upgradeDisplayInfo.requiredItems.find(
-    (requiredItem) => requiredItem.itemName === itemName
-  )?.requiredAmount);
+  let requiredItemAmount = $derived(
+    upgradeDisplayInfo.requiredItems.find((requiredItem) => requiredItem.itemName === itemName)
+      ?.requiredAmount
+  );
 </script>
 
 {#if requiredItemAmount}

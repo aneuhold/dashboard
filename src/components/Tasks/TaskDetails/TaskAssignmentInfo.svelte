@@ -19,13 +19,16 @@
   let collaborators = $derived($userSettings.collaborators);
   // The below needs to be updated with a new store that has the user's info
   // in it.
-  let assignedUser = $derived($task.assignedTo
-    ? $currentUserId.toString() === $task.assignedTo.toString()
-      ? { _id: $currentUserId, userName: LocalData.username }
-      : collaborators[$task.assignedTo.toString()]
-    : undefined);
-  let assignedUserIsCurrentuser =
-    $derived(assignedUser && assignedUser._id.toString() === $currentUserId.toString());
+  let assignedUser = $derived(
+    $task.assignedTo
+      ? $currentUserId.toString() === $task.assignedTo.toString()
+        ? { _id: $currentUserId, userName: LocalData.username }
+        : collaborators[$task.assignedTo.toString()]
+      : undefined
+  );
+  let assignedUserIsCurrentuser = $derived(
+    assignedUser && assignedUser._id.toString() === $currentUserId.toString()
+  );
 </script>
 
 {#if assignedUser}

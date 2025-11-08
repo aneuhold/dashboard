@@ -17,7 +17,6 @@
 
   let { sortSetting = $bindable(), disabled }: Props = $props();
 
-
   type SortDirectionChoice = {
     value: DashboardTaskSortDirection;
     iconName: string;
@@ -72,10 +71,12 @@
     }
   };
   let sortName = $derived(getSortName(sortSetting.sortBy));
-  let tagContentClass = $derived(disabled ? 'card-content dimmed-color' : 'card-content colorWhite');
-  let sortDirectionChoice = $derived(sortDirectionChoices.find(
-    (choice) => choice.value === sortSetting.sortDirection
-  ));
+  let tagContentClass = $derived(
+    disabled ? 'card-content dimmed-color' : 'card-content colorWhite'
+  );
+  let sortDirectionChoice = $derived(
+    sortDirectionChoices.find((choice) => choice.value === sortSetting.sortDirection)
+  );
 </script>
 
 <div>
@@ -111,14 +112,13 @@
           <div class="iconSet">
             <SegmentedButton
               segments={sortDirectionChoices}
-              
               singleSelect
               selected={sortDirectionChoice}
               key={(segment) => segment.value}
               class="tagSegmentedButton"
             >
               {#snippet children({ segment })}
-                            <Segment
+                <Segment
                   {segment}
                   title={segment.value}
                   on:click$preventDefault={() => {
@@ -127,8 +127,8 @@
                 >
                   <Icon class="material-icons">{segment.iconName}</Icon>
                 </Segment>
-                                        {/snippet}
-                        </SegmentedButton>
+              {/snippet}
+            </SegmentedButton>
           </div>
         {/if}
       </div>

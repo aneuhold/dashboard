@@ -36,7 +36,6 @@
   const globalTags = TaskTagsService.getStore();
   const taskMap = TaskMapService.getStore();
 
-
   let sortingDialogOpen = $state(false);
   let filterDialogOpen = $state(false);
 
@@ -96,39 +95,46 @@
       $userSettings.config.taskListFilterSettings = filterSettings;
     }
   };
-  let parentTaskFilterSettings = $derived($parentTask
-    ? $parentTask.filterSettings[$currentUserId]
-    : undefined);
+  let parentTaskFilterSettings = $derived(
+    $parentTask ? $parentTask.filterSettings[$currentUserId] : undefined
+  );
   let userTaskFilterSettings = $derived($userSettings.config.taskListFilterSettings[category]);
-  let currentFilterSettings =
-    $derived(parentTaskFilterSettings ??
-    userTaskFilterSettings ??
-    getDefaultTaskListFilterSettings($currentUserId));
+  let currentFilterSettings = $derived(
+    parentTaskFilterSettings ??
+      userTaskFilterSettings ??
+      getDefaultTaskListFilterSettings($currentUserId)
+  );
   let sortingDimmed = $derived($parentTask ? !parentTaskSortSettings : !userTaskSortSettings);
   let filterDimmed = $derived($parentTask ? !parentTaskFilterSettings : !userTaskFilterSettings);
-  let taskSpecificText = $derived(getTaskSpecificText({
-    parentTask: $parentTask,
-    parentTaskSortSettings,
-    parentTaskFilterSettings
-  }));
-  let tagsWithRemovedIds = $derived(removedTaskIds.reduce((tagSet, id) => {
-    const task = $taskMap[id];
-    const currentUserTags = task?.tags[$currentUserId];
-    if (task && currentUserTags) {
-      currentUserTags.forEach((tag) => tagSet.add(tag));
-    }
-    return tagSet;
-  }, new Set<string>()));
+  let taskSpecificText = $derived(
+    getTaskSpecificText({
+      parentTask: $parentTask,
+      parentTaskSortSettings,
+      parentTaskFilterSettings
+    })
+  );
+  let tagsWithRemovedIds = $derived(
+    removedTaskIds.reduce((tagSet, id) => {
+      const task = $taskMap[id];
+      const currentUserTags = task?.tags[$currentUserId];
+      if (task && currentUserTags) {
+        currentUserTags.forEach((tag) => tagSet.add(tag));
+      }
+      return tagSet;
+    }, new Set<string>())
+  );
   /**
    * Tags that are hidden, but only those that actually have tasks with removed
    * ids.
    */
-  let hiddenTags = $derived($globalTags.filter(
-    (tag) =>
-      currentFilterSettings.tags[tag] &&
-      !currentFilterSettings.tags[tag].show &&
-      tagsWithRemovedIds.has(tag)
-  ));
+  let hiddenTags = $derived(
+    $globalTags.filter(
+      (tag) =>
+        currentFilterSettings.tags[tag] &&
+        !currentFilterSettings.tags[tag].show &&
+        tagsWithRemovedIds.has(tag)
+    )
+  );
 </script>
 
 <div class="container">

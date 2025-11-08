@@ -55,6 +55,8 @@ export default class TaskTagsService {
 
   /**
    * Deletes a tag from the current user's settings and all tasks.
+   *
+   * @param tag
    */
   static deleteTag(tag: string) {
     // Setup user settings subscribers if needed.
@@ -83,6 +85,9 @@ export default class TaskTagsService {
 
   /**
    * Updates a tag from the current user's settings and all tasks.
+   *
+   * @param oldTag
+   * @param newTag
    */
   static updateTag(oldTag: string, newTag: string) {
     // Setup user settings subscribers if needed.
@@ -179,6 +184,8 @@ export default class TaskTagsService {
   /**
    * Removes the provided tag from all tasks for the current user. This should
    * only be triggered from the global tag manager.
+   *
+   * @param tag
    */
   private static removeTagFromAllTasks(tag: string) {
     const userId = this.userId;
@@ -206,6 +213,9 @@ export default class TaskTagsService {
   /**
    * Updates the provided tag in all tasks for the current user. This should
    * only be triggered from the global tag manager.
+   *
+   * @param oldTag
+   * @param newTag
    */
   private static updateTagInAllTasks(oldTag: string, newTag: string) {
     const userId = this.userId;

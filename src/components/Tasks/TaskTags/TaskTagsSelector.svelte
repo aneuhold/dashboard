@@ -18,7 +18,9 @@
 
   let task = $derived(TaskMapService.getTaskStore(taskId));
   let globalTags = $derived(TaskTagsService.getStore());
-  let unselectedTags = $derived($globalTags.filter((tag) => !$task.tags[$currentUserId]?.includes(tag)));
+  let unselectedTags = $derived(
+    $globalTags.filter((tag) => !$task.tags[$currentUserId]?.includes(tag))
+  );
   // This needs to be redirected like this so that the Set component doesn't
   // make a small write on startup.
   let currentUserTags = $derived($task.tags[$currentUserId] ?? []);
@@ -49,6 +51,8 @@
 
   /**
    * Handles removal. The actual event is an internal MDC Chip Removal event.
+   *
+   * @param event
    */
   function handleRemoval(event: CustomEvent<{ chipId: string }>) {
     let currentUserTags = $task.tags[$currentUserId];
@@ -80,14 +84,14 @@
       <i class="mdc-typography--body2 subTasksTitle dimmed-color">No tags</i>
     {:else}
       <span>Tags</span>
-      <Set bind:chips={currentUserTags} on:SMUIChip:removal={handleRemoval} >
+      <Set bind:chips={currentUserTags} on:SMUIChip:removal={handleRemoval}>
         {#snippet children({ chip })}
-                <Chip {chip}>
+          <Chip {chip}>
             <Text>{chip}</Text>
             <TrailingAction icon$class="material-icons">cancel</TrailingAction>
           </Chip>
-                      {/snippet}
-            </Set>
+        {/snippet}
+      </Set>
     {/if}
   </div>
 
@@ -105,7 +109,7 @@
     on:SMUIAutocomplete:selected={handleSelection}
   >
     <!-- @migration-task: migrate this slot by hand, `no-matches` is an invalid identifier -->
-  <div slot="no-matches">
+    <div slot="no-matches">
       {#if currentUserTags.includes(currentAutoCompleteValue)}
         <Text>Tag "{currentAutoCompleteValue}" already added</Text>
       {:else}

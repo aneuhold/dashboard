@@ -93,7 +93,7 @@
   });
 </script>
 
-<SegmentedButton segments={choices}  key={(segment) => segment.name}>
+<SegmentedButton segments={choices} key={(segment) => segment.name}>
   {#snippet children({ segment })}
     <!--
         When the selected prop is provided, Segment will no longer fire a "selected"

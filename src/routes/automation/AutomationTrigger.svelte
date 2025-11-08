@@ -11,12 +11,7 @@
     automationTriggerUrl: string | undefined;
   }
 
-  let {
-    iconName,
-    title,
-    description,
-    automationTriggerUrl
-  }: Props = $props();
+  let { iconName, title, description, automationTriggerUrl }: Props = $props();
 
   function handleButtonClick() {
     if (automationTriggerUrl) {

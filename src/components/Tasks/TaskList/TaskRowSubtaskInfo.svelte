@@ -15,14 +15,14 @@ Info about subtasks within a task row.
 
   let { allChildrenIds }: Props = $props();
 
-  let allChildTasks = $derived(allChildrenIds.map(
-    (id) => TaskMapService.getMap()[id.toString()]
-  ) as DashboardTask[]);
+  let allChildTasks = $derived(
+    allChildrenIds.map((id) => TaskMapService.getMap()[id.toString()]) as DashboardTask[]
+  );
   let allCompletedTasks = $derived(allChildTasks.filter((task) => task.completed));
   let allIncompleteTasks = $derived(allChildTasks.filter((task) => !task.completed));
-  let allIncompleteTasksAssignedToMe = $derived(allIncompleteTasks.filter(
-    (task) => task.assignedTo?.toString() === $currentUserId
-  ));
+  let allIncompleteTasksAssignedToMe = $derived(
+    allIncompleteTasks.filter((task) => task.assignedTo?.toString() === $currentUserId)
+  );
 </script>
 
 <!--Left at the root so that the parent can style it-->

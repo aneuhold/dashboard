@@ -19,27 +19,24 @@
   import SveltyPicker from 'svelty-picker';
   import SmartDialog from './SmartDialog.svelte';
 
-  
-  
-  
   interface Props {
     title?: string;
     open: boolean;
     /**
-   * Determines if the date is an end date. If it is, and time is not
-   * specified by the user, the time will automatically be set to 23:59:59.
-   */
+     * Determines if the date is an end date. If it is, and time is not
+     * specified by the user, the time will automatically be set to 23:59:59.
+     */
     dateIsEndDate?: boolean;
     initialDate?: Date | undefined;
     /**
-   * The first date that should be available for selection. This can be setup
-   * with a time attached in the same date too.
-   */
+     * The first date that should be available for selection. This can be setup
+     * with a time attached in the same date too.
+     */
     startDate?: Date | undefined;
     /**
-   * The last date that should be available for selection. This can be setup
-   * with a time attached in the same date too.
-   */
+     * The last date that should be available for selection. This can be setup
+     * with a time attached in the same date too.
+     */
     endDate?: Date | undefined;
   }
 
@@ -131,8 +128,8 @@
     <FormField>
       <Checkbox checked={mode === 'datetime'} on:click={handleTimeBoxClicked} touch />
       {#snippet label()}
-            <span >Use Time</span>
-          {/snippet}
+        <span>Use Time</span>
+      {/snippet}
     </FormField>
   </Content>
   <Actions>

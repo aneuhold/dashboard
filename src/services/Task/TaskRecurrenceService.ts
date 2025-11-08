@@ -31,6 +31,11 @@ export default class TaskRecurrenceService {
   /**
    * Creates an example of what would happen to a task if the recurrence
    * were to occur.
+   *
+   * @param startDate
+   * @param dueDate
+   * @param recurrenceInfo
+   * @param parentRecurringTaskInfo
    */
   static createExampleOfRecurrence(
     startDate: Date | undefined,
@@ -51,6 +56,8 @@ export default class TaskRecurrenceService {
    * Executes recurrence for the provided task if it is time to do so. Only
    * executes for the top-level recurring task and not child tasks, because
    * child tasks are handled by the parent task.
+   *
+   * @param task
    */
   static executeRecurrenceIfNeeded(task: DashboardTask) {
     if (this.taskShouldRecur(task)) {
@@ -94,6 +101,8 @@ export default class TaskRecurrenceService {
    * map is set.
    *
    * This will not take any action if there is no recurrence info on the task.
+   *
+   * @param task
    */
   static executeRecurrenceForTask(task: DashboardTask) {
     if (!task.recurrenceInfo || task.parentRecurringTaskInfo) {
@@ -185,6 +194,8 @@ export default class TaskRecurrenceService {
    * Gets the next recurrence date for the provided task.
    *
    * This returns a value for parent and sub tasks.
+   *
+   * @param task
    */
   static getNextRecurrenceDate(task: DashboardTask): Date | null {
     if (
@@ -217,6 +228,9 @@ export default class TaskRecurrenceService {
    * Gets a simulated next recurrence date for the provided task. This makes
    * a deep copy of the task first. If anything is invalid, or the task recurs
    * on completion, this will return null.
+   *
+   * @param originalTask
+   * @param updater
    */
   static getSimulatedRecurrenceDate(
     originalTask: DashboardTask,
@@ -229,6 +243,8 @@ export default class TaskRecurrenceService {
 
   /**
    * This should only be called by the taskMap store when it is updated.
+   *
+   * @param taskMap
    */
   static buildTaskRecurrenceSubMapFresh(taskMap: DashboardTaskMap): void {
     // Clear the current map
@@ -252,6 +268,8 @@ export default class TaskRecurrenceService {
    * and no longer fits the conditions to be attached.
    *
    * This should be called whenever a task's recurrence info is updated.
+   *
+   * @param task
    */
   static updateOrRemoveTaskTimeSubscription(task: DashboardTask) {
     // Remove the current subscription if it exists
@@ -289,6 +307,8 @@ export default class TaskRecurrenceService {
 
   /**
    * Updates the provided Tasks's dates based on the recurrence info in-place.
+   *
+   * @param task
    */
   static updateDatesForRecurrence(task: DashboardTask): void {
     if (!task.recurrenceInfo) {

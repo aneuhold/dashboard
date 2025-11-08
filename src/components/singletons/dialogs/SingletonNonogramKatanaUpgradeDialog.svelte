@@ -32,10 +32,12 @@
 <script lang="ts">
   import { NonogramKatanaItemName } from '@aneuhold/core-ts-db-lib';
 
-  let upgrade = $derived($currentUpgradeId
-    ? NonogramKatanaUpgradeMapService.getUpgradeStore($currentUpgradeId)
-    : null);
-  let displayInfo = $derived($upgrade ? nonogramKatanaUpgradesDisplayInfo[$upgrade.upgradeName] : null);
+  let upgrade = $derived(
+    $currentUpgradeId ? NonogramKatanaUpgradeMapService.getUpgradeStore($currentUpgradeId) : null
+  );
+  let displayInfo = $derived(
+    $upgrade ? nonogramKatanaUpgradesDisplayInfo[$upgrade.upgradeName] : null
+  );
 
   function getItemAmount(itemName: NonogramKatanaItemName) {
     return $upgrade ? $upgrade.currentItemAmounts[itemName] : 0;

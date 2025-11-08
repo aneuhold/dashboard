@@ -39,23 +39,26 @@
 
   const taskMap = TaskMapService.getStore();
   let task = $derived($taskMap[taskId] ? TaskMapService.getTaskStore(taskId) : undefined);
-  let allChildrenIds = $derived($task
-    ? DashboardTaskService.getChildrenIds(Object.values($taskMap) as DashboardTask[], [
-        $task._id
-      ]).map((id) => id.toString())
-    : []);
-  let sortAndFilterResult = $derived(TaskListService.getTaskIdsForTask(
-    $taskMap,
-    $userSettings,
-    allChildrenIds,
+  let allChildrenIds = $derived(
     $task
-  ));
+      ? DashboardTaskService.getChildrenIds(Object.values($taskMap) as DashboardTask[], [
+          $task._id
+        ]).map((id) => id.toString())
+      : []
+  );
+  let sortAndFilterResult = $derived(
+    TaskListService.getTaskIdsForTask($taskMap, $userSettings, allChildrenIds, $task)
+  );
   // Explicitly include `task` so that it reactively updates
-  let breadCrumbArray = $derived(TaskService.getBreadCrumbArray($task ? $task._id.toString() : taskId));
+  let breadCrumbArray = $derived(
+    TaskService.getBreadCrumbArray($task ? $task._id.toString() : taskId)
+  );
   let parentTaskId = $derived($task ? $task.parentTaskId : undefined);
-  let parentRoute = $derived(parentTaskId
-    ? TaskService.getTaskRoute(parentTaskId.toString())
-    : TaskService.getTaskCategoryRoute(taskId));
+  let parentRoute = $derived(
+    parentTaskId
+      ? TaskService.getTaskRoute(parentTaskId.toString())
+      : TaskService.getTaskCategoryRoute(taskId)
+  );
 
   function addSubTask() {
     if (!$task) return;

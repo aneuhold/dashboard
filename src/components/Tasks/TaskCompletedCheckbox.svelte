@@ -18,11 +18,12 @@
   let clickY = 0;
 
   let task = $derived(TaskMapService.getTaskStore(taskId));
-  let preventDefault =
-    $derived(!$task.parentRecurringTaskInfo &&
-    !$task.completed &&
-    $task.recurrenceInfo &&
-    $task.recurrenceInfo.recurrenceEffect === RecurrenceEffect.rollOnCompletion);
+  let preventDefault = $derived(
+    !$task.parentRecurringTaskInfo &&
+      !$task.completed &&
+      $task.recurrenceInfo &&
+      $task.recurrenceInfo.recurrenceEffect === RecurrenceEffect.rollOnCompletion
+  );
 
   function handleCheckboxClick(event?: ClickEvent) {
     if (event) {

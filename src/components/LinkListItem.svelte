@@ -15,7 +15,7 @@
     iconName?: string;
     icon?: ComponentType;
     clickAction: () => void;
-    
+
     isInternalLink?: boolean;
   }
 </script>

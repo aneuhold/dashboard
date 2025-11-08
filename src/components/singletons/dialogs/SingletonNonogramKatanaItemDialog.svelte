@@ -30,11 +30,19 @@
   import Checkbox from '@smui/checkbox';
   import { nonogramKatanaItemsDisplayInfo } from '../../../routes/entertainment/nonogramkatana/items/nonogramKatanaItemsDisplayInfo';
 
-  let item = $derived($currentItemId ? NonogramKatanaItemMapService.getItemStore($currentItemId) : null);
+  let item = $derived(
+    $currentItemId ? NonogramKatanaItemMapService.getItemStore($currentItemId) : null
+  );
   let displayInfo = $derived($item ? nonogramKatanaItemsDisplayInfo[$item.itemName] : null);
-  let minDesiredPresent = $derived($item && $item.minDesired !== undefined && $item.minDesired !== null);
-  let maxDesiredPresent = $derived($item && $item.maxDesired !== undefined && $item.maxDesired !== null);
-  let storageCapPresent = $derived($item && $item.storageCap !== undefined && $item.storageCap !== null);
+  let minDesiredPresent = $derived(
+    $item && $item.minDesired !== undefined && $item.minDesired !== null
+  );
+  let maxDesiredPresent = $derived(
+    $item && $item.maxDesired !== undefined && $item.maxDesired !== null
+  );
+  let storageCapPresent = $derived(
+    $item && $item.storageCap !== undefined && $item.storageCap !== null
+  );
 </script>
 
 <SmartDialog bind:open={$open}>

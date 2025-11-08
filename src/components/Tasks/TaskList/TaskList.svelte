@@ -28,25 +28,29 @@
 
   const taskMap = TaskMapService.getStore();
   let parentTask = $derived(parentTaskId ? TaskMapService.getTaskStore(parentTaskId) : undefined);
-  let parentTaskSortSettings = $derived($parentTask ? $parentTask.sortSettings[$currentUserId] : undefined);
+  let parentTaskSortSettings = $derived(
+    $parentTask ? $parentTask.sortSettings[$currentUserId] : undefined
+  );
   let userTaskSortSettings = $derived($userSettings.config.taskListSortSettings[category]);
-  let currentSortSettings =
-    $derived(parentTaskSortSettings ??
-    userTaskSortSettings ??
-    getDefaultTaskListSortSettings($currentUserId));
-  let isSortedByTagsFirst =
-    $derived(currentSortSettings.sortList.length !== 0 &&
-    currentSortSettings.sortList[0].sortBy === DashboardTaskSortBy.tags);
-  let tagHeaderMap = $derived(isSortedByTagsFirst
-    ? DashboardTaskService.getTagHeaderMap(
-        $taskMap,
-        sortAndFilterResult.filteredAndSortedIds,
-        $currentUserId,
-        $userSettings.config.tagSettings,
-        'No Priority',
-        currentSortSettings.sortList[0].sortDirection
-      )
-    : undefined);
+  let currentSortSettings = $derived(
+    parentTaskSortSettings ?? userTaskSortSettings ?? getDefaultTaskListSortSettings($currentUserId)
+  );
+  let isSortedByTagsFirst = $derived(
+    currentSortSettings.sortList.length !== 0 &&
+      currentSortSettings.sortList[0].sortBy === DashboardTaskSortBy.tags
+  );
+  let tagHeaderMap = $derived(
+    isSortedByTagsFirst
+      ? DashboardTaskService.getTagHeaderMap(
+          $taskMap,
+          sortAndFilterResult.filteredAndSortedIds,
+          $currentUserId,
+          $userSettings.config.tagSettings,
+          'No Priority',
+          currentSortSettings.sortList[0].sortDirection
+        )
+      : undefined
+  );
 </script>
 
 <div class="content">

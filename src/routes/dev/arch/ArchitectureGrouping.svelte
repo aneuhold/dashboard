@@ -28,7 +28,7 @@
 </script>
 
 <div class={className}>
-  {@render children?.({ class: "something", })}
+  {@render children?.({ class: 'something' })}
 </div>
 
 <style>

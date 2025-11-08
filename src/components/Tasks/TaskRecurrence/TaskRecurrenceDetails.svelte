@@ -30,7 +30,6 @@
 
   let { taskId, recurrenceInfo }: Props = $props();
 
-
   function createRInfoStore(initialRInfo: RecurrenceInfo) {
     let currentFrequencyType = initialRInfo.frequency.type;
     const { set, subscribe } = writable<RecurrenceInfo>(initialRInfo);
@@ -127,12 +126,14 @@
   let startDate = $derived($task.startDate);
   let dueDate = $derived($task.dueDate);
   let parentRecurringTaskInfo = $derived($task.parentRecurringTaskInfo);
-  let exampleOfRecurrence = $derived(TaskRecurrenceService.createExampleOfRecurrence(
-    startDate,
-    dueDate,
-    recurrenceInfo,
-    parentRecurringTaskInfo
-  ));
+  let exampleOfRecurrence = $derived(
+    TaskRecurrenceService.createExampleOfRecurrence(
+      startDate,
+      dueDate,
+      recurrenceInfo,
+      parentRecurringTaskInfo
+    )
+  );
   let rInfo = $derived(createRInfoStore(recurrenceInfo));
 </script>
 

@@ -17,9 +17,9 @@
 
   let item = $derived(NonogramKatanaItemMapService.getItemStore(itemId));
   let displayInfo = $derived(nonogramKatanaItemsDisplayInfo[$item.itemName]);
-  let upgradesThatRequireThisItem = $derived(NonogramKatanaUpgradeMapService.getUpgradeStoresByItemName(
-    $item.itemName
-  ));
+  let upgradesThatRequireThisItem = $derived(
+    NonogramKatanaUpgradeMapService.getUpgradeStoresByItemName($item.itemName)
+  );
   let amountThatCanBeSpent = $derived($item.currentAmount - ($item.minDesired ?? 0));
 </script>
 

@@ -55,6 +55,8 @@ export class NonogramKatanaItemMapService extends DocumentMapStoreService<Nonogr
    * Creates or updates the Nonogram Katana items for the given user based
    * on the defaults. It was done this way so that the user didn't need to
    * always have this data created on application load.
+   *
+   * @param userId
    */
   static createOrUpdateItems(userId: ObjectId): void {
     const currentMap = this.getMap();

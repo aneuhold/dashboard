@@ -18,9 +18,9 @@
    * Only inlcudes the ids of the users that the current user is a collaborator
    * with.
    */
-  let sharedWithIds = $derived($task.sharedWith
-    .map((id) => id.toString())
-    .filter((id) => $userSettings.collaborators[id]));
+  let sharedWithIds = $derived(
+    $task.sharedWith.map((id) => id.toString()).filter((id) => $userSettings.collaborators[id])
+  );
   let collaborators = $derived($userSettings.collaborators);
   let userIsNotOwner = $derived($task.userId.toString() !== $userSettings.config.userId.toString());
 </script>

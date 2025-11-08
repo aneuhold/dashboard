@@ -91,10 +91,10 @@
                 }}
               />
               {#snippet label()}
-                                <span >
+                <span>
                   {collaborator.userName}
                 </span>
-                              {/snippet}
+              {/snippet}
             </FormField>
           {/each}
         {/if}

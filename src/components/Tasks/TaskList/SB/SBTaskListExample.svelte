@@ -57,7 +57,9 @@
 
   const taskMap = TaskMapService.getStore();
 
-  let sortAndFilterResult = $derived(TaskListService.getTaskIds($taskMap, $userSettings, 'default'));
+  let sortAndFilterResult = $derived(
+    TaskListService.getTaskIds($taskMap, $userSettings, 'default')
+  );
 </script>
 
 <TaskList category="default" {sortAndFilterResult} />

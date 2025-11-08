@@ -13,20 +13,25 @@
 
   const itemMap = NonogramKatanaItemMapService.getStore();
   let searchInput = $state('');
-  let items = $derived(Object.values($itemMap)
-    .filter(
-      (item) =>
-        item !== undefined && item.itemName.toLowerCase().includes(searchInput.toLowerCase().trim())
-    )
-    .sort((a, b) => {
-      if (!a) {
-        return 1;
-      } else if (!b) {
-        return -1;
-      }
-      return b.priority - a.priority;
-    }) as NonogramKatanaItem[]);
-  let itemsMissing = $derived(Object.values($itemMap).length < Object.values(NonogramKatanaItemName).length);
+  let items = $derived(
+    Object.values($itemMap)
+      .filter(
+        (item) =>
+          item !== undefined &&
+          item.itemName.toLowerCase().includes(searchInput.toLowerCase().trim())
+      )
+      .sort((a, b) => {
+        if (!a) {
+          return 1;
+        } else if (!b) {
+          return -1;
+        }
+        return b.priority - a.priority;
+      }) as NonogramKatanaItem[]
+  );
+  let itemsMissing = $derived(
+    Object.values($itemMap).length < Object.values(NonogramKatanaItemName).length
+  );
 </script>
 
 <svelte:head>

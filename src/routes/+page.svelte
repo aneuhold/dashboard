@@ -8,9 +8,11 @@
   import { enabledPages } from '../stores/visual/enabledPages';
   import { homePageInfo } from './pageInfo';
 
-  let tableOfContentsLinks = $derived($enabledPages.filter((pageInfo) => {
-    return pageInfo.nestingLevel === 0 && pageInfo.title !== homePageInfo.title;
-  }));
+  let tableOfContentsLinks = $derived(
+    $enabledPages.filter((pageInfo) => {
+      return pageInfo.nestingLevel === 0 && pageInfo.title !== homePageInfo.title;
+    })
+  );
 
   const primaryLinks: Array<LinkInfo> = [
     {

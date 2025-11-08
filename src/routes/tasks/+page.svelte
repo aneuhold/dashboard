@@ -19,7 +19,9 @@
 
   const taskMap = TaskMapService.getStore();
 
-  let sortAndFilterResult = $derived(TaskListService.getTaskIds($taskMap, $userSettings, 'default'));
+  let sortAndFilterResult = $derived(
+    TaskListService.getTaskIds($taskMap, $userSettings, 'default')
+  );
   let taskId = $derived($page.url.searchParams.get('taskId'));
   let task = $derived(taskId && $taskMap[taskId] ? $taskMap[taskId] : undefined);
 

@@ -17,13 +17,18 @@
   let currentlyChosenDateType: 'start' | 'due' = $state('start');
   let datePickerOpen = $state(false);
   let dateName = $derived(currentlyChosenDateType === 'start' ? 'Start Date' : 'Due Date');
-  let currentlyChosenDate = $derived(currentlyChosenDateType === 'start' ? $task.startDate : $task.dueDate);
-  let oppositeDate = $derived(currentlyChosenDateType === 'start' ? $task.dueDate : $task.startDate);
+  let currentlyChosenDate = $derived(
+    currentlyChosenDateType === 'start' ? $task.startDate : $task.dueDate
+  );
+  let oppositeDate = $derived(
+    currentlyChosenDateType === 'start' ? $task.dueDate : $task.startDate
+  );
   let oppositeDateName = $derived(currentlyChosenDateType === 'start' ? 'Due Date' : 'Start Date');
-  let basisIsSameAsChosenDate =
-    $derived(currentlyChosenDateType === 'start'
+  let basisIsSameAsChosenDate = $derived(
+    currentlyChosenDateType === 'start'
       ? $task.recurrenceInfo?.recurrenceBasis === RecurrenceBasis.startDate
-      : $task.recurrenceInfo?.recurrenceBasis === RecurrenceBasis.dueDate);
+      : $task.recurrenceInfo?.recurrenceBasis === RecurrenceBasis.dueDate
+  );
 
   function handleStartDateClick() {
     currentlyChosenDateType = 'start';
@@ -144,6 +149,8 @@
 
   /**
    * Just updates the date, nothing else is considered.
+   *
+   * @param newDate
    */
   function updateDate(newDate: Date | undefined) {
     if (currentlyChosenDateType === 'start') {

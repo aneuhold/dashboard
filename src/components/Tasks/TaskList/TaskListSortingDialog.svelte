@@ -24,7 +24,6 @@
   let currentSettings: DashboardTaskListSortSettings = $state();
   let previousOpen = $state(false);
 
-
   const dispatch = createEventDispatcher<{
     updateSettings: DashboardTaskListSortSettings;
     reset: unknown;
@@ -74,6 +73,8 @@
    *
    * This is opposite of what you would expect, because the sort settings are
    * ordered in descending priority.
+   *
+   * @param event
    */
   const handleIncrement = (event: CustomEvent<DashboardTaskSortBy>) => {
     const sortBy = event.detail;

@@ -19,16 +19,18 @@
 
   let activeRoute: string = $state('/');
   let previousLink: string | undefined = $state();
-  let routeArray = $derived(breadCrumbArray
-    ? breadCrumbArray
-    : activeRoute
-        .split('/')
-        .filter((route) => route !== '')
-        .map((route) => {
-          const routeLink = previousLink ? previousLink + '/' + route : route;
-          previousLink = routeLink;
-          return { name: route, link: routeLink };
-        }));
+  let routeArray = $derived(
+    breadCrumbArray
+      ? breadCrumbArray
+      : activeRoute
+          .split('/')
+          .filter((route) => route !== '')
+          .map((route) => {
+            const routeLink = previousLink ? previousLink + '/' + route : route;
+            previousLink = routeLink;
+            return { name: route, link: routeLink };
+          })
+  );
 
   page.subscribe((pageData) => {
     if (pageData.route.id) {

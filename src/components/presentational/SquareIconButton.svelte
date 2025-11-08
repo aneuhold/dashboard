@@ -9,12 +9,7 @@
     iconName: string;
   }
 
-  let {
-    variant = undefined,
-    disabled = false,
-    color = 'primary',
-    iconName
-  }: Props = $props();
+  let { variant = undefined, disabled = false, color = 'primary', iconName }: Props = $props();
 
   const dispatch = createEventDispatcher();
 </script>

@@ -19,7 +19,7 @@
       <Option value={2}>2nd</Option>
       <Option value={3}>3rd</Option>
       <Option value={4}>4th</Option>
-      <Option value={'last'}>Last</Option>
+      <Option value="last">Last</Option>
     </Select>
   </div>
   <WeekdaySegmentedButton {disabled} bind:weekDaySetOrChoice={weekDay} />

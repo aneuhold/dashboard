@@ -21,14 +21,15 @@
     completedRemoved = false
   }: Props = $props();
 
-  let noChangesAtAll =
-    $derived(!originalStartDate &&
-    !originalDueDate &&
-    !newStartDate &&
-    !newDueDate &&
-    !recurrenceIsRemoved &&
-    !recurrenceIsAdded &&
-    !completedRemoved);
+  let noChangesAtAll = $derived(
+    !originalStartDate &&
+      !originalDueDate &&
+      !newStartDate &&
+      !newDueDate &&
+      !recurrenceIsRemoved &&
+      !recurrenceIsAdded &&
+      !completedRemoved
+  );
 </script>
 
 {#if noChangesAtAll}

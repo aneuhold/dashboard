@@ -7,16 +7,20 @@
   import GlobalTagRow from './GlobalTagRow.svelte';
 
   let tagSettings = $derived($userSettings.config.tagSettings);
-  let sortableTagList = $derived(Object.keys(tagSettings)
-    .filter((tagName) => {
-      return tagSettings[tagName].priority !== 0;
+  let sortableTagList = $derived(
+    Object.keys(tagSettings)
+      .filter((tagName) => {
+        return tagSettings[tagName].priority !== 0;
+      })
+      .sort((a, b) => {
+        return tagSettings[b].priority - tagSettings[a].priority;
+      })
+  );
+  let nonSortableTagList = $derived(
+    Object.keys(tagSettings).filter((tagName) => {
+      return tagSettings[tagName].priority === 0;
     })
-    .sort((a, b) => {
-      return tagSettings[b].priority - tagSettings[a].priority;
-    }));
-  let nonSortableTagList = $derived(Object.keys(tagSettings).filter((tagName) => {
-    return tagSettings[tagName].priority === 0;
-  }));
+  );
 
   let editorOpen = $state(false);
   let editorOpenForTag: string | undefined = $state('');

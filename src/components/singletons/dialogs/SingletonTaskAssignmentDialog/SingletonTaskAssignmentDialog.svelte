@@ -60,7 +60,6 @@
       );
     })
   ]);
-  
 
   function toggleAssignment(id: ObjectId) {
     if (!$task) return;
@@ -91,10 +90,10 @@
                 }}
               />
               {#snippet label()}
-                                <span >
+                <span>
                   {sharedWithUser.userName}
                 </span>
-                              {/snippet}
+              {/snippet}
             </FormField>
           {/each}
         {/if}
