@@ -19,10 +19,6 @@
   $: processingCredentials = $loginState === LoginState.ProcessingCredentials;
   let invalidCredentials = false;
 
-  /**
-   *
-   * @param event
-   */
   function handleSubmit(event: CustomEvent) {
     // Prevent the page from refreshing
     event.preventDefault();
@@ -36,10 +32,6 @@
     }).then(handleLoginResult);
   }
 
-  /**
-   *
-   * @param validationResponse
-   */
   function handleLoginResult(validationResponse: APIResponse<AuthValidateUserOutput>) {
     if (
       validationResponse.success &&
