@@ -8,8 +8,8 @@
   import DashboardAPIService from '$util/api/DashboardAPIService';
   import {
     APIService,
-    type AuthValidateUserOutput,
-    type DOFunctionCallOutput
+    type APIResponse,
+    type AuthValidateUserOutput
   } from '@aneuhold/core-ts-api-lib';
   import Button, { Label } from '@smui/button';
   import CircularProgress from '@smui/circular-progress';
@@ -19,6 +19,10 @@
   $: processingCredentials = $loginState === LoginState.ProcessingCredentials;
   let invalidCredentials = false;
 
+  /**
+   *
+   * @param event
+   */
   function handleSubmit(event: CustomEvent) {
     // Prevent the page from refreshing
     event.preventDefault();
@@ -32,7 +36,11 @@
     }).then(handleLoginResult);
   }
 
-  function handleLoginResult(validationResponse: DOFunctionCallOutput<AuthValidateUserOutput>) {
+  /**
+   *
+   * @param validationResponse
+   */
+  function handleLoginResult(validationResponse: APIResponse<AuthValidateUserOutput>) {
     if (
       validationResponse.success &&
       validationResponse.data.userInfo?.apiKey &&

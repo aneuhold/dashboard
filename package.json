@@ -11,14 +11,19 @@
     "test": "vitest",
     "upgrade:core": "yarn up '@aneuhold/*'",
     "upgrade:smui": "yarn up '@smui/*'",
-    "storybook": "yarn theme && storybook dev -p 6006"
+    "storybook": "yarn theme && storybook dev -p 6006",
+    "sub": "yarn sub:core-ts-api-lib",
+    "unsub": "yarn unsub:core-ts-api-lib",
+    "sub:core-ts-api-lib": "local-npm subscribe @aneuhold/core-ts-api-lib",
+    "unsub:core-ts-api-lib": "local-npm unsubscribe @aneuhold/core-ts-api-lib"
   },
   "packageManager": "yarn@4.5.1",
   "type": "module",
   "devDependencies": {
-    "@aneuhold/core-ts-api-lib": "^1.0.115",
-    "@aneuhold/core-ts-lib": "^1.1.52",
-    "@aneuhold/eslint-config": "^1.0.37",
+    "@aneuhold/core-ts-api-lib": "^2.2.7",
+    "@aneuhold/core-ts-lib": "^2.3.8",
+    "@aneuhold/eslint-config": "^1.3.14",
+    "@aneuhold/local-npm-registry": "^0.2.15",
     "@fontsource/fira-mono": "^5.1.0",
     "@neoconfetti/svelte": "^2.2.1",
     "@smui-extra/accordion": "^7.0.0",
@@ -59,7 +64,7 @@
     "@types/node": "^20.17.0",
     "@typescript-eslint/eslint-plugin": "^8.13.0",
     "@typescript-eslint/parser": "^8.13.0",
-    "bson": "patch:bson@npm%3A6.2.0#~/.yarn/patches/bson-npm-6.2.0-3d364484ee.patch",
+    "bson": "^7.0.0",
     "eslint": "^9.14.0",
     "prettier": "^3.3.3",
     "smui-theme": "^7.0.0",
@@ -78,14 +83,12 @@
     "svelte": "Locked at 4.x because 5.x doesn't seem to work with @smui components as of 11/25/2023"
   },
   "resolutions": {
-    "bson@npm:^6.2.0": "patch:bson@npm%3A6.2.0#~/.yarn/patches/bson-npm-6.2.0-3d364484ee.patch",
     "globals": "^15.3.0"
   },
   "resolutionsComments": {
-    "bson@npm:^6.2.0": "Patched to fix a bug where bson would use top-level await for seemingly no reason. This breaks safari. Just the awaits were removed from bson.mjs. See this GitHub PR: https://github.com/WebKit/WebKit/pull/24122",
     "globals": "This is a temporary fix for the globals package due to this issue: https://github.com/eslint/eslint/discussions/17868. Once other packages pull 15+ then should be able to remove this"
   },
   "dependencies": {
-    "@sentry/sveltekit": "^8.33.0"
+    "@sentry/sveltekit": "^10.22.0"
   }
 }

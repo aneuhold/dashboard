@@ -17,6 +17,7 @@ import { NonogramKatanaUpgradeMapService } from '../../services/NonogramKatana/N
 import { TaskMapService } from '../../services/Task/TaskMapService/TaskMapService';
 
 const SECONDS_TO_WAIT_BEFORE_FETCHING_INITIAL_DATA = 10;
+const API_BASE_URL_OVERRIDE: string | null = null;
 
 export default class DashboardAPIService {
   /**
@@ -133,11 +134,17 @@ export default class DashboardAPIService {
 
   static checkOrSetupDashboardAPI(): UUID {
     if (!this.dashboardAPIUrlSet) {
-      const url = dashboardConfig.get()?.projectDashboardFunctionUrl;
+      const url = dashboardConfig.get()?.gcloudBackendUrl;
       if (!url) {
         throw new Error('Dashboard API URL not set!');
       }
-      APIService.setDashboardAPIUrl(url);
+      if (API_BASE_URL_OVERRIDE) {
+        console.warn(
+          'Overriding dashboard API URL with override value:',
+          API_BASE_URL_OVERRIDE
+        );
+        APIService.setAPIUrl(API_BASE_URL_OVERRIDE);
+      }
       this.dashboardAPIUrlSet = true;
     }
     const apiKeyValue = apiKey.get();

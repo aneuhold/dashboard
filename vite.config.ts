@@ -19,6 +19,7 @@ if (!sentryAuthToken) {
 const viteConfig: UserConfig = {
   plugins: [
     // Make sure `sentrySvelteKit` is registered before `sveltekit`
+    process.env.CI === 'true' && 
     sentrySvelteKit({
       sourceMapsUploadOptions: {
         org: 'anton-neuhold',
@@ -33,11 +34,6 @@ const viteConfig: UserConfig = {
       include: ['crypto', 'util', 'stream']
     })
   ],
-  /* This was disabled because it was causing a bunch of build output errors
-  It could potentially be turned back on if needed.
-  ssr: {
-    noExternal: [/^@material\//]
-  },*/
   resolve: {
     dedupe: ['svelte']
   },
