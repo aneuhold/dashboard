@@ -3,15 +3,12 @@
 ## Project: Dashboard
 
 **Branch:** Svelte5Update
-**Current State:** Phase 1 COMPLETE ✅ - All production code and Storybook examples migrated to runes. Ready for Phase 2 (SMUI v7 → v8 upgrade).
 
 ---
 
 ## Overview
 
 This document outlines the phased approach to migrating this SvelteKit project from Svelte 4 to Svelte 5, followed by upgrading SMUI from v7 to v8.
-
-**Status:** Phase 1 is 100% complete. All `run()` and `createEventDispatcher` patterns have been migrated in all code including Storybook examples. The build currently fails due to SMUI v7 incompatibility with Svelte 5 (expected - requires Phase 2).
 
 ---
 
@@ -251,6 +248,13 @@ All `run()` imports have been converted to `$effect()` or `$derived`, all `creat
 - [ ] No SMUI-related console warnings
 - [ ] Build succeeds with zero errors
 - [ ] Manual testing passes for all major user flows
+
+---
+
+## Requirements
+
+- NEVER simply comment to ignore an ESLint rule. The rules are there for a reason. Find a way to fix the problem.
+- NEVER use `any`. If you absolutely must, use `unknown`. But only as an absolute last resort.
 
 ---
 
