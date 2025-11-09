@@ -6,12 +6,12 @@ import {
   MockTaskSharedWith
 } from '$services/Task/TaskMapService/TaskMapService.mock';
 import { createEnumArgType } from '$storybook/storybookUtil';
-import type { Meta } from '@storybook/sveltekit';
-import SbTaskDetailsExample from './SBTaskDetailsExample.svelte';
+import type { defineMeta } from '@storybook/addon-svelte-csf';
+import SBTaskDetailsExample from './SBTaskDetailsExample.svelte';
 
-const sbTaskDetailsMeta: Meta<SbTaskDetailsExample> = {
+const sbTaskDetailsMeta: Parameters<typeof defineMeta>[0] = {
   title: 'Stateful Components/TaskDetails',
-  component: SbTaskDetailsExample,
+  component: SBTaskDetailsExample,
   decorators: [
     () => ({ Component: SbConfettiDecorator }),
     () => ({ Component: SbSingletonTaskSharingDialogDecorator }),

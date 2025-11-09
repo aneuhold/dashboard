@@ -7,17 +7,15 @@
   import { DashboardTask } from '@aneuhold/core-ts-db-lib';
   import TaskDetails from '../TaskDetails.svelte';
 
-  interface Props {
-    mainTaskExists?: boolean;
-    sharedWith?: MockTaskSharedWith;
-    assignedTo?: MockTaskAssignment;
-  }
-
   let {
     mainTaskExists = true,
     sharedWith = MockTaskSharedWith.none,
     assignedTo = MockTaskAssignment.none
-  }: Props = $props();
+  }: {
+    mainTaskExists?: boolean;
+    sharedWith?: MockTaskSharedWith;
+    assignedTo?: MockTaskAssignment;
+  } = $props();
 
   let mainTask: DashboardTask | undefined = $state();
   let taskId = $derived(mainTask ? mainTask._id.toString() : 'nonExistentTaskId');
