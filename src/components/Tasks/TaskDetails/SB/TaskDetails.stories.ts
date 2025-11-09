@@ -6,7 +6,7 @@ import {
   MockTaskSharedWith
 } from '$services/Task/TaskMapService/TaskMapService.mock';
 import { createEnumArgType } from '$storybook/storybookUtil';
-import type { Meta } from '@storybook/svelte';
+import type { Meta } from '@storybook/sveltekit';
 import SbTaskDetailsExample from './SBTaskDetailsExample.svelte';
 
 const sbTaskDetailsMeta: Meta<SbTaskDetailsExample> = {

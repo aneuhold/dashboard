@@ -1,8 +1,8 @@
 import { LoginState, loginState } from '$stores/loginState';
 import LocalData from '$util/LocalData/LocalData';
 import { APIService } from '@aneuhold/core-ts-api-lib';
-import type { Meta, StoryObj } from '@storybook/svelte';
-import { expect, spyOn, userEvent, within } from '@storybook/test';
+import type { Meta, StoryObj } from '@storybook/sveltekit';
+import { expect, spyOn, userEvent, within } from 'storybook/test';
 import Login from './Login.svelte';
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories

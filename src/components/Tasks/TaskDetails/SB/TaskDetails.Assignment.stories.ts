@@ -3,7 +3,7 @@ import {
   MockTaskAssignment,
   MockTaskSharedWith
 } from '$services/Task/TaskMapService/TaskMapService.mock';
-import type { Meta, StoryObj } from '@storybook/svelte';
+import type { Meta, StoryObj } from '@storybook/sveltekit';
 import sbTaskDetailsMeta from './TaskDetails.stories';
 
 const meta: Meta<SBTaskDetailsExample> = {

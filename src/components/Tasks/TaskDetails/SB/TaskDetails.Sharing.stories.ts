@@ -1,5 +1,5 @@
 import { MockTaskSharedWith } from '$services/Task/TaskMapService/TaskMapService.mock';
-import type { Meta, StoryObj } from '@storybook/svelte';
+import type { Meta, StoryObj } from '@storybook/sveltekit';
 import type SbTaskDetailsExample from './SBTaskDetailsExample.svelte';
 import sbTaskDetailsMeta from './TaskDetails.stories';
 

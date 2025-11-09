@@ -1,5 +1,5 @@
 import type SBTaskDetailsExample from '$components/Tasks/TaskDetails/SB/SBTaskDetailsExample.svelte';
-import type { Meta, StoryObj } from '@storybook/svelte';
+import type { Meta, StoryObj } from '@storybook/sveltekit';
 import sbTaskDetailsMeta from './TaskDetails.stories';
 
 const meta: Meta<SBTaskDetailsExample> = {

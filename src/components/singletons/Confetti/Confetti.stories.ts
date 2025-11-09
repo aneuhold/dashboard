@@ -1,6 +1,6 @@
 import { userSettings } from '$stores/userSettings/userSettings';
 import { createNumberArgTypes } from '$storybook/storybookUtil';
-import type { Meta, StoryObj } from '@storybook/svelte';
+import type { Meta, StoryObj } from '@storybook/sveltekit';
 import SbConfettiExample from './SBConfettiExample.svelte';
 
 const meta = {

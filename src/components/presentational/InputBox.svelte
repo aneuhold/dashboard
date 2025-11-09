@@ -164,7 +164,7 @@
   bind:invalid
   disabled={disable}
   bind:value={inputValue}
-  input$autocomplete={autocompleteLabel ?? undefined}
+  input$autocomplete={autocompleteLabel}
   input$resizable={isTextArea ? false : undefined}
   input$rows={isTextArea && typeof inputValue === 'string'
     ? inputValue.split(/\r\n|\r|\n/).length

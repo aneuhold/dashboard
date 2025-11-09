@@ -8,7 +8,7 @@ import {
   MockTaskSubTasks
 } from '$services/Task/TaskMapService/TaskMapService.mock';
 import { createEnumArgType } from '$storybook/storybookUtil';
-import type { Meta } from '@storybook/svelte';
+import type { Meta } from '@storybook/sveltekit';
 import SbTaskListExample from './SBTaskListExample.svelte';
 
 const sbTaskListMeta = {
