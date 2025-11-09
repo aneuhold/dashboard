@@ -3,20 +3,23 @@
   import type { DashboardTaskListFilterSettings } from '@aneuhold/core-ts-db-lib';
   import Button, { Label } from '@smui/button';
   import { Actions, Content, Title } from '@smui/dialog';
-  import { createEventDispatcher } from 'svelte';
   import TaskTagsService from '../../../services/Task/TaskTagsService';
   import TaskFilterSetting from './TaskFilterSetting.svelte';
 
   interface Props {
     open: boolean;
     initialSettings: DashboardTaskListFilterSettings;
+    onUpdateSettings?: (settings: DashboardTaskListFilterSettings) => void;
+    onReset?: () => void;
   }
 
-  let { open = $bindable(), initialSettings }: Props = $props();
+  let { open = $bindable(), initialSettings, onUpdateSettings, onReset }: Props = $props();
 
   const userTags = TaskTagsService.getStore();
 
-  let currentSettings: DashboardTaskListFilterSettings = $state();
+  let currentSettings: DashboardTaskListFilterSettings = $state(
+    JSON.parse(JSON.stringify(initialSettings))
+  );
   let previousOpen = $state(false);
   $effect(() => {
     currentSettings = JSON.parse(
@@ -33,20 +36,15 @@
     previousOpen = open;
   });
 
-  const dispatch = createEventDispatcher<{
-    updateSettings: DashboardTaskListFilterSettings;
-    reset: unknown;
-  }>();
-
   const handleDone = () => {
-    dispatch('updateSettings', currentSettings);
+    onUpdateSettings?.(currentSettings);
     open = false;
   };
   const handleCancel = () => {
     open = false;
   };
   const handleReset = () => {
-    dispatch('reset');
+    onReset?.();
     open = false;
   };
 </script>

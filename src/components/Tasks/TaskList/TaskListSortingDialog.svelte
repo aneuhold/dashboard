@@ -7,7 +7,6 @@
   } from '@aneuhold/core-ts-db-lib';
   import Button, { Label } from '@smui/button';
   import { Actions, Content, Title } from '@smui/dialog';
-  import { createEventDispatcher } from 'svelte';
   import { flip } from 'svelte/animate';
   import { slide } from 'svelte/transition';
   import TaskSortSetting from './TaskSortSetting.svelte';
@@ -15,27 +14,26 @@
   interface Props {
     open: boolean;
     initialSettings: DashboardTaskListSortSettings;
+    onUpdateSettings?: (settings: DashboardTaskListSortSettings) => void;
+    onReset?: () => void;
   }
 
-  let { open = $bindable(), initialSettings }: Props = $props();
+  let { open = $bindable(), initialSettings, onUpdateSettings, onReset }: Props = $props();
 
-  let currentSettings: DashboardTaskListSortSettings = $state();
+  let currentSettings: DashboardTaskListSortSettings = $state(
+    JSON.parse(JSON.stringify(initialSettings)) as DashboardTaskListSortSettings
+  );
   let previousOpen = $state(false);
 
-  const dispatch = createEventDispatcher<{
-    updateSettings: DashboardTaskListSortSettings;
-    reset: unknown;
-  }>();
-
   const handleDone = () => {
-    dispatch('updateSettings', currentSettings);
+    onUpdateSettings?.(currentSettings);
     open = false;
   };
   const handleCancel = () => {
     open = false;
   };
   const handleReset = () => {
-    dispatch('reset');
+    onReset?.();
     open = false;
   };
   const getDisabledSortSettings = (
@@ -48,8 +46,7 @@
     return Array.from(disabledSettings) as DashboardTaskSortBy[];
   };
 
-  const handleEnable = (event: CustomEvent<DashboardTaskSortBy>) => {
-    const sortBy = event.detail;
+  const handleEnable = (sortBy: DashboardTaskSortBy) => {
     currentSettings.sortList.push({
       sortBy,
       sortDirection: DashboardTaskSortDirection.descending
@@ -57,8 +54,7 @@
     currentSortList = currentSettings.sortList;
     disabledSortSettings = getDisabledSortSettings(currentSettings);
   };
-  const handleDisable = (event: CustomEvent<DashboardTaskSortBy>) => {
-    const sortBy = event.detail;
+  const handleDisable = (sortBy: DashboardTaskSortBy) => {
     currentSettings.sortList = currentSettings.sortList.filter(
       (sortSetting) => sortSetting.sortBy !== sortBy
     );
@@ -72,18 +68,16 @@
    * This is opposite of what you would expect, because the sort settings are
    * ordered in descending priority.
    *
-   * @param event
+   * @param sortBy
    */
-  const handleIncrement = (event: CustomEvent<DashboardTaskSortBy>) => {
-    const sortBy = event.detail;
+  const handleIncrement = (sortBy: DashboardTaskSortBy) => {
     const sortList = currentSettings.sortList;
     const settingIndex = sortList.findIndex((sortSetting) => sortSetting.sortBy === sortBy);
     if (settingIndex === -1 || settingIndex === 0) return;
     // Swap elements
     moveSortSetting(settingIndex, settingIndex - 1);
   };
-  const handleDecrement = (event: CustomEvent<DashboardTaskSortBy>) => {
-    const sortBy = event.detail;
+  const handleDecrement = (sortBy: DashboardTaskSortBy) => {
     const sortList = currentSettings.sortList;
     const settingIndex = sortList.findIndex((sortSetting) => sortSetting.sortBy === sortBy);
     if (settingIndex === -1 || settingIndex === sortList.length - 1) return;

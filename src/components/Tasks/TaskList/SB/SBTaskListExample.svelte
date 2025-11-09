@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
-
   import TaskListService from '$services/Task/TaskListService';
   import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
   import {
@@ -39,7 +37,7 @@
     subtasks = MockTaskSubTasks.none
   }: Props = $props();
 
-  run(() => {
+  $effect(() => {
     SBMockData.taskMapServiceMock.reset();
     SBMockData.taskMapServiceMock.addTasks({
       numTasks,

@@ -57,8 +57,7 @@
     return '';
   };
 
-  const handleUpdateSortSettings = (event: CustomEvent<DashboardTaskListSortSettings>) => {
-    const newSortSettings = event.detail;
+  const handleUpdateSortSettings = (newSortSettings: DashboardTaskListSortSettings) => {
     if ($parentTask) {
       $parentTask.sortSettings[$currentUserId] = newSortSettings;
     } else {
@@ -76,8 +75,7 @@
       $userSettings.config.taskListSortSettings = sortSettings;
     }
   };
-  const handleUpdateFilterSettings = (event: CustomEvent<DashboardTaskListFilterSettings>) => {
-    const newFilterSettings = event.detail;
+  const handleUpdateFilterSettings = (newFilterSettings: DashboardTaskListFilterSettings) => {
     if ($parentTask) {
       $parentTask.filterSettings[$currentUserId] = newFilterSettings;
     } else {
@@ -168,14 +166,14 @@
 <TaskListSortingDialog
   initialSettings={currentSortSettings}
   bind:open={sortingDialogOpen}
-  on:updateSettings={handleUpdateSortSettings}
-  on:reset={handleResetSortSettings}
+  onUpdateSettings={handleUpdateSortSettings}
+  onReset={handleResetSortSettings}
 />
 <TaskListFilterDialog
   initialSettings={currentFilterSettings}
   bind:open={filterDialogOpen}
-  on:updateSettings={handleUpdateFilterSettings}
-  on:reset={handleResetFilterSettings}
+  onUpdateSettings={handleUpdateFilterSettings}
+  onReset={handleResetFilterSettings}
 />
 
 <style>

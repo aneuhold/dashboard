@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
-
   import {
     MockTaskAssignment,
     MockTaskSharedWith
@@ -24,7 +22,7 @@
   let mainTask: DashboardTask | undefined = $state();
   let taskId = $derived(mainTask ? mainTask._id.toString() : 'nonExistentTaskId');
 
-  run(() => {
+  $effect(() => {
     SBMockData.taskMapServiceMock.reset();
     if (mainTaskExists) {
       mainTask = SBMockData.taskMapServiceMock.addTask({
