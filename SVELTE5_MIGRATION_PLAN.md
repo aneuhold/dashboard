@@ -21,8 +21,7 @@ This document outlines the phased approach to migrating this SvelteKit project f
 
 Based on error analysis, we have:
 
-- `goto()` calls without `resolve()` in TaskDetails.svelte (compile errors)
-- Likely additional legacy syntax throughout the codebase
+- Legacy syntax throughout the codebase
 
 ### Step 1.1: Core Runes Migration
 
@@ -123,7 +122,6 @@ Based on error analysis, we have:
 **Objective:** Ensure everything works as expected
 
 - [ ] **1.7.1** Fix all compilation errors
-  - Resolve `goto()` without `resolve()` errors
   - Fix any type errors
   - Address compiler warnings
 
