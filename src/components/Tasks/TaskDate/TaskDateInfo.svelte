@@ -150,7 +150,7 @@
   /**
    * Just updates the date, nothing else is considered.
    *
-   * @param newDate
+   * @param newDate The new date to set
    */
   function updateDate(newDate: Date | undefined) {
     if (currentlyChosenDateType === 'start') {

@@ -1,6 +1,6 @@
 import { createInvisibleArgTypes, createTextArgTypes } from '$storybook/storybookUtil';
 import type { Meta, StoryObj } from '@storybook/sveltekit';
-import { fn } from 'storybook/test';
+import { fn } from '@storybook/test';
 import FabButton from './FabButton.svelte';
 
 const meta: Meta<FabButton> = {

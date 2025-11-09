@@ -69,7 +69,7 @@
     <InputBox
       label="Password"
       spellCheck={false}
-      autocompleteLabel="password"
+      autocompleteLabel="current-password"
       bind:inputValue={typedPassword}
       inputType="password"
     />
