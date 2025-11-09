@@ -19,7 +19,7 @@
   let processingCredentials = $derived($loginState === LoginState.ProcessingCredentials);
   let invalidCredentials = $state(false);
 
-  function handleSubmit(event: CustomEvent) {
+  function handleSubmit(event: MouseEvent | SubmitEvent) {
     // Prevent the page from refreshing
     event.preventDefault();
 

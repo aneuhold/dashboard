@@ -27,6 +27,7 @@
     | 'username'
     | 'new-password'
     | 'current-password'
+    | 'password'
     | 'one-time-code'
     | 'organization-title'
     | 'organization'
@@ -40,7 +41,23 @@
     | 'tel'
     | 'url';
 
-  interface Props {
+  let {
+    disable = $bindable(false),
+    inputType = 'text',
+    min = undefined,
+    max = undefined,
+    isTextArea = false,
+    label = undefined,
+    onBlurValue = $bindable(''),
+    inputValue = $bindable(onBlurValue),
+    autocompleteLabel = null,
+    helperText = null,
+    variant = 'standard',
+    spellCheck = true,
+    isSmall = false,
+    isValid = true,
+    onsubmit
+  }: {
     disable?: boolean;
     /**
      * The input type for the `InputBox`.
@@ -109,25 +126,7 @@
      * Callback fired when the user presses Enter (for non-textarea inputs).
      */
     onsubmit?: () => void;
-  }
-
-  let {
-    disable = $bindable(false),
-    inputType = 'text',
-    min = undefined,
-    max = undefined,
-    isTextArea = false,
-    label = undefined,
-    onBlurValue = $bindable(''),
-    inputValue = $bindable(onBlurValue),
-    autocompleteLabel = null,
-    helperText = null,
-    variant = 'standard',
-    spellCheck = true,
-    isSmall = false,
-    isValid = true,
-    onsubmit
-  }: Props = $props();
+  } = $props();
 
   let previousOnBlurValue = $state(onBlurValue);
 

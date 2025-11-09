@@ -71,7 +71,7 @@
                 <span>Used for: </span>
                 <ul class="dependencies-list">
                   {#if upgradesThatRequireThisItem.length > 0}
-                    {#each upgradesThatRequireThisItem as upgrade (upgrade._id.toString())}
+                    {#each upgradesThatRequireThisItem as upgrade, i (i)}
                       <NonogramKatanaRelatedUpgrade
                         itemName={$item.itemName}
                         relatedUpgrade={upgrade}

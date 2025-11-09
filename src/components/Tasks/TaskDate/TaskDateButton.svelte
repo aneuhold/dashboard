@@ -20,7 +20,7 @@
 <div class="container">
   <span class={`mdc-typography--body2${date ? '' : ' dimmed-color'}`}>{dateTitle}</span>
   <Set chips={['one']}>
-    {#snippet children({ chip })}
+    {#snippet chip(chip)}
       <Chip
         {chip}
         class={date ? '' : 'dimmed-color'}

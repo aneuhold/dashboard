@@ -12,7 +12,7 @@
     borderLeft?: boolean;
     borderRight?: boolean;
     borderBottom?: boolean;
-    children?: Snippet<{ class?: string }>;
+    children?: Snippet<[{ class?: string }]>;
   }
 
   let {

@@ -34,13 +34,15 @@
 
   let { taskId, tagHeaderName = undefined }: Props = $props();
 
+  const taskMap = TaskMapService.getStore();
+  let task = $derived(TaskMapService.getTaskStore(taskId));
+
   /**
    * Used so that the animation doesn't play every time the task shows up,
    * only when completed is clicked.
    */
   let completeAnimationShouldShow = $state(false);
   let previousTaskCompletedState = $state($task.completed);
-  const taskMap = TaskMapService.getStore();
 
   function goToTask() {
     goto(TaskService.getTaskRoute(taskId));
@@ -136,7 +138,7 @@
     });
     return menuItems;
   }
-  let task = $derived(TaskMapService.getTaskStore(taskId));
+
   let allChildrenIds = $derived(
     DashboardTaskService.getChildrenIds(
       Object.values($taskMap).filter((task) => task !== undefined),

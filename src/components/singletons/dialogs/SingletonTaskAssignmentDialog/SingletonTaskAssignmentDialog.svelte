@@ -49,6 +49,7 @@
 
 <script lang="ts">
   let task = $derived($currentTaskId ? TaskMapService.getTaskStore($currentTaskId) : null);
+  let title = $derived($task?.title ?? 'Task Assignment');
   let sharedWithIds = $derived($task ? $task.sharedWith.map((id) => id.toString()) : []);
   let collaborators = $derived($userSettings.collaborators);
   let sharedWithUsers = $derived([

@@ -25,8 +25,8 @@
   let editorOpen = $state(false);
   let editorOpenForTag: string | undefined = $state('');
 
-  const handleOpenEditor = (event: CustomEvent<string>) => {
-    editorOpenForTag = event.detail;
+  const handleOpenEditor = (tagName: string) => {
+    editorOpenForTag = tagName;
     editorOpen = true;
   };
 </script>

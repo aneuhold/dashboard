@@ -937,7 +937,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@floating-ui/dom@npm:^1.4":
+"@floating-ui/dom@npm:^1.6.13":
   version: 1.7.4
   resolution: "@floating-ui/dom@npm:1.7.4"
   dependencies:
@@ -5721,7 +5721,7 @@ __metadata:
     svelte: "npm:^5.43.5"
     svelte-check: "npm:^4.3.3"
     svelte-confetti-explosion: "npm:^0.4.0"
-    svelty-picker: "npm:^5.2.9"
+    svelty-picker: "npm:^6.1.6"
     tslib: "npm:^2.8.0"
     typescript: "npm:^5.6.3"
     vite: "npm:^5.4.10"
@@ -11673,14 +11673,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"svelty-picker@npm:^5.2.9":
-  version: 5.2.12
-  resolution: "svelty-picker@npm:5.2.12"
+"svelty-picker@npm:^6.1.6":
+  version: 6.1.6
+  resolution: "svelty-picker@npm:6.1.6"
   dependencies:
-    "@floating-ui/dom": "npm:^1.4"
+    "@floating-ui/dom": "npm:^1.6.13"
   peerDependencies:
-    svelte: ^3.53.0 || ^4.0.0 || ^5.0.0
-  checksum: 10c0/09b161bcd54f0215b5b86ebd9c665cdd75c633b9a26ff8797bc8255365ed8c833ec80471fdb011b6bb8b74f086b1954f8c224c902e32e1d216dbe0f51e8d313f
+    svelte: ^5.0.0
+  checksum: 10c0/95eaa4bbfa861ec361874d80ad3bc8b5059de406acbe65bfb6c4aa46670a81bdd0cd86134848e5b074432468ae640499d90fe34cdd18e302388f5fac057f7d19
   languageName: node
   linkType: hard
 

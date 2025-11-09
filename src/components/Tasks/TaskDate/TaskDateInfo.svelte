@@ -39,14 +39,14 @@
     datePickerOpen = true;
   }
 
-  function handleSelectedDate(event: CustomEvent<Date | null>) {
-    const newDate = event.detail ? event.detail : undefined;
+  function handleSelectedDate(newDate: Date | null) {
+    const date = newDate ? newDate : undefined;
     datePickerOpen = false;
-    if (!DateService.datesAreEqual(currentlyChosenDate, newDate)) {
-      if (!newDate) {
+    if (!DateService.datesAreEqual(currentlyChosenDate, date)) {
+      if (!date) {
         handleDateDeletion();
       } else {
-        handleDateUpdate(newDate);
+        handleDateUpdate(date);
       }
     }
   }

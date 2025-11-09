@@ -17,7 +17,15 @@
   import SveltyPicker from 'svelty-picker';
   import SmartDialog from './SmartDialog.svelte';
 
-  interface Props {
+  let {
+    title = 'Pick a date',
+    open = $bindable(),
+    dateIsEndDate = false,
+    initialDate = undefined,
+    startDate = undefined,
+    endDate = undefined,
+    onselected
+  }: {
     title?: string;
     open: boolean;
     /**
@@ -40,17 +48,7 @@
      * Callback fired when a date is selected (Done button clicked).
      */
     onselected?: (date: Date | null) => void;
-  }
-
-  let {
-    title = 'Pick a date',
-    open = $bindable(),
-    dateIsEndDate = false,
-    initialDate = undefined,
-    startDate = undefined,
-    endDate = undefined,
-    onselected
-  }: Props = $props();
+  } = $props();
 
   /**
    * This is the actual dialog open state. This is needed so that svelty-picker
@@ -118,7 +116,7 @@
   };
 </script>
 
-<SmartDialog bind:open={dialogOpen} onSMUIDialogClosed={handleCancel}>
+<SmartDialog bind:open={dialogOpen}>
   <Title>{title}</Title>
   <Content>
     {#if sveltyPickerVisible}
