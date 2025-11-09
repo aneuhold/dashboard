@@ -6,13 +6,15 @@
 <script lang="ts">
   import Fab, { Icon, Label } from '@smui/fab';
 
-  interface Props {
+  let {
+    clickHandler,
+    iconName,
+    label = null
+  }: {
     clickHandler: () => void;
     iconName: string;
     label?: string | null;
-  }
-
-  let { clickHandler, iconName, label = null }: Props = $props();
+  } = $props();
 </script>
 
 <div class="fabButton">

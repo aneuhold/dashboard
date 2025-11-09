@@ -5399,7 +5399,6 @@ __metadata:
     storybook: "npm:^10.0.6"
     svelte: "npm:^5.43.5"
     svelte-check: "npm:^4.3.3"
-    svelte-confetti-explosion: "npm:^0.4.0"
     svelty-picker: "npm:^6.1.6"
     tslib: "npm:^2.8.0"
     typescript: "npm:^5.6.3"
@@ -10858,13 +10857,6 @@ __metadata:
   bin:
     svelte-check: bin/svelte-check
   checksum: 10c0/210c12a01b1535600d67866371bebdd17d2407d2ef5f0ed005f072e4976964489d85a8da35c85daa1fbf3bc19416ed0b90e77fa8ddad299b2f89282fb4e5918d
-  languageName: node
-  linkType: hard
-
-"svelte-confetti-explosion@npm:^0.4.0":
-  version: 0.4.0
-  resolution: "svelte-confetti-explosion@npm:0.4.0"
-  checksum: 10c0/91f279bc9ca252f5b02bb7ccb3cf0f25a1402fdb37b5cfe348cdf23d5aed64d1e2e4ef0dec798591112dd5837de1d6aebd280e1d7fffc84e5c42665d649b9486
   languageName: node
   linkType: hard
 

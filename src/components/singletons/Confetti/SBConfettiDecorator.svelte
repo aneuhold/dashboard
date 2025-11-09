@@ -1,11 +1,9 @@
 <script lang="ts">
+  import type { Snippet } from 'svelte';
   import Confetti from './Confetti.svelte';
-  interface Props {
-    children?: import('svelte').Snippet;
-  }
 
-  let { children }: Props = $props();
+  let { children }: { children: Snippet } = $props();
 </script>
 
 <Confetti />
-{@render children?.()}
+{@render children()}

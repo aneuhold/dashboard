@@ -8,16 +8,19 @@ import {
   MockTaskSubTasks
 } from '$services/Task/TaskMapService/TaskMapService.mock';
 import { createEnumArgType } from '$storybook/storybookUtil';
-import type { Meta } from '@storybook/sveltekit';
+import { defineMeta } from '@storybook/addon-svelte-csf';
 import SbTaskListExample from './SBTaskListExample.svelte';
 
-const sbTaskListMeta = {
+const sbTaskListMetaBase: Parameters<typeof defineMeta>[0] = {
   title: 'Stateful Components/TaskList',
   component: SbTaskListExample,
   decorators: [
-    () => ({ Component: SbConfettiDecorator }),
-    () => ({ Component: SbSingletonTaskSharingDialogDecorator }),
-    () => ({ Component: SbSingletonTaskAssignmentDialogDecorator })
+    // @ts-expect-error - Decorator type mismatch between Storybook and Svelte - see https://github.com/storybookjs/storybook/issues/29951
+    () => SbConfettiDecorator,
+    // @ts-expect-error - Decorator type mismatch between Storybook and Svelte
+    () => SbSingletonTaskSharingDialogDecorator,
+    // @ts-expect-error - Decorator type mismatch between Storybook and Svelte
+    () => SbSingletonTaskAssignmentDialogDecorator
   ],
   argTypes: {
     sharedWith: createEnumArgType(MockTaskSharedWith),
@@ -37,5 +40,6 @@ const sbTaskListMeta = {
     descriptions: MockTaskDescription.none,
     subtasks: MockTaskSubTasks.none
   }
-} satisfies Meta<SbTaskListExample>;
-export default sbTaskListMeta;
+};
+
+export default sbTaskListMetaBase;

@@ -1,11 +1,7 @@
 <script lang="ts">
   import Confetti, { triggerConfetti } from './Confetti.svelte';
 
-  interface Props {
-    numButtons?: number;
-  }
-
-  let { numButtons = 1 }: Props = $props();
+  let { numButtons = 1 }: { numButtons?: number } = $props();
 
   let confettiButtonInfo = $derived(Array(numButtons).fill(null));
 </script>
