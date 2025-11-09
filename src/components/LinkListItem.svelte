@@ -32,7 +32,7 @@
   let { linkInfo }: Props = $props();
 </script>
 
-<Item onSMUIaction={linkInfo.clickAction}>
+<Item onclick={linkInfo.clickAction}>
   {#if linkInfo.iconName}
     <Graphic><Icon class="material-icons">{linkInfo.iconName}</Icon></Graphic>
   {/if}

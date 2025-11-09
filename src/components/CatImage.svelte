@@ -12,7 +12,7 @@
 
 <div class="imageContainer">
   <IconButton
-    on:click={() => {
+    onclick={() => {
       getImage();
     }}
   >

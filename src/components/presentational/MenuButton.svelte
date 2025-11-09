@@ -25,27 +25,29 @@
   let { menuItems, alignCenterVertically = false }: Props = $props();
 
   function handleItemClick(clickAction: () => void) {
-    menu.setOpen(false);
+    if (menu) {
+      menu.setOpen(false);
+    }
     // Wait for the ripple to stop, this also prevents an error for events
     // from SMUI if the component was deleted during the clickAction.
     setTimeout(clickAction, 50);
   }
 
-  let menu: MenuSurface = $state();
-  let anchor: HTMLDivElement = $state();
+  let menu: MenuSurface | null = $state(null);
+  let anchor: HTMLDivElement | null = $state(null);
 </script>
 
 <!--The extra div is required to keep the bounds of the menu contained -->
 <div class={alignCenterVertically ? 'alignCenter' : ''}>
   <div bind:this={anchor}>
-    <IconButton class="material-icons dimmed-color" onclick={() => menu.setOpen(true)}>
+    <IconButton class="material-icons dimmed-color" onclick={() => menu?.setOpen(true)}>
       menu
     </IconButton>
     <MenuSurface bind:this={menu} anchorElement={anchor} anchorCorner="BOTTOM_RIGHT">
       <List>
         {#each menuItems as item (item.title)}
           <Item
-            onSMUIaction={() => {
+            onclick={() => {
               handleItemClick(item.clickAction);
             }}
           >

@@ -99,7 +99,7 @@
           </div>
         </div>
         <IconButton
-          on:click={() => {
+          onclick={() => {
             nonogramKatanaItemDialog.open(itemId);
           }}><Icon class="material-icons dimmed-color">edit</Icon></IconButton
         >

@@ -48,7 +48,7 @@
     <Content>
       {#if itemsMissing}
         <Button
-          on:click={() => {
+          onclick={() => {
             NonogramKatanaItemMapService.createOrUpdateItems($userSettings.config.userId);
           }}
         >

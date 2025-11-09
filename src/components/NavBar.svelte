@@ -13,7 +13,7 @@
 
   let { children }: Props = $props();
 
-  let topAppBar: TopAppBar = $state();
+  let topAppBar: TopAppBar | null = $state(null);
 
   function handleLogOut() {
     apiKey.set(null);
@@ -26,13 +26,13 @@
     <Section>
       <IconButton
         class="material-icons"
-        on:click={() => {
+        onclick={() => {
           $navDrawerOpen = true;
         }}>menu</IconButton
       >
       <div class="dashboard-title">
         <Title
-          on:click={() => {
+          onclick={() => {
             goto('/');
           }}
         >
@@ -44,13 +44,13 @@
       <IconButton
         class="material-icons"
         aria-label="GitHub"
-        on:click={() => {
+        onclick={() => {
           window.open('https://github.com/aneuhold?tab=repositories', '_blank');
         }}
       >
         <Icon><GitHubIcon size={24} /></Icon>
       </IconButton>
-      <IconButton class="material-icons" aria-label="Log Out" on:click={handleLogOut}>
+      <IconButton class="material-icons" aria-label="Log Out" onclick={handleLogOut}>
         logout
       </IconButton>
     </Section>

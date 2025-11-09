@@ -78,7 +78,7 @@
         style="width: 100%;"
         variant="raised"
         class="material-icons dimmed-color"
-        on:click={handleSubmit}
+        onclick={handleSubmit}
         disabled={processingCredentials}
         data-testid="login-submit-button"
       >

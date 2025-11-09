@@ -37,6 +37,7 @@
   let errorInfoDialogOpen = $state(false);
   let errorInfoDialogTitle = $state('');
   let errorInfoDialogContent = $state('');
+  let task = $derived(TaskMapService.getTaskStore(taskId));
   let defaultRecurrenceInfo: RecurrenceInfo = $derived({
     frequency: {
       type: RecurrenceFrequencyType.everyXTimeUnit,
@@ -48,7 +49,6 @@
     recurrenceBasis: $task.dueDate ? RecurrenceBasis.dueDate : RecurrenceBasis.startDate,
     recurrenceEffect: RecurrenceEffect.rollOnCompletion
   });
-  let task = $derived(TaskMapService.getTaskStore(taskId));
   let isRecurring = $derived(!!$task.recurrenceInfo);
   let hasParentRecurringTask = $derived(!!$task.parentRecurringTaskInfo);
   let hasChildRecurringTask = $derived(
@@ -154,7 +154,7 @@
   <DialogContent>{errorInfoDialogContent}</DialogContent>
   <Actions>
     <Button
-      on:click={() => {
+      onclick={() => {
         errorInfoDialogOpen = false;
       }}
     >

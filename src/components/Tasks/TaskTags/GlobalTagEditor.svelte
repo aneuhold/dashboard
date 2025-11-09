@@ -46,10 +46,10 @@
     <InputBox label="Tag Name" isValid={tagValueIsValid} bind:inputValue={tagEditorValue} />
   </Content>
   <Actions>
-    <Button on:click={handleCancel}>
+    <Button onclick={handleCancel}>
       <Label>Cancel</Label>
     </Button>
-    <Button on:click={handleDone} disabled={buttonIsDisabled}>
+    <Button onclick={handleDone} disabled={buttonIsDisabled}>
       <Label>Done</Label>
     </Button>
   </Actions>

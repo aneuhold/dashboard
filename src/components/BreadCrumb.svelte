@@ -17,15 +17,15 @@
 
   let { breadCrumbArray = null }: Props = $props();
 
-  let activeRoute = $derived($page.route.id ?? '/');
+  let activeRoute = $derived(page.route.id ?? '/');
   let previousLink: string | undefined = $state();
   let routeArray = $derived(
     breadCrumbArray
       ? breadCrumbArray
       : activeRoute
           .split('/')
-          .filter((route) => route !== '')
-          .map((route) => {
+          .filter((route: string) => route !== '')
+          .map((route: string) => {
             const routeLink = previousLink ? previousLink + '/' + route : route;
             previousLink = routeLink;
             return { name: route, link: routeLink };

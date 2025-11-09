@@ -16,7 +16,7 @@
 </script>
 
 <div class="fabButton">
-  <Fab color="primary" on:click={clickHandler} extended={!!label}>
+  <Fab color="primary" onclick={clickHandler} extended={!!label}>
     <Icon class="material-icons">{iconName}</Icon>
     {#if label}
       <Label>{label}</Label>

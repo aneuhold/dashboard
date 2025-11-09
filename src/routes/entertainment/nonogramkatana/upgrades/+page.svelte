@@ -62,7 +62,7 @@
       <div class="topSettingsRow">
         {#if upgradesMissing}
           <Button
-            on:click={() => {
+            onclick={() => {
               NonogramKatanaUpgradeMapService.createOrUpdateUpgrades($userSettings.config.userId);
             }}
           >

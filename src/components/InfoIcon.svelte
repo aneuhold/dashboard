@@ -27,7 +27,7 @@
 </script>
 
 <IconButton
-  on:click={() => {
+  onclick={() => {
     open = true;
   }}
   size="button"
@@ -41,7 +41,7 @@
   <Content>{@render children?.()}</Content>
   <Actions>
     <Button
-      on:click={() => {
+      onclick={() => {
         open = false;
       }}
     >

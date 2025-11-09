@@ -19,6 +19,27 @@
   import Textfield from '@smui/textfield';
   import HelperText from '@smui/textfield/helper-text';
 
+  type AutoCompleteType =
+    | 'off'
+    | 'on'
+    | 'name'
+    | 'email'
+    | 'username'
+    | 'new-password'
+    | 'current-password'
+    | 'one-time-code'
+    | 'organization-title'
+    | 'organization'
+    | 'street-address'
+    | 'address-line1'
+    | 'address-line2'
+    | 'address-line3'
+    | 'country'
+    | 'country-name'
+    | 'postal-code'
+    | 'tel'
+    | 'url';
+
   interface Props {
     disable?: boolean;
     /**
@@ -59,7 +80,7 @@
      * label. For example `password`. If auto-complete is not desired, do not
      * set this.
      */
-    autocompleteLabel?: string | null;
+    autocompleteLabel?: AutoCompleteType | null;
     /**
      * The helper text to show below the input box. If null, no helper text will
      * be shown.
@@ -163,7 +184,7 @@
   type={inputType}
   bind:dirty
   bind:invalid
-  bind:disabled={disable}
+  disabled={disable}
   bind:value={inputValue}
   input$autocomplete={autocompleteLabel}
   input$resizable={isTextArea ? false : undefined}
@@ -178,8 +199,8 @@
   variant={isTextArea ? undefined : variant}
   {label}
   class={isSmall ? 'textField-small' : undefined}
-  on:keydown={handleKeyDown}
-  on:blur={handleBlur}
+  onkeydown={handleKeyDown}
+  onblur={handleBlur}
 >
   {#snippet helper()}
     {#if helperText}

@@ -39,7 +39,7 @@
    * only when completed is clicked.
    */
   let completeAnimationShouldShow = $state(false);
-  let previousTaskCompletedState: boolean;
+  let previousTaskCompletedState = $state($task.completed);
   const taskMap = TaskMapService.getStore();
 
   function goToTask() {
@@ -150,6 +150,7 @@
   $effect(() => {
     if ($task.completed !== previousTaskCompletedState) {
       completeAnimationShouldShow = true;
+      previousTaskCompletedState = $task.completed;
     }
   });
   let currentStrikeClass = $derived(

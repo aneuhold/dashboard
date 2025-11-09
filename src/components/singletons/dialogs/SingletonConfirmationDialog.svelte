@@ -87,10 +87,10 @@
   <Title>{$dialogStore.title}</Title>
   <Content>{$dialogStore.message}</Content>
   <Actions>
-    <Button on:click={handleConfirm}>
+    <Button onclick={handleConfirm}>
       <Label>{$dialogStore.confirmationButtonText}</Label>
     </Button>
-    <Button on:click={handleCancel}>
+    <Button onclick={handleCancel}>
       <Label>{$dialogStore.cancelButtonText}</Label>
     </Button>
   </Actions>

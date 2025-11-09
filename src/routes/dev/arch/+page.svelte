@@ -21,7 +21,7 @@
   import ArchitectureSection from './ArchitectureSection.svelte';
   import { archPageInfo } from './pageInfo';
 
-  let archContext = $derived(ArchitectureInfo.getContextFromSearchParams($page.url.searchParams));
+  let archContext = $derived(ArchitectureInfo.getContextFromSearchParams(page.url.searchParams));
 </script>
 
 <svelte:head>
@@ -40,7 +40,7 @@
       </p>
       <List twoLine={true}>
         {#each Object.entries(architectureContextInfo) as [contextName, contextInfo] (contextName)}
-          <Item onSMUIaction={() => goto(`?context=${contextName}`)}>
+          <Item onclick={() => goto(`?context=${contextName}`)}>
             <Text>
               <PrimaryText>{contextInfo.title}</PrimaryText>
               <SecondaryText>{contextInfo.description}</SecondaryText>
@@ -59,7 +59,7 @@
         {archContext.title}
         <IconButton
           class="material-icons"
-          on:click={() => {
+          onclick={() => {
             goto('/dev/arch');
           }}
         >

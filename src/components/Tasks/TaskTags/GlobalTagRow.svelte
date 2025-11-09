@@ -121,14 +121,14 @@
           {#if tagSettings.priority !== 0}
             <IconButton
               size="button"
-              on:click={decrementPriority}
+              onclick={decrementPriority}
               disabled={tagSettings.priority === 1}
             >
               <Icon class="material-icons">arrow_downward</Icon>
             </IconButton>
             <IconButton
               size="button"
-              on:click={incrementPriority}
+              onclick={incrementPriority}
               disabled={tagSettings.priority === maxPriority}
             >
               <Icon class="material-icons">arrow_upward</Icon>

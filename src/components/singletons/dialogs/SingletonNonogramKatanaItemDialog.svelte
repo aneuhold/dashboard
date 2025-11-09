@@ -52,7 +52,7 @@
       <div class="content">
         <Checkbox
           checked={minDesiredPresent}
-          on:click={() => {
+          onclick={() => {
             if ($item && minDesiredPresent) {
               $item.minDesired = undefined;
             } else if ($item) {
@@ -73,7 +73,7 @@
         {/if}
         <Checkbox
           checked={maxDesiredPresent}
-          on:click={() => {
+          onclick={() => {
             if ($item && maxDesiredPresent) {
               $item.maxDesired = undefined;
             } else if ($item) {
@@ -94,7 +94,7 @@
         {/if}
         <Checkbox
           checked={storageCapPresent}
-          on:click={() => {
+          onclick={() => {
             if ($item && storageCapPresent) {
               $item.storageCap = undefined;
             } else if ($item) {
@@ -118,7 +118,7 @@
     </Content>
     <Actions>
       <Button
-        on:click={() => {
+        onclick={() => {
           $open = false;
         }}
       >

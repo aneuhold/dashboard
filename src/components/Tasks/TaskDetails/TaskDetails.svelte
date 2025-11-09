@@ -117,7 +117,7 @@
             <Button
               variant="outlined"
               class="danger-button"
-              on:click={() => {
+              onclick={() => {
                 TaskService.handleDeleteTaskClick(allChildrenIds.length, deleteTask, $task?.title);
               }}
             >
@@ -134,7 +134,7 @@
 
           <div class="doneButton">
             <Button
-              on:click={() => goto(parentRoute)}
+              onclick={() => goto(parentRoute)}
               style="width: 100%; max-width: 500px"
               variant="outlined"
               class="primary-button"

@@ -59,7 +59,7 @@
           {#each displayInfo.requiredItems as requiredItem (requiredItem.itemName)}
             <Checkbox
               checked={getItemAmount(requiredItem.itemName) === requiredItem.requiredAmount}
-              on:click={() => {
+              onclick={() => {
                 if (getItemAmount(requiredItem.itemName) !== requiredItem.requiredAmount) {
                   updateItemToAmount(requiredItem.itemName, requiredItem.requiredAmount);
                 } else {

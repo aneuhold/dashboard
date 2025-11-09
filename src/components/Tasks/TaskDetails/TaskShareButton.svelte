@@ -36,7 +36,7 @@
   class="secondary-button"
   color="secondary"
   disabled={sharingDisabled}
-  on:click={handleClick}
+  onclick={handleClick}
 >
   <Icon class="material-icons">share</Icon>
   {buttonText}

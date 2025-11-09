@@ -23,8 +23,8 @@
   let { activeRoute = $bindable('/') }: Props = $props();
 
   $effect(() => {
-    if ($page.route.id) {
-      activeRoute = $page.route.id;
+    if (page.route.id) {
+      activeRoute = page.route.id;
     }
   });
 
@@ -55,7 +55,7 @@
             <Separator />
           {/if}
           <Item
-            on:click={() => {
+            onclick={() => {
               setRoute(pageInfo.url);
             }}
             activated={activeRoute === pageInfo.url}

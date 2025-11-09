@@ -58,7 +58,7 @@
   <Checkbox
     checked={$task.completed}
     touch
-    on:click={(event) => {
+    onclick={(event) => {
       if (preventDefault) {
         event.preventDefault();
       }

@@ -58,7 +58,7 @@
             {/if}
           </div>
         </div>
-        <IconButton on:click={() => nonogramKatanaUpgradeDialog.open($upgrade._id.toString())}>
+        <IconButton onclick={() => nonogramKatanaUpgradeDialog.open($upgrade._id.toString())}>
           <Icon class="material-icons dimmed-color">edit</Icon>
         </IconButton>
       </div>

@@ -33,7 +33,7 @@
         <Icon class="material-icons">{iconName}</Icon>
         <div class="action-container">
           {#if automationTriggerUrl}
-            <Button variant="raised" on:click={handleButtonClick}>
+            <Button variant="raised" onclick={handleButtonClick}>
               <Label>{title}</Label>
             </Button>
           {/if}
