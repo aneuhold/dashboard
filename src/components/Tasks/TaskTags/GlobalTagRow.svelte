@@ -5,19 +5,15 @@
   import type { DashboardTagSetting } from '@aneuhold/core-ts-db-lib';
   import Card, { Content } from '@smui/card';
   import IconButton, { Icon } from '@smui/icon-button';
-  import { createEventDispatcher } from 'svelte';
   import TaskTagsService from '../../../services/Task/TaskTagsService';
 
   interface Props {
     tagName: string;
     maxPriority: number;
+    onOpenEditor?: (tagName: string) => void;
   }
 
-  let { tagName, maxPriority }: Props = $props();
-
-  const dispatch = createEventDispatcher<{
-    openEditor: string;
-  }>();
+  let { tagName, maxPriority, onOpenEditor }: Props = $props();
 
   const getMenuItems = (tagSettings: DashboardTagSetting) => {
     const menuItems: MenuButtonItem[] = [
@@ -25,7 +21,7 @@
         title: 'Edit',
         iconName: 'edit',
         clickAction: () => {
-          dispatch('openEditor', tagName);
+          onOpenEditor?.(tagName);
         }
       },
       {

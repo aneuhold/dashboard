@@ -2,21 +2,19 @@
   import ClickableDiv from '$components/presentational/ClickableDiv.svelte';
   import Card, { Content } from '@smui/card';
   import Checkbox from '@smui/checkbox';
-  import { createEventDispatcher } from 'svelte';
 
   interface Props {
     settingName: string;
     enabled: boolean;
+    onclick?: () => void;
   }
 
-  let { settingName, enabled }: Props = $props();
+  let { settingName, enabled, onclick }: Props = $props();
 
   let tagContentClass = $derived(enabled ? 'card-content colorWhite' : 'card-content dimmed-color');
 
-  const dispatch = createEventDispatcher();
-
   const handleClick = () => {
-    dispatch('click');
+    onclick?.();
   };
 </script>
 

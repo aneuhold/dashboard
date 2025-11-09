@@ -8,14 +8,24 @@
   import Checkbox from '@smui/checkbox';
   import IconButton, { Icon } from '@smui/icon-button';
   import SegmentedButton, { Segment } from '@smui/segmented-button';
-  import { createEventDispatcher } from 'svelte';
 
   interface Props {
     sortSetting: DashboardTaskSortSetting;
     disabled: boolean;
+    onEnable?: (sortBy: DashboardTaskSortBy) => void;
+    onDisable?: (sortBy: DashboardTaskSortBy) => void;
+    onIncrementPriority?: (sortBy: DashboardTaskSortBy) => void;
+    onDecrementPriority?: (sortBy: DashboardTaskSortBy) => void;
   }
 
-  let { sortSetting = $bindable(), disabled }: Props = $props();
+  let {
+    sortSetting = $bindable(),
+    disabled,
+    onEnable,
+    onDisable,
+    onIncrementPriority,
+    onDecrementPriority
+  }: Props = $props();
 
   type SortDirectionChoice = {
     value: DashboardTaskSortDirection;
@@ -33,24 +43,17 @@
     }
   ];
 
-  const dispatch = createEventDispatcher<{
-    enable: DashboardTaskSortBy;
-    disable: DashboardTaskSortBy;
-    incrementPriority: DashboardTaskSortBy;
-    decrementPriority: DashboardTaskSortBy;
-  }>();
-
   const enable = () => {
-    dispatch('enable', sortSetting.sortBy);
+    onEnable?.(sortSetting.sortBy);
   };
   const disable = () => {
-    dispatch('disable', sortSetting.sortBy);
+    onDisable?.(sortSetting.sortBy);
   };
   const incrementPriority = () => {
-    dispatch('incrementPriority', sortSetting.sortBy);
+    onIncrementPriority?.(sortSetting.sortBy);
   };
   const decrementPriority = () => {
-    dispatch('decrementPriority', sortSetting.sortBy);
+    onDecrementPriority?.(sortSetting.sortBy);
   };
   const getSortName = (sortBy: DashboardTaskSortBy) => {
     switch (sortBy) {

@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
-
   import SmartDialog from '$components/presentational/SmartDialog.svelte';
   import {
     DashboardTaskSortBy,
@@ -101,10 +99,10 @@
     currentSettings.sortList = sortList;
     currentSortList = sortList;
   };
-  run(() => {
+  $effect(() => {
     currentSettings = JSON.parse(JSON.stringify(initialSettings)) as DashboardTaskListSortSettings;
   });
-  run(() => {
+  $effect(() => {
     if (open !== previousOpen) {
       currentSettings = JSON.parse(
         JSON.stringify(initialSettings)
@@ -126,9 +124,9 @@
         <TaskSortSetting
           {sortSetting}
           disabled={false}
-          on:disable={handleDisable}
-          on:incrementPriority={handleIncrement}
-          on:decrementPriority={handleDecrement}
+          onDisable={handleDisable}
+          onIncrementPriority={handleIncrement}
+          onDecrementPriority={handleDecrement}
         />
       </div>
     {/each}
@@ -139,7 +137,7 @@
             sortBy: disabledSetting,
             sortDirection: DashboardTaskSortDirection.descending
           }}
-          on:enable={handleEnable}
+          onEnable={handleEnable}
           disabled={true}
         />
       </div>

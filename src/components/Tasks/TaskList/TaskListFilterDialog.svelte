@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
-
   import SmartDialog from '$components/presentational/SmartDialog.svelte';
   import type { DashboardTaskListFilterSettings } from '@aneuhold/core-ts-db-lib';
   import Button, { Label } from '@smui/button';
@@ -20,13 +18,13 @@
 
   let currentSettings: DashboardTaskListFilterSettings = $state();
   let previousOpen = $state(false);
-  run(() => {
+  $effect(() => {
     currentSettings = JSON.parse(
       JSON.stringify(initialSettings)
     ) as DashboardTaskListFilterSettings;
   });
 
-  run(() => {
+  $effect(() => {
     if (open !== previousOpen) {
       currentSettings = JSON.parse(
         JSON.stringify(initialSettings)
@@ -59,21 +57,21 @@
     <TaskFilterSetting
       settingName="Show Completed"
       enabled={currentSettings.completed.show}
-      on:click={() => {
+      onclick={() => {
         currentSettings.completed.show = !currentSettings.completed.show;
       }}
     />
     <TaskFilterSetting
       settingName="Show Future Tasks"
       enabled={currentSettings.startDate.showFutureTasks}
-      on:click={() => {
+      onclick={() => {
         currentSettings.startDate.showFutureTasks = !currentSettings.startDate.showFutureTasks;
       }}
     />
     <TaskFilterSetting
       settingName="Show All Children Tasks"
       enabled={currentSettings.grandChildrenTasks.show}
-      on:click={() => {
+      onclick={() => {
         currentSettings.grandChildrenTasks.show = !currentSettings.grandChildrenTasks.show;
       }}
     />
@@ -82,7 +80,7 @@
       <TaskFilterSetting
         settingName={tag}
         enabled={currentSettings.tags[tag] ? currentSettings.tags[tag].show : true}
-        on:click={() => {
+        onclick={() => {
           if (currentSettings.tags[tag]) {
             currentSettings.tags[tag].show = !currentSettings.tags[tag].show;
           } else {

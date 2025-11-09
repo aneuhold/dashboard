@@ -58,8 +58,6 @@
 </script>
 
 <script lang="ts">
-  import { run } from 'svelte/legacy';
-
   let previousOpen = $state($open);
 
   function handleConfirm() {
@@ -72,7 +70,7 @@
     $open = false;
   }
 
-  run(() => {
+  $effect(() => {
     // So that if the dialog is closed by any other means, it will trigger the
     // onCancel function
     if (previousOpen !== $open) {

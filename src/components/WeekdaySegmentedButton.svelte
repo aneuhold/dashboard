@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
-
   import SegmentedButton, { Label, Segment } from '@smui/segmented-button';
 
   interface Props {
@@ -54,8 +52,6 @@
     }
   ];
 
-  let choices: Array<WeekDaySegment> = $state();
-
   function getChoices(updatedWeekDaySet: Array<number> | number) {
     const weekDayChoiceIsNumber = typeof updatedWeekDaySet === 'number';
     return defaultChoices.map((segment) => {
@@ -67,6 +63,9 @@
       };
     });
   }
+
+  // Reactively compute choices whenever weekDaySetOrChoice changes
+  let choices = $derived(getChoices(weekDaySetOrChoice));
 
   function handleClick(segment: WeekDaySegment) {
     if (typeof weekDaySetOrChoice === 'number') {
@@ -86,11 +85,9 @@
         weekDaySetOrChoice = weekDaySetOrChoice.filter((value) => value !== segment.value);
       }
     }
-    choices = choices;
+    // Trigger reactivity by reassigning
+    weekDaySetOrChoice = weekDaySetOrChoice;
   }
-  run(() => {
-    choices = getChoices(weekDaySetOrChoice);
-  });
 </script>
 
 <SegmentedButton segments={choices} key={(segment) => segment.name}>

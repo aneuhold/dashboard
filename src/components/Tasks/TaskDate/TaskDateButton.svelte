@@ -1,19 +1,20 @@
 <script lang="ts">
   import { DateService } from '@aneuhold/core-ts-lib';
   import Chip, { LeadingIcon, Set, Text } from '@smui/chips';
-  import { createEventDispatcher } from 'svelte';
 
   interface Props {
     dateType: 'due' | 'start';
     date?: Date | undefined;
+    /**
+     * Callback fired when the chip is clicked.
+     */
+    onclick?: () => void;
   }
 
-  let { dateType, date = undefined }: Props = $props();
+  let { dateType, date = undefined, onclick }: Props = $props();
 
   let dateTitle = $derived(dateType === 'due' ? 'Due Date' : 'Start Date');
   let dateValue = $derived(date ? DateService.getAutoDateString(date) : 'Not Set');
-
-  const dispatch = createEventDispatcher();
 </script>
 
 <div class="container">
@@ -24,7 +25,7 @@
         {chip}
         class={date ? '' : 'dimmed-color'}
         shouldRemoveOnTrailingIconClick={false}
-        on:click={() => dispatch('click')}
+        {onclick}
       >
         <LeadingIcon class="material-icons">event</LeadingIcon>
         <Text>{dateValue}</Text>

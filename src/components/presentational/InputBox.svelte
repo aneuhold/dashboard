@@ -3,11 +3,11 @@
   
   A basic input box component.
 
-  - The `on:submit` can be bound to for when the user presses the "Enter" key.
+  - The `onsubmit` callback can be provided for when the user presses the "Enter" key.
 
-  Note that the `on:submit` event is not required if the InputBox is contained
-  in a `form` element, as that automatically happens in that case. No event
-  binding needed. The form will automatically trigger the on:click event of the
+  Note that the `onsubmit` callback is not required if the InputBox is contained
+  in a `form` element, as that automatically happens in that case. No callback
+  needed. The form will automatically trigger the onclick event of the
   nearest button.
 
   ### Implmenetation Notes
@@ -16,11 +16,8 @@
   to adjust it's min height.
 -->
 <script lang="ts">
-  import { run } from 'svelte/legacy';
-
   import Textfield from '@smui/textfield';
   import HelperText from '@smui/textfield/helper-text';
-  import { createEventDispatcher } from 'svelte';
 
   interface Props {
     disable?: boolean;
@@ -87,6 +84,10 @@
      * will be invalid.
      */
     isValid?: boolean;
+    /**
+     * Callback fired when the user presses Enter (for non-textarea inputs).
+     */
+    onsubmit?: () => void;
   }
 
   let {
@@ -103,7 +104,8 @@
     variant = 'standard',
     spellCheck = true,
     isSmall = false,
-    isValid = true
+    isValid = true,
+    onsubmit
   }: Props = $props();
 
   let previousOnBlurValue = $state(onBlurValue);
@@ -126,13 +128,11 @@
           (max !== undefined && inputValue > max)))
   );
 
-  const dispatch = createEventDispatcher();
-
   function handleKeyDown(event: CustomEvent | KeyboardEvent) {
     event = event as KeyboardEvent;
     if (event.key === 'Enter' && !isTextArea) {
       onBlurValue = inputValue;
-      dispatch('submit');
+      onsubmit?.();
     }
   }
 
@@ -144,12 +144,12 @@
 
   // Check if the onBlurValue is null or undefined and set it to an empty
   // string if it is. This fixes graphical issues with the input box.
-  run(() => {
+  // Also detect when the onBlurValue is changed outside the component.
+  $effect(() => {
     if (onBlurValue === null || onBlurValue === undefined) {
       onBlurValue = '';
       previousOnBlurValue = onBlurValue;
       inputValue = onBlurValue;
-      // Detect when the onBlurValue is changed outside the component.
     } else if (onBlurValue !== previousOnBlurValue && onBlurValue !== inputValue) {
       inputValue = onBlurValue;
       previousOnBlurValue = onBlurValue;

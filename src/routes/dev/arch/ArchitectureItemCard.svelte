@@ -10,8 +10,6 @@
   in styles when using the menu component.
 -->
 <script lang="ts">
-  import { run } from 'svelte/legacy';
-
   import type { MenuButtonItem } from '$components/presentational/MenuButton.svelte';
   import MenuButton from '$components/presentational/MenuButton.svelte';
   import ArchitectureInfo from '$util/ArchitectureInfo/ArchitectureInfo';
@@ -27,9 +25,6 @@
 
   let { archComponent, children }: Props = $props();
 
-
-  const menuItems: MenuButtonItem[] = [];
-
   function openUrl(url: string | undefined) {
     if (url) window.open(url, '_blank');
   }
@@ -38,39 +33,40 @@
   let archComponentType = $derived(archComponent.type);
   let iconComponent = $derived(archComponent.icon);
   let dependencyNames = $derived(archComponent.dependencies?.map((component) => component.title));
-  run(() => {
-    if (archComponent.configurationUrl) {
-      menuItems.push({
-        title: 'Configure',
-        iconName: 'build',
-        clickAction: () => {
-          openUrl(archComponent.configurationUrl);
-        }
-      });
-    }
-  });
-  run(() => {
-    if (archComponent.docsUrl) {
-      menuItems.push({
-        title: 'Docs',
-        iconName: 'article',
-        clickAction: () => {
-          openUrl(archComponent.docsUrl);
-        }
-      });
-    }
-  });
-  run(() => {
-    if (archComponent.latestExampleProjectUrl) {
-      menuItems.push({
-        title: 'Latest Example Project or Code',
-        iconName: 'code',
-        clickAction: () => {
-          openUrl(archComponent.latestExampleProjectUrl);
-        }
-      });
-    }
-  });
+
+  let menuItems = $derived<MenuButtonItem[]>(
+    (() => {
+      const items: MenuButtonItem[] = [];
+      if (archComponent.configurationUrl) {
+        items.push({
+          title: 'Configure',
+          iconName: 'build',
+          clickAction: () => {
+            openUrl(archComponent.configurationUrl);
+          }
+        });
+      }
+      if (archComponent.docsUrl) {
+        items.push({
+          title: 'Docs',
+          iconName: 'article',
+          clickAction: () => {
+            openUrl(archComponent.docsUrl);
+          }
+        });
+      }
+      if (archComponent.latestExampleProjectUrl) {
+        items.push({
+          title: 'Latest Example Project or Code',
+          iconName: 'code',
+          clickAction: () => {
+            openUrl(archComponent.latestExampleProjectUrl);
+          }
+        });
+      }
+      return items;
+    })()
+  );
 </script>
 
 <div class="container">
@@ -79,7 +75,7 @@
       <div class="card-content">
         <div class="left-side">
           {#if iconComponent}
-            <Icon class="material-icons">{@const SvelteComponent = iconComponent}
+            {@const SvelteComponent = iconComponent}
             <Icon class="material-icons"><SvelteComponent size={30} /></Icon>
           {/if}
           <div>

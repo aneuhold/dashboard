@@ -1,29 +1,28 @@
 <script lang="ts">
   import Button, { Icon } from '@smui/button';
-  import { createEventDispatcher } from 'svelte';
 
   interface Props {
     variant?: 'outlined' | 'raised' | undefined;
     disabled?: boolean;
     color?: 'primary' | 'secondary';
     iconName: string;
+    /**
+     * Callback fired when the button is clicked.
+     */
+    onclick?: () => void;
   }
 
-  let { variant = undefined, disabled = false, color = 'primary', iconName }: Props = $props();
-
-  const dispatch = createEventDispatcher();
+  let {
+    variant = undefined,
+    disabled = false,
+    color = 'primary',
+    iconName,
+    onclick
+  }: Props = $props();
 </script>
 
 <div>
-  <Button
-    {variant}
-    {color}
-    class="squareIconButton"
-    on:click={() => {
-      dispatch('click');
-    }}
-    {disabled}
-  >
+  <Button {variant} {color} class="squareIconButton" {onclick} {disabled}>
     <Icon class="material-icons squareIconButtonIcon">{iconName}</Icon>
   </Button>
 </div>

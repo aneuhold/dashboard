@@ -4,8 +4,6 @@
   A single task that can be displayed in a row format.
 -->
 <script lang="ts">
-  import { run } from 'svelte/legacy';
-
   import { goto } from '$app/navigation';
   import ClickableDiv from '$components/presentational/ClickableDiv.svelte';
   import type { MenuButtonItem } from '$components/presentational/MenuButton.svelte';
@@ -149,7 +147,7 @@
   let finalSharedParentId = $derived(TaskService.findParentIdWithSameSharedWith($task));
   let usersTaskTags = $derived($task.tags[$currentUserId]);
   let menuItems = $derived(getMenuItems($task));
-  run(() => {
+  $effect(() => {
     if ($task.completed !== previousTaskCompletedState) {
       completeAnimationShouldShow = true;
     }

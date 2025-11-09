@@ -4,8 +4,6 @@
   Reccurence information for use in the Task Details component.
 -->
 <script lang="ts">
-  import { run } from 'svelte/legacy';
-
   import ClickableDiv from '$components/presentational/ClickableDiv.svelte';
   import SmartDialog from '$components/presentational/SmartDialog.svelte';
   import {
@@ -64,7 +62,7 @@
   let currentRecurrenceInfo = $derived($task.recurrenceInfo ?? defaultRecurrenceInfo);
 
   // Auto-close the accordion when switching tasks
-  run(() => {
+  $effect(() => {
     if (previousTaskId !== taskId) {
       previousTaskId = taskId;
       recurringInfoOpen = false;

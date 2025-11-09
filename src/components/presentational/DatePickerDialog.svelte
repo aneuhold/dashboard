@@ -8,14 +8,12 @@
   it gets used more than just on the TaskDetails component, then it should.
 -->
 <script lang="ts">
-  import { run } from 'svelte/legacy';
-
   import { DateService } from '@aneuhold/core-ts-lib';
   import Button, { Label } from '@smui/button';
   import Checkbox from '@smui/checkbox';
   import { Actions, Content, Title } from '@smui/dialog';
   import FormField from '@smui/form-field';
-  import { createEventDispatcher, tick } from 'svelte';
+  import { tick } from 'svelte';
   import SveltyPicker from 'svelty-picker';
   import SmartDialog from './SmartDialog.svelte';
 
@@ -38,6 +36,10 @@
      * with a time attached in the same date too.
      */
     endDate?: Date | undefined;
+    /**
+     * Callback fired when a date is selected (Done button clicked).
+     */
+    onselected?: (date: Date | null) => void;
   }
 
   let {
@@ -46,7 +48,8 @@
     dateIsEndDate = false,
     initialDate = undefined,
     startDate = undefined,
-    endDate = undefined
+    endDate = undefined,
+    onselected
   }: Props = $props();
 
   /**
@@ -61,18 +64,26 @@
   let dialogOpen = $state(false);
   let sveltyPickerVisible = $state(false);
   let previousOpen = $state(false);
-  let mode: 'date' | 'datetime' = $state();
-  run(() => {
-    mode = initialDate ? (DateService.dateHasTime(initialDate) ? 'datetime' : 'date') : 'date';
-  });
-  let currentlySelectedDate = $derived(initialDate);
+
+  // Track mode state separately - initialize based on initialDate
+  let modeState = $state<'date' | 'datetime'>(
+    initialDate ? (DateService.dateHasTime(initialDate) ? 'datetime' : 'date') : 'date'
+  );
+
+  let currentlySelectedDate = $state(initialDate);
 
   // Main reactivity logic for opening and closing the dialog
-  run(() => {
+  $effect(() => {
     if (open && previousOpen !== open) {
       previousOpen = open;
       sveltyPickerVisible = true;
       currentlySelectedDate = initialDate;
+      // Reset mode state when dialog opens
+      modeState = initialDate
+        ? DateService.dateHasTime(initialDate)
+          ? 'datetime'
+          : 'date'
+        : 'date';
       tick().then(() => {
         dialogOpen = true;
       });
@@ -86,19 +97,15 @@
     }
   });
 
-  const dispatch = createEventDispatcher<{
-    selected: Date | null;
-  }>();
-
   const handleTimeBoxClicked = () => {
-    mode = mode === 'date' ? 'datetime' : 'date';
+    modeState = modeState === 'date' ? 'datetime' : 'date';
   };
 
   const handleDone = () => {
-    if (dateIsEndDate && currentlySelectedDate && mode === 'date') {
+    if (dateIsEndDate && currentlySelectedDate && modeState === 'date') {
       currentlySelectedDate.setHours(23, 59, 59);
     }
-    dispatch('selected', currentlySelectedDate);
+    onselected?.(currentlySelectedDate ?? null);
     open = false;
   };
 
@@ -111,7 +118,7 @@
   };
 </script>
 
-<SmartDialog bind:open={dialogOpen} on:SMUIDialog:closed={handleCancel}>
+<SmartDialog bind:open={dialogOpen} onSMUIDialogClosed={handleCancel}>
   <Title>{title}</Title>
   <Content>
     {#if sveltyPickerVisible}
@@ -119,24 +126,24 @@
         {startDate}
         {endDate}
         {initialDate}
-        {mode}
+        mode={modeState}
         weekStart={0}
         pickerOnly={true}
-        on:dateChange={handleChange}
+        ondateChange={handleChange}
       />
     {/if}
     <FormField>
-      <Checkbox checked={mode === 'datetime'} on:click={handleTimeBoxClicked} touch />
+      <Checkbox checked={modeState === 'datetime'} onclick={handleTimeBoxClicked} touch />
       {#snippet label()}
         <span>Use Time</span>
       {/snippet}
     </FormField>
   </Content>
   <Actions>
-    <Button on:click={handleCancel}>
+    <Button onclick={handleCancel}>
       <Label>Cancel</Label>
     </Button>
-    <Button on:click={handleDone}>
+    <Button onclick={handleDone}>
       <Label>Done</Label>
     </Button>
   </Actions>

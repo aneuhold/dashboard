@@ -70,12 +70,12 @@
       <GlobalTagRow
         maxPriority={sortableTagList.length}
         {tagName}
-        on:openEditor={handleOpenEditor}
+        onOpenEditor={handleOpenEditor}
       />
     </div>
   {/each}
   {#each nonSortableTagList as tagName}
-    <GlobalTagRow maxPriority={sortableTagList.length} {tagName} on:openEditor={handleOpenEditor} />
+    <GlobalTagRow maxPriority={sortableTagList.length} {tagName} onOpenEditor={handleOpenEditor} />
   {/each}
   <div class="addTagButtonContainer">
     <Button

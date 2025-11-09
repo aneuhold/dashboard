@@ -162,8 +162,8 @@
 </script>
 
 <div class="container">
-  <TaskDateButton dateType="start" on:click={handleStartDateClick} date={$task.startDate} />
-  <TaskDateButton dateType="due" on:click={handleDueDateClick} date={$task.dueDate} />
+  <TaskDateButton dateType="start" onclick={handleStartDateClick} date={$task.startDate} />
+  <TaskDateButton dateType="due" onclick={handleDueDateClick} date={$task.dueDate} />
 </div>
 
 <DatePickerDialog
@@ -172,7 +172,7 @@
   startDate={currentlyChosenDateType === 'due' ? $task.startDate : undefined}
   endDate={currentlyChosenDateType === 'start' ? $task.dueDate : undefined}
   dateIsEndDate={currentlyChosenDateType === 'due'}
-  on:selected={handleSelectedDate}
+  onselected={handleSelectedDate}
   initialDate={currentlyChosenDate}
 />
 
