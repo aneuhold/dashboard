@@ -9,11 +9,11 @@
   let {
     clickHandler,
     iconName,
-    label = null
+    label
   }: {
     clickHandler: () => void;
     iconName: string;
-    label?: string | null;
+    label?: string;
   } = $props();
 </script>
 

@@ -1,25 +1,25 @@
 <script lang="ts">
+  import {
+    type APIResponse,
+    APIService,
+    type AuthValidateUserOutput
+  } from '@aneuhold/core-ts-api-lib';
+  import Button, { Label } from '@smui/button';
+  import CircularProgress from '@smui/circular-progress';
   import InputBox from '$components/presentational/InputBox.svelte';
   import { apiKey } from '$stores/apiKey';
   import { dashboardConfig } from '$stores/dashboardConfig';
   import { LoginState, loginState } from '$stores/loginState';
   import { password } from '$stores/password';
-  import LocalData from '$util/LocalData/LocalData';
   import DashboardAPIService from '$util/api/DashboardAPIService';
-  import {
-    APIService,
-    type APIResponse,
-    type AuthValidateUserOutput
-  } from '@aneuhold/core-ts-api-lib';
-  import Button, { Label } from '@smui/button';
-  import CircularProgress from '@smui/circular-progress';
+  import LocalData from '$util/LocalData/LocalData';
 
   let typedUserName = $state(LocalData.username);
   let typedPassword = $state(LocalData.password);
   let processingCredentials = $derived($loginState === LoginState.ProcessingCredentials);
   let invalidCredentials = $state(false);
 
-  function handleSubmit(event: MouseEvent | SubmitEvent) {
+  function handleSubmit(event: MouseEvent) {
     // Prevent the page from refreshing
     event.preventDefault();
 

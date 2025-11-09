@@ -34,7 +34,7 @@ export function createEnumArgType(enumType: object): object {
  *
  * ```
  * argTypes: {
- * ...createInvisibleArgTypes('staticText', 'SurveyQuestionDisplayType')
+ *   ...createInvisibleArgTypes('staticText', 'SurveyQuestionDisplayType')
  * },
  * ```
  *

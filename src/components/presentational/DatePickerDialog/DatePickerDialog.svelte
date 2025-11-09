@@ -15,16 +15,16 @@
   import FormField from '@smui/form-field';
   import { tick } from 'svelte';
   import SveltyPicker from 'svelty-picker';
-  import SmartDialog from './SmartDialog.svelte';
+  import SmartDialog from '$components/presentational/SmartDialog.svelte';
 
   let {
     title = 'Pick a date',
     open = $bindable(),
     dateIsEndDate = false,
-    initialDate = undefined,
-    startDate = undefined,
-    endDate = undefined,
-    onselected
+    initialDate,
+    startDate,
+    endDate,
+    onSelected
   }: {
     title?: string;
     open: boolean;
@@ -33,21 +33,21 @@
      * specified by the user, the time will automatically be set to 23:59:59.
      */
     dateIsEndDate?: boolean;
-    initialDate?: Date | undefined;
+    initialDate?: Date;
     /**
      * The first date that should be available for selection. This can be setup
      * with a time attached in the same date too.
      */
-    startDate?: Date | undefined;
+    startDate?: Date;
     /**
      * The last date that should be available for selection. This can be setup
      * with a time attached in the same date too.
      */
-    endDate?: Date | undefined;
+    endDate?: Date;
     /**
      * Callback fired when a date is selected (Done button clicked).
      */
-    onselected?: (date: Date | null) => void;
+    onSelected?: (date: Date | null) => void;
   } = $props();
 
   /**
@@ -103,7 +103,7 @@
     if (dateIsEndDate && currentlySelectedDate && modeState === 'date') {
       currentlySelectedDate.setHours(23, 59, 59);
     }
-    onselected?.(currentlySelectedDate ?? null);
+    onSelected?.(currentlySelectedDate ?? null);
     open = false;
   };
 

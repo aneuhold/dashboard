@@ -1,21 +1,13 @@
-<script lang="ts" module>
-  export type ClickEvent = MouseEvent & {
-    currentTarget: EventTarget & HTMLDivElement;
-  };
-</script>
-
 <!--
   @component
   
   A div that is clickable. It is setup to be accessible.
 -->
 <script lang="ts">
-  interface Props {
-    clickAction: (event?: ClickEvent) => void;
-    children?: import('svelte').Snippet;
-  }
+  import type { Snippet } from 'svelte';
 
-  let { clickAction, children }: Props = $props();
+  let { clickAction, children }: { clickAction: (event?: MouseEvent) => void; children: Snippet } =
+    $props();
 </script>
 
 <div
@@ -28,7 +20,7 @@
     clickAction();
   }}
 >
-  {@render children?.()}
+  {@render children()}
 </div>
 
 <style>

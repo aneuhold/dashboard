@@ -10,7 +10,7 @@
   needed. The form will automatically trigger the onclick event of the
   nearest button.
 
-  ### Implmenetation Notes
+  ### Implementation Notes
 
   There's also a global style added in the globalStyles folder for the text area
   to adjust it's min height.

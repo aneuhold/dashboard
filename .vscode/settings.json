@@ -12,8 +12,7 @@
     "editor.formatOnSave": true
   },
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "always",
-    "source.organizeImports": "always"
+    "source.fixAll.eslint": "always"
   },
   "eslint.run": "onSave",
   // Below is super important for ESLint to run at all with Svelte

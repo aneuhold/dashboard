@@ -1,9 +1,8 @@
+import '../src/globalStyles/global.css';
+import { APIService } from '@aneuhold/core-ts-api-lib';
 import type { Preview } from '@storybook/sveltekit';
 import { spyOn } from 'storybook/test';
 import SBMockData from './globalMockData';
-
-import { APIService } from '@aneuhold/core-ts-api-lib';
-import '../src/globalStyles/global.css';
 
 // Hide the warning about SlotDecorator. This happens whenever a decorator
 // is used.

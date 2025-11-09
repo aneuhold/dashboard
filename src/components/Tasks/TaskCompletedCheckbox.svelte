@@ -1,11 +1,11 @@
 <script lang="ts">
-  import { triggerConfetti } from '$components/singletons/Confetti/Confetti.svelte';
-  import { snackbar } from '$components/singletons/SingletonSnackbar.svelte';
-  import { confirmationDialog } from '$components/singletons/dialogs/SingletonConfirmationDialog.svelte';
   import { RecurrenceEffect } from '@aneuhold/core-ts-db-lib';
   import Checkbox from '@smui/checkbox';
+  import { triggerConfetti } from '$components/singletons/Confetti/Confetti.svelte';
+  import { confirmationDialog } from '$components/singletons/dialogs/SingletonConfirmationDialog.svelte';
+  import { snackbar } from '$components/singletons/SingletonSnackbar.svelte';
   import { TaskMapService } from '../../services/Task/TaskMapService/TaskMapService';
-  import ClickableDiv, { type ClickEvent } from '../presentational/ClickableDiv.svelte';
+  import ClickableDiv from '../presentational/ClickableDiv.svelte';
 
   interface Props {
     taskId: string;
@@ -25,7 +25,7 @@
       $task.recurrenceInfo.recurrenceEffect === RecurrenceEffect.rollOnCompletion
   );
 
-  function handleCheckboxClick(event?: ClickEvent) {
+  function handleCheckboxClick(event?: MouseEvent) {
     if (event) {
       clickX = event.clientX;
       clickY = event.clientY;
