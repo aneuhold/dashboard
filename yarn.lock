@@ -5745,8 +5745,8 @@ __metadata:
     prettier: "npm:^3.3.3"
     smui-theme: "npm:^7.0.0"
     storybook: "npm:^8.3.6"
-    svelte: "npm:^5.0.0"
-    svelte-check: "npm:^4.0.4"
+    svelte: "npm:^5.43.5"
+    svelte-check: "npm:^4.3.3"
     svelte-confetti-explosion: "npm:^0.4.0"
     svelty-picker: "npm:^5.2.9"
     tslib: "npm:^2.8.0"
@@ -11564,7 +11564,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"svelte-check@npm:^4.0.4":
+"svelte-check@npm:^4.3.3":
   version: 4.3.3
   resolution: "svelte-check@npm:4.3.3"
   dependencies:
@@ -11667,7 +11667,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"svelte@npm:^5.0.0":
+"svelte@npm:^5.43.5":
   version: 5.43.5
   resolution: "svelte@npm:5.43.5"
   dependencies:
