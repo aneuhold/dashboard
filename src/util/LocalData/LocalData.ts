@@ -120,40 +120,40 @@ export default class LocalData {
     return '';
   }
 
-  static set dashboardConfig(newDashboardConfig: DashboardConfig) {
+  static set dashboardConfig(newDashboardConfig: DashboardConfig | null) {
     this.storeValue(
       LocalData.storedKeyNames.dashboardConfig,
       EJSON.stringify(newDashboardConfig, { relaxed: false })
     );
   }
 
-  static get dashboardConfig(): DashboardConfig | null {
+  static get dashboardConfig() {
     return this.getStoredObject<DashboardConfig>(LocalData.storedKeyNames.dashboardConfig);
   }
 
-  static set translations(newTranslations: Translations) {
+  static set translations(newTranslations: Translations | null) {
     this.storeValue(
       LocalData.storedKeyNames.translations,
       EJSON.stringify(newTranslations, { relaxed: false })
     );
   }
 
-  static get translations(): Translations | null {
+  static get translations() {
     return this.getStoredObject<Translations>(LocalData.storedKeyNames.translations);
   }
 
-  static set userSettings(newSettings: UserSettings) {
+  static set userSettings(newSettings: UserSettings | null) {
     this.storeValue(
       LocalData.storedKeyNames.userSettings,
       EJSON.stringify(newSettings, { relaxed: false })
     );
   }
 
-  static get userSettings(): UserSettings | null {
+  static get userSettings() {
     return this.getStoredObject<UserSettings>(LocalData.storedKeyNames.userSettings);
   }
 
-  static set taskMap(newTaskMap: DashboardTaskMap) {
+  static set taskMap(newTaskMap: DashboardTaskMap | null) {
     this.storeValue(
       LocalData.storedKeyNames.taskMap,
       EJSON.stringify(newTaskMap, { relaxed: false })
@@ -166,7 +166,7 @@ export default class LocalData {
     return EJSON.parse(stringifiedTaskMap) as DashboardTaskMap;
   }
 
-  static get taskMap(): DashboardTaskMap | null {
+  static get taskMap() {
     return this.getStoredObject<DashboardTaskMap>(LocalData.storedKeyNames.taskMap);
   }
 
@@ -230,7 +230,7 @@ export default class LocalData {
    * Gets a stored object with some basic validation. This should be setup
    * to use type guards.
    *
-   * @param key
+   * @param key The key to get the object for.
    */
   private static getStoredObject<ObjectType>(key: string): ObjectType | null {
     const currentlyStoredValue = this.getValue(key);
