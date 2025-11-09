@@ -17,16 +17,10 @@
 
   const userTags = TaskTagsService.getStore();
 
-  let currentSettings: DashboardTaskListFilterSettings = $state(
-    JSON.parse(JSON.stringify(initialSettings))
+  let currentSettings: DashboardTaskListFilterSettings = $derived(
+    JSON.parse(JSON.stringify(initialSettings)) as DashboardTaskListFilterSettings
   );
   let previousOpen = $state(false);
-  $effect(() => {
-    currentSettings = JSON.parse(
-      JSON.stringify(initialSettings)
-    ) as DashboardTaskListFilterSettings;
-  });
-
   $effect(() => {
     if (open !== previousOpen) {
       currentSettings = JSON.parse(
@@ -91,13 +85,13 @@
     {/each}
   </Content>
   <Actions>
-    <Button color="secondary" on:click={handleReset}>
+    <Button color="secondary" onclick={handleReset}>
       <Label>Reset</Label>
     </Button>
-    <Button on:click={handleCancel}>
+    <Button onclick={handleCancel}>
       <Label>Cancel</Label>
     </Button>
-    <Button on:click={handleDone}>
+    <Button onclick={handleDone}>
       <Label>Done</Label>
     </Button>
   </Actions>

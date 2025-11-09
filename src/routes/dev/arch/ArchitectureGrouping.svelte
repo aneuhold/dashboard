@@ -4,13 +4,15 @@
   A grouping of architecture items.
 -->
 <script lang="ts">
+  import type { Snippet } from 'svelte';
+
   interface Props {
     direction?: 'row' | 'column';
     borderTop?: boolean;
     borderLeft?: boolean;
     borderRight?: boolean;
     borderBottom?: boolean;
-    children?: import('svelte').Snippet<[any]>;
+    children?: Snippet<{ class?: string }>;
   }
 
   let {

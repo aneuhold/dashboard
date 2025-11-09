@@ -1,6 +1,5 @@
 import { userSettings } from '$stores/userSettings/userSettings';
-import type { DashboardTask } from '@aneuhold/core-ts-db-lib';
-import type { DashboardTagSettings } from '@aneuhold/core-ts-db-lib/lib/embedded-types/dashboard/userConfig/Tags';
+import type { DashboardTagSettings, DashboardTask } from '@aneuhold/core-ts-db-lib';
 import { ArrayService } from '@aneuhold/core-ts-lib';
 import { writable, type Unsubscriber, type Writable } from 'svelte/store';
 import type { DocumentMapStoreSubscriber } from '../DocumentMapStoreService';

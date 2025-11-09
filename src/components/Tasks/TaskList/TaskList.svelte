@@ -8,12 +8,12 @@
   import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
   import { currentUserId } from '$stores/derived/currentUserId';
   import { userSettings } from '$stores/userSettings/userSettings';
+  import type { DashboardTaskFilterAndSortResult } from '@aneuhold/core-ts-db-lib';
   import {
     DashboardTaskService,
     DashboardTaskSortBy,
     getDefaultTaskListSortSettings
   } from '@aneuhold/core-ts-db-lib';
-  import type { DashboardTaskFilterAndSortResult } from '@aneuhold/core-ts-db-lib/lib/services/dashboard/Task/TaskService';
   import { flip } from 'svelte/animate';
   import { slide } from 'svelte/transition';
   import TaskListOptions from './TaskListOptions.svelte';
