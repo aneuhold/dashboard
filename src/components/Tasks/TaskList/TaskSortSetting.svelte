@@ -6,6 +6,7 @@
   } from '@aneuhold/core-ts-db-lib';
   import Card, { Content } from '@smui/card';
   import Checkbox from '@smui/checkbox';
+  import { preventDefault } from '@smui/common/events';
   import IconButton, { Icon } from '@smui/icon-button';
   import SegmentedButton, { Segment } from '@smui/segmented-button';
 
@@ -91,7 +92,7 @@
             checked={!disabled}
             touch
             class="tagCheckbox"
-            on:click={() => {
+            onclick={() => {
               if (disabled) {
                 enable();
               } else {
@@ -100,10 +101,10 @@
             }}
           />
           {#if !disabled}
-            <IconButton size="button" on:click={decrementPriority}>
+            <IconButton size="button" onclick={decrementPriority}>
               <Icon class="material-icons">arrow_downward</Icon>
             </IconButton>
-            <IconButton size="button" on:click={incrementPriority}>
+            <IconButton size="button" onclick={incrementPriority}>
               <Icon class="material-icons">arrow_upward</Icon>
             </IconButton>
           {/if}
@@ -120,13 +121,13 @@
               key={(segment) => segment.value}
               class="tagSegmentedButton"
             >
-              {#snippet children({ segment })}
+              {#snippet segment(segment)}
                 <Segment
                   {segment}
-                  title={segment.value}
-                  on:click$preventDefault={() => {
+                  title={String(segment.value)}
+                  onclick={preventDefault(() => {
                     sortSetting.sortDirection = segment.value;
-                  }}
+                  })}
                 >
                   <Icon class="material-icons">{segment.iconName}</Icon>
                 </Segment>

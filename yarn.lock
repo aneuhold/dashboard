@@ -2851,9 +2851,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@smui-extra/accordion@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "@smui-extra/accordion@npm:7.0.0"
+"@smui-extra/accordion@npm:^8.0.0":
+  version: 8.0.3
+  resolution: "@smui-extra/accordion@npm:8.0.3"
   dependencies:
     "@material/animation": "npm:^14.0.0"
     "@material/elevation": "npm:^14.0.0"
@@ -2861,31 +2861,29 @@ __metadata:
     "@material/ripple": "npm:^14.0.0"
     "@material/theme": "npm:^14.0.0"
     "@material/typography": "npm:^14.0.0"
-    "@smui/common": "npm:^7.0.0"
-    "@smui/paper": "npm:^7.0.0"
-    "@smui/ripple": "npm:^7.0.0"
-    svelte2tsx: "npm:^0.7.8"
-  checksum: 10c0/7104b811bcb14c24c00f80e6e6700541ff40dd4bc6f80bbba46dce447e7bad88e0e603a0479844cb28b215bb0268f8e62e677e28d3c3bb6dfc54c757527d241b
+    "@smui/common": "npm:^8.0.3"
+    "@smui/paper": "npm:^8.0.3"
+    "@smui/ripple": "npm:^8.0.3"
+  checksum: 10c0/d23be62a0e8f66e25f5291244570293782b634219ed31d191294d220c336ea853ddea690b0c88ee2005deb7c37d7e8ce49a99e01140441c293d505a5dba131ac
   languageName: node
   linkType: hard
 
-"@smui-extra/autocomplete@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "@smui-extra/autocomplete@npm:7.0.0"
+"@smui-extra/autocomplete@npm:^8.0.0":
+  version: 8.0.3
+  resolution: "@smui-extra/autocomplete@npm:8.0.3"
   dependencies:
-    "@smui/common": "npm:^7.0.0"
-    "@smui/list": "npm:^7.0.0"
-    "@smui/menu": "npm:^7.0.0"
-    "@smui/menu-surface": "npm:^7.0.0"
-    "@smui/textfield": "npm:^7.0.0"
-    svelte2tsx: "npm:^0.7.8"
-  checksum: 10c0/6aadbcace471ec23ec6b6692c0743a1c2d1856ecece0b7ac3cd33eb0bbbe5ce649a323e726b6c960142bca95d8beb703c7ab409584cbb7b3398e047994b8d8ae
+    "@smui/common": "npm:^8.0.3"
+    "@smui/list": "npm:^8.0.3"
+    "@smui/menu": "npm:^8.0.3"
+    "@smui/menu-surface": "npm:^8.0.3"
+    "@smui/textfield": "npm:^8.0.3"
+  checksum: 10c0/f901f2a28fbcfbfe051d75177fda038343d4163d8d34f418a815039327362aab881eb9d36677b61446f5fac62cf8e6e85c249e33aac6a05c39b555ed85b4de88
   languageName: node
   linkType: hard
 
-"@smui/button@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "@smui/button@npm:7.0.0"
+"@smui/button@npm:^8.0.0, @smui/button@npm:^8.0.3":
+  version: 8.0.3
+  resolution: "@smui/button@npm:8.0.3"
   dependencies:
     "@material/button": "npm:^14.0.0"
     "@material/elevation": "npm:^14.0.0"
@@ -2893,330 +2891,305 @@ __metadata:
     "@material/ripple": "npm:^14.0.0"
     "@material/shape": "npm:^14.0.0"
     "@material/theme": "npm:^14.0.0"
-    "@smui/common": "npm:^7.0.0"
-    "@smui/ripple": "npm:^7.0.0"
-    svelte2tsx: "npm:^0.7.8"
-  checksum: 10c0/9d9a3a553f2d5d0df44264d3315b73a51c37e262ebaaa12238c0c30f96db870fcf32210171590ae42b83653192409f384309ff3fce12e7566afa4034a0c4401c
+    "@smui/common": "npm:^8.0.3"
+    "@smui/ripple": "npm:^8.0.3"
+  checksum: 10c0/2f89888fca90338985c841ea55d6b6c40f2b2cd1ef1fb8f22ef43c2a57d07e505b6d90e5cdea23074144df6e5160fd32350a6373d60b39e769c26d13be98a147
   languageName: node
   linkType: hard
 
-"@smui/card@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "@smui/card@npm:7.0.0"
+"@smui/card@npm:^8.0.0":
+  version: 8.0.3
+  resolution: "@smui/card@npm:8.0.3"
   dependencies:
     "@material/card": "npm:^14.0.0"
-    "@smui/button": "npm:^7.0.0"
-    "@smui/common": "npm:^7.0.0"
-    "@smui/icon-button": "npm:^7.0.0"
-    "@smui/ripple": "npm:^7.0.0"
-    svelte2tsx: "npm:^0.7.8"
-  checksum: 10c0/eed25d51c1feacdd128c41211db085256358a0cc543cf3fa89e4dc99062a6dc68ef09525fcfa1b417274f819474b2c397b44c10992619cb68f9fb4d3663c5606
+    "@smui/button": "npm:^8.0.3"
+    "@smui/common": "npm:^8.0.3"
+    "@smui/icon-button": "npm:^8.0.3"
+    "@smui/ripple": "npm:^8.0.3"
+  checksum: 10c0/262b11a7ad9dbd66dd26b6a023717b2dc564b670427ccfc25c5d0b66ae502bf77b10dd6d6da902a515f866baac7bee5a6d1af004879cf8d8d3d0db1ed5fd0e9a
   languageName: node
   linkType: hard
 
-"@smui/checkbox@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "@smui/checkbox@npm:7.0.0"
+"@smui/checkbox@npm:^8.0.0":
+  version: 8.0.3
+  resolution: "@smui/checkbox@npm:8.0.3"
   dependencies:
     "@material/checkbox": "npm:^14.0.0"
-    "@smui/common": "npm:^7.0.0"
-    "@smui/ripple": "npm:^7.0.0"
-    svelte2tsx: "npm:^0.7.8"
-  checksum: 10c0/1fc06f7b7772fe84f205998eac706dd47d9c44ae57693b18399394c5f49033476ecdac5aebf112c2cf300386d6215a07ad6c817978c7e6245e51016153163c29
+    "@smui/common": "npm:^8.0.3"
+    "@smui/ripple": "npm:^8.0.3"
+  checksum: 10c0/14c976a96db898bc8b38d531a10c7373af688021f8b525503d8c4a6244476be8d187d17fa2273d00f61d94a436b353a01e2a8cfcd328403b053375071967880e
   languageName: node
   linkType: hard
 
-"@smui/chips@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "@smui/chips@npm:7.0.0"
+"@smui/chips@npm:^8.0.0":
+  version: 8.0.3
+  resolution: "@smui/chips@npm:8.0.3"
   dependencies:
     "@material/chips": "npm:^14.0.0"
     "@material/dom": "npm:^14.0.0"
     "@material/rtl": "npm:^14.0.0"
-    "@smui/common": "npm:^7.0.0"
-    "@smui/ripple": "npm:^7.0.0"
-    svelte2tsx: "npm:^0.7.8"
-  checksum: 10c0/b2e3e0f2a3a9d999f105d793c134ff2045d71b9d4dca246250bbfe5fe2d997fddeffa6c8d4032655443aef3ea2d9e96d8f5f9166a39476c628400496e0c61ecf
+    "@smui/common": "npm:^8.0.3"
+    "@smui/ripple": "npm:^8.0.3"
+  checksum: 10c0/724ae9f550fa411522f7ed0a3b4ebaf079b6da9105ec20b4f25d4c902db315b6e477c3630169482d6eaea32bddda6a6c752a339cf24ef142df7375837123d4f9
   languageName: node
   linkType: hard
 
-"@smui/circular-progress@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "@smui/circular-progress@npm:7.0.0"
+"@smui/circular-progress@npm:^8.0.0":
+  version: 8.0.3
+  resolution: "@smui/circular-progress@npm:8.0.3"
   dependencies:
     "@material/circular-progress": "npm:^14.0.0"
-    "@smui/common": "npm:^7.0.0"
-    svelte2tsx: "npm:^0.7.8"
-  checksum: 10c0/6124aeb9dc9cbf542bf11ed19e778cabe80829cba7e3f5d9b41be29252dc8979939bcd97552821deb36fb712463180d6561a7edebd28945333111b328b737ffe
+    "@smui/common": "npm:^8.0.3"
+  checksum: 10c0/a2b172b487fff4d97cf028ab5493c140cf9819a961b0d0ea35eb032d944c1a91e5a8596041f2d64b6628efcfdc221203d7c147081ac76ba45081ec106ac42f75
   languageName: node
   linkType: hard
 
-"@smui/common@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "@smui/common@npm:7.0.0"
+"@smui/common@npm:^8.0.0, @smui/common@npm:^8.0.3":
+  version: 8.0.3
+  resolution: "@smui/common@npm:8.0.3"
   dependencies:
     "@material/dom": "npm:^14.0.0"
-    svelte2tsx: "npm:^0.7.8"
-  checksum: 10c0/fb50d79292b407de815b3373d805290a5633638c8ddf101b386e5b49864e7f83a6f296476e74af6b19bff1b0fd1f00db40fdc9b197e52eef4a741f5a8c851278
+  checksum: 10c0/c866a6f98781522d010b94d6727b69c13030d866a018c08bf79455438ca77f7cf9879a83ec777d8cb109af77ff07838ba70f51a774f212f4ad6c0b3d957dd38c
   languageName: node
   linkType: hard
 
-"@smui/dialog@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "@smui/dialog@npm:7.0.0"
+"@smui/dialog@npm:^8.0.0":
+  version: 8.0.3
+  resolution: "@smui/dialog@npm:8.0.3"
   dependencies:
     "@material/button": "npm:^14.0.0"
     "@material/dialog": "npm:^14.0.0"
     "@material/dom": "npm:^14.0.0"
-    "@smui/common": "npm:^7.0.0"
-    svelte2tsx: "npm:^0.7.8"
-  checksum: 10c0/ba4892bf7a3e0c50e6d0ec6883f68b762a980ee288e134ed152fb0df5ec8806037bb27d0df5c339b5523f22997a278e3d3a9315e913cfc13c8141250d56d4e34
+    "@smui/common": "npm:^8.0.3"
+  checksum: 10c0/2604662ebe8a1a8c086359539462282877ba342929dcf5d668b38c4bbc392b5fdbdca419fdc3bc9f1c8d2abfe98982492c6d635b66ea7e4aa182bb1626df7c42
   languageName: node
   linkType: hard
 
-"@smui/drawer@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "@smui/drawer@npm:7.0.0"
+"@smui/drawer@npm:^8.0.0":
+  version: 8.0.3
+  resolution: "@smui/drawer@npm:8.0.3"
   dependencies:
     "@material/dom": "npm:^14.0.0"
     "@material/drawer": "npm:^14.0.0"
-    "@smui/common": "npm:^7.0.0"
-    svelte2tsx: "npm:^0.7.8"
-  checksum: 10c0/4033b552e4335cb906017e403a0df64660f6a00f4fe1e5dd0dfdccf35a16daad6bcd54a4a13a35270efae340219c556b36ce7893abb1cddd1b5176edda33e56d
+    "@smui/common": "npm:^8.0.3"
+  checksum: 10c0/80d75db35987c3197953310d156f613fec31f76c519b7251cf05a4020e8866ecc2c27625b7e99c6ea340e3038302438a44cbf7f96238d5ca5ea4bbfd319b368c
   languageName: node
   linkType: hard
 
-"@smui/fab@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "@smui/fab@npm:7.0.0"
+"@smui/fab@npm:^8.0.0":
+  version: 8.0.3
+  resolution: "@smui/fab@npm:8.0.3"
   dependencies:
     "@material/fab": "npm:^14.0.0"
     "@material/feature-targeting": "npm:^14.0.0"
-    "@smui/common": "npm:^7.0.0"
-    "@smui/ripple": "npm:^7.0.0"
-    svelte2tsx: "npm:^0.7.8"
-  checksum: 10c0/e6eaf5eafd21cd5f8e3d69268a77475251daad6b056fecb49832e58e770876e503a82fc380f01f7f5fc4006337301f1a616baa5c321998e6c54f12ee9ca52970
+    "@smui/common": "npm:^8.0.3"
+    "@smui/ripple": "npm:^8.0.3"
+  checksum: 10c0/43b53a6a66c65386f736e391818ea46ef1151156d1aa8c8829f76d6b1cc1330f80c19e5603c7f2324bf9a4cdfa974ab285289a03bd74bbf8558369d31891f5b7
   languageName: node
   linkType: hard
 
-"@smui/floating-label@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "@smui/floating-label@npm:7.0.0"
+"@smui/floating-label@npm:^8.0.3":
+  version: 8.0.3
+  resolution: "@smui/floating-label@npm:8.0.3"
   dependencies:
     "@material/floating-label": "npm:^14.0.0"
-    "@smui/common": "npm:^7.0.0"
-    svelte2tsx: "npm:^0.7.8"
-  checksum: 10c0/2bd09c0a85d1d24806d99d93f092a3449555fcf181c05ecd25dfc8e5570aa32729a179d64491a2089ec8a8155dd7966e76d431adb047b3e87fbfbb2d346b6e25
+    "@smui/common": "npm:^8.0.3"
+  checksum: 10c0/5434fd84e23cf69481dda53035d506d71b6492311dd6d1b03f79c241695e27bbc81c7dd56c1dd9442f6a9fa648f2192dc17fe88e93259548822835238a43db04
   languageName: node
   linkType: hard
 
-"@smui/form-field@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "@smui/form-field@npm:7.0.0"
+"@smui/form-field@npm:^8.0.0":
+  version: 8.0.3
+  resolution: "@smui/form-field@npm:8.0.3"
   dependencies:
     "@material/feature-targeting": "npm:^14.0.0"
     "@material/form-field": "npm:^14.0.0"
     "@material/rtl": "npm:^14.0.0"
-    "@smui/common": "npm:^7.0.0"
-    svelte2tsx: "npm:^0.7.8"
-  checksum: 10c0/bdb1a7050871c0f41a32285745ec84b89ad268d06ef7997b66619765ccf9c88fc9f4427752f98650ea881ef7f94bb891c8c0d535b96241048e74edd458f05cb7
+    "@smui/common": "npm:^8.0.3"
+  checksum: 10c0/43da0e3e49a63e6b43a0ed1480228a5bdc462543088d686b40a6ec97ae34c58193d1ccedb99a75f10d63ef32d335d15990a19f547875eba0f4257e5d9d557c7b
   languageName: node
   linkType: hard
 
-"@smui/icon-button@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "@smui/icon-button@npm:7.0.0"
+"@smui/icon-button@npm:^8.0.0, @smui/icon-button@npm:^8.0.3":
+  version: 8.0.3
+  resolution: "@smui/icon-button@npm:8.0.3"
   dependencies:
     "@material/density": "npm:^14.0.0"
     "@material/icon-button": "npm:^14.0.0"
-    "@smui/common": "npm:^7.0.0"
-    "@smui/ripple": "npm:^7.0.0"
-    svelte2tsx: "npm:^0.7.8"
-  checksum: 10c0/636c9e89228f7b09ab588f1c2044f4903679d86875fcfb14b7a6d60bcb9d272018d6db3afa6d5857844ae508626a5da7273fd58b6a79b2f90aa7dedc3a23ea73
+    "@smui/common": "npm:^8.0.3"
+    "@smui/ripple": "npm:^8.0.3"
+  checksum: 10c0/c75600324e29bf03c0af7840dc00d00fe89ca8d4bf7d7c928a10e0a28342152e79b32d3af7231a26dae0ebb0633793711f1e05ecdb34747754bb2cdfc1394e07
   languageName: node
   linkType: hard
 
-"@smui/line-ripple@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "@smui/line-ripple@npm:7.0.0"
+"@smui/line-ripple@npm:^8.0.3":
+  version: 8.0.3
+  resolution: "@smui/line-ripple@npm:8.0.3"
   dependencies:
     "@material/line-ripple": "npm:^14.0.0"
-    "@smui/common": "npm:^7.0.0"
-    svelte2tsx: "npm:^0.7.8"
-  checksum: 10c0/303676989e2e3172d75b640d9494ce5fb05cf3d96a0b3d6f757238c9fbf3f0f8516bf5f89d48cf6580ff2670e9282d18c403fd2daab51067b3981dc0900332e1
+    "@smui/common": "npm:^8.0.3"
+  checksum: 10c0/9669905dd8fba72bec343a0bd624f8228d5d357babf5a182b22f13302ee91cd2679be33499c2500d261c3fd53762ebd7f321f498cb087abc4a476de88962ee1d
   languageName: node
   linkType: hard
 
-"@smui/list@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "@smui/list@npm:7.0.0"
+"@smui/list@npm:^8.0.0, @smui/list@npm:^8.0.3":
+  version: 8.0.3
+  resolution: "@smui/list@npm:8.0.3"
   dependencies:
     "@material/dom": "npm:^14.0.0"
     "@material/feature-targeting": "npm:^14.0.0"
     "@material/list": "npm:^14.0.0"
-    "@smui/common": "npm:^7.0.0"
-    "@smui/ripple": "npm:^7.0.0"
-    svelte2tsx: "npm:^0.7.8"
-  checksum: 10c0/199355a974498cc36aab8efba32043b092404f582a329d2109a893c51465287b5f4e692f39a75ec24976b829fcc7c5a502da095686018232c8cb2745122f4aa4
+    "@smui/common": "npm:^8.0.3"
+    "@smui/ripple": "npm:^8.0.3"
+  checksum: 10c0/b60c7b9187d15e1fa3605893126a7a63ca9421738f7e8cab03c5237dafa8f0828ffc477c73d2abba59c40324af90b5e5746cfa02bf90700fdb6187d260a1712a
   languageName: node
   linkType: hard
 
-"@smui/menu-surface@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "@smui/menu-surface@npm:7.0.0"
+"@smui/menu-surface@npm:^8.0.0, @smui/menu-surface@npm:^8.0.3":
+  version: 8.0.3
+  resolution: "@smui/menu-surface@npm:8.0.3"
   dependencies:
     "@material/animation": "npm:^14.0.0"
     "@material/menu-surface": "npm:^14.0.0"
-    "@smui/common": "npm:^7.0.0"
-    svelte2tsx: "npm:^0.7.8"
-  checksum: 10c0/6a9f3c571eb9773efc3736af50b5d172aa2ab865e0d4441f6ed0b3f8c76cddee5a1f8015cf726f272d138f83285210b9ff1e2aca4423fb9f0f995b42a40693f9
+    "@smui/common": "npm:^8.0.3"
+  checksum: 10c0/a766105f4b869f7283e37ac344610f9818f9862e811a9dc5ad135e4ad9eb2d18a3bed81c41b3bb48a864bd67a4a5ad94666933ec7e2212044d38cd99e976083c
   languageName: node
   linkType: hard
 
-"@smui/menu@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "@smui/menu@npm:7.0.0"
+"@smui/menu@npm:^8.0.0, @smui/menu@npm:^8.0.3":
+  version: 8.0.3
+  resolution: "@smui/menu@npm:8.0.3"
   dependencies:
     "@material/dom": "npm:^14.0.0"
     "@material/menu": "npm:^14.0.0"
-    "@smui/common": "npm:^7.0.0"
-    "@smui/list": "npm:^7.0.0"
-    "@smui/menu-surface": "npm:^7.0.0"
-    svelte2tsx: "npm:^0.7.8"
-  checksum: 10c0/e9e7cd8f1920face3f18db7feb60468256d215b090af87680c6dbcc31143a2d6a73f175bac6564c0cb3265554219c46e9526d67970723b4d41203dbe09f8be08
+    "@smui/common": "npm:^8.0.3"
+    "@smui/list": "npm:^8.0.3"
+    "@smui/menu-surface": "npm:^8.0.3"
+  checksum: 10c0/ce910dba7ee06ad17b08a6e72e5c7aa085d042700baa3b2ef22515fa5793f35efba9fb750d8110f37263879bc625f0c4bef005c814c91af4f41cbc434fb577ab
   languageName: node
   linkType: hard
 
-"@smui/notched-outline@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "@smui/notched-outline@npm:7.0.0"
+"@smui/notched-outline@npm:^8.0.3":
+  version: 8.0.3
+  resolution: "@smui/notched-outline@npm:8.0.3"
   dependencies:
     "@material/notched-outline": "npm:^14.0.0"
-    "@smui/common": "npm:^7.0.0"
-    "@smui/floating-label": "npm:^7.0.0"
-    svelte2tsx: "npm:^0.7.8"
-  checksum: 10c0/d7821c2d1f884585c957bae12252f3294e7f08623f8d3c0ae6de7ddcc805fc3ff47939b628e8dc8da28f454094cbc7ac8ef7e9f77205db522fba1842e74b3c2e
+    "@smui/common": "npm:^8.0.3"
+    "@smui/floating-label": "npm:^8.0.3"
+  checksum: 10c0/4cddeec687e7d28ca8ffe3c9deb5b8fe44ff934dabbfa1a5e3841d84c94507ab93cba542783649cffbcff6965712db61ceae7e61c495803a66b61e6b8e1040b7
   languageName: node
   linkType: hard
 
-"@smui/paper@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "@smui/paper@npm:7.0.0"
+"@smui/paper@npm:^8.0.0, @smui/paper@npm:^8.0.3":
+  version: 8.0.3
+  resolution: "@smui/paper@npm:8.0.3"
   dependencies:
     "@material/elevation": "npm:^14.0.0"
     "@material/feature-targeting": "npm:^14.0.0"
     "@material/shape": "npm:^14.0.0"
     "@material/theme": "npm:^14.0.0"
     "@material/typography": "npm:^14.0.0"
-    "@smui/common": "npm:^7.0.0"
-    svelte2tsx: "npm:^0.7.8"
-  checksum: 10c0/3914ad9d94e4db342b65ccd7edc4cf1ab014fcc2ba196101579b26b24610c7239dbd8cecb8111cf418e94487aefb6715d27bc4cc27aae2f2f12beb701eab3b70
+    "@smui/common": "npm:^8.0.3"
+  checksum: 10c0/dad3408ecfa61544bae3292122d031b2976e7a42df8fd8e78517d03da535e51f32f93b445ece2d7fcf3afab526db39a95b8847c6d992a44e1ea4cbdef65db673
   languageName: node
   linkType: hard
 
-"@smui/ripple@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "@smui/ripple@npm:7.0.0"
+"@smui/ripple@npm:^8.0.3":
+  version: 8.0.3
+  resolution: "@smui/ripple@npm:8.0.3"
   dependencies:
     "@material/dom": "npm:^14.0.0"
     "@material/ripple": "npm:^14.0.0"
-    "@smui/common": "npm:^7.0.0"
-    svelte2tsx: "npm:^0.7.8"
-  checksum: 10c0/e34909a64bd175ff353a71a74125494908fcbfb0f95f96266e58ce4a24c03ed7ee081783babb70e0d9e8e7ea9fe669f031c10357660f690b7b611b22498bfbf3
+    "@smui/common": "npm:^8.0.3"
+  checksum: 10c0/226f78d140b00fbb17bafc5bb39abdd2ea2827194c41e33bc26f897eba7f4fb63adfd00a8dd6c7dbdf18dc1572aa0be2a680bbe53b7725ea0295390b515f76f5
   languageName: node
   linkType: hard
 
-"@smui/segmented-button@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "@smui/segmented-button@npm:7.0.0"
+"@smui/segmented-button@npm:^8.0.0":
+  version: 8.0.3
+  resolution: "@smui/segmented-button@npm:8.0.3"
   dependencies:
     "@material/base": "npm:^14.0.0"
     "@material/ripple": "npm:^14.0.0"
     "@material/segmented-button": "npm:^14.0.0"
-    "@smui/common": "npm:^7.0.0"
-    "@smui/ripple": "npm:^7.0.0"
-    svelte2tsx: "npm:^0.7.8"
-  checksum: 10c0/efba805085c07f3ed906059d20c89f2dfda929b816d5863ec6d7d5782267b8760fa613b9b1cba821d8cec9859b712839d4cf057ba3b03332dc5dc2cb66d89c4c
+    "@smui/common": "npm:^8.0.3"
+    "@smui/ripple": "npm:^8.0.3"
+  checksum: 10c0/091a7aa3958df005d0302b589d2195c73014cab564f1d94d4648879662a4577f31bdc6f39231440c1d028e5fe369c6f31558c09217ccfba76c67de84599ccbc4
   languageName: node
   linkType: hard
 
-"@smui/select@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "@smui/select@npm:7.0.0"
+"@smui/select@npm:^8.0.0":
+  version: 8.0.3
+  resolution: "@smui/select@npm:8.0.3"
   dependencies:
     "@material/feature-targeting": "npm:^14.0.0"
     "@material/ripple": "npm:^14.0.0"
     "@material/rtl": "npm:^14.0.0"
     "@material/select": "npm:^14.0.0"
     "@material/theme": "npm:^14.0.0"
-    "@smui/common": "npm:^7.0.0"
-    "@smui/floating-label": "npm:^7.0.0"
-    "@smui/line-ripple": "npm:^7.0.0"
-    "@smui/list": "npm:^7.0.0"
-    "@smui/menu": "npm:^7.0.0"
-    "@smui/menu-surface": "npm:^7.0.0"
-    "@smui/notched-outline": "npm:^7.0.0"
-    "@smui/ripple": "npm:^7.0.0"
-    svelte2tsx: "npm:^0.7.8"
-  checksum: 10c0/65525a6efefc21388b59bcf2cfd880d9fc4e59edadca3170aef497279c67adfb9d958c24a05856bb4a5300658394d5a84e23f5fa673d7c519f7756e88c271829
+    "@smui/common": "npm:^8.0.3"
+    "@smui/floating-label": "npm:^8.0.3"
+    "@smui/line-ripple": "npm:^8.0.3"
+    "@smui/list": "npm:^8.0.3"
+    "@smui/menu": "npm:^8.0.3"
+    "@smui/menu-surface": "npm:^8.0.3"
+    "@smui/notched-outline": "npm:^8.0.3"
+    "@smui/ripple": "npm:^8.0.3"
+  checksum: 10c0/148d4c744907fb213d1eaab36466890e8eca7a649363b1b47a4c58902dacf81250104ca023074a5597992a4f1d00691e4eee61faa20171b77f06e55bc78d0abb
   languageName: node
   linkType: hard
 
-"@smui/snackbar@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "@smui/snackbar@npm:7.0.0"
+"@smui/snackbar@npm:^8.0.0":
+  version: 8.0.3
+  resolution: "@smui/snackbar@npm:8.0.3"
   dependencies:
     "@material/dom": "npm:^14.0.0"
     "@material/feature-targeting": "npm:^14.0.0"
     "@material/snackbar": "npm:^14.0.0"
-    "@smui/button": "npm:^7.0.0"
-    "@smui/common": "npm:^7.0.0"
-    "@smui/icon-button": "npm:^7.0.0"
-    "@smui/ripple": "npm:^7.0.0"
-    svelte2tsx: "npm:^0.7.8"
-  checksum: 10c0/6efd6a47d3cc5c9e7e826dd7725729a946efda099f0be59bf23af955947863ef2b31d7154d1082ec2242cbb98d16e63b490e866d1fc9d14f073798beaba0d00c
+    "@smui/button": "npm:^8.0.3"
+    "@smui/common": "npm:^8.0.3"
+    "@smui/icon-button": "npm:^8.0.3"
+    "@smui/ripple": "npm:^8.0.3"
+  checksum: 10c0/5703fc5cee01be65d07b9849bcbadf544c48f3b006e476127ec0907d096624655de369575f0bfa31c3c2d0461c1fa424964bcba1f84efdc1ac679cf0f22373b4
   languageName: node
   linkType: hard
 
-"@smui/textfield@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "@smui/textfield@npm:7.0.0"
+"@smui/textfield@npm:^8.0.0, @smui/textfield@npm:^8.0.3":
+  version: 8.0.3
+  resolution: "@smui/textfield@npm:8.0.3"
   dependencies:
     "@material/dom": "npm:^14.0.0"
     "@material/feature-targeting": "npm:^14.0.0"
     "@material/ripple": "npm:^14.0.0"
     "@material/rtl": "npm:^14.0.0"
     "@material/textfield": "npm:^14.0.0"
-    "@smui/common": "npm:^7.0.0"
-    "@smui/floating-label": "npm:^7.0.0"
-    "@smui/line-ripple": "npm:^7.0.0"
-    "@smui/notched-outline": "npm:^7.0.0"
-    "@smui/ripple": "npm:^7.0.0"
-    svelte2tsx: "npm:^0.7.8"
-  checksum: 10c0/7c4771335ee816895cac6d2922097addf3bfcfaed89d4f9e0d4ed869a313dcb70b84822da3a5580f6caca5aa53b9e10ab7e31b92b43cc19375be4dcbc2fa761b
+    "@smui/common": "npm:^8.0.3"
+    "@smui/floating-label": "npm:^8.0.3"
+    "@smui/line-ripple": "npm:^8.0.3"
+    "@smui/notched-outline": "npm:^8.0.3"
+    "@smui/ripple": "npm:^8.0.3"
+  checksum: 10c0/b4d8fc49c0b3d76925bb32062b79de2cad59fdaf1149ae41c18410e78b7e463e9cfe66ca8ebe9751b89d9c540289b839f36872688455eb737e6b71ff29f53a5c
   languageName: node
   linkType: hard
 
-"@smui/tooltip@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "@smui/tooltip@npm:7.0.0"
+"@smui/tooltip@npm:^8.0.0":
+  version: 8.0.3
+  resolution: "@smui/tooltip@npm:8.0.3"
   dependencies:
     "@material/tooltip": "npm:^14.0.0"
-    "@smui/common": "npm:^7.0.0"
-    svelte2tsx: "npm:^0.7.8"
-  checksum: 10c0/785b3fd527d31224ad9603ee8fe35a2cbe52c6b1a0ad72c7f4fe4ca9184b353961f42ebec254365cdbd4c9d636810659399e64734b6149c2f8181c3e2b49ea52
+    "@smui/common": "npm:^8.0.3"
+  checksum: 10c0/63156259ff9b747ccdf0debf6b272c5c41305cb2c2ad8ffb97b48a0d3b120cd547fe8c6eacc1a9e4bb94e5e0eecda2402783a9901cdad3c2553326b9ed0b9f56
   languageName: node
   linkType: hard
 
-"@smui/top-app-bar@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "@smui/top-app-bar@npm:7.0.0"
+"@smui/top-app-bar@npm:^8.0.0":
+  version: 8.0.3
+  resolution: "@smui/top-app-bar@npm:8.0.3"
   dependencies:
     "@material/feature-targeting": "npm:^14.0.0"
     "@material/top-app-bar": "npm:^14.0.0"
-    "@smui/common": "npm:^7.0.0"
-    svelte2tsx: "npm:^0.7.8"
-  checksum: 10c0/8a11e9088908e9e60c48ead90f6ebd33c5ad14e398b254140e1a63676feace91e0867a28e4e5af7223655e526d731f59ad4a964c49f3404674b8ed859c047834
+    "@smui/common": "npm:^8.0.3"
+  checksum: 10c0/47d99d3fa52fafee75640698a982682aed0a418faffbf990bb3dce9d16dbcee16be42b22343e943f7c91df13f1ded37038150cb688aa4dc2d457f0574cd8484b
   languageName: node
   linkType: hard
 
@@ -5702,29 +5675,29 @@ __metadata:
     "@fontsource/fira-mono": "npm:^5.1.0"
     "@neoconfetti/svelte": "npm:^2.2.1"
     "@sentry/sveltekit": "npm:^10.22.0"
-    "@smui-extra/accordion": "npm:^7.0.0"
-    "@smui-extra/autocomplete": "npm:^7.0.0"
-    "@smui/button": "npm:^7.0.0"
-    "@smui/card": "npm:^7.0.0"
-    "@smui/checkbox": "npm:^7.0.0"
-    "@smui/chips": "npm:^7.0.0"
-    "@smui/circular-progress": "npm:^7.0.0"
-    "@smui/common": "npm:^7.0.0"
-    "@smui/dialog": "npm:^7.0.0"
-    "@smui/drawer": "npm:^7.0.0"
-    "@smui/fab": "npm:^7.0.0"
-    "@smui/form-field": "npm:^7.0.0"
-    "@smui/icon-button": "npm:^7.0.0"
-    "@smui/list": "npm:^7.0.0"
-    "@smui/menu": "npm:^7.0.0"
-    "@smui/menu-surface": "npm:^7.0.0"
-    "@smui/paper": "npm:^7.0.0"
-    "@smui/segmented-button": "npm:^7.0.0"
-    "@smui/select": "npm:^7.0.0"
-    "@smui/snackbar": "npm:^7.0.0"
-    "@smui/textfield": "npm:^7.0.0"
-    "@smui/tooltip": "npm:^7.0.0"
-    "@smui/top-app-bar": "npm:^7.0.0"
+    "@smui-extra/accordion": "npm:^8.0.0"
+    "@smui-extra/autocomplete": "npm:^8.0.0"
+    "@smui/button": "npm:^8.0.0"
+    "@smui/card": "npm:^8.0.0"
+    "@smui/checkbox": "npm:^8.0.0"
+    "@smui/chips": "npm:^8.0.0"
+    "@smui/circular-progress": "npm:^8.0.0"
+    "@smui/common": "npm:^8.0.0"
+    "@smui/dialog": "npm:^8.0.0"
+    "@smui/drawer": "npm:^8.0.0"
+    "@smui/fab": "npm:^8.0.0"
+    "@smui/form-field": "npm:^8.0.0"
+    "@smui/icon-button": "npm:^8.0.0"
+    "@smui/list": "npm:^8.0.0"
+    "@smui/menu": "npm:^8.0.0"
+    "@smui/menu-surface": "npm:^8.0.0"
+    "@smui/paper": "npm:^8.0.0"
+    "@smui/segmented-button": "npm:^8.0.0"
+    "@smui/select": "npm:^8.0.0"
+    "@smui/snackbar": "npm:^8.0.0"
+    "@smui/textfield": "npm:^8.0.0"
+    "@smui/tooltip": "npm:^8.0.0"
+    "@smui/top-app-bar": "npm:^8.0.0"
     "@storybook/addon-actions": "npm:^8.3.6"
     "@storybook/addon-essentials": "npm:^8.3.6"
     "@storybook/addon-interactions": "npm:^8.3.6"
@@ -5743,7 +5716,7 @@ __metadata:
     bson: "npm:^7.0.0"
     eslint: "npm:^9.14.0"
     prettier: "npm:^3.3.3"
-    smui-theme: "npm:^7.0.0"
+    smui-theme: "npm:^8.0.0"
     storybook: "npm:^8.3.6"
     svelte: "npm:^5.43.5"
     svelte-check: "npm:^4.3.3"
@@ -7971,7 +7944,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"https-proxy-agent@npm:^7.0.1, https-proxy-agent@npm:^7.0.4":
+"https-proxy-agent@npm:^7.0.1, https-proxy-agent@npm:^7.0.6":
   version: 7.0.6
   resolution: "https-proxy-agent@npm:7.0.6"
   dependencies:
@@ -10864,7 +10837,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sass@npm:^1.76.0":
+"sass@npm:^1.83.0":
   version: 1.93.3
   resolution: "sass@npm:1.93.3"
   dependencies:
@@ -11143,18 +11116,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"smui-theme@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "smui-theme@npm:7.0.0"
+"smui-theme@npm:^8.0.0":
+  version: 8.0.3
+  resolution: "smui-theme@npm:8.0.3"
   dependencies:
     "@material/theme": "npm:^14.0.0"
-    https-proxy-agent: "npm:^7.0.4"
+    https-proxy-agent: "npm:^7.0.6"
     node-fetch: "npm:^2.7.0"
-    sass: "npm:^1.76.0"
+    sass: "npm:^1.83.0"
     yargs: "npm:^17.7.2"
   bin:
     smui-theme: smui-theme
-  checksum: 10c0/061ca78b4dcf4fed2c3958e6c956fac9da7ecd03c26cc19f0618efa4b9095872c9abb92bd44fba2b79a27886b369f2257475b5cd3b86991275800981f6eb717c
+  checksum: 10c0/49ca6b570937160db9f69c583d0d962a041500172b02545e25a47564d60d7636e0a3b9693b6d6c5b515b3280c0d85fcb71c4feefac7ceb36f5830b3ba9a8bd25
   languageName: node
   linkType: hard
 
@@ -11654,7 +11627,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"svelte2tsx@npm:^0.7.35, svelte2tsx@npm:^0.7.8":
+"svelte2tsx@npm:^0.7.35":
   version: 0.7.45
   resolution: "svelte2tsx@npm:0.7.45"
   dependencies:

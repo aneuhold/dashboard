@@ -91,7 +91,7 @@
 </script>
 
 <SegmentedButton segments={choices} key={(segment) => segment.name}>
-  {#snippet children({ segment })}
+  {#snippet segment(segment)}
     <!--
         When the selected prop is provided, Segment will no longer fire a "selected"
         event.
@@ -100,7 +100,7 @@
       {disabled}
       {segment}
       selected={segment.selected}
-      on:click={() => {
+      onclick={() => {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         handleClick(segment);
       }}

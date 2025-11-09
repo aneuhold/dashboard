@@ -46,9 +46,9 @@
     userSettings.removeCollaborator(event.detail.chipId);
   }
 
-  function handleEnableConfetti(event: CustomEvent) {
+  function handleEnableConfetti(event: MouseEvent | PointerEvent) {
     if (!previousUseConfetti) {
-      if (event instanceof PointerEvent) {
+      if (event instanceof PointerEvent || event instanceof MouseEvent) {
         triggerConfetti(event.clientX, event.clientY);
       }
       previousUseConfetti = true;
@@ -95,8 +95,8 @@
         <hr class="sectionSeparator" />
         <h6 class="sectionTitle mdc-typography--subtitle1">Collaborators</h6>
         <div class="collaboratorsContainer">
-          <Set chips={collaboratorUserNames} input on:SMUIChip:removal={handleCollaboratorRemoval}>
-            {#snippet children({ chip })}
+          <Set chips={collaboratorUserNames} input onSMUIChipRemoval={handleCollaboratorRemoval}>
+            {#snippet chip(chip)}
               <Chip {chip}>
                 <Text>{chip}</Text>
                 <TrailingAction icon$class="material-icons">cancel</TrailingAction>
@@ -112,13 +112,13 @@
                 spellCheck={false}
                 helperText="Enter a username to search"
                 label="Username"
-                on:submit={handleSearchForUser}
+                onsubmit={handleSearchForUser}
               />
             </div>
             <Button
               variant="raised"
               disabled={searchingForUser || userNameSearchValue === ''}
-              on:click={handleSearchForUser}
+              onclick={handleSearchForUser}
             >
               {#if searchingForUser}
                 <CircularProgress style="height: 32px; width: 32px;" indeterminate={true} />
@@ -136,7 +136,7 @@
         <FormField>
           <Checkbox
             bind:checked={$userSettings.config.enabledFeatures.useConfettiForTasks}
-            on:click={handleEnableConfetti}
+            onclick={handleEnableConfetti}
             touch
           />
           {#snippet label()}

@@ -26,7 +26,7 @@
   let currentUserTags = $derived($task.tags[$currentUserId] ?? []);
 
   let currentAutoCompleteValue = $state('');
-  let selector: Autocomplete = $state();
+  let selector: Autocomplete | undefined = $state();
 
   function addTagToTask(tag: string) {
     const newTagsObject = $task.tags;
@@ -40,7 +40,7 @@
     if (newTag === '' || currentUserTags.includes(newTag)) return;
     addTagToTask(newTag);
     currentAutoCompleteValue = '';
-    selector.focus();
+    selector?.focus();
   }
 
   function handleSelection(event: CustomEvent<string>) {
@@ -50,9 +50,9 @@
   }
 
   /**
-   * Handles removal. The actual event is an internal MDC Chip Removal event.
+   * Handles removal of a tag chip.
    *
-   * @param event
+   * @param event - The chip removal event containing chipId.
    */
   function handleRemoval(event: CustomEvent<{ chipId: string }>) {
     let currentUserTags = $task.tags[$currentUserId];
@@ -84,8 +84,8 @@
       <i class="mdc-typography--body2 subTasksTitle dimmed-color">No tags</i>
     {:else}
       <span>Tags</span>
-      <Set bind:chips={currentUserTags} on:SMUIChip:removal={handleRemoval}>
-        {#snippet children({ chip })}
+      <Set bind:chips={currentUserTags} onSMUIChipRemoval={handleRemoval}>
+        {#snippet chip(chip)}
           <Chip {chip}>
             <Text>{chip}</Text>
             <TrailingAction icon$class="material-icons">cancel</TrailingAction>
@@ -99,23 +99,22 @@
     bind:this={selector}
     options={unselectedTags}
     bind:text={currentAutoCompleteValue}
-    on:keydown={handleKeyDown}
+    onkeydown={handleKeyDown}
     noMatchesActionDisabled={false}
     selectOnExactMatch={false}
     showMenuWithNoInput={false}
     clearOnBlur={false}
     label="Add Tag"
-    on:SMUIAutocomplete:noMatchesAction={handleNewSelection}
-    on:SMUIAutocomplete:selected={handleSelection}
+    onSMUIAutocompleteNoMatchesAction={handleNewSelection}
+    onSMUIAutocompleteSelected={handleSelection}
   >
-    <!-- @migration-task: migrate this slot by hand, `no-matches` is an invalid identifier -->
-    <div slot="no-matches">
+    {#snippet noMatches()}
       {#if currentUserTags.includes(currentAutoCompleteValue)}
         <Text>Tag "{currentAutoCompleteValue}" already added</Text>
       {:else}
         <Text>Add tag "{currentAutoCompleteValue}"</Text>
       {/if}
-    </div>
+    {/snippet}
   </Autocomplete>
 </div>
 
