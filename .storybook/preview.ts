@@ -1,5 +1,5 @@
 import type { Preview } from '@storybook/sveltekit';
-import { spyOn } from '@storybook/test';
+import { spyOn } from 'storybook/test';
 import SBMockData from './globalMockData';
 
 import { APIService } from '@aneuhold/core-ts-api-lib';
