@@ -9,6 +9,7 @@
     "lint": "eslint",
     "theme": "smui-theme compile static/smui.css -i src/globalStyles",
     "test": "vitest",
+    "check": "svelte-check",
     "upgrade:core": "yarn up '@aneuhold/*'",
     "upgrade:smui": "yarn up '@smui/*'",
     "storybook": "yarn theme && storybook dev -p 6006",
