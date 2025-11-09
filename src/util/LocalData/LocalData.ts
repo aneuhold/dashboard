@@ -149,7 +149,6 @@ export default class LocalData {
     );
   }
 
-  // eslint-disable-next-line @typescript-eslint/related-getter-setter-pairs
   static get userSettings(): UserSettings | null {
     return this.getStoredObject<UserSettings>(LocalData.storedKeyNames.userSettings);
   }
@@ -167,7 +166,6 @@ export default class LocalData {
     return EJSON.parse(stringifiedTaskMap) as DashboardTaskMap;
   }
 
-  // eslint-disable-next-line @typescript-eslint/related-getter-setter-pairs
   static get taskMap(): DashboardTaskMap | null {
     return this.getStoredObject<DashboardTaskMap>(LocalData.storedKeyNames.taskMap);
   }
