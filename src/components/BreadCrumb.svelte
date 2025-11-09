@@ -11,21 +11,21 @@
 <script lang="ts">
   import { page } from '$app/state';
 
-  interface Props {
+  let {
+    breadCrumbArray = null
+  }: {
     breadCrumbArray?: BreadCrumbArray | null;
-  }
-
-  let { breadCrumbArray = null }: Props = $props();
+  } = $props();
 
   let activeRoute = $derived(page.route.id ?? '/');
-  let previousLink: string | undefined = $state();
+  let previousLink: string | undefined;
   let routeArray = $derived(
     breadCrumbArray
       ? breadCrumbArray
       : activeRoute
           .split('/')
-          .filter((route: string) => route !== '')
-          .map((route: string) => {
+          .filter((route) => route !== '')
+          .map((route) => {
             const routeLink = previousLink ? previousLink + '/' + route : route;
             previousLink = routeLink;
             return { name: route, link: routeLink };
