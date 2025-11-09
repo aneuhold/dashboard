@@ -111,8 +111,12 @@
     open = false;
   };
 
-  const handleChange = (event: CustomEvent<{ dateValue: Date | null }>) => {
-    currentlySelectedDate = event.detail.dateValue ? event.detail.dateValue : undefined;
+  const handleChange = (dateChange: {
+    dateValue: Date | Date[] | null;
+    value: string | string[] | null;
+  }) => {
+    const dateValue = dateChange.dateValue;
+    currentlySelectedDate = dateValue && !Array.isArray(dateValue) ? dateValue : undefined;
   };
 </script>
 
@@ -123,11 +127,11 @@
       <SveltyPicker
         {startDate}
         {endDate}
-        {initialDate}
+        value={initialDate?.toISOString() ?? null}
         mode={modeState}
         weekStart={0}
         pickerOnly={true}
-        ondateChange={handleChange}
+        onDateChange={handleChange}
       />
     {/if}
     <FormField>

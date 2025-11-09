@@ -9,7 +9,7 @@ import { createEnumArgType } from '$storybook/storybookUtil';
 import type { Meta } from '@storybook/svelte';
 import SbTaskDetailsExample from './SBTaskDetailsExample.svelte';
 
-const sbTaskDetailsMeta = {
+const sbTaskDetailsMeta: Meta<SbTaskDetailsExample> = {
   title: 'Stateful Components/TaskDetails',
   component: SbTaskDetailsExample,
   decorators: [
@@ -26,5 +26,5 @@ const sbTaskDetailsMeta = {
     sharedWith: MockTaskSharedWith.none,
     assignedTo: MockTaskAssignment.none
   }
-} satisfies Meta<SbTaskDetailsExample>;
+};
 export default sbTaskDetailsMeta;

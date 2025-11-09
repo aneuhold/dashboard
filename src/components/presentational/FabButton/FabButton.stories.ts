@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/svelte';
 import { fn } from '@storybook/test';
 import FabButton from './FabButton.svelte';
 
-const meta = {
+const meta: Meta<FabButton> = {
   title: 'Presentational Components/FabButton',
   component: FabButton,
   args: {
@@ -13,7 +13,7 @@ const meta = {
     ...createInvisibleArgTypes('clickHandler'),
     ...createTextArgTypes('label', 'iconName')
   }
-} satisfies Meta<FabButton>;
+};
 
 export default meta;
 type Story = StoryObj<typeof meta>;

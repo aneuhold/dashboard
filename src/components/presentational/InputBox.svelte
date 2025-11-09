@@ -18,28 +18,7 @@
 <script lang="ts">
   import Textfield from '@smui/textfield';
   import HelperText from '@smui/textfield/helper-text';
-
-  type AutoCompleteType =
-    | 'off'
-    | 'on'
-    | 'name'
-    | 'email'
-    | 'username'
-    | 'new-password'
-    | 'current-password'
-    | 'password'
-    | 'one-time-code'
-    | 'organization-title'
-    | 'organization'
-    | 'street-address'
-    | 'address-line1'
-    | 'address-line2'
-    | 'address-line3'
-    | 'country'
-    | 'country-name'
-    | 'postal-code'
-    | 'tel'
-    | 'url';
+  import type { FullAutoFill } from 'svelte/elements';
 
   let {
     disable = $bindable(false),
@@ -50,7 +29,7 @@
     label = undefined,
     onBlurValue = $bindable(''),
     inputValue = $bindable(onBlurValue),
-    autocompleteLabel = null,
+    autocompleteLabel = undefined,
     helperText = null,
     variant = 'standard',
     spellCheck = true,
@@ -97,7 +76,7 @@
      * label. For example `password`. If auto-complete is not desired, do not
      * set this.
      */
-    autocompleteLabel?: AutoCompleteType | null;
+    autocompleteLabel?: FullAutoFill;
     /**
      * The helper text to show below the input box. If null, no helper text will
      * be shown.
@@ -185,7 +164,7 @@
   bind:invalid
   disabled={disable}
   bind:value={inputValue}
-  input$autocomplete={autocompleteLabel}
+  input$autocomplete={autocompleteLabel ?? undefined}
   input$resizable={isTextArea ? false : undefined}
   input$rows={isTextArea && typeof inputValue === 'string'
     ? inputValue.split(/\r\n|\r|\n/).length
