@@ -2809,7 +2809,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@smui-extra/accordion@npm:^8.0.0":
+"@smui-extra/accordion@npm:^8.0.3":
   version: 8.0.3
   resolution: "@smui-extra/accordion@npm:8.0.3"
   dependencies:
@@ -2826,7 +2826,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@smui-extra/autocomplete@npm:^8.0.0":
+"@smui-extra/autocomplete@npm:^8.0.3":
   version: 8.0.3
   resolution: "@smui-extra/autocomplete@npm:8.0.3"
   dependencies:
@@ -2839,7 +2839,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@smui/button@npm:^8.0.0, @smui/button@npm:^8.0.3":
+"@smui/button@npm:^8.0.3":
   version: 8.0.3
   resolution: "@smui/button@npm:8.0.3"
   dependencies:
@@ -2855,7 +2855,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@smui/card@npm:^8.0.0":
+"@smui/card@npm:^8.0.3":
   version: 8.0.3
   resolution: "@smui/card@npm:8.0.3"
   dependencies:
@@ -2868,7 +2868,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@smui/checkbox@npm:^8.0.0":
+"@smui/checkbox@npm:^8.0.3":
   version: 8.0.3
   resolution: "@smui/checkbox@npm:8.0.3"
   dependencies:
@@ -2879,7 +2879,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@smui/chips@npm:^8.0.0":
+"@smui/chips@npm:^8.0.3":
   version: 8.0.3
   resolution: "@smui/chips@npm:8.0.3"
   dependencies:
@@ -2892,7 +2892,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@smui/circular-progress@npm:^8.0.0":
+"@smui/circular-progress@npm:^8.0.3":
   version: 8.0.3
   resolution: "@smui/circular-progress@npm:8.0.3"
   dependencies:
@@ -2902,7 +2902,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@smui/common@npm:^8.0.0, @smui/common@npm:^8.0.3":
+"@smui/common@npm:^8.0.3":
   version: 8.0.3
   resolution: "@smui/common@npm:8.0.3"
   dependencies:
@@ -2911,7 +2911,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@smui/dialog@npm:^8.0.0":
+"@smui/dialog@npm:^8.0.3":
   version: 8.0.3
   resolution: "@smui/dialog@npm:8.0.3"
   dependencies:
@@ -2923,7 +2923,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@smui/drawer@npm:^8.0.0":
+"@smui/drawer@npm:^8.0.3":
   version: 8.0.3
   resolution: "@smui/drawer@npm:8.0.3"
   dependencies:
@@ -2934,7 +2934,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@smui/fab@npm:^8.0.0":
+"@smui/fab@npm:^8.0.3":
   version: 8.0.3
   resolution: "@smui/fab@npm:8.0.3"
   dependencies:
@@ -2956,7 +2956,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@smui/form-field@npm:^8.0.0":
+"@smui/form-field@npm:^8.0.3":
   version: 8.0.3
   resolution: "@smui/form-field@npm:8.0.3"
   dependencies:
@@ -2968,7 +2968,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@smui/icon-button@npm:^8.0.0, @smui/icon-button@npm:^8.0.3":
+"@smui/icon-button@npm:^8.0.3":
   version: 8.0.3
   resolution: "@smui/icon-button@npm:8.0.3"
   dependencies:
@@ -2990,7 +2990,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@smui/list@npm:^8.0.0, @smui/list@npm:^8.0.3":
+"@smui/list@npm:^8.0.3":
   version: 8.0.3
   resolution: "@smui/list@npm:8.0.3"
   dependencies:
@@ -3003,7 +3003,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@smui/menu-surface@npm:^8.0.0, @smui/menu-surface@npm:^8.0.3":
+"@smui/menu-surface@npm:^8.0.3":
   version: 8.0.3
   resolution: "@smui/menu-surface@npm:8.0.3"
   dependencies:
@@ -3014,7 +3014,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@smui/menu@npm:^8.0.0, @smui/menu@npm:^8.0.3":
+"@smui/menu@npm:^8.0.3":
   version: 8.0.3
   resolution: "@smui/menu@npm:8.0.3"
   dependencies:
@@ -3038,7 +3038,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@smui/paper@npm:^8.0.0, @smui/paper@npm:^8.0.3":
+"@smui/paper@npm:^8.0.3":
   version: 8.0.3
   resolution: "@smui/paper@npm:8.0.3"
   dependencies:
@@ -3063,7 +3063,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@smui/segmented-button@npm:^8.0.0":
+"@smui/segmented-button@npm:^8.0.3":
   version: 8.0.3
   resolution: "@smui/segmented-button@npm:8.0.3"
   dependencies:
@@ -3076,7 +3076,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@smui/select@npm:^8.0.0":
+"@smui/select@npm:^8.0.3":
   version: 8.0.3
   resolution: "@smui/select@npm:8.0.3"
   dependencies:
@@ -3097,7 +3097,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@smui/snackbar@npm:^8.0.0":
+"@smui/snackbar@npm:^8.0.3":
   version: 8.0.3
   resolution: "@smui/snackbar@npm:8.0.3"
   dependencies:
@@ -3112,7 +3112,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@smui/textfield@npm:^8.0.0, @smui/textfield@npm:^8.0.3":
+"@smui/textfield@npm:^8.0.3":
   version: 8.0.3
   resolution: "@smui/textfield@npm:8.0.3"
   dependencies:
@@ -3130,7 +3130,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@smui/tooltip@npm:^8.0.0":
+"@smui/tooltip@npm:^8.0.3":
   version: 8.0.3
   resolution: "@smui/tooltip@npm:8.0.3"
   dependencies:
@@ -3140,7 +3140,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@smui/top-app-bar@npm:^8.0.0":
+"@smui/top-app-bar@npm:^8.0.3":
   version: 8.0.3
   resolution: "@smui/top-app-bar@npm:8.0.3"
   dependencies:
@@ -5357,29 +5357,29 @@ __metadata:
     "@fontsource/fira-mono": "npm:^5.1.0"
     "@neoconfetti/svelte": "npm:^2.2.1"
     "@sentry/sveltekit": "npm:^10.22.0"
-    "@smui-extra/accordion": "npm:^8.0.0"
-    "@smui-extra/autocomplete": "npm:^8.0.0"
-    "@smui/button": "npm:^8.0.0"
-    "@smui/card": "npm:^8.0.0"
-    "@smui/checkbox": "npm:^8.0.0"
-    "@smui/chips": "npm:^8.0.0"
-    "@smui/circular-progress": "npm:^8.0.0"
-    "@smui/common": "npm:^8.0.0"
-    "@smui/dialog": "npm:^8.0.0"
-    "@smui/drawer": "npm:^8.0.0"
-    "@smui/fab": "npm:^8.0.0"
-    "@smui/form-field": "npm:^8.0.0"
-    "@smui/icon-button": "npm:^8.0.0"
-    "@smui/list": "npm:^8.0.0"
-    "@smui/menu": "npm:^8.0.0"
-    "@smui/menu-surface": "npm:^8.0.0"
-    "@smui/paper": "npm:^8.0.0"
-    "@smui/segmented-button": "npm:^8.0.0"
-    "@smui/select": "npm:^8.0.0"
-    "@smui/snackbar": "npm:^8.0.0"
-    "@smui/textfield": "npm:^8.0.0"
-    "@smui/tooltip": "npm:^8.0.0"
-    "@smui/top-app-bar": "npm:^8.0.0"
+    "@smui-extra/accordion": "npm:^8.0.3"
+    "@smui-extra/autocomplete": "npm:^8.0.3"
+    "@smui/button": "npm:^8.0.3"
+    "@smui/card": "npm:^8.0.3"
+    "@smui/checkbox": "npm:^8.0.3"
+    "@smui/chips": "npm:^8.0.3"
+    "@smui/circular-progress": "npm:^8.0.3"
+    "@smui/common": "npm:^8.0.3"
+    "@smui/dialog": "npm:^8.0.3"
+    "@smui/drawer": "npm:^8.0.3"
+    "@smui/fab": "npm:^8.0.3"
+    "@smui/form-field": "npm:^8.0.3"
+    "@smui/icon-button": "npm:^8.0.3"
+    "@smui/list": "npm:^8.0.3"
+    "@smui/menu": "npm:^8.0.3"
+    "@smui/menu-surface": "npm:^8.0.3"
+    "@smui/paper": "npm:^8.0.3"
+    "@smui/segmented-button": "npm:^8.0.3"
+    "@smui/select": "npm:^8.0.3"
+    "@smui/snackbar": "npm:^8.0.3"
+    "@smui/textfield": "npm:^8.0.3"
+    "@smui/tooltip": "npm:^8.0.3"
+    "@smui/top-app-bar": "npm:^8.0.3"
     "@storybook/addon-docs": "npm:^10.0.6"
     "@storybook/addon-links": "npm:^10.0.6"
     "@storybook/addon-svelte-csf": "npm:^5.0.10"
@@ -5395,7 +5395,7 @@ __metadata:
     eslint: "npm:^9.14.0"
     eslint-plugin-storybook: "npm:10.0.6"
     prettier: "npm:^3.3.3"
-    smui-theme: "npm:^8.0.0"
+    smui-theme: "npm:^8.0.3"
     storybook: "npm:^10.0.6"
     svelte: "npm:^5.43.5"
     svelte-check: "npm:^4.3.3"
@@ -10415,7 +10415,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"smui-theme@npm:^8.0.0":
+"smui-theme@npm:^8.0.3":
   version: 8.0.3
   resolution: "smui-theme@npm:8.0.3"
   dependencies:
