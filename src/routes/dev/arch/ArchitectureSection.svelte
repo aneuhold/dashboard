@@ -5,8 +5,8 @@
 -->
 <script lang="ts">
   import Paper, { Content, Subtitle, Title } from '@smui/paper';
-  import ArchitectureItemCard from './ArchitectureItemCard.svelte';
   import type { ArchitectureContextComponent } from '../../../util/ArchitectureInfo/architectureContextInfo';
+  import ArchitectureItemCard from './ArchitectureItemCard.svelte';
 
   interface Props {
     title: string;
@@ -23,7 +23,7 @@
     <Subtitle>{subtitle}</Subtitle>
   {/if}
   <Content>
-    {#each components as { component, contextSpecificDescription }}
+    {#each components as { component, contextSpecificDescription } (component.title)}
       <ArchitectureItemCard archComponent={component}>
         {#if contextSpecificDescription}
           <span><b>Context Specific Description:</b> {contextSpecificDescription}</span>

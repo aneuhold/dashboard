@@ -16,7 +16,7 @@
 </script>
 
 <List twoLine={true}>
-  {#each links as linkInfo}
+  {#each links as linkInfo (linkInfo.title)}
     <LinkListItem {linkInfo} />
   {/each}
 </List>

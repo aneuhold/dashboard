@@ -82,11 +82,11 @@
         {:else if currentUserIsOwner}
           <span class="sectionTitle mdc-typography--body1">Share With</span>
           <span>Note that sharing automatically applies to all sub-tasks if enabled.</span>
-          {#each Object.values(collaborators) as collaborator}
+          {#each Object.values(collaborators) as collaborator (collaborator._id.toString())}
             <FormField>
               <Checkbox
                 checked={sharedWithIds.includes(collaborator._id.toString())}
-                on:click={() => {
+                onclick={() => {
                   toggleSharedWith(collaborator._id);
                 }}
               />
@@ -102,7 +102,7 @@
     </Content>
     <Actions>
       <Button
-        on:click={() => {
+        onclick={() => {
           $open = false;
         }}
       >

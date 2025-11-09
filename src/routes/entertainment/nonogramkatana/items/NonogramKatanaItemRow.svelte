@@ -71,7 +71,7 @@
                 <span>Used for: </span>
                 <ul class="dependencies-list">
                   {#if upgradesThatRequireThisItem.length > 0}
-                    {#each upgradesThatRequireThisItem as upgrade}
+                    {#each upgradesThatRequireThisItem as upgrade (upgrade._id.toString())}
                       <NonogramKatanaRelatedUpgrade
                         itemName={$item.itemName}
                         relatedUpgrade={upgrade}
@@ -79,7 +79,7 @@
                     {/each}
                   {/if}
                   {#if displayInfo.usedFor && displayInfo.usedFor.length > 0}
-                    {#each displayInfo.usedFor as usedFor}
+                    {#each displayInfo.usedFor as usedFor (usedFor)}
                       <li>{usedFor}</li>
                     {/each}
                   {/if}
@@ -90,7 +90,7 @@
               <div class="mdc-typography--caption mdc-theme--text-hint-on-background dependencies">
                 <span>Acquired from: </span>
                 <ul class="dependencies-list">
-                  {#each displayInfo.collectedFrom as collectedFrom}
+                  {#each displayInfo.collectedFrom as collectedFrom (collectedFrom)}
                     <li>{collectedFrom}</li>
                   {/each}
                 </ul>

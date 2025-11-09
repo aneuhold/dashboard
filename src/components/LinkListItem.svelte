@@ -7,13 +7,13 @@
 <script lang="ts" module>
   import { Icon } from '@smui/icon-button';
   import { Graphic, Item, PrimaryText, SecondaryText, Text } from '@smui/list';
-  import type { ComponentType } from 'svelte';
+  import type { Component } from 'svelte';
 
   export interface LinkInfo {
     title: string;
     description?: string;
     iconName?: string;
-    icon?: ComponentType;
+    icon?: Component;
     clickAction: () => void;
 
     isInternalLink?: boolean;
@@ -32,7 +32,7 @@
   let { linkInfo }: Props = $props();
 </script>
 
-<Item on:SMUI:action={linkInfo.clickAction}>
+<Item onSMUIaction={linkInfo.clickAction}>
   {#if linkInfo.iconName}
     <Graphic><Icon class="material-icons">{linkInfo.iconName}</Icon></Graphic>
   {/if}

@@ -8,6 +8,7 @@
   import Button, { Label } from '@smui/button';
   import { Actions, Content, Title } from '@smui/dialog';
   import { flip } from 'svelte/animate';
+  import { SvelteSet } from 'svelte/reactivity';
   import { slide } from 'svelte/transition';
   import TaskSortSetting from './TaskSortSetting.svelte';
 
@@ -20,9 +21,6 @@
 
   let { open = $bindable(), initialSettings, onUpdateSettings, onReset }: Props = $props();
 
-  let currentSettings: DashboardTaskListSortSettings = $state(
-    JSON.parse(JSON.stringify(initialSettings)) as DashboardTaskListSortSettings
-  );
   let previousOpen = $state(false);
 
   const handleDone = () => {
@@ -39,7 +37,7 @@
   const getDisabledSortSettings = (
     settings: DashboardTaskListSortSettings
   ): DashboardTaskSortBy[] => {
-    const disabledSettings = new Set(Object.keys(DashboardTaskSortBy));
+    const disabledSettings = new SvelteSet(Object.keys(DashboardTaskSortBy));
     settings.sortList.forEach((sortSetting) => {
       disabledSettings.delete(sortSetting.sortBy);
     });
@@ -93,9 +91,9 @@
     currentSettings.sortList = sortList;
     currentSortList = sortList;
   };
-  $effect(() => {
-    currentSettings = JSON.parse(JSON.stringify(initialSettings)) as DashboardTaskListSortSettings;
-  });
+  let currentSettings: DashboardTaskListSortSettings = $derived(
+    JSON.parse(JSON.stringify(initialSettings)) as DashboardTaskListSortSettings
+  );
   $effect(() => {
     if (open !== previousOpen) {
       currentSettings = JSON.parse(
@@ -138,13 +136,13 @@
     {/each}
   </Content>
   <Actions>
-    <Button color="secondary" on:click={handleReset}>
+    <Button color="secondary" onclick={handleReset}>
       <Label>Reset</Label>
     </Button>
-    <Button on:click={handleCancel}>
+    <Button onclick={handleCancel}>
       <Label>Cancel</Label>
     </Button>
-    <Button on:click={handleDone}>
+    <Button onclick={handleDone}>
       <Label>Done</Label>
     </Button>
   </Actions>

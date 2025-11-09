@@ -90,7 +90,7 @@
             </h4>
             {#if categories.length > 0}
               <div class="mdc-typography--caption mdc-theme--text-hint-on-background">
-                {#each categories as category, index}
+                {#each categories as category, index (category.title)}
                   <span><i>{category.title}</i></span>
                   {#if index !== categories.length - 1}
                     <span>, </span>
@@ -107,7 +107,7 @@
               <div class="mdc-typography--caption mdc-theme--text-hint-on-background dependencies">
                 <span>Dependencies: </span>
                 <ul class="dependencies-list">
-                  {#each dependencyNames as dependencyName}
+                  {#each dependencyNames as dependencyName (dependencyName)}
                     <li>{dependencyName}</li>
                   {/each}
                 </ul>

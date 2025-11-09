@@ -206,7 +206,7 @@
               {#if usersTaskTags && usersTaskTags.length > 0}
                 <div class="tagsContainer">
                   <Icon class="material-icons dimmed-color small-icon">sell</Icon>
-                  {#each usersTaskTags as tag, index}
+                  {#each usersTaskTags as tag, index (tag)}
                     <i class="mdc-typography--caption mdc-theme--text-hint-on-background no-before">
                       {`${tag}${index === usersTaskTags.length - 1 ? '' : ', '}`}
                     </i>

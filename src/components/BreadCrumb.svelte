@@ -9,7 +9,7 @@
 </script>
 
 <script lang="ts">
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
 
   interface Props {
     breadCrumbArray?: BreadCrumbArray | null;
@@ -17,7 +17,7 @@
 
   let { breadCrumbArray = null }: Props = $props();
 
-  let activeRoute: string = $state('/');
+  let activeRoute = $derived($page.route.id ?? '/');
   let previousLink: string | undefined = $state();
   let routeArray = $derived(
     breadCrumbArray
@@ -31,12 +31,6 @@
             return { name: route, link: routeLink };
           })
   );
-
-  page.subscribe((pageData) => {
-    if (pageData.route.id) {
-      activeRoute = pageData.route.id;
-    }
-  });
 </script>
 
 <span class="breadcrumb-container">
@@ -46,7 +40,7 @@
     <a href="/">home</a>
     <span>/</span>
   {/if}
-  {#each routeArray as route, index}
+  {#each routeArray as route, index (route.link)}
     {#if index > 0}
       <span>/</span>
     {/if}

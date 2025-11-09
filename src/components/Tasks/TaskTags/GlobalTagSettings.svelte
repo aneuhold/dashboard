@@ -74,13 +74,13 @@
       />
     </div>
   {/each}
-  {#each nonSortableTagList as tagName}
+  {#each nonSortableTagList as tagName (tagName)}
     <GlobalTagRow maxPriority={sortableTagList.length} {tagName} onOpenEditor={handleOpenEditor} />
   {/each}
   <div class="addTagButtonContainer">
     <Button
       variant="outlined"
-      on:click={() => {
+      onclick={() => {
         editorOpenForTag = undefined;
         editorOpen = true;
       }}>Add New Tag</Button

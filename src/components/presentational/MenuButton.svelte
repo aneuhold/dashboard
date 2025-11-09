@@ -38,14 +38,14 @@
 <!--The extra div is required to keep the bounds of the menu contained -->
 <div class={alignCenterVertically ? 'alignCenter' : ''}>
   <div bind:this={anchor}>
-    <IconButton class="material-icons dimmed-color" on:click={() => menu.setOpen(true)}>
+    <IconButton class="material-icons dimmed-color" onclick={() => menu.setOpen(true)}>
       menu
     </IconButton>
     <MenuSurface bind:this={menu} anchorElement={anchor} anchorCorner="BOTTOM_RIGHT">
       <List>
-        {#each menuItems as item}
+        {#each menuItems as item (item.title)}
           <Item
-            on:SMUI:action={() => {
+            onSMUIaction={() => {
               handleItemClick(item.clickAction);
             }}
           >

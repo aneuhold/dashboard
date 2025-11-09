@@ -74,7 +74,7 @@
       }}
     />
     <span class="tagsSeparator">Show Tags</span>
-    {#each $userTags as tag}
+    {#each $userTags as tag (tag)}
       <TaskFilterSetting
         settingName={tag}
         enabled={currentSettings.tags[tag] ? currentSettings.tags[tag].show : true}

@@ -14,7 +14,7 @@ import SentryIcon from '$lib/svgs/SentryIcon.svelte';
 import SvelteIcon from '$lib/svgs/SvelteIcon.svelte';
 import TypeScriptIcon from '$lib/svgs/TypeScriptIcon.svelte';
 import VitestIcon from '$lib/svgs/VitestIcon.svelte';
-import type { ComponentType } from 'svelte';
+import type { Component } from 'svelte';
 import {
   backendCategories,
   devOpsCategories,
@@ -39,7 +39,7 @@ export type ArchitectureComponent = {
    * component.
    */
   configurationUrl?: string;
-  icon?: ComponentType;
+  icon?: Component;
   /**
    * Optional dependencies listing. These should be the title of the dependency
    * from the components here.

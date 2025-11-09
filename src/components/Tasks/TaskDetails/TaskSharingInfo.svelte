@@ -37,7 +37,7 @@
     {#if sharedWithIds.length > 0}
       <span class="sharedWithTitle">Shared With</span>
       <ul class="sharedWithList">
-        {#each sharedWithIds as sharedWithId}
+        {#each sharedWithIds as sharedWithId (sharedWithId)}
           <li class="dimmed-color">{collaborators[sharedWithId].userName}</li>
         {/each}
       </ul>

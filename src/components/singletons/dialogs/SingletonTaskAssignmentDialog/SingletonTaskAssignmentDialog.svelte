@@ -81,11 +81,11 @@
           <a href="/settings">Add one in settings here!</a>
         {:else if sharedWithIds.length > 0}
           <span class="sectionTitle mdc-typography--body1">Assign To</span>
-          {#each Object.values(sharedWithUsers) as sharedWithUser}
+          {#each Object.values(sharedWithUsers) as sharedWithUser (sharedWithUser._id.toString())}
             <FormField>
               <Checkbox
                 checked={$task.assignedTo?.toString() === sharedWithUser._id.toString()}
-                on:click={() => {
+                onclick={() => {
                   toggleAssignment(sharedWithUser._id);
                 }}
               />
@@ -101,7 +101,7 @@
     </Content>
     <Actions>
       <Button
-        on:click={() => {
+        onclick={() => {
           $open = false;
         }}
       >

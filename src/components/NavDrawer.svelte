@@ -7,7 +7,7 @@
 -->
 <script lang="ts">
   import { goto } from '$app/navigation';
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
   import type { PageInfo } from '$util/navInfo';
   import Drawer, { Content } from '@smui/drawer';
   import List, { Graphic, Item, Separator, Text } from '@smui/list';
@@ -22,6 +22,12 @@
 
   let { activeRoute = $bindable('/') }: Props = $props();
 
+  $effect(() => {
+    if ($page.route.id) {
+      activeRoute = $page.route.id;
+    }
+  });
+
   function setRoute(newRoute: string) {
     $navDrawerOpen = false;
     goto(newRoute);
@@ -34,12 +40,6 @@
     }
     return nestingText;
   }
-
-  page.subscribe((pageData) => {
-    if (pageData.route.id) {
-      activeRoute = pageData.route.id;
-    }
-  });
 </script>
 
 <div
@@ -50,7 +50,7 @@
   <Drawer variant="modal" bind:open={$navDrawerOpen}>
     <Content>
       <List>
-        {#each $enabledPages as pageInfo}
+        {#each $enabledPages as pageInfo (pageInfo.url)}
           {#if pageInfo.title === settingsPageInfo.title}
             <Separator />
           {/if}

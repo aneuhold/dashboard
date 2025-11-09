@@ -1,12 +1,12 @@
 import { NonogramKatanaItemName, NonogramKatanaUpgradeName } from '@aneuhold/core-ts-db-lib';
-import type { ComponentType } from 'svelte';
+import type { Component } from 'svelte';
 
 export type NonogramKatanaUpgradeDisplayInfo = {
   displayName: string;
   requiredUpgrades: NonogramKatanaUpgradeName[];
   requiredItems: Array<{ itemName: NonogramKatanaItemName; requiredAmount: number }>;
   defaultPriority?: number;
-  icon?: ComponentType;
+  icon?: Component;
 };
 
 export const nonogramKatanaUpgradesDisplayInfo: Record<

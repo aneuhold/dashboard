@@ -11,27 +11,17 @@
 
 <script lang="ts">
   import { goto } from '$app/navigation';
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
   import PageTitle from '$components/PageTitle.svelte';
   import ArchitectureInfo from '$util/ArchitectureInfo/ArchitectureInfo';
-  import type { ArchitectureContext } from '$util/ArchitectureInfo/architectureContextInfo';
   import architectureContextInfo from '$util/ArchitectureInfo/architectureContextInfo';
   import IconButton from '@smui/icon-button';
   import List, { Item, PrimaryText, SecondaryText, Text } from '@smui/list';
   import Paper, { Content as PaperContent, Subtitle, Title } from '@smui/paper';
-  import { onDestroy } from 'svelte';
   import ArchitectureSection from './ArchitectureSection.svelte';
   import { archPageInfo } from './pageInfo';
 
-  let archContext: ArchitectureContext | null = $state(null);
-
-  const unsub = page.subscribe((pageData) => {
-    archContext = ArchitectureInfo.getContextFromSearchParams(pageData.url.searchParams);
-  });
-
-  onDestroy(() => {
-    unsub();
-  });
+  let archContext = $derived(ArchitectureInfo.getContextFromSearchParams($page.url.searchParams));
 </script>
 
 <svelte:head>
@@ -49,8 +39,8 @@
         Architecture contexts are different types of projects that you have built or are building.
       </p>
       <List twoLine={true}>
-        {#each Object.entries(architectureContextInfo) as [contextName, contextInfo]}
-          <Item on:SMUI:action={() => goto(`?context=${contextName}`)}>
+        {#each Object.entries(architectureContextInfo) as [contextName, contextInfo] (contextName)}
+          <Item onSMUIaction={() => goto(`?context=${contextName}`)}>
             <Text>
               <PrimaryText>{contextInfo.title}</PrimaryText>
               <SecondaryText>{contextInfo.description}</SecondaryText>

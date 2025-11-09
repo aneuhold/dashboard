@@ -56,7 +56,7 @@
     <Content>
       <div class="content">
         {#if displayInfo.requiredItems.length > 0}
-          {#each displayInfo.requiredItems as requiredItem}
+          {#each displayInfo.requiredItems as requiredItem (requiredItem.itemName)}
             <Checkbox
               checked={getItemAmount(requiredItem.itemName) === requiredItem.requiredAmount}
               on:click={() => {
@@ -92,7 +92,7 @@
     </Content>
     <Actions>
       <Button
-        on:click={() => {
+        onclick={() => {
           $open = false;
         }}
       >

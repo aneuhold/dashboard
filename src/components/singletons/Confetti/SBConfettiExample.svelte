@@ -12,7 +12,7 @@
 
 <div class="exampleContainer">
   <Confetti />
-  {#each confettiButtonInfo as _}
+  {#each confettiButtonInfo as _, index (index)}
     <button
       class="exampleConfettiButton"
       onclick={(event) => {
