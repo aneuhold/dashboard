@@ -5,10 +5,10 @@
   exported functions to show the dialog.
 -->
 <script lang="ts" module>
-  import SmartDialog from '$components/presentational/SmartDialog.svelte';
   import Button, { Label } from '@smui/button';
   import { Actions, Content, Title } from '@smui/dialog';
   import { writable } from 'svelte/store';
+  import SmartDialog from '$components/presentational/SmartDialog.svelte';
   import { NonogramKatanaItemMapService } from '../../../services/NonogramKatana/NonogramKatanaItemMapService';
 
   /**
@@ -26,8 +26,8 @@
 </script>
 
 <script lang="ts">
-  import InputBox from '$components/presentational/InputBox.svelte';
   import Checkbox from '@smui/checkbox';
+  import InputBox from '$components/presentational/InputBox.svelte';
   import { nonogramKatanaItemsDisplayInfo } from '../../../routes/entertainment/nonogramkatana/items/nonogramKatanaItemsDisplayInfo';
 
   let item = $derived(

@@ -1,7 +1,7 @@
 <script module lang="ts">
+  import { defineMeta } from '@storybook/addon-svelte-csf';
   import { userSettings } from '$stores/userSettings/userSettings';
   import { createNumberArgTypes } from '$storybook/storybookUtil';
-  import { defineMeta } from '@storybook/addon-svelte-csf';
   import SbConfettiExample from './SBConfettiExample.svelte';
 
   const { Story } = defineMeta({

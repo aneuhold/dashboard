@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { goto } from '$app/navigation';
-  import GitHubIcon from '$lib/svgs/GitHubIcon.svelte';
   import IconButton, { Icon } from '@smui/icon-button';
   import TopAppBar, { AutoAdjust, Row, Section, Title } from '@smui/top-app-bar';
+  import { goto } from '$app/navigation';
+  import GitHubIcon from '$lib/svgs/GitHubIcon.svelte';
   import { apiKey } from '../stores/apiKey';
   import { LoginState, loginState } from '../stores/loginState';
   import { navDrawerOpen } from '../stores/visual/navDrawerOpen';

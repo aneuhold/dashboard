@@ -8,7 +8,7 @@
     title: 'Presentational Components/DatePickerDialog',
     component: SBDatePickerDialogExample,
     argTypes: {
-      ...createInvisibleArgTypes('onSelected'),
+      ...createInvisibleArgTypes('onSelected', 'initialDate'),
       ...createTextArgTypes('title')
     },
     args: {

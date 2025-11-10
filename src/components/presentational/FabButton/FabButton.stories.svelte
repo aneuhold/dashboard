@@ -1,7 +1,7 @@
 <script context="module" lang="ts">
-  import { createInvisibleArgTypes, createTextArgTypes } from '$storybook/storybookUtil';
   import { defineMeta } from '@storybook/addon-svelte-csf';
   import { fn } from 'storybook/test';
+  import { createInvisibleArgTypes, createTextArgTypes } from '$storybook/storybookUtil';
   import FabButton from './FabButton.svelte';
 
   const { Story } = defineMeta({

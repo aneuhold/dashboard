@@ -1,11 +1,11 @@
-import LocalData from '$util/LocalData/LocalData';
-import DashboardAPIService from '$util/api/DashboardAPIService';
 import {
+  type DocumentMap,
   NonogramKatanaItem,
-  NonogramKatanaItemName,
-  type DocumentMap
+  NonogramKatanaItemName
 } from '@aneuhold/core-ts-db-lib';
 import type { ObjectId } from 'bson';
+import DashboardAPIService from '$util/api/DashboardAPIService';
+import LocalData from '$util/LocalData/LocalData';
 import { nonogramKatanaItemsDisplayInfo } from '../../routes/entertainment/nonogramkatana/items/nonogramKatanaItemsDisplayInfo';
 import type {
   DocumentInsertOrUpdateInfo,

@@ -1,6 +1,6 @@
-import LocalData, { localDataReady } from '$util/LocalData/LocalData';
 import type { DashboardConfig } from '@aneuhold/core-ts-api-lib';
 import { writable } from 'svelte/store';
+import LocalData, { localDataReady } from '$util/LocalData/LocalData';
 
 function createDashboardConfigStore() {
   const { subscribe, set } = writable<DashboardConfig | null>(null);

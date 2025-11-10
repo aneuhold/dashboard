@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { snackbar } from '$components/singletons/SingletonSnackbar.svelte';
   import Button, { Label } from '@smui/button';
   import Card, { Content } from '@smui/card';
   import { Icon } from '@smui/icon-button';
+  import { snackbar } from '$components/singletons/SingletonSnackbar.svelte';
 
   interface Props {
     iconName: string;

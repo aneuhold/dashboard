@@ -1,13 +1,13 @@
 <script lang="ts">
-  import PageTitle from '$components/PageTitle.svelte';
-  import InputBox from '$components/presentational/InputBox.svelte';
-  import SingletonNonogramKatanaUpgradeDialog from '$components/singletons/dialogs/SingletonNonogramKatanaUpgradeDialog.svelte';
-  import { userSettings } from '$stores/userSettings/userSettings';
   import { NonogramKatanaUpgrade, NonogramKatanaUpgradeName } from '@aneuhold/core-ts-db-lib';
   import Button from '@smui/button';
   import Checkbox from '@smui/checkbox';
   import Paper, { Content } from '@smui/paper';
   import { flip } from 'svelte/animate';
+  import PageTitle from '$components/PageTitle.svelte';
+  import InputBox from '$components/presentational/InputBox.svelte';
+  import SingletonNonogramKatanaUpgradeDialog from '$components/singletons/dialogs/SingletonNonogramKatanaUpgradeDialog.svelte';
+  import { userSettings } from '$stores/userSettings/userSettings';
   import { NonogramKatanaUpgradeMapService } from '../../../../services/NonogramKatana/NonogramKatanaUpgradeMapService';
   import NonogramKatanaUpgradeRow from './NonogramKatanaUpgradeRow.svelte';
   import { nonogramKatanaUpgradesPageInfo } from './pageInfo';

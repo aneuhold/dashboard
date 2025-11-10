@@ -4,10 +4,10 @@
 Info about subtasks within a task row.
 -->
 <script lang="ts">
-  import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
-  import { currentUserId } from '$stores/derived/currentUserId';
   import { DashboardTask } from '@aneuhold/core-ts-db-lib';
   import type { ObjectId } from 'bson';
+  import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
+  import { currentUserId } from '$stores/derived/currentUserId';
 
   interface Props {
     allChildrenIds: ObjectId[];

@@ -1,10 +1,10 @@
 import {
+  type ArchitectureComponent,
   backendComponents,
   backendTestingComponents,
   devOpsComponents,
   frontendComponents,
-  frontendTestingComponents,
-  type ArchitectureComponent
+  frontendTestingComponents
 } from './architectureComponents';
 
 export type ArchitectureContext = {

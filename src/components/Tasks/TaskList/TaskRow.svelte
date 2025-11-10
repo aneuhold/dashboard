@@ -4,6 +4,9 @@
   A single task that can be displayed in a row format.
 -->
 <script lang="ts">
+  import { DashboardTask, DashboardTaskService, RecurrenceEffect } from '@aneuhold/core-ts-db-lib';
+  import Card, { Content as CardContent } from '@smui/card';
+  import { Icon } from '@smui/icon-button';
   import { goto } from '$app/navigation';
   import ClickableDiv from '$components/presentational/ClickableDiv.svelte';
   import type { MenuButtonItem } from '$components/presentational/MenuButton.svelte';
@@ -13,9 +16,6 @@
   import { taskSharingDialog } from '$components/singletons/dialogs/SingletonTaskSharingDialog/SingletonTaskSharingDialog.svelte';
   import { currentUserId } from '$stores/derived/currentUserId';
   import { userSettings } from '$stores/userSettings/userSettings';
-  import { DashboardTask, DashboardTaskService, RecurrenceEffect } from '@aneuhold/core-ts-db-lib';
-  import Card, { Content as CardContent } from '@smui/card';
-  import { Icon } from '@smui/icon-button';
   import { TaskMapService } from '../../../services/Task/TaskMapService/TaskMapService';
   import TaskRecurrenceService from '../../../services/Task/TaskRecurrenceService';
   import TaskService from '../../../services/Task/TaskService';

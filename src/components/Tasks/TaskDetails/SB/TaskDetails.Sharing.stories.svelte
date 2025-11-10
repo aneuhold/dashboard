@@ -1,6 +1,6 @@
 <script module lang="ts">
-  import { MockTaskSharedWith } from '$services/Task/TaskMapService/TaskMapService.mock';
   import { defineMeta } from '@storybook/addon-svelte-csf';
+  import { MockTaskSharedWith } from '$services/Task/TaskMapService/TaskMapService.mock';
   import sbTaskDetailsMeta from './TaskDetails.stories.base';
 
   const { Story } = defineMeta({

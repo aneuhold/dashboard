@@ -1,15 +1,15 @@
-import { userSettings } from '$stores/userSettings/userSettings';
-import LocalData from '$util/LocalData/LocalData';
-import DashboardTaskAPIService from '$util/api/DashboardTaskAPIService';
 import {
-  DashboardTaskService,
-  DocumentService,
   type DashboardTask,
-  type DocumentMap
+  DashboardTaskService,
+  type DocumentMap,
+  DocumentService
 } from '@aneuhold/core-ts-db-lib';
 import { DateService } from '@aneuhold/core-ts-lib';
 import { ObjectId } from 'bson';
 import type { Updater } from 'svelte/store';
+import { userSettings } from '$stores/userSettings/userSettings';
+import DashboardTaskAPIService from '$util/api/DashboardTaskAPIService';
+import LocalData from '$util/LocalData/LocalData';
 import type {
   DocumentInsertOrUpdateInfo,
   DocumentMapStore,

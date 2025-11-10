@@ -10,14 +10,14 @@
 </script>
 
 <script lang="ts">
-  import { goto } from '$app/navigation';
-  import { page } from '$app/state';
-  import PageTitle from '$components/PageTitle.svelte';
-  import ArchitectureInfo from '$util/ArchitectureInfo/ArchitectureInfo';
-  import architectureContextInfo from '$util/ArchitectureInfo/architectureContextInfo';
   import IconButton from '@smui/icon-button';
   import List, { Item, PrimaryText, SecondaryText, Text } from '@smui/list';
   import Paper, { Content as PaperContent, Subtitle, Title } from '@smui/paper';
+  import { goto } from '$app/navigation';
+  import { page } from '$app/state';
+  import PageTitle from '$components/PageTitle.svelte';
+  import architectureContextInfo from '$util/ArchitectureInfo/architectureContextInfo';
+  import ArchitectureInfo from '$util/ArchitectureInfo/ArchitectureInfo';
   import ArchitectureSection from './ArchitectureSection.svelte';
   import { archPageInfo } from './pageInfo';
 

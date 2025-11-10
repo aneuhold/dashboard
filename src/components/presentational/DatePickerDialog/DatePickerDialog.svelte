@@ -13,9 +13,21 @@
   import Checkbox from '@smui/checkbox';
   import { Actions, Content, Title } from '@smui/dialog';
   import FormField from '@smui/form-field';
-  import { tick } from 'svelte';
-  import SveltyPicker from 'svelty-picker';
+  import SveltyPicker, { formatDate } from 'svelty-picker';
+  import { en } from 'svelty-picker/i18n';
   import SmartDialog from '$components/presentational/SmartDialog.svelte';
+
+  /**
+   * Pulled from the library. See docs here: https://svelty-picker.vercel.app/properties
+   */
+  type DateChange = {
+    value: string | string[] | null;
+    dateValue: Date | Date[] | null;
+    displayValue: string | null;
+    valueFormat: string | null;
+    displayFormat: string | null;
+    event: 'date' | 'hour' | 'minute' | 'datetime'; // which event triggered the callback
+  };
 
   let {
     title = 'Pick a date',
@@ -50,19 +62,6 @@
     onSelected?: (date: Date | null) => void;
   } = $props();
 
-  /**
-   * This is the actual dialog open state. This is needed so that svelty-picker
-   * can regenerate each time, because of quite a lot of reactivity
-   * problems with the component.
-   *
-   * Setting the svelty-picker value explicitly was already tried, so was
-   * manually updating or clearing the value as well as restting the
-   * initialDate. None of these worked.
-   */
-  let dialogOpen = $state(false);
-  let sveltyPickerVisible = $state(false);
-  let previousOpen = $state(false);
-
   // Track mode state separately - initialize based on initialDate
   let modeState = $state<'date' | 'datetime'>(
     initialDate ? (DateService.dateHasTime(initialDate) ? 'datetime' : 'date') : 'date'
@@ -70,27 +69,34 @@
 
   let currentlySelectedDate = $state(initialDate);
 
-  // Main reactivity logic for opening and closing the dialog
+  /**
+   * The formatted date string for the SveltyPicker component. This took quite a while to figure
+   * out. Make sure to leave this logic as is. SveltyPicker is very particular about how it gets
+   * its date strings.
+   */
+  let datePickerFormattedDate = $derived(
+    currentlySelectedDate
+      ? formatDate(currentlySelectedDate, 'yyyy-mm-dd hh:ii:ss', en, 'standard')
+      : ''
+  );
+
+  // Delayed visibility for smooth dialog close animation
+  let pickerVisible = $state(false);
+
+  // Reset state when dialog opens, delay hiding picker when closing
   $effect(() => {
-    if (open && previousOpen !== open) {
-      previousOpen = open;
-      sveltyPickerVisible = true;
+    if (open) {
       currentlySelectedDate = initialDate;
-      // Reset mode state when dialog opens
+      pickerVisible = true;
       modeState = initialDate
         ? DateService.dateHasTime(initialDate)
           ? 'datetime'
           : 'date'
         : 'date';
-      tick().then(() => {
-        dialogOpen = true;
-      });
-    } else if (!open && previousOpen !== open) {
-      previousOpen = open;
-      dialogOpen = false;
-      // 200ms seemed like a good amount of time for the dialog to go away.
+    } else {
+      // Delay hiding picker to let dialog animation complete
       setTimeout(() => {
-        sveltyPickerVisible = false;
+        pickerVisible = false;
       }, 200);
     }
   });
@@ -111,35 +117,39 @@
     open = false;
   };
 
-  const handleChange = (dateChange: {
-    dateValue: Date | Date[] | null;
-    value: string | string[] | null;
-  }) => {
-    const dateValue = dateChange.dateValue;
-    currentlySelectedDate = dateValue && !Array.isArray(dateValue) ? dateValue : undefined;
+  const handleDateChange = (event: DateChange) => {
+    if (event.dateValue instanceof Date) {
+      currentlySelectedDate = event.dateValue;
+    } else {
+      currentlySelectedDate = undefined;
+    }
   };
 </script>
 
-<SmartDialog bind:open={dialogOpen}>
+<SmartDialog bind:open>
   <Title>{title}</Title>
   <Content>
-    {#if sveltyPickerVisible}
-      <SveltyPicker
-        {startDate}
-        {endDate}
-        value={initialDate?.toISOString() ?? null}
-        mode={modeState}
-        weekStart={0}
-        pickerOnly={true}
-        onDateChange={handleChange}
-      />
-    {/if}
-    <FormField>
-      <Checkbox checked={modeState === 'datetime'} onclick={handleTimeBoxClicked} touch />
-      {#snippet label()}
-        <span>Use Time</span>
-      {/snippet}
-    </FormField>
+    <div class="picker-container">
+      {#if pickerVisible}
+        {#key modeState}
+          <SveltyPicker
+            {startDate}
+            {endDate}
+            value={datePickerFormattedDate}
+            mode={modeState}
+            weekStart={0}
+            pickerOnly={true}
+            onDateChange={handleDateChange}
+          />
+        {/key}
+      {/if}
+      <FormField>
+        <Checkbox checked={modeState === 'datetime'} onclick={handleTimeBoxClicked} touch />
+        {#snippet label()}
+          <span>Use Time</span>
+        {/snippet}
+      </FormField>
+    </div>
   </Content>
   <Actions>
     <Button onclick={handleCancel}>
@@ -150,3 +160,11 @@
     </Button>
   </Actions>
 </SmartDialog>
+
+<style>
+  .picker-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+</style>

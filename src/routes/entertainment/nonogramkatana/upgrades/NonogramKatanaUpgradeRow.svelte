@@ -1,10 +1,10 @@
 <script lang="ts">
-  import { nonogramKatanaUpgradeDialog } from '$components/singletons/dialogs/SingletonNonogramKatanaUpgradeDialog.svelte';
   import type { NonogramKatanaUpgradeName } from '@aneuhold/core-ts-db-lib';
   import Card, { Content as CardContent } from '@smui/card';
   import Checkbox from '@smui/checkbox';
   import { Icon } from '@smui/common';
   import IconButton from '@smui/icon-button';
+  import { nonogramKatanaUpgradeDialog } from '$components/singletons/dialogs/SingletonNonogramKatanaUpgradeDialog.svelte';
   import { NonogramKatanaUpgradeMapService } from '../../../../services/NonogramKatana/NonogramKatanaUpgradeMapService';
   import NonogramKatanaRequiredItem from './NonogramKatanaRequiredItem.svelte';
   import NonogramKatanaRequiredUpgrade from './NonogramKatanaRequiredUpgrade.svelte';

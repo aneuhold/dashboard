@@ -1,6 +1,6 @@
 import { DashboardUserConfig, type UserCTO } from '@aneuhold/core-ts-db-lib';
 import { ObjectId } from 'bson';
-import { userSettings, type UserSettings } from './userSettings';
+import { type UserSettings, userSettings } from './userSettings';
 
 /**
  * A mock provider for the UserSettings store. This depends on the backend API

@@ -1,10 +1,10 @@
 <script lang="ts">
-  import type { MenuButtonItem } from '$components/presentational/MenuButton.svelte';
-  import MenuButton from '$components/presentational/MenuButton.svelte';
-  import { userSettings } from '$stores/userSettings/userSettings';
   import type { DashboardTagSetting } from '@aneuhold/core-ts-db-lib';
   import Card, { Content } from '@smui/card';
   import IconButton, { Icon } from '@smui/icon-button';
+  import type { MenuButtonItem } from '$components/presentational/MenuButton.svelte';
+  import MenuButton from '$components/presentational/MenuButton.svelte';
+  import { userSettings } from '$stores/userSettings/userSettings';
   import TaskTagsService from '../../../services/Task/TaskTagsService';
 
   interface Props {

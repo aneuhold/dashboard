@@ -58,9 +58,9 @@
   Maybe write something for the dispatch of confetti being complete?
 -->
 <script lang="ts">
-  import { userSettings } from '$stores/userSettings/userSettings';
   import { confetti } from '@neoconfetti/svelte';
   import { tick } from 'svelte';
+  import { userSettings } from '$stores/userSettings/userSettings';
 
   let confettiEnabled = $derived($userSettings.config.enabledFeatures.useConfettiForTasks);
   let showConfetti = $derived($confettiSettings.show && confettiEnabled);

@@ -1,7 +1,7 @@
-import { userSettings } from '$stores/userSettings/userSettings';
-import SBMockData from '$storybook/globalMockData';
 import { DashboardTask, type DashboardTaskFilterAndSortResult } from '@aneuhold/core-ts-db-lib';
 import type { ObjectId } from 'bson';
+import { userSettings } from '$stores/userSettings/userSettings';
+import SBMockData from '$storybook/globalMockData';
 import TaskListService from '../TaskListService';
 import TaskTagsService from '../TaskTagsService';
 import { TaskMapService } from './TaskMapService';

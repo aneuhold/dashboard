@@ -1,7 +1,7 @@
 <script module lang="ts">
+  import { defineMeta } from '@storybook/addon-svelte-csf';
   import sbTaskListMetaBase from '$components/Tasks/TaskList/SB/TaskList.stories.base';
   import { MockTaskDescription } from '$services/Task/TaskMapService/TaskMapService.mock';
-  import { defineMeta } from '@storybook/addon-svelte-csf';
 
   const { Story } = defineMeta({
     ...sbTaskListMetaBase,

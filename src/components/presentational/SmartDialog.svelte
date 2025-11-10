@@ -7,14 +7,9 @@
 -->
 <script lang="ts">
   import Dialog from '@smui/dialog';
-  import { onMount } from 'svelte';
+  import { onMount, type Snippet } from 'svelte';
 
-  interface Props {
-    open?: boolean;
-    children?: import('svelte').Snippet;
-  }
-
-  let { open = $bindable(false), children }: Props = $props();
+  let { open = $bindable(false), children }: { open?: boolean; children: Snippet } = $props();
 
   function closeDialog() {
     open = false;
@@ -29,5 +24,5 @@
 </script>
 
 <Dialog bind:open>
-  {@render children?.()}
+  {@render children()}
 </Dialog>

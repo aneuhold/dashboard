@@ -1,4 +1,3 @@
-import type { UserSettings } from '$stores/userSettings/userSettings';
 import type {
   DashboardConfig,
   ProjectDashboardOptions,
@@ -13,6 +12,7 @@ import type {
 import { sleep } from '@aneuhold/core-ts-lib';
 import { EJSON } from 'bson';
 import { writable } from 'svelte/store';
+import type { UserSettings } from '$stores/userSettings/userSettings';
 
 function createLocalDataReadyStore() {
   const { subscribe, set } = writable<boolean>(false);

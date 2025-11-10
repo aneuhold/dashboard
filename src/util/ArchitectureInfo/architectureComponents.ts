@@ -1,3 +1,4 @@
+import type { Component } from 'svelte';
 import CssIcon from '$lib/svgs/CSSIcon.svelte';
 import DenoIcon from '$lib/svgs/DenoIcon.svelte';
 import DigitalOceanIcon from '$lib/svgs/DigitalOceanIcon.svelte';
@@ -7,19 +8,18 @@ import HtmlIcon from '$lib/svgs/HTMLIcon.svelte';
 import JavaScriptIcon from '$lib/svgs/JavaScriptIcon.svelte';
 import JestIcon from '$lib/svgs/JestIcon.svelte';
 import MongoDbIcon from '$lib/svgs/MongoDBIcon.svelte';
-import NpmIcon from '$lib/svgs/NPMIcon.svelte';
 import NetlifyIcon from '$lib/svgs/NetlifyIcon.svelte';
 import NodeJsIcon from '$lib/svgs/NodeJSIcon.svelte';
+import NpmIcon from '$lib/svgs/NPMIcon.svelte';
 import SentryIcon from '$lib/svgs/SentryIcon.svelte';
 import SvelteIcon from '$lib/svgs/SvelteIcon.svelte';
 import TypeScriptIcon from '$lib/svgs/TypeScriptIcon.svelte';
 import VitestIcon from '$lib/svgs/VitestIcon.svelte';
-import type { Component } from 'svelte';
 import {
+  type ArchitectureCategoryInfo,
   backendCategories,
   devOpsCategories,
-  frontendCategories,
-  type ArchitectureCategoryInfo
+  frontendCategories
 } from './architectureCategories';
 
 /**

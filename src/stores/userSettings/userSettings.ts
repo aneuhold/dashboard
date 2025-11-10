@@ -1,8 +1,8 @@
-import LocalData, { localDataReady } from '$util/LocalData/LocalData';
-import DashboardAPIService from '$util/api/DashboardAPIService';
 import { DashboardUserConfig, type UserCTO } from '@aneuhold/core-ts-db-lib';
 import { ObjectId } from 'bson';
-import { writable, type Updater } from 'svelte/store';
+import { type Updater, writable } from 'svelte/store';
+import DashboardAPIService from '$util/api/DashboardAPIService';
+import LocalData, { localDataReady } from '$util/LocalData/LocalData';
 
 export type UserSettings = {
   config: DashboardUserConfig;

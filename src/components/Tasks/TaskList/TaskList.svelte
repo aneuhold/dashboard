@@ -4,10 +4,6 @@
   A list of tasks.
 -->
 <script lang="ts">
-  import TaskRow from '$components/Tasks/TaskList/TaskRow.svelte';
-  import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
-  import { currentUserId } from '$stores/derived/currentUserId';
-  import { userSettings } from '$stores/userSettings/userSettings';
   import type { DashboardTaskFilterAndSortResult } from '@aneuhold/core-ts-db-lib';
   import {
     DashboardTaskService,
@@ -16,6 +12,10 @@
   } from '@aneuhold/core-ts-db-lib';
   import { flip } from 'svelte/animate';
   import { slide } from 'svelte/transition';
+  import TaskRow from '$components/Tasks/TaskList/TaskRow.svelte';
+  import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
+  import { currentUserId } from '$stores/derived/currentUserId';
+  import { userSettings } from '$stores/userSettings/userSettings';
   import TaskListOptions from './TaskListOptions.svelte';
 
   interface Props {

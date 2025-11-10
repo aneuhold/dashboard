@@ -6,11 +6,11 @@
   Documentation on SMUI's NavDrawer and possible options can be found [here](https://sveltematerialui.com/demo/drawer/).
 -->
 <script lang="ts">
+  import Drawer, { Content } from '@smui/drawer';
+  import List, { Graphic, Item, Separator, Text } from '@smui/list';
   import { goto } from '$app/navigation';
   import { page } from '$app/state';
   import type { PageInfo } from '$util/navInfo';
-  import Drawer, { Content } from '@smui/drawer';
-  import List, { Graphic, Item, Separator, Text } from '@smui/list';
   import { clickOutside } from '../actions/clickOutside';
   import { settingsPageInfo } from '../routes/settings/pageInfo';
   import { enabledPages } from '../stores/visual/enabledPages';

@@ -1,12 +1,12 @@
-import type { UserSettings } from '$stores/userSettings/userSettings';
 import {
   DashboardTask,
+  type DashboardTaskFilterAndSortResult,
+  type DashboardTaskMap,
   DashboardTaskService,
   getDefaultTaskListFilterSettings,
-  getDefaultTaskListSortSettings,
-  type DashboardTaskFilterAndSortResult,
-  type DashboardTaskMap
+  getDefaultTaskListSortSettings
 } from '@aneuhold/core-ts-db-lib';
+import type { UserSettings } from '$stores/userSettings/userSettings';
 
 /**
  * A service responsible for getting filtered and sorted lists of task IDs.

@@ -1,14 +1,14 @@
 <script lang="ts">
+  import {
+    DashboardTask,
+    type DashboardTaskListFilterSettings,
+    type DashboardTaskListSortSettings,
+    getDefaultTaskListFilterSettings
+  } from '@aneuhold/core-ts-db-lib';
   import ClickableDiv from '$components/presentational/ClickableDiv.svelte';
   import SquareIconButton from '$components/presentational/SquareIconButton.svelte';
   import { currentUserId } from '$stores/derived/currentUserId';
   import { userSettings } from '$stores/userSettings/userSettings';
-  import {
-    DashboardTask,
-    getDefaultTaskListFilterSettings,
-    type DashboardTaskListFilterSettings,
-    type DashboardTaskListSortSettings
-  } from '@aneuhold/core-ts-db-lib';
   import type { DocumentStore } from '../../../services/DocumentMapStoreService';
   import { TaskMapService } from '../../../services/Task/TaskMapService/TaskMapService';
   import TaskTagsService from '../../../services/Task/TaskTagsService';

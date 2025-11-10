@@ -4,8 +4,6 @@
   Reccurence information for use in the Task Details component.
 -->
 <script lang="ts">
-  import ClickableDiv from '$components/presentational/ClickableDiv.svelte';
-  import SmartDialog from '$components/presentational/SmartDialog.svelte';
   import {
     DashboardTask,
     RecurrenceBasis,
@@ -14,11 +12,13 @@
     type RecurrenceInfo
   } from '@aneuhold/core-ts-db-lib';
   import { DateService } from '@aneuhold/core-ts-lib';
-  import Accordion, { Content, Panel } from '@smui-extra/accordion';
   import Button, { Label } from '@smui/button';
   import Checkbox from '@smui/checkbox';
   import { Actions, Content as DialogContent, Title } from '@smui/dialog';
   import IconButton, { Icon } from '@smui/icon-button';
+  import Accordion, { Content, Panel } from '@smui-extra/accordion';
+  import ClickableDiv from '$components/presentational/ClickableDiv.svelte';
+  import SmartDialog from '$components/presentational/SmartDialog.svelte';
   import { TaskMapService } from '../../../services/Task/TaskMapService/TaskMapService';
   import TaskRecurrenceService from '../../../services/Task/TaskRecurrenceService';
   import TaskService from '../../../services/Task/TaskService';

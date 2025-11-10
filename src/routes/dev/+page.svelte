@@ -7,6 +7,7 @@
   - SVG icons: https://worldvectorlogo.com/
 -->
 <script lang="ts">
+  import Paper, { Content as PaperContent, Title } from '@smui/paper';
   import LinkList from '$components/LinkList.svelte';
   import type { LinkInfo } from '$components/LinkListItem.svelte';
   import PageNotFound from '$components/PageNotFound.svelte';
@@ -17,7 +18,6 @@
   import SentryIcon from '$lib/svgs/SentryIcon.svelte';
   import { userSettings } from '$stores/userSettings/userSettings';
   import navInfo from '$util/navInfo';
-  import Paper, { Content as PaperContent, Title } from '@smui/paper';
   import { devPageInfo } from './pageInfo';
 
   const architectureLinks: Array<LinkInfo> = [

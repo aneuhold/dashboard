@@ -5,15 +5,15 @@
   exported functions to show the dialog.
 -->
 <script lang="ts" module>
-  import SmartDialog from '$components/presentational/SmartDialog.svelte';
-  import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
-  import { userSettings } from '$stores/userSettings/userSettings';
   import Button, { Label } from '@smui/button';
   import Checkbox from '@smui/checkbox';
   import { Actions, Content, Title } from '@smui/dialog';
   import FormField from '@smui/form-field';
   import type { ObjectId } from 'bson';
   import { writable } from 'svelte/store';
+  import SmartDialog from '$components/presentational/SmartDialog.svelte';
+  import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
+  import { userSettings } from '$stores/userSettings/userSettings';
 
   /**
    * A task assignment dialog which can be used anywhere in the app.

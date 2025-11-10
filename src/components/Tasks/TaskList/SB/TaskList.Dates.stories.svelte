@@ -1,6 +1,6 @@
 <script module lang="ts">
-  import sbTaskListMetaBase from '$components/Tasks/TaskList/SB/TaskList.stories.base';
   import { defineMeta } from '@storybook/addon-svelte-csf';
+  import sbTaskListMetaBase from '$components/Tasks/TaskList/SB/TaskList.stories.base';
 
   const { Story } = defineMeta({
     ...sbTaskListMetaBase,

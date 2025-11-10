@@ -1,12 +1,12 @@
 <script lang="ts">
-  import PageTitle from '$components/PageTitle.svelte';
-  import InputBox from '$components/presentational/InputBox.svelte';
-  import SingletonNonogramKatanaItemDialog from '$components/singletons/dialogs/SingletonNonogramKatanaItemDialog.svelte';
-  import { userSettings } from '$stores/userSettings/userSettings';
   import { NonogramKatanaItem, NonogramKatanaItemName } from '@aneuhold/core-ts-db-lib';
   import Button from '@smui/button';
   import Paper, { Content } from '@smui/paper';
   import { flip } from 'svelte/animate';
+  import PageTitle from '$components/PageTitle.svelte';
+  import InputBox from '$components/presentational/InputBox.svelte';
+  import SingletonNonogramKatanaItemDialog from '$components/singletons/dialogs/SingletonNonogramKatanaItemDialog.svelte';
+  import { userSettings } from '$stores/userSettings/userSettings';
   import { NonogramKatanaItemMapService } from '../../../../services/NonogramKatana/NonogramKatanaItemMapService';
   import NonogramKatanaItemRow from './NonogramKatanaItemRow.svelte';
   import { nonogramKatanaItemsPageInfo } from './pageInfo';

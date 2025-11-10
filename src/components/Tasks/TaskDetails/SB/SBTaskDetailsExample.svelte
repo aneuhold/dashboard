@@ -1,10 +1,10 @@
 <script lang="ts">
+  import { DashboardTask } from '@aneuhold/core-ts-db-lib';
   import {
     MockTaskAssignment,
     MockTaskSharedWith
   } from '$services/Task/TaskMapService/TaskMapService.mock';
   import SBMockData from '$storybook/globalMockData';
-  import { DashboardTask } from '@aneuhold/core-ts-db-lib';
   import TaskDetails from '../TaskDetails.svelte';
 
   let {

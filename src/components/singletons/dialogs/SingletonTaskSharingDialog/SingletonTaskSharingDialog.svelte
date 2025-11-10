@@ -5,16 +5,16 @@
   exported functions to show the dialog.
 -->
 <script lang="ts" module>
-  import SmartDialog from '$components/presentational/SmartDialog.svelte';
-  import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
-  import { currentUserId } from '$stores/derived/currentUserId';
-  import { userSettings } from '$stores/userSettings/userSettings';
   import Button, { Label } from '@smui/button';
   import Checkbox from '@smui/checkbox';
   import { Actions, Content, Title } from '@smui/dialog';
   import FormField from '@smui/form-field';
   import type { ObjectId } from 'bson';
   import { writable } from 'svelte/store';
+  import SmartDialog from '$components/presentational/SmartDialog.svelte';
+  import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
+  import { currentUserId } from '$stores/derived/currentUserId';
+  import { userSettings } from '$stores/userSettings/userSettings';
 
   /**
    * A task sharing dialog which can be used anywhere in the app.

@@ -1,10 +1,10 @@
 <script lang="ts">
+  import { DashboardTask } from '@aneuhold/core-ts-db-lib';
+  import Button, { Icon } from '@smui/button';
   import { goto } from '$app/navigation';
   import { taskSharingDialog } from '$components/singletons/dialogs/SingletonTaskSharingDialog/SingletonTaskSharingDialog.svelte';
   import type { DocumentStore } from '$services/DocumentMapStoreService';
   import { userSettings } from '$stores/userSettings/userSettings';
-  import { DashboardTask } from '@aneuhold/core-ts-db-lib';
-  import Button, { Icon } from '@smui/button';
   import TaskService from '../../../services/Task/TaskService';
 
   interface Props {

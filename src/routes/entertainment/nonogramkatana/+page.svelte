@@ -4,10 +4,10 @@
   A page for entertainment things, like games and stuff like that.
 -->
 <script lang="ts">
+  import Paper, { Content } from '@smui/paper';
   import LinkList from '$components/LinkList.svelte';
   import type { LinkInfo } from '$components/LinkListItem.svelte';
   import PageTitle from '$components/PageTitle.svelte';
-  import Paper, { Content } from '@smui/paper';
   import { nonogramKatanaItemsPageInfo } from './items/pageInfo';
   import { nonogramKatanaPageInfo } from './pageInfo';
   import { nonogramKatanaUpgradesPageInfo } from './upgrades/pageInfo';
