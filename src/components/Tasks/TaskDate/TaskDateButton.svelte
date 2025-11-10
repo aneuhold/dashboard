@@ -2,16 +2,18 @@
   import { DateService } from '@aneuhold/core-ts-lib';
   import Chip, { LeadingIcon, Set, Text } from '@smui/chips';
 
-  interface Props {
+  let {
+    dateType,
+    date = undefined,
+    onclick
+  }: {
     dateType: 'due' | 'start';
     date?: Date | undefined;
     /**
      * Callback fired when the chip is clicked.
      */
     onclick?: () => void;
-  }
-
-  let { dateType, date = undefined, onclick }: Props = $props();
+  } = $props();
 
   let dateTitle = $derived(dateType === 'due' ? 'Due Date' : 'Start Date');
   let dateValue = $derived(date ? DateService.getAutoDateString(date) : 'Not Set');

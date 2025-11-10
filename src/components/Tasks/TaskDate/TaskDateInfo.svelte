@@ -7,11 +7,7 @@
   import TaskRecurrenceService from '../../../services/Task/TaskRecurrenceService';
   import TaskDateButton from './TaskDateButton.svelte';
 
-  interface Props {
-    taskId: string;
-  }
-
-  let { taskId }: Props = $props();
+  let { taskId }: { taskId: string } = $props();
   let task = $derived(TaskMapService.getTaskStore(taskId));
 
   let currentlyChosenDateType: 'start' | 'due' = $state('start');

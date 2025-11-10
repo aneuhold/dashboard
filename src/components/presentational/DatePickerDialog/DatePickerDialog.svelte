@@ -13,6 +13,7 @@
   import Checkbox from '@smui/checkbox';
   import { Actions, Content, Title } from '@smui/dialog';
   import FormField from '@smui/form-field';
+  import { SvelteDate } from 'svelte/reactivity';
   import SveltyPicker, { formatDate } from 'svelty-picker';
   import { en } from 'svelty-picker/i18n';
   import SmartDialog from '$components/presentational/SmartDialog.svelte';
@@ -87,12 +88,12 @@
   $effect(() => {
     if (open) {
       currentlySelectedDate = initialDate;
-      pickerVisible = true;
       modeState = initialDate
         ? DateService.dateHasTime(initialDate)
           ? 'datetime'
           : 'date'
         : 'date';
+      pickerVisible = true;
     } else {
       // Delay hiding picker to let dialog animation complete
       setTimeout(() => {
@@ -101,29 +102,39 @@
     }
   });
 
-  const handleTimeBoxClicked = () => {
+  function handleTimeBoxClicked() {
     modeState = modeState === 'date' ? 'datetime' : 'date';
-  };
+  }
 
-  const handleDone = () => {
-    if (dateIsEndDate && currentlySelectedDate && modeState === 'date') {
-      currentlySelectedDate.setHours(23, 59, 59);
+  function handleDone() {
+    // Create a new Date object to ensure reactivity. It doesn't work for some reason when
+    // using the currentlySelectedDate directly, but only when clearing the time on a date. It
+    // works in all other cases.
+    let dateToReturn = currentlySelectedDate;
+    if (dateToReturn && modeState === 'date') {
+      dateToReturn = new SvelteDate(dateToReturn);
+      if (dateIsEndDate) {
+        dateToReturn.setHours(23, 59, 59, 0);
+      } else {
+        // If time is not being used, set to start of day
+        dateToReturn.setHours(0, 0, 0, 0);
+      }
     }
-    onSelected?.(currentlySelectedDate ?? null);
+    onSelected?.(dateToReturn ?? null);
     open = false;
-  };
+  }
 
-  const handleCancel = () => {
+  function handleCancel() {
     open = false;
-  };
+  }
 
-  const handleDateChange = (event: DateChange) => {
+  function handleDateChange(event: DateChange) {
     if (event.dateValue instanceof Date) {
       currentlySelectedDate = event.dateValue;
     } else {
       currentlySelectedDate = undefined;
     }
-  };
+  }
 </script>
 
 <SmartDialog bind:open>
