@@ -23,6 +23,13 @@
 
   let previousOpen = $state(false);
 
+  /**
+   * Initialize with the initial settings, but it will be reset with each open.
+   */
+  let currentSettings: DashboardTaskListSortSettings = $state(initialSettings);
+  let currentSortList = $derived(currentSettings.sortList);
+  let disabledSortSettings = $derived(getDisabledSortSettings(currentSettings));
+
   const handleDone = () => {
     onUpdateSettings?.(currentSettings);
     open = false;
@@ -34,15 +41,14 @@
     onReset?.();
     open = false;
   };
-  const getDisabledSortSettings = (
-    settings: DashboardTaskListSortSettings
-  ): DashboardTaskSortBy[] => {
+
+  function getDisabledSortSettings(settings: DashboardTaskListSortSettings): DashboardTaskSortBy[] {
     const disabledSettings = new SvelteSet(Object.keys(DashboardTaskSortBy));
     settings.sortList.forEach((sortSetting) => {
       disabledSettings.delete(sortSetting.sortBy);
     });
     return Array.from(disabledSettings) as DashboardTaskSortBy[];
-  };
+  }
 
   const handleEnable = (sortBy: DashboardTaskSortBy) => {
     currentSettings.sortList.push({
@@ -66,7 +72,7 @@
    * This is opposite of what you would expect, because the sort settings are
    * ordered in descending priority.
    *
-   * @param sortBy
+   * @param sortBy The sort by to increment priority for.
    */
   const handleIncrement = (sortBy: DashboardTaskSortBy) => {
     const sortList = currentSettings.sortList;
@@ -91,9 +97,17 @@
     currentSettings.sortList = sortList;
     currentSortList = sortList;
   };
-  let currentSettings: DashboardTaskListSortSettings = $derived(
-    JSON.parse(JSON.stringify(initialSettings)) as DashboardTaskListSortSettings
-  );
+
+  const handleDirectionChange = (
+    sortBy: DashboardTaskSortBy,
+    direction: DashboardTaskSortDirection
+  ) => {
+    const sortSetting = currentSettings.sortList.find((s) => s.sortBy === sortBy);
+    if (sortSetting) {
+      sortSetting.sortDirection = direction;
+    }
+  };
+
   $effect(() => {
     if (open !== previousOpen) {
       currentSettings = JSON.parse(
@@ -104,8 +118,6 @@
     }
     previousOpen = open;
   });
-  let currentSortList = $derived(currentSettings.sortList);
-  let disabledSortSettings = $derived(getDisabledSortSettings(currentSettings));
 </script>
 
 <SmartDialog bind:open>
@@ -119,6 +131,7 @@
           onDisable={handleDisable}
           onIncrementPriority={handleIncrement}
           onDecrementPriority={handleDecrement}
+          onDirectionChange={handleDirectionChange}
         />
       </div>
     {/each}

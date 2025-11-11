@@ -11,12 +11,13 @@
   import SegmentedButton, { Segment } from '@smui/segmented-button';
 
   let {
-    sortSetting = $bindable(),
+    sortSetting,
     disabled,
     onEnable,
     onDisable,
     onIncrementPriority,
-    onDecrementPriority
+    onDecrementPriority,
+    onDirectionChange
   }: {
     sortSetting: DashboardTaskSortSetting;
     disabled: boolean;
@@ -24,6 +25,10 @@
     onDisable?: (sortBy: DashboardTaskSortBy) => void;
     onIncrementPriority?: (sortBy: DashboardTaskSortBy) => void;
     onDecrementPriority?: (sortBy: DashboardTaskSortBy) => void;
+    onDirectionChange?: (
+      sortBy: DashboardTaskSortBy,
+      direction: DashboardTaskSortDirection
+    ) => void;
   } = $props();
 
   type SortDirectionChoice = {
@@ -119,17 +124,15 @@
               key={(segment) => segment.value.toString()}
               class="tagSegmentedButton"
             >
-              {#snippet segment(segment)}
+              {#snippet segment(choice: SortDirectionChoice)}
                 <Segment
-                  {segment}
-                  title={segment.value.toString()}
+                  segment={choice}
+                  title={choice.value.toString()}
                   onclick={preventDefault(() => {
-                    sortSetting.sortDirection = segment.value;
-                    // Trigger reactivity
-                    sortSetting = sortSetting;
+                    onDirectionChange?.(sortSetting.sortBy, choice.value);
                   })}
                 >
-                  <Icon class="material-icons">{segment.iconName}</Icon>
+                  <Icon class="material-icons">{choice.iconName}</Icon>
                 </Segment>
               {/snippet}
             </SegmentedButton>
