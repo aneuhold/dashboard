@@ -12,7 +12,7 @@
     borderLeft?: boolean;
     borderRight?: boolean;
     borderBottom?: boolean;
-    children?: Snippet<[{ class?: string }]>;
+    children?: Snippet;
   }
 
   let {
@@ -30,7 +30,7 @@
 </script>
 
 <div class={className}>
-  {@render children?.({ class: 'something' })}
+  {@render children?.()}
 </div>
 
 <style>

@@ -1,17 +1,19 @@
 <script lang="ts">
   import IconButton, { Icon } from '@smui/icon-button';
   import TopAppBar, { AutoAdjust, Row, Section, Title } from '@smui/top-app-bar';
+  import type { Snippet } from 'svelte';
   import { goto } from '$app/navigation';
   import GitHubIcon from '$lib/svgs/GitHubIcon.svelte';
   import { apiKey } from '../stores/apiKey';
   import { LoginState, loginState } from '../stores/loginState';
   import { navDrawerOpen } from '../stores/visual/navDrawerOpen';
   import NavDrawer from './NavDrawer.svelte';
-  interface Props {
-    children?: import('svelte').Snippet;
-  }
 
-  let { children }: Props = $props();
+  let {
+    children
+  }: {
+    children?: Snippet;
+  } = $props();
 
   let topAppBar: TopAppBar | null = $state(null);
 

@@ -13,17 +13,19 @@
   import Card, { Content as CardContent } from '@smui/card';
   import { Icon } from '@smui/icon-button';
   import Tooltip, { Wrapper } from '@smui/tooltip';
+  import type { Snippet } from 'svelte';
   import type { MenuButtonItem } from '$components/presentational/MenuButton.svelte';
   import MenuButton from '$components/presentational/MenuButton.svelte';
   import type { ArchitectureComponent } from '$util/ArchitectureInfo/architectureComponents';
   import ArchitectureInfo from '$util/ArchitectureInfo/ArchitectureInfo';
 
-  interface Props {
+  let {
+    archComponent,
+    children
+  }: {
     archComponent: ArchitectureComponent;
-    children?: import('svelte').Snippet;
-  }
-
-  let { archComponent, children }: Props = $props();
+    children?: Snippet;
+  } = $props();
 
   function openUrl(url: string | undefined) {
     if (url) window.open(url, '_blank');
@@ -100,7 +102,7 @@
             {/if}
             {#if children}
               <div class="mdc-deprecated-list-item__secondary-text subtitle no-before">
-                {@render children?.()}
+                {@render children()}
               </div>
             {/if}
             {#if dependencyNames}
