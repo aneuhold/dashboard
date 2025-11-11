@@ -2,20 +2,20 @@
   import { DateService } from '@aneuhold/core-ts-lib';
 
   interface Props {
-    originalStartDate?: Date | undefined;
-    originalDueDate?: Date | undefined;
-    newStartDate?: Date | undefined;
-    newDueDate?: Date | undefined;
+    originalStartDate?: Date;
+    originalDueDate?: Date;
+    newStartDate?: Date;
+    newDueDate?: Date;
     recurrenceIsRemoved?: boolean;
     recurrenceIsAdded?: boolean;
     completedRemoved?: boolean;
   }
 
   let {
-    originalStartDate = undefined,
-    originalDueDate = undefined,
-    newStartDate = undefined,
-    newDueDate = undefined,
+    originalStartDate,
+    originalDueDate,
+    newStartDate,
+    newDueDate,
     recurrenceIsRemoved = false,
     recurrenceIsAdded = false,
     completedRemoved = false

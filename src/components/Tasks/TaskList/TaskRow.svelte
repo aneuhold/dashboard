@@ -29,10 +29,10 @@
     /**
      * If set, it will display the tag as a header above the task.
      */
-    tagHeaderName?: string | undefined;
+    tagHeaderName?: string;
   }
 
-  let { taskId, tagHeaderName = undefined }: Props = $props();
+  let { taskId, tagHeaderName }: Props = $props();
 
   const taskMap = TaskMapService.getStore();
   let task = $derived(TaskMapService.getTaskStore(taskId));

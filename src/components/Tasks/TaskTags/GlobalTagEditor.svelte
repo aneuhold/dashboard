@@ -11,10 +11,10 @@
     /**
      * The tag name to update. If not provided, the editor will be in "add" mode.
      */
-    tagName?: string | undefined;
+    tagName?: string;
   }
 
-  let { open = $bindable(false), tagName = undefined }: Props = $props();
+  let { open = $bindable(false), tagName }: Props = $props();
 
   function handleCancel() {
     open = false;

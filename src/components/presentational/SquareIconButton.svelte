@@ -2,7 +2,7 @@
   import Button, { Icon } from '@smui/button';
 
   interface Props {
-    variant?: 'outlined' | 'raised' | undefined;
+    variant?: 'outlined' | 'raised';
     disabled?: boolean;
     color?: 'primary' | 'secondary';
     iconName: string;
@@ -12,13 +12,7 @@
     onclick?: () => void;
   }
 
-  let {
-    variant = undefined,
-    disabled = false,
-    color = 'primary',
-    iconName,
-    onclick
-  }: Props = $props();
+  let { variant, disabled = false, color = 'primary', iconName, onclick }: Props = $props();
 </script>
 
 <div>

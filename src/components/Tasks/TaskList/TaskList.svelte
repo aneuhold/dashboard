@@ -21,11 +21,11 @@
   let {
     sortAndFilterResult,
     category,
-    parentTaskId = undefined
+    parentTaskId
   }: {
     sortAndFilterResult: DashboardTaskFilterAndSortResult;
     category: string;
-    parentTaskId?: string | undefined;
+    parentTaskId?: string;
   } = $props();
 
   const taskMap = TaskMapService.getStore();
