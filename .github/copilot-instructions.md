@@ -1,16 +1,16 @@
 # Repo-specific instructions for AI coding agents
 
-This repository is a SvelteKit app (Svelte 5) managed with Yarn 4.
+This repository is a SvelteKit app (Svelte 5) managed with pnpm.
 
-- Quick commands (use `yarn`):
-  - Dev server: `yarn dev` (runs `yarn theme` then `vite dev`)
-  - Build: `yarn build` (runs `yarn theme` then `vite build`)
-  - Preview: `yarn preview`
-  - Storybook: `yarn storybook` (also runs `yarn theme`)
-  - Lint: `yarn lint` (ESLint)
+- Quick commands (use `pnpm`):
+  - Dev server: `pnpm dev` (runs `pnpm theme` then `vite dev`)
+  - Build: `pnpm build` (runs `pnpm theme` then `vite build`)
+  - Preview: `pnpm preview`
+  - Storybook: `pnpm storybook` (also runs `pnpm theme`)
+  - Lint: `pnpm lint` (ESLint)
 
 - Important project files to consult:
-  - `package.json` — scripts, Yarn 4, important resolutions/patches (e.g. `bson` patch).
+  - `package.json` — scripts, pnpm configuration, important resolutions/patches (e.g. `bson` patch).
   - `README.md` — architecture notes (store flow, singletons, recurring tasks) and local development tips.
   - `svelte.config.js` — adapter (static), and path aliases ($components, $stores, $services, ...).
   - `vite.config.ts` — Sentry integration, node polyfills for browser crypto, Vitest merge.
@@ -30,7 +30,7 @@ This repository is a SvelteKit app (Svelte 5) managed with Yarn 4.
 
 - Small contract for an agent working here:
   1. Read `package.json` & `README.md` to learn workflow scripts and store patterns.
-  2. For code changes, run `yarn test` and `yarn lint` where applicable.
+  2. For code changes, run `pnpm test` and `pnpm lint` where applicable.
 
 - Examples to reference when making edits:
   - Aliases useful for imports: `$components`, `$stores`, `$services` (defined in `svelte.config.js`).

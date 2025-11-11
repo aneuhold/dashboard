@@ -24,10 +24,6 @@ Notes for improvement:
 
 ## Architecture
 
-### Usage of Yarn 4.x
-
-The version of yarn was upgraded to the latest to take advantage of some new features, particularly `yarn patch`, but also to see how the package manager works.
-
 ### Singleton Components
 
 Some components are prefixed with `Singleton`, which means that they should only ever be used once. They will export functions to update their content.
@@ -75,7 +71,7 @@ Logging is done via Sentry. Configuration is setup in `hooks.client.ts` primaril
 
 To start working on the project simply run:
 
-- `yarn dev` then navigate to the URL it shows in the terminal
+- `pnpm dev` then navigate to the URL it shows in the terminal
 
 Some nice pages to have up at the same time:
 
@@ -109,5 +105,5 @@ The reason that the `pageInfo.ts` files are separate and not done in the module 
 To create a production version of the app:
 
 ```bash
-yarn build
+pnpm build
 ```

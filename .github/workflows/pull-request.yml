@@ -14,36 +14,29 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup yarn 4
-        run: corepack enable
+      - name: Set up PNPM
+        uses: pnpm/action-setup@v3
 
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
-
-      # Cache yarn packages
-      - uses: actions/cache@v4
-        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
         with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-cache-v1-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-cache-v1-
+          node-version: 'lts/*'
+          cache: 'pnpm'
 
       - name: Install dependencies
-        run: yarn
+        run: pnpm install
 
       #- name: Run tests
-      #  run: yarn test
+      #  run: pnpm test
 
       - name: Run Linting
-        run: yarn lint
+        run: pnpm lint
 
       - name: Run Svelte check
-        run: yarn svelte-check
+        run: pnpm check
 
       - name: Build the site
-        run: yarn build
+        run: pnpm build
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
 
