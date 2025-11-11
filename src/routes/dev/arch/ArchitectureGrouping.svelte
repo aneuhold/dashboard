@@ -6,15 +6,6 @@
 <script lang="ts">
   import type { Snippet } from 'svelte';
 
-  interface Props {
-    direction?: 'row' | 'column';
-    borderTop?: boolean;
-    borderLeft?: boolean;
-    borderRight?: boolean;
-    borderBottom?: boolean;
-    children?: Snippet;
-  }
-
   let {
     direction = 'row',
     borderTop = true,
@@ -22,7 +13,14 @@
     borderRight = false,
     borderBottom = false,
     children
-  }: Props = $props();
+  }: {
+    direction?: 'row' | 'column';
+    borderTop?: boolean;
+    borderLeft?: boolean;
+    borderRight?: boolean;
+    borderBottom?: boolean;
+    children?: Snippet;
+  } = $props();
 
   const className = `grouping ${direction} ${borderTop ? 'border-top' : ''} ${
     borderLeft ? 'border-left' : ''

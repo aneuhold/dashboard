@@ -4,11 +4,7 @@
   import { taskAssignmentDialog } from '$components/singletons/dialogs/SingletonTaskAssignmentDialog/SingletonTaskAssignmentDialog.svelte';
   import type { DocumentStore } from '$services/DocumentMapStoreService';
 
-  interface Props {
-    task: DocumentStore<DashboardTask>;
-  }
-
-  let { task }: Props = $props();
+  let { task }: { task: DocumentStore<DashboardTask> } = $props();
 
   function handleClick() {
     taskAssignmentDialog.open($task._id.toString());

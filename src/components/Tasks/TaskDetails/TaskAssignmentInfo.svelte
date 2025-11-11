@@ -9,11 +9,7 @@
   import LocalData from '$util/LocalData/LocalData';
   import { TaskMapService } from '../../../services/Task/TaskMapService/TaskMapService';
 
-  interface Props {
-    taskId: string;
-  }
-
-  let { taskId }: Props = $props();
+  let { taskId }: { taskId: string } = $props();
 
   let task = $derived(TaskMapService.getTaskStore(taskId));
   let collaborators = $derived($userSettings.collaborators);

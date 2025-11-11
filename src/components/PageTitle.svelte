@@ -1,13 +1,15 @@
 <script lang="ts">
   import BreadCrumb from './BreadCrumb.svelte';
 
-  interface Props {
+  let {
+    title,
+    subtitle = null,
+    includeBreadcrumb = true
+  }: {
     title: string;
     subtitle?: string | null;
     includeBreadcrumb?: boolean;
-  }
-
-  let { title, subtitle = null, includeBreadcrumb = true }: Props = $props();
+  } = $props();
 </script>
 
 {#if includeBreadcrumb}

@@ -7,11 +7,7 @@
   import { userSettings } from '$stores/userSettings/userSettings';
   import { TaskMapService } from '../../../services/Task/TaskMapService/TaskMapService';
 
-  interface Props {
-    taskId: string;
-  }
-
-  let { taskId }: Props = $props();
+  let { taskId }: { taskId: string } = $props();
 
   let task = $derived(TaskMapService.getTaskStore(taskId));
   /**

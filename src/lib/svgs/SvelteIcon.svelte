@@ -1,10 +1,6 @@
 <!--Pulled from https://github.com/sveltejs/branding-->
 <script lang="ts">
-  interface Props {
-    size?: number;
-  }
-
-  let { size = 48 }: Props = $props();
+  let { size = 48 }: { size?: number } = $props();
   let sizePx = $derived(`${size}px`);
 </script>
 

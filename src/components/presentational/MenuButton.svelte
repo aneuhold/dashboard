@@ -17,12 +17,13 @@
   import List, { Graphic, Item, Text } from '@smui/list';
   import MenuSurface from '@smui/menu-surface';
 
-  interface Props {
+  let {
+    menuItems,
+    alignCenterVertically = false
+  }: {
     menuItems: MenuButtonItem[];
     alignCenterVertically?: boolean;
-  }
-
-  let { menuItems, alignCenterVertically = false }: Props = $props();
+  } = $props();
 
   function handleItemClick(clickAction: () => void) {
     if (menu) {

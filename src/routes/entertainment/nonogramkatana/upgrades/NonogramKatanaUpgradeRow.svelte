@@ -10,11 +10,7 @@
   import NonogramKatanaRequiredUpgrade from './NonogramKatanaRequiredUpgrade.svelte';
   import { nonogramKatanaUpgradesDisplayInfo } from './nonogramKatanaUpgradesDisplayInfo';
 
-  interface Props {
-    upgradeName: NonogramKatanaUpgradeName;
-  }
-
-  let { upgradeName }: Props = $props();
+  let { upgradeName }: { upgradeName: NonogramKatanaUpgradeName } = $props();
   let upgrade = $derived(NonogramKatanaUpgradeMapService.getUpgradeStoreByName(upgradeName));
   let displayInfo = $derived(nonogramKatanaUpgradesDisplayInfo[upgradeName]);
 </script>

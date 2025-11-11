@@ -16,11 +16,7 @@
   import { enabledPages } from '../stores/visual/enabledPages';
   import { navDrawerOpen } from '../stores/visual/navDrawerOpen';
 
-  interface Props {
-    activeRoute?: string;
-  }
-
-  let { activeRoute = $bindable('/') }: Props = $props();
+  let { activeRoute = $bindable('/') }: { activeRoute?: string } = $props();
 
   $effect(() => {
     if (page.route.id) {

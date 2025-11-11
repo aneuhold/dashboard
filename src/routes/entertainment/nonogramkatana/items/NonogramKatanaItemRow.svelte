@@ -9,11 +9,7 @@
   import { nonogramKatanaItemsDisplayInfo } from './nonogramKatanaItemsDisplayInfo';
   import NonogramKatanaRelatedUpgrade from './NonogramKatanaRelatedUpgrade.svelte';
 
-  interface Props {
-    itemId: string;
-  }
-
-  let { itemId }: Props = $props();
+  let { itemId }: { itemId: string } = $props();
 
   let item = $derived(NonogramKatanaItemMapService.getItemStore(itemId));
   let displayInfo = $derived(nonogramKatanaItemsDisplayInfo[$item.itemName]);

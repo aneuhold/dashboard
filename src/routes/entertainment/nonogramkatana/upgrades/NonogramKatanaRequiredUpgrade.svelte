@@ -3,11 +3,7 @@
   import { NonogramKatanaUpgradeMapService } from '../../../../services/NonogramKatana/NonogramKatanaUpgradeMapService';
   import { nonogramKatanaUpgradesDisplayInfo } from './nonogramKatanaUpgradesDisplayInfo';
 
-  interface Props {
-    upgradeName: NonogramKatanaUpgradeName;
-  }
-
-  let { upgradeName }: Props = $props();
+  let { upgradeName }: { upgradeName: NonogramKatanaUpgradeName } = $props();
   let upgrade = $derived(NonogramKatanaUpgradeMapService.getUpgradeStoreByName(upgradeName));
   let upgradeDisplayName = $derived(nonogramKatanaUpgradesDisplayInfo[upgradeName].displayName);
 </script>

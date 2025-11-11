@@ -1,9 +1,5 @@
 <script lang="ts">
-  interface Props {
-    tagName: string;
-  }
-
-  let { tagName }: Props = $props();
+  let { tagName }: { tagName: string } = $props();
 </script>
 
 <div class="container">
