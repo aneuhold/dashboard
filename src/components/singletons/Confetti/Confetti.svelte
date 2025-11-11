@@ -13,7 +13,7 @@
   };
 
   function createConfettiSettings() {
-    let currentTimeout: NodeJS.Timeout | undefined = undefined;
+    let currentTimeout: NodeJS.Timeout | undefined;
     const { subscribe, set } = writable<ConfettiSettings>({
       centerX: 100,
       centerY: 100,

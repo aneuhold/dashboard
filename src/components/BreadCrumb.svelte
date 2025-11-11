@@ -23,7 +23,7 @@
   );
 
   function buildActiveRouteSegments(routeString: string) {
-    let previousLink: string | undefined = undefined;
+    let previousLink: string | undefined;
     return routeString
       .split('/')
       .filter((route) => route !== '')
