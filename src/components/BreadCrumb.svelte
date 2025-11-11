@@ -18,19 +18,21 @@
   } = $props();
 
   let activeRoute = $derived(page.route.id ?? '/');
-  let previousLink: string | undefined;
   let routeArray = $derived(
-    breadCrumbArray
-      ? breadCrumbArray
-      : activeRoute
-          .split('/')
-          .filter((route) => route !== '')
-          .map((route) => {
-            const routeLink = previousLink ? previousLink + '/' + route : route;
-            previousLink = routeLink;
-            return { name: route, link: routeLink };
-          })
+    breadCrumbArray ? breadCrumbArray : buildActiveRouteSegments(activeRoute)
   );
+
+  function buildActiveRouteSegments(routeString: string) {
+    let previousLink: string | undefined = undefined;
+    return routeString
+      .split('/')
+      .filter((route) => route !== '')
+      .map((route) => {
+        const routeLink = previousLink ? previousLink + '/' + route : route;
+        previousLink = routeLink;
+        return { name: route, link: routeLink };
+      });
+  }
 </script>
 
 <span class="breadcrumb-container">

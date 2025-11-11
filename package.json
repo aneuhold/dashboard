@@ -5,7 +5,7 @@
     "dev": "yarn theme && vite dev",
     "build": "yarn theme && vite build",
     "build:sb": "yarn theme && storybook build",
-    "preview": "yarn theme && vite preview",
+    "preview": "yarn build && vite preview --port 5173",
     "lint": "eslint",
     "theme": "smui-theme compile static/smui.css -i src/globalStyles",
     "test": "vitest",
