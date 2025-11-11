@@ -7,7 +7,7 @@
     "build:sb": "pnpm theme && storybook build",
     "preview": "pnpm build && vite preview --port 5173",
     "lint": "eslint",
-    "theme": "smui-theme compile static/smui.css -i src/globalStyles -i node_modules/.pnpm/node_modules",
+    "theme": "smui-theme compile static/smui.css -i src/globalStyles -i node_modules/.pnpm/node_modules -i node_modules",
     "test": "vitest",
     "check": "svelte-check",
     "upgrade:core": "pnpm up '@aneuhold/*'",
@@ -21,7 +21,7 @@
     "unsub:eslint-config": "local-npm unsubscribe @aneuhold/eslint-config"
   },
   "scriptsComments": {
-    "theme": "This has the extra parameter for node_modules so it works with pnpm. Otherwise it fails when SASS tries to resolve imports."
+    "theme": "This has the extra parameters for node_modules so it works with pnpm. Otherwise it fails when SASS tries to resolve imports."
   },
   "packageManager": "pnpm@10.17.1",
   "type": "module",
