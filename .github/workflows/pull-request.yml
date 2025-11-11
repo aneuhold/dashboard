@@ -26,6 +26,12 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
+      # Build has to go before link and check because it creates the .svelte-kit directory
+      - name: Build the site
+        run: pnpm build
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+
       #- name: Run tests
       #  run: pnpm test
 
@@ -34,11 +40,6 @@ jobs:
 
       - name: Run Svelte check
         run: pnpm check
-
-      - name: Build the site
-        run: pnpm build
-        env:
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
 
       - name: Deploy to Netlify
         uses: nwtgck/actions-netlify@v3.0
