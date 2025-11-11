@@ -27,7 +27,7 @@
 
 <script lang="ts">
   import Checkbox from '@smui/checkbox';
-  import InputBox from '$components/presentational/InputBox.svelte';
+  import { InputBox } from '$components/presentational';
   import { nonogramKatanaItemsDisplayInfo } from '../../../routes/entertainment/nonogramkatana/items/nonogramKatanaItemsDisplayInfo';
 
   let item = $derived(

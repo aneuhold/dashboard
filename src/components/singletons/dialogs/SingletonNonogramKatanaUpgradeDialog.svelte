@@ -9,7 +9,7 @@
   import Checkbox from '@smui/checkbox';
   import { Actions, Content, Title } from '@smui/dialog';
   import { writable } from 'svelte/store';
-  import InputBox from '$components/presentational/InputBox.svelte';
+  import { InputBox } from '$components/presentational';
   import SmartDialog from '$components/presentational/SmartDialog.svelte';
   import { nonogramKatanaItemsDisplayInfo } from '../../../routes/entertainment/nonogramkatana/items/nonogramKatanaItemsDisplayInfo';
   import { nonogramKatanaUpgradesDisplayInfo } from '../../../routes/entertainment/nonogramkatana/upgrades/nonogramKatanaUpgradesDisplayInfo';

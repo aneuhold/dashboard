@@ -15,8 +15,7 @@
   import { goto } from '$app/navigation';
   import BreadCrumb from '$components/BreadCrumb.svelte';
   import PageTitle from '$components/PageTitle.svelte';
-  import { FabButton } from '$components/presentational';
-  import InputBox from '$components/presentational/InputBox.svelte';
+  import { FabButton, InputBox } from '$components/presentational';
   import { userSettings } from '$stores/userSettings/userSettings';
   import TaskListService from '../../../services/Task/TaskListService';
   import { TaskMapService } from '../../../services/Task/TaskMapService/TaskMapService';

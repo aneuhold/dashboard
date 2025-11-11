@@ -11,7 +11,7 @@
   import FormField from '@smui/form-field';
   import Paper, { Content } from '@smui/paper';
   import PageTitle from '$components/PageTitle.svelte';
-  import InputBox from '$components/presentational/InputBox.svelte';
+  import { InputBox } from '$components/presentational';
   import { triggerConfetti } from '$components/singletons/Confetti/Confetti.svelte';
   import { snackbar } from '$components/singletons/SingletonSnackbar.svelte';
   import TaskDeletionSettings from '$components/Tasks/TaskDeletionSettings.svelte';
