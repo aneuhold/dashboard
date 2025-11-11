@@ -14,16 +14,12 @@
   } = $props();
 
   let tagContentClass = $derived(enabled ? 'card-content colorWhite' : 'card-content dimmed-color');
-
-  const handleClick = () => {
-    onclick?.();
-  };
 </script>
 
 <div>
   <Card variant="outlined">
     <Content class="tagRowContent">
-      <ClickableDiv clickAction={handleClick}>
+      <ClickableDiv clickAction={() => onclick?.()}>
         <div class={tagContentClass}>
           <div class="iconSet leftIconSet">
             <Checkbox checked={enabled} touch class="tagCheckbox" />

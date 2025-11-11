@@ -6,18 +6,21 @@
   import TaskTagsService from '../../../services/Task/TaskTagsService';
   import TaskFilterSetting from './TaskFilterSetting.svelte';
 
-  interface Props {
+  let {
+    open = $bindable(),
+    initialSettings,
+    onUpdateSettings,
+    onReset
+  }: {
     open: boolean;
     initialSettings: DashboardTaskListFilterSettings;
     onUpdateSettings?: (settings: DashboardTaskListFilterSettings) => void;
     onReset?: () => void;
-  }
-
-  let { open = $bindable(), initialSettings, onUpdateSettings, onReset }: Props = $props();
+  } = $props();
 
   const userTags = TaskTagsService.getStore();
 
-  let currentSettings: DashboardTaskListFilterSettings = $derived(
+  let currentSettings = $state(
     JSON.parse(JSON.stringify(initialSettings)) as DashboardTaskListFilterSettings
   );
   let previousOpen = $state(false);
