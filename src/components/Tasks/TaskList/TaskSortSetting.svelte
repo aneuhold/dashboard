@@ -10,15 +10,6 @@
   import IconButton, { Icon } from '@smui/icon-button';
   import SegmentedButton, { Segment } from '@smui/segmented-button';
 
-  interface Props {
-    sortSetting: DashboardTaskSortSetting;
-    disabled: boolean;
-    onEnable?: (sortBy: DashboardTaskSortBy) => void;
-    onDisable?: (sortBy: DashboardTaskSortBy) => void;
-    onIncrementPriority?: (sortBy: DashboardTaskSortBy) => void;
-    onDecrementPriority?: (sortBy: DashboardTaskSortBy) => void;
-  }
-
   let {
     sortSetting = $bindable(),
     disabled,
@@ -26,7 +17,14 @@
     onDisable,
     onIncrementPriority,
     onDecrementPriority
-  }: Props = $props();
+  }: {
+    sortSetting: DashboardTaskSortSetting;
+    disabled: boolean;
+    onEnable?: (sortBy: DashboardTaskSortBy) => void;
+    onDisable?: (sortBy: DashboardTaskSortBy) => void;
+    onIncrementPriority?: (sortBy: DashboardTaskSortBy) => void;
+    onDecrementPriority?: (sortBy: DashboardTaskSortBy) => void;
+  } = $props();
 
   type SortDirectionChoice = {
     value: DashboardTaskSortDirection;
@@ -118,15 +116,17 @@
               segments={sortDirectionChoices}
               singleSelect
               selected={sortDirectionChoice}
-              key={(segment) => segment.value}
+              key={(segment) => segment.value.toString()}
               class="tagSegmentedButton"
             >
               {#snippet segment(segment)}
                 <Segment
                   {segment}
-                  title={String(segment.value)}
+                  title={segment.value.toString()}
                   onclick={preventDefault(() => {
                     sortSetting.sortDirection = segment.value;
+                    // Trigger reactivity
+                    sortSetting = sortSetting;
                   })}
                 >
                   <Icon class="material-icons">{segment.iconName}</Icon>

@@ -18,13 +18,15 @@
   import { userSettings } from '$stores/userSettings/userSettings';
   import TaskListOptions from './TaskListOptions.svelte';
 
-  interface Props {
+  let {
+    sortAndFilterResult,
+    category,
+    parentTaskId = undefined
+  }: {
     sortAndFilterResult: DashboardTaskFilterAndSortResult;
     category: string;
     parentTaskId?: string | undefined;
-  }
-
-  let { sortAndFilterResult, category, parentTaskId = undefined }: Props = $props();
+  } = $props();
 
   const taskMap = TaskMapService.getStore();
   let parentTask = $derived(parentTaskId ? TaskMapService.getTaskStore(parentTaskId) : undefined);

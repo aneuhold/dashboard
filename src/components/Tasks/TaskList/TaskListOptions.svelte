@@ -15,23 +15,21 @@
   import TaskListFilterDialog from './TaskListFilterDialog.svelte';
   import TaskListSortingDialog from './TaskListSortingDialog.svelte';
 
-  interface Props {
-    category: string;
-    parentTask?: DocumentStore<DashboardTask> | undefined;
-    parentTaskSortSettings?: DashboardTaskListSortSettings | undefined;
-    userTaskSortSettings?: DashboardTaskListSortSettings | undefined;
-    currentSortSettings: DashboardTaskListSortSettings;
-    removedTaskIds: string[];
-  }
-
   let {
     category,
-    parentTask = undefined,
-    parentTaskSortSettings = undefined,
-    userTaskSortSettings = undefined,
+    parentTask,
+    parentTaskSortSettings,
+    userTaskSortSettings,
     currentSortSettings,
     removedTaskIds
-  }: Props = $props();
+  }: {
+    category: string;
+    parentTask?: DocumentStore<DashboardTask>;
+    parentTaskSortSettings?: DashboardTaskListSortSettings;
+    userTaskSortSettings?: DashboardTaskListSortSettings;
+    currentSortSettings: DashboardTaskListSortSettings;
+    removedTaskIds: string[];
+  } = $props();
 
   const globalTags = TaskTagsService.getStore();
   const taskMap = TaskMapService.getStore();

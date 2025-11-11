@@ -4,11 +4,11 @@
 
   let {
     dateType,
-    date = undefined,
+    date,
     onclick
   }: {
     dateType: 'due' | 'start';
-    date?: Date | undefined;
+    date?: Date;
     /**
      * Callback fired when the chip is clicked.
      */
