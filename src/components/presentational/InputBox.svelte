@@ -21,7 +21,7 @@
   import type { FullAutoFill } from 'svelte/elements';
 
   let {
-    disable = $bindable(false),
+    disable = false,
     inputType = 'text',
     min = undefined,
     max = undefined,
@@ -35,7 +35,7 @@
     spellCheck = true,
     isSmall = false,
     isValid = true,
-    onsubmit
+    onSubmit
   }: {
     disable?: boolean;
     /**
@@ -45,11 +45,11 @@
     /**
      * The minimum value if the input type is a number.
      */
-    min?: number | undefined;
+    min?: number;
     /**
      * The maximum value if the input type is a number.
      */
-    max?: number | undefined;
+    max?: number;
     /**
      * Determines if the input is a text area instead of just a single line.
      */
@@ -58,7 +58,7 @@
      * This will show in the input box as a label when the text is empty,
      * and move to the top when the user starts typing.
      */
-    label?: string | undefined;
+    label?: string;
     /**
      * The value of the input box when the user blurs the input. This also acts
      * as the initial value. It will only be updated when the user leaves the
@@ -104,7 +104,7 @@
     /**
      * Callback fired when the user presses Enter (for non-textarea inputs).
      */
-    onsubmit?: () => void;
+    onSubmit?: () => void;
   } = $props();
 
   let previousOnBlurValue = $state(onBlurValue);
@@ -131,7 +131,7 @@
     event = event as KeyboardEvent;
     if (event.key === 'Enter' && !isTextArea) {
       onBlurValue = inputValue;
-      onsubmit?.();
+      onSubmit?.();
     }
   }
 
@@ -145,6 +145,8 @@
   // string if it is. This fixes graphical issues with the input box.
   // Also detect when the onBlurValue is changed outside the component.
   $effect(() => {
+    // Because we don't know what kind of value the backend is providing
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (onBlurValue === null || onBlurValue === undefined) {
       onBlurValue = '';
       previousOnBlurValue = onBlurValue;

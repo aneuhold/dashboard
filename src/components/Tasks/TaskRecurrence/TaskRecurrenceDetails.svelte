@@ -23,12 +23,26 @@
   import TaskRecurrenceUpdateExample from './TaskRecurrenceUpdateExample.svelte';
   import TaskRecurrenceWeekdayOfMonth from './TaskRecurrenceWeekdayOfMonth.svelte';
 
-  interface Props {
-    taskId: string;
-    recurrenceInfo: RecurrenceInfo;
-  }
+  let { taskId, recurrenceInfo }: { taskId: string; recurrenceInfo: RecurrenceInfo } = $props();
 
-  let { taskId, recurrenceInfo }: Props = $props();
+  let task = $derived(TaskMapService.getTaskStore(taskId));
+  /**
+   * Stored so that the changes can be reverted
+   */
+  let previousRInfoString = $derived(JSON.stringify(recurrenceInfo));
+  let disabled = $derived(!$task.recurrenceInfo || !!$task.parentRecurringTaskInfo);
+  let startDate = $derived($task.startDate);
+  let dueDate = $derived($task.dueDate);
+  let parentRecurringTaskInfo = $derived($task.parentRecurringTaskInfo);
+  let exampleOfRecurrence = $derived(
+    TaskRecurrenceService.createExampleOfRecurrence(
+      startDate,
+      dueDate,
+      recurrenceInfo,
+      parentRecurringTaskInfo
+    )
+  );
+  let rInfo = $derived(createRInfoStore(recurrenceInfo));
 
   function createRInfoStore(initialRInfo: RecurrenceInfo) {
     let currentFrequencyType = initialRInfo.frequency.type;
@@ -42,9 +56,17 @@
       if (checkDate && updateWouldTriggerRecurrence(newRInfo)) {
         return;
       }
-      previousRInfoString = JSON.stringify(newRInfo);
-      set(newRInfo);
-      $task.recurrenceInfo = newRInfo;
+      const newRInfoString = JSON.stringify(newRInfo);
+      // Only update the task if the recurrence info has actually changed
+      // This prevents unnecessary DB writes when the store is recreated
+      if (newRInfoString !== previousRInfoString) {
+        previousRInfoString = newRInfoString;
+        set(newRInfo);
+        $task.recurrenceInfo = newRInfo;
+      } else {
+        // Still update the store for UI consistency
+        set(newRInfo);
+      }
     };
     return {
       subscribe,
@@ -61,7 +83,7 @@
     };
   }
 
-  const updateWouldTriggerRecurrence = (newRInfo: RecurrenceInfo): boolean => {
+  function updateWouldTriggerRecurrence(newRInfo: RecurrenceInfo): boolean {
     const simulatedDate = TaskRecurrenceService.getSimulatedRecurrenceDate($task, (task) => {
       task.recurrenceInfo = newRInfo;
       return task;
@@ -84,9 +106,9 @@
       return true;
     }
     return false;
-  };
+  }
 
-  const handleTypeChange = (newRInfo: RecurrenceInfo) => {
+  function handleTypeChange(newRInfo: RecurrenceInfo) {
     switch (newRInfo.frequency.type) {
       case RecurrenceFrequencyType.everyXTimeUnit:
         newRInfo.frequency.everyXTimeUnit = {
@@ -107,34 +129,16 @@
         break;
     }
     clearOtherTypes(newRInfo);
-  };
+  }
 
-  const clearOtherTypes = (newRInfo: RecurrenceInfo) => {
+  function clearOtherTypes(newRInfo: RecurrenceInfo) {
     Object.keys(newRInfo.frequency).forEach((key) => {
       if (key !== newRInfo.frequency.type.toString() && key !== 'type') {
         // Little hacky, but does the job
         (newRInfo.frequency as { [key: string]: unknown })[key] = undefined;
       }
     });
-  };
-  let task = $derived(TaskMapService.getTaskStore(taskId));
-  /**
-   * Stored so that the changes can be reverted
-   */
-  let previousRInfoString = $derived(JSON.stringify(recurrenceInfo));
-  let disabled = $derived(!$task.recurrenceInfo || !!$task.parentRecurringTaskInfo);
-  let startDate = $derived($task.startDate);
-  let dueDate = $derived($task.dueDate);
-  let parentRecurringTaskInfo = $derived($task.parentRecurringTaskInfo);
-  let exampleOfRecurrence = $derived(
-    TaskRecurrenceService.createExampleOfRecurrence(
-      startDate,
-      dueDate,
-      recurrenceInfo,
-      parentRecurringTaskInfo
-    )
-  );
-  let rInfo = $derived(createRInfoStore(recurrenceInfo));
+  }
 </script>
 
 <div class={disabled ? ' dimmed-color' : ''}>

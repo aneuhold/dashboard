@@ -11,19 +11,6 @@
   import SBMockData from '$storybook/globalMockData';
   import TaskList from '../TaskList.svelte';
 
-  interface Props {
-    numTasks?: number;
-    includeStartDates?: boolean;
-    includeStartDatesInFuture?: boolean;
-    includeDueDates?: boolean;
-    includeOverDueDates?: boolean;
-    sharedWith?: MockTaskSharedWith;
-    assignedTo?: MockTaskAssignment;
-    tags?: string[];
-    descriptions?: MockTaskDescription;
-    subtasks?: MockTaskSubTasks;
-  }
-
   let {
     numTasks = 20,
     includeStartDates = false,
@@ -35,7 +22,18 @@
     tags = [],
     descriptions = MockTaskDescription.none,
     subtasks = MockTaskSubTasks.none
-  }: Props = $props();
+  }: {
+    numTasks?: number;
+    includeStartDates?: boolean;
+    includeStartDatesInFuture?: boolean;
+    includeDueDates?: boolean;
+    includeOverDueDates?: boolean;
+    sharedWith?: MockTaskSharedWith;
+    assignedTo?: MockTaskAssignment;
+    tags?: string[];
+    descriptions?: MockTaskDescription;
+    subtasks?: MockTaskSubTasks;
+  } = $props();
 
   $effect(() => {
     SBMockData.taskMapServiceMock.reset();

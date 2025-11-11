@@ -24,12 +24,7 @@
   import TaskService from '../../../services/Task/TaskService';
   import TaskRecurrenceDetails from './TaskRecurrenceDetails.svelte';
 
-  interface Props {
-    taskId: string;
-    childTaskIds: string[];
-  }
-
-  let { taskId, childTaskIds }: Props = $props();
+  let { taskId, childTaskIds }: { taskId: string; childTaskIds: string[] } = $props();
 
   let recurringInfoOpen = $state(false);
   const taskMap = TaskMapService.getStore();

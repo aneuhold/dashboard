@@ -112,7 +112,7 @@
                 spellCheck={false}
                 helperText="Enter a username to search"
                 label="Username"
-                onsubmit={handleSearchForUser}
+                onSubmit={handleSearchForUser}
               />
             </div>
             <Button
