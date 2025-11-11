@@ -77,12 +77,12 @@ export default class TaskRecurrenceService {
     ) {
       return true;
     } else {
-      const nextRecurreceDate = this.getNextRecurrenceDate(task);
-      if (!nextRecurreceDate) {
+      const nextRecurrenceDate = this.getNextRecurrenceDate(task);
+      if (!nextRecurrenceDate) {
         return false;
       }
       const currentDate = new Date();
-      if (nextRecurreceDate < currentDate) {
+      if (nextRecurrenceDate < currentDate) {
         return true;
       }
     }
