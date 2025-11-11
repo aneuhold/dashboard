@@ -1,10 +1,12 @@
 <script lang="ts">
+  import type { Snippet } from 'svelte';
   import SingletonTaskSharingDialog from './SingletonTaskSharingDialog.svelte';
-  interface Props {
-    children?: import('svelte').Snippet;
-  }
 
-  let { children }: Props = $props();
+  let {
+    children
+  }: {
+    children?: Snippet;
+  } = $props();
 </script>
 
 {@render children?.()}
