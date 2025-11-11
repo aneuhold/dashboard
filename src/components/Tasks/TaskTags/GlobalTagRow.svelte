@@ -7,15 +7,13 @@
   import { userSettings } from '$stores/userSettings/userSettings';
   import TaskTagsService from '../../../services/Task/TaskTagsService';
 
-  interface Props {
-    tagName: string;
-    maxPriority: number;
-    onOpenEditor?: (tagName: string) => void;
-  }
+  let {
+    tagName,
+    maxPriority,
+    onOpenEditor
+  }: { tagName: string; maxPriority: number; onOpenEditor?: (tagName: string) => void } = $props();
 
-  let { tagName, maxPriority, onOpenEditor }: Props = $props();
-
-  const getMenuItems = (tagSettings: DashboardTagSetting) => {
+  const getMenuItems = (currentTagSettings?: DashboardTagSetting) => {
     const menuItems: MenuButtonItem[] = [
       {
         title: 'Edit',
@@ -32,7 +30,7 @@
         }
       }
     ];
-    if (tagSettings && tagSettings.priority !== 0) {
+    if (currentTagSettings && currentTagSettings.priority !== 0) {
       menuItems.push({
         title: 'Remove priority',
         iconName: 'remove',
@@ -50,11 +48,15 @@
 
   const incrementPriority = () => {
     userSettings.update((settings) => {
+      const currentTagSettings = settings.config.tagSettings[tagName] as
+        | DashboardTagSetting
+        | undefined;
+      if (!currentTagSettings) return settings;
       Object.keys(settings.config.tagSettings).forEach((otherTagName) => {
         // Increment all the existing non-zero tags priority by 1 that are
         // lower than the current tag
         const otherTagPriority = settings.config.tagSettings[otherTagName].priority;
-        if (otherTagPriority === tagSettings.priority + 1) {
+        if (otherTagPriority === currentTagSettings.priority + 1) {
           settings.config.tagSettings[otherTagName].priority -= 1;
         }
       });
@@ -65,11 +67,15 @@
 
   const decrementPriority = () => {
     userSettings.update((settings) => {
+      const currentTagSettings = settings.config.tagSettings[tagName] as
+        | DashboardTagSetting
+        | undefined;
+      if (!currentTagSettings) return settings;
       Object.keys(settings.config.tagSettings).forEach((otherTagName) => {
         // Decrement all the existing non-zero tags priority by 1 that are
         // higher than the current tag
         const otherTagPriority = settings.config.tagSettings[otherTagName].priority;
-        if (otherTagPriority === tagSettings.priority - 1) {
+        if (otherTagPriority === currentTagSettings.priority - 1) {
           settings.config.tagSettings[otherTagName].priority += 1;
         }
       });
@@ -93,6 +99,10 @@
 
   const removePriorityFromTag = () => {
     userSettings.update((settings) => {
+      const currentTagSettings = settings.config.tagSettings[tagName] as
+        | DashboardTagSetting
+        | undefined;
+      if (!currentTagSettings) return settings;
       Object.keys(settings.config.tagSettings).forEach((otherTagName) => {
         // Decrement all the existing non-zero tags priority by 1 that are
         // higher than the current tag
@@ -100,7 +110,7 @@
         if (
           otherTagName !== tagName &&
           otherTagPriority !== 0 &&
-          otherTagPriority > tagSettings.priority
+          otherTagPriority > currentTagSettings.priority
         ) {
           settings.config.tagSettings[otherTagName].priority -= 1;
         }
@@ -109,46 +119,50 @@
       return settings;
     });
   };
-  let tagSettings = $derived($userSettings.config.tagSettings[tagName]);
-  let menuItems = $derived(getMenuItems(tagSettings));
+  let tagSettings = $derived(
+    $userSettings.config.tagSettings[tagName] as DashboardTagSetting | undefined
+  );
+  let menuItems = $derived(tagSettings ? getMenuItems(tagSettings) : []);
 </script>
 
 <div>
-  <Card variant="outlined">
-    <Content class="tagRowContent">
-      <div class="card-content">
-        <div class="left-side">
-          {#if tagSettings.priority !== 0}
-            <IconButton
-              size="button"
-              onclick={decrementPriority}
-              disabled={tagSettings.priority === 1}
-            >
-              <Icon class="material-icons">arrow_downward</Icon>
-            </IconButton>
-            <IconButton
-              size="button"
-              onclick={incrementPriority}
-              disabled={tagSettings.priority === maxPriority}
-            >
-              <Icon class="material-icons">arrow_upward</Icon>
-            </IconButton>
-          {/if}
+  {#if tagSettings}
+    <Card variant="outlined">
+      <Content class="tagRowContent">
+        <div class="card-content">
+          <div class="left-side">
+            {#if tagSettings.priority !== 0}
+              <IconButton
+                size="button"
+                onclick={decrementPriority}
+                disabled={tagSettings.priority === 1}
+              >
+                <Icon class="material-icons">arrow_downward</Icon>
+              </IconButton>
+              <IconButton
+                size="button"
+                onclick={incrementPriority}
+                disabled={tagSettings.priority === maxPriority}
+              >
+                <Icon class="material-icons">arrow_upward</Icon>
+              </IconButton>
+            {/if}
+          </div>
+          <div class="tagInfo">
+            <h4 class="mdc-typography--body1 text">
+              {tagName}
+            </h4>
+            {#if tagSettings.priority !== 0}
+              <span class="mdc-deprecated-list-item__secondary-text text">
+                Priority: {tagSettings.priority}
+              </span>
+            {/if}
+          </div>
+          <MenuButton {menuItems} />
         </div>
-        <div class="tagInfo">
-          <h4 class="mdc-typography--body1 text">
-            {tagName}
-          </h4>
-          {#if tagSettings.priority !== 0}
-            <span class="mdc-deprecated-list-item__secondary-text text">
-              Priority: {tagSettings.priority}
-            </span>
-          {/if}
-        </div>
-        <MenuButton {menuItems} />
-      </div>
-    </Content>
-  </Card>
+      </Content>
+    </Card>
+  {/if}
 </div>
 
 <style>
