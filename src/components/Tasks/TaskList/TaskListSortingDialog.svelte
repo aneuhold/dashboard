@@ -1,65 +1,56 @@
 <script lang="ts">
-  import SmartDialog from '$components/presentational/SmartDialog.svelte';
   import {
+    type DashboardTaskListSortSettings,
     DashboardTaskSortBy,
-    DashboardTaskSortDirection,
-    type DashboardTaskListSortSettings
+    DashboardTaskSortDirection
   } from '@aneuhold/core-ts-db-lib';
   import Button, { Label } from '@smui/button';
   import { Actions, Content, Title } from '@smui/dialog';
-  import { createEventDispatcher } from 'svelte';
   import { flip } from 'svelte/animate';
+  import { SvelteSet } from 'svelte/reactivity';
   import { slide } from 'svelte/transition';
+  import SmartDialog from '$components/presentational/SmartDialog.svelte';
   import TaskSortSetting from './TaskSortSetting.svelte';
 
-  export let open: boolean;
-  export let initialSettings: DashboardTaskListSortSettings;
-
-  let currentSettings: DashboardTaskListSortSettings;
-  let previousOpen = false;
-  $: currentSettings = JSON.parse(JSON.stringify(initialSettings)) as DashboardTaskListSortSettings;
-  $: currentSortList = currentSettings.sortList;
-  $: disabledSortSettings = getDisabledSortSettings(currentSettings);
-
-  $: {
-    if (open !== previousOpen) {
-      currentSettings = JSON.parse(
-        JSON.stringify(initialSettings)
-      ) as DashboardTaskListSortSettings;
-      currentSortList = currentSettings.sortList;
-      disabledSortSettings = getDisabledSortSettings(currentSettings);
-    }
-    previousOpen = open;
+  interface Props {
+    open: boolean;
+    initialSettings: DashboardTaskListSortSettings;
+    onUpdateSettings?: (settings: DashboardTaskListSortSettings) => void;
+    onReset?: () => void;
   }
 
-  const dispatch = createEventDispatcher<{
-    updateSettings: DashboardTaskListSortSettings;
-    reset: unknown;
-  }>();
+  let { open = $bindable(), initialSettings, onUpdateSettings, onReset }: Props = $props();
+
+  let previousOpen = $state(false);
+
+  /**
+   * Initialize with the initial settings, but it will be reset with each open.
+   */
+  let currentSettings: DashboardTaskListSortSettings = $state(initialSettings);
+  let currentSortList = $derived(currentSettings.sortList);
+  let disabledSortSettings = $derived(getDisabledSortSettings(currentSettings));
 
   const handleDone = () => {
-    dispatch('updateSettings', currentSettings);
+    onUpdateSettings?.(currentSettings);
     open = false;
   };
   const handleCancel = () => {
     open = false;
   };
   const handleReset = () => {
-    dispatch('reset');
+    onReset?.();
     open = false;
   };
-  const getDisabledSortSettings = (
-    settings: DashboardTaskListSortSettings
-  ): DashboardTaskSortBy[] => {
-    const disabledSettings = new Set(Object.keys(DashboardTaskSortBy));
+
+  function getDisabledSortSettings(settings: DashboardTaskListSortSettings): DashboardTaskSortBy[] {
+    const disabledSettings = new SvelteSet(Object.keys(DashboardTaskSortBy));
     settings.sortList.forEach((sortSetting) => {
       disabledSettings.delete(sortSetting.sortBy);
     });
     return Array.from(disabledSettings) as DashboardTaskSortBy[];
-  };
+  }
 
-  const handleEnable = (event: CustomEvent<DashboardTaskSortBy>) => {
-    const sortBy = event.detail;
+  const handleEnable = (sortBy: DashboardTaskSortBy) => {
     currentSettings.sortList.push({
       sortBy,
       sortDirection: DashboardTaskSortDirection.descending
@@ -67,8 +58,7 @@
     currentSortList = currentSettings.sortList;
     disabledSortSettings = getDisabledSortSettings(currentSettings);
   };
-  const handleDisable = (event: CustomEvent<DashboardTaskSortBy>) => {
-    const sortBy = event.detail;
+  const handleDisable = (sortBy: DashboardTaskSortBy) => {
     currentSettings.sortList = currentSettings.sortList.filter(
       (sortSetting) => sortSetting.sortBy !== sortBy
     );
@@ -81,17 +71,17 @@
    *
    * This is opposite of what you would expect, because the sort settings are
    * ordered in descending priority.
+   *
+   * @param sortBy The sort by to increment priority for.
    */
-  const handleIncrement = (event: CustomEvent<DashboardTaskSortBy>) => {
-    const sortBy = event.detail;
+  const handleIncrement = (sortBy: DashboardTaskSortBy) => {
     const sortList = currentSettings.sortList;
     const settingIndex = sortList.findIndex((sortSetting) => sortSetting.sortBy === sortBy);
     if (settingIndex === -1 || settingIndex === 0) return;
     // Swap elements
     moveSortSetting(settingIndex, settingIndex - 1);
   };
-  const handleDecrement = (event: CustomEvent<DashboardTaskSortBy>) => {
-    const sortBy = event.detail;
+  const handleDecrement = (sortBy: DashboardTaskSortBy) => {
     const sortList = currentSettings.sortList;
     const settingIndex = sortList.findIndex((sortSetting) => sortSetting.sortBy === sortBy);
     if (settingIndex === -1 || settingIndex === sortList.length - 1) return;
@@ -107,6 +97,27 @@
     currentSettings.sortList = sortList;
     currentSortList = sortList;
   };
+
+  const handleDirectionChange = (
+    sortBy: DashboardTaskSortBy,
+    direction: DashboardTaskSortDirection
+  ) => {
+    const sortSetting = currentSettings.sortList.find((s) => s.sortBy === sortBy);
+    if (sortSetting) {
+      sortSetting.sortDirection = direction;
+    }
+  };
+
+  $effect(() => {
+    if (open !== previousOpen) {
+      currentSettings = JSON.parse(
+        JSON.stringify(initialSettings)
+      ) as DashboardTaskListSortSettings;
+      currentSortList = currentSettings.sortList;
+      disabledSortSettings = getDisabledSortSettings(currentSettings);
+    }
+    previousOpen = open;
+  });
 </script>
 
 <SmartDialog bind:open>
@@ -117,9 +128,10 @@
         <TaskSortSetting
           {sortSetting}
           disabled={false}
-          on:disable={handleDisable}
-          on:incrementPriority={handleIncrement}
-          on:decrementPriority={handleDecrement}
+          onDisable={handleDisable}
+          onIncrementPriority={handleIncrement}
+          onDecrementPriority={handleDecrement}
+          onDirectionChange={handleDirectionChange}
         />
       </div>
     {/each}
@@ -130,20 +142,20 @@
             sortBy: disabledSetting,
             sortDirection: DashboardTaskSortDirection.descending
           }}
-          on:enable={handleEnable}
+          onEnable={handleEnable}
           disabled={true}
         />
       </div>
     {/each}
   </Content>
   <Actions>
-    <Button color="secondary" on:click={handleReset}>
+    <Button color="secondary" onclick={handleReset}>
       <Label>Reset</Label>
     </Button>
-    <Button on:click={handleCancel}>
+    <Button onclick={handleCancel}>
       <Label>Cancel</Label>
     </Button>
-    <Button on:click={handleDone}>
+    <Button onclick={handleDone}>
       <Label>Done</Label>
     </Button>
   </Actions>

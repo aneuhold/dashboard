@@ -4,17 +4,17 @@
   This component is a singleton, and should only ever be used once. Use the
   exported functions to show the dialog.
 -->
-<script lang="ts" context="module">
-  import SmartDialog from '$components/presentational/SmartDialog.svelte';
-  import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
-  import { currentUserId } from '$stores/derived/currentUserId';
-  import { userSettings } from '$stores/userSettings/userSettings';
+<script lang="ts" module>
   import Button, { Label } from '@smui/button';
   import Checkbox from '@smui/checkbox';
   import { Actions, Content, Title } from '@smui/dialog';
   import FormField from '@smui/form-field';
   import type { ObjectId } from 'bson';
   import { writable } from 'svelte/store';
+  import SmartDialog from '$components/presentational/SmartDialog.svelte';
+  import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
+  import { currentUserId } from '$stores/derived/currentUserId';
+  import { userSettings } from '$stores/userSettings/userSettings';
 
   /**
    * A task sharing dialog which can be used anywhere in the app.
@@ -49,11 +49,11 @@
 </script>
 
 <script lang="ts">
-  $: task = $currentTaskId ? TaskMapService.getTaskStore($currentTaskId) : null;
-  $: sharedWithIds = $task ? $task.sharedWith.map((id) => id.toString()) : [];
-  $: collaborators = $userSettings.collaborators;
-  $: currentUserIsOwner = $task ? $task.userId.toString() === $currentUserId : false;
-  $: title = $task ? `Share "${$task.title}"` : 'There was an error, please tell Tony';
+  let task = $derived($currentTaskId ? TaskMapService.getTaskStore($currentTaskId) : null);
+  let sharedWithIds = $derived($task ? $task.sharedWith.map((id) => id.toString()) : []);
+  let collaborators = $derived($userSettings.collaborators);
+  let currentUserIsOwner = $derived($task ? $task.userId.toString() === $currentUserId : false);
+  let title = $derived($task ? `Share "${$task.title}"` : 'There was an error, please tell Tony');
 
   function toggleSharedWith(id: ObjectId) {
     if (!$task) return;
@@ -82,17 +82,19 @@
         {:else if currentUserIsOwner}
           <span class="sectionTitle mdc-typography--body1">Share With</span>
           <span>Note that sharing automatically applies to all sub-tasks if enabled.</span>
-          {#each Object.values(collaborators) as collaborator}
+          {#each Object.values(collaborators) as collaborator (collaborator._id.toString())}
             <FormField>
               <Checkbox
                 checked={sharedWithIds.includes(collaborator._id.toString())}
-                on:click={() => {
+                onclick={() => {
                   toggleSharedWith(collaborator._id);
                 }}
               />
-              <span slot="label">
-                {collaborator.userName}
-              </span>
+              {#snippet label()}
+                <span>
+                  {collaborator.userName}
+                </span>
+              {/snippet}
             </FormField>
           {/each}
         {/if}
@@ -100,7 +102,7 @@
     </Content>
     <Actions>
       <Button
-        on:click={() => {
+        onclick={() => {
           $open = false;
         }}
       >

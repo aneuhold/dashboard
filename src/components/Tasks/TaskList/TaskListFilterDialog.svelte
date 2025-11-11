@@ -1,46 +1,47 @@
 <script lang="ts">
-  import SmartDialog from '$components/presentational/SmartDialog.svelte';
   import type { DashboardTaskListFilterSettings } from '@aneuhold/core-ts-db-lib';
   import Button, { Label } from '@smui/button';
   import { Actions, Content, Title } from '@smui/dialog';
-  import { createEventDispatcher } from 'svelte';
+  import SmartDialog from '$components/presentational/SmartDialog.svelte';
   import TaskTagsService from '../../../services/Task/TaskTagsService';
   import TaskFilterSetting from './TaskFilterSetting.svelte';
 
-  export let open: boolean;
-  export let initialSettings: DashboardTaskListFilterSettings;
+  let {
+    open = $bindable(),
+    initialSettings,
+    onUpdateSettings,
+    onReset
+  }: {
+    open: boolean;
+    initialSettings: DashboardTaskListFilterSettings;
+    onUpdateSettings?: (settings: DashboardTaskListFilterSettings) => void;
+    onReset?: () => void;
+  } = $props();
 
   const userTags = TaskTagsService.getStore();
 
-  let currentSettings: DashboardTaskListFilterSettings;
-  let previousOpen = false;
-  $: currentSettings = JSON.parse(
-    JSON.stringify(initialSettings)
-  ) as DashboardTaskListFilterSettings;
-
-  $: {
+  let currentSettings = $state(
+    JSON.parse(JSON.stringify(initialSettings)) as DashboardTaskListFilterSettings
+  );
+  let previousOpen = $state(false);
+  $effect(() => {
     if (open !== previousOpen) {
       currentSettings = JSON.parse(
         JSON.stringify(initialSettings)
       ) as DashboardTaskListFilterSettings;
     }
     previousOpen = open;
-  }
-
-  const dispatch = createEventDispatcher<{
-    updateSettings: DashboardTaskListFilterSettings;
-    reset: unknown;
-  }>();
+  });
 
   const handleDone = () => {
-    dispatch('updateSettings', currentSettings);
+    onUpdateSettings?.(currentSettings);
     open = false;
   };
   const handleCancel = () => {
     open = false;
   };
   const handleReset = () => {
-    dispatch('reset');
+    onReset?.();
     open = false;
   };
 </script>
@@ -51,30 +52,30 @@
     <TaskFilterSetting
       settingName="Show Completed"
       enabled={currentSettings.completed.show}
-      on:click={() => {
+      onclick={() => {
         currentSettings.completed.show = !currentSettings.completed.show;
       }}
     />
     <TaskFilterSetting
       settingName="Show Future Tasks"
       enabled={currentSettings.startDate.showFutureTasks}
-      on:click={() => {
+      onclick={() => {
         currentSettings.startDate.showFutureTasks = !currentSettings.startDate.showFutureTasks;
       }}
     />
     <TaskFilterSetting
       settingName="Show All Children Tasks"
       enabled={currentSettings.grandChildrenTasks.show}
-      on:click={() => {
+      onclick={() => {
         currentSettings.grandChildrenTasks.show = !currentSettings.grandChildrenTasks.show;
       }}
     />
     <span class="tagsSeparator">Show Tags</span>
-    {#each $userTags as tag}
+    {#each $userTags as tag (tag)}
       <TaskFilterSetting
         settingName={tag}
         enabled={currentSettings.tags[tag] ? currentSettings.tags[tag].show : true}
-        on:click={() => {
+        onclick={() => {
           if (currentSettings.tags[tag]) {
             currentSettings.tags[tag].show = !currentSettings.tags[tag].show;
           } else {
@@ -87,13 +88,13 @@
     {/each}
   </Content>
   <Actions>
-    <Button color="secondary" on:click={handleReset}>
+    <Button color="secondary" onclick={handleReset}>
       <Label>Reset</Label>
     </Button>
-    <Button on:click={handleCancel}>
+    <Button onclick={handleCancel}>
       <Label>Cancel</Label>
     </Button>
-    <Button on:click={handleDone}>
+    <Button onclick={handleDone}>
       <Label>Done</Label>
     </Button>
   </Actions>

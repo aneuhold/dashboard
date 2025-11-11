@@ -1,16 +1,18 @@
 <script lang="ts">
+  import Paper, { Content, Title } from '@smui/paper';
   import CatImage from '$components/CatImage.svelte';
   import LinkList from '$components/LinkList.svelte';
   import type { LinkInfo } from '$components/LinkListItem.svelte';
   import PageTitle from '$components/PageTitle.svelte';
-  import Paper, { Content, Title } from '@smui/paper';
   import { userSettings } from '../stores/userSettings/userSettings';
   import { enabledPages } from '../stores/visual/enabledPages';
   import { homePageInfo } from './pageInfo';
 
-  $: tableOfContentsLinks = $enabledPages.filter((pageInfo) => {
-    return pageInfo.nestingLevel === 0 && pageInfo.title !== homePageInfo.title;
-  });
+  let tableOfContentsLinks = $derived(
+    $enabledPages.filter((pageInfo) => {
+      return pageInfo.nestingLevel === 0 && pageInfo.title !== homePageInfo.title;
+    })
+  );
 
   const primaryLinks: Array<LinkInfo> = [
     {

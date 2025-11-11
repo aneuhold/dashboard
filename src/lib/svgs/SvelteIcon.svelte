@@ -1,7 +1,11 @@
 <!--Pulled from https://github.com/sveltejs/branding-->
-<script>
-  export let size = 48;
-  $: sizePx = `${size}px`;
+<script lang="ts">
+  interface Props {
+    size?: number;
+  }
+
+  let { size = 48 }: Props = $props();
+  let sizePx = $derived(`${size}px`);
 </script>
 
 <svg

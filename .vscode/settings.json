@@ -7,16 +7,14 @@
     "editor.defaultFormatter": "dbaeumer.vscode-eslint",
     "editor.formatOnSave": false
   },
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "always",
-    "source.organizeImports": "always"
-  },
   "[svelte]": {
     "editor.defaultFormatter": "svelte.svelte-vscode",
     "editor.formatOnSave": true
   },
-  "eslint.experimental.useFlatConfig": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "always"
+  },
   "eslint.run": "onSave",
   // Below is super important for ESLint to run at all with Svelte
-  "eslint.validate": ["svelte"]
+  "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact", "svelte"]
 }

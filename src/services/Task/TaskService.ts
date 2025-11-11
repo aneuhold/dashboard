@@ -1,7 +1,7 @@
-import type { BreadCrumbArray } from '$components/BreadCrumb.svelte';
-import { confirmationDialog } from '$components/singletons/dialogs/SingletonConfirmationDialog.svelte';
 import type { DashboardTask } from '@aneuhold/core-ts-db-lib';
 import { ArrayService } from '@aneuhold/core-ts-lib';
+import type { BreadCrumbArray } from '$components/BreadCrumb.svelte';
+import { confirmationDialog } from '$components/singletons/dialogs/SingletonConfirmationDialog.svelte';
 import { TaskMapService } from './TaskMapService/TaskMapService';
 
 /**
@@ -14,6 +14,8 @@ export default class TaskService {
 
   /**
    * Gets the appropriate route for the task category page for the given task.
+   *
+   * @param taskId
    */
   static getTaskCategoryBreadCrumbs(taskId: string): BreadCrumbArray {
     const defaultBreadCrumbs = [{ name: 'tasks', link: 'tasks' }];
@@ -56,6 +58,10 @@ export default class TaskService {
 
   /**
    * A generic method for handling the delete click for a task.
+   *
+   * @param allChildrenIdsLength
+   * @param deleteTaskCallback
+   * @param taskTitle
    */
   static handleDeleteTaskClick(
     allChildrenIdsLength: number,
@@ -79,6 +85,8 @@ export default class TaskService {
   /**
    * Recursively finds the parent ID of the given task that has the same
    * sharedWith array.
+   *
+   * @param task
    */
   static findParentIdWithSameSharedWith(task: DashboardTask): string {
     if (!task.parentTaskId || task.sharedWith.length === 0) {

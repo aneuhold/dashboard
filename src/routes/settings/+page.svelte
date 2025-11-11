@@ -4,28 +4,28 @@
   A page for settings of the dashboard for the current user.
 -->
 <script lang="ts">
-  import PageTitle from '$components/PageTitle.svelte';
-  import TaskDeletionSettings from '$components/Tasks/TaskDeletionSettings.svelte';
-  import GlobalTagSettings from '$components/Tasks/TaskTags/GlobalTagSettings.svelte';
-  import InputBox from '$components/presentational/InputBox.svelte';
-  import { triggerConfetti } from '$components/singletons/Confetti/Confetti.svelte';
-  import { snackbar } from '$components/singletons/SingletonSnackbar.svelte';
-  import { userSettings } from '$stores/userSettings/userSettings';
-  import DashboardAPIService from '$util/api/DashboardAPIService';
   import Button from '@smui/button';
   import Checkbox from '@smui/checkbox';
   import Chip, { Set, Text, TrailingAction } from '@smui/chips';
   import CircularProgress from '@smui/circular-progress';
   import FormField from '@smui/form-field';
   import Paper, { Content } from '@smui/paper';
+  import PageTitle from '$components/PageTitle.svelte';
+  import { InputBox } from '$components/presentational';
+  import { triggerConfetti } from '$components/singletons/Confetti/Confetti.svelte';
+  import { snackbar } from '$components/singletons/SingletonSnackbar.svelte';
+  import TaskDeletionSettings from '$components/Tasks/TaskDeletionSettings.svelte';
+  import GlobalTagSettings from '$components/Tasks/TaskTags/GlobalTagSettings.svelte';
+  import { userSettings } from '$stores/userSettings/userSettings';
+  import DashboardAPIService from '$util/api/DashboardAPIService';
   import { settingsPageInfo } from './pageInfo';
 
-  let searchingForUser = false;
-  let userNameSearchValue = '';
+  let searchingForUser = $state(false);
+  let userNameSearchValue = $state('');
   let previousUseConfetti = $userSettings.config.enabledFeatures.useConfettiForTasks;
 
-  $: collaboratorUserNames = Object.values($userSettings.collaborators).map(
-    (userCto) => userCto.userName
+  let collaboratorUserNames = $derived(
+    Object.values($userSettings.collaborators).map((userCto) => userCto.userName)
   );
 
   function handleSearchForUser() {
@@ -46,9 +46,9 @@
     userSettings.removeCollaborator(event.detail.chipId);
   }
 
-  function handleEnableConfetti(event: CustomEvent) {
+  function handleEnableConfetti(event: MouseEvent | PointerEvent) {
     if (!previousUseConfetti) {
-      if (event instanceof PointerEvent) {
+      if (event instanceof PointerEvent || event instanceof MouseEvent) {
         triggerConfetti(event.clientX, event.clientY);
       }
       previousUseConfetti = true;
@@ -72,35 +72,36 @@
         <h6 class="sectionTitle mdc-typography--subtitle1">General Settings</h6>
         <FormField>
           <Checkbox bind:checked={$userSettings.config.enableDevMode} touch />
-          <span slot="label">
-            Enable dev mode
-            <span class="mdc-theme--text-hint-on-background checkBoxText">
-              Enables some development features on the site
+          {#snippet label()}
+            <span>
+              Enable dev mode
+              <span class="mdc-theme--text-hint-on-background checkBoxText">
+                Enables some development features on the site
+              </span>
             </span>
-          </span>
+          {/snippet}
         </FormField>
         <FormField>
           <Checkbox bind:checked={$userSettings.config.enabledFeatures.catImageOnHomePage} touch />
-          <span slot="label">
-            Enable cat image on home page 🐈
-            <span class="mdc-theme--text-hint-on-background checkBoxText">
-              Just adds a random cat image to the home page
+          {#snippet label()}
+            <span>
+              Enable cat image on home page 🐈
+              <span class="mdc-theme--text-hint-on-background checkBoxText">
+                Just adds a random cat image to the home page
+              </span>
             </span>
-          </span>
+          {/snippet}
         </FormField>
         <hr class="sectionSeparator" />
         <h6 class="sectionTitle mdc-typography--subtitle1">Collaborators</h6>
         <div class="collaboratorsContainer">
-          <Set
-            chips={collaboratorUserNames}
-            let:chip
-            input
-            on:SMUIChip:removal={handleCollaboratorRemoval}
-          >
-            <Chip {chip}>
-              <Text>{chip}</Text>
-              <TrailingAction icon$class="material-icons">cancel</TrailingAction>
-            </Chip>
+          <Set chips={collaboratorUserNames} input onSMUIChipRemoval={handleCollaboratorRemoval}>
+            {#snippet chip(chip)}
+              <Chip {chip}>
+                <Text>{chip}</Text>
+                <TrailingAction icon$class="material-icons">cancel</TrailingAction>
+              </Chip>
+            {/snippet}
           </Set>
 
           <div class="userNameSearch">
@@ -111,13 +112,13 @@
                 spellCheck={false}
                 helperText="Enter a username to search"
                 label="Username"
-                on:submit={handleSearchForUser}
+                onSubmit={handleSearchForUser}
               />
             </div>
             <Button
               variant="raised"
               disabled={searchingForUser || userNameSearchValue === ''}
-              on:click={handleSearchForUser}
+              onclick={handleSearchForUser}
             >
               {#if searchingForUser}
                 <CircularProgress style="height: 32px; width: 32px;" indeterminate={true} />
@@ -135,10 +136,12 @@
         <FormField>
           <Checkbox
             bind:checked={$userSettings.config.enabledFeatures.useConfettiForTasks}
-            on:click={handleEnableConfetti}
+            onclick={handleEnableConfetti}
             touch
           />
-          <span slot="label">Enable confetti for tasks</span>
+          {#snippet label()}
+            <span>Enable confetti for tasks</span>
+          {/snippet}
         </FormField>
         <hr class="sectionSeparator" />
         <TaskDeletionSettings />

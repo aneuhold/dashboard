@@ -1,11 +1,11 @@
-import LocalData from '$util/LocalData/LocalData';
-import DashboardAPIService from '$util/api/DashboardAPIService';
 import {
+  type DocumentMap,
   NonogramKatanaItem,
-  NonogramKatanaItemName,
-  type DocumentMap
+  NonogramKatanaItemName
 } from '@aneuhold/core-ts-db-lib';
 import type { ObjectId } from 'bson';
+import DashboardAPIService from '$util/api/DashboardAPIService';
+import LocalData from '$util/LocalData/LocalData';
 import { nonogramKatanaItemsDisplayInfo } from '../../routes/entertainment/nonogramkatana/items/nonogramKatanaItemsDisplayInfo';
 import type {
   DocumentInsertOrUpdateInfo,
@@ -55,6 +55,8 @@ export class NonogramKatanaItemMapService extends DocumentMapStoreService<Nonogr
    * Creates or updates the Nonogram Katana items for the given user based
    * on the defaults. It was done this way so that the user didn't need to
    * always have this data created on application load.
+   *
+   * @param userId
    */
   static createOrUpdateItems(userId: ObjectId): void {
     const currentMap = this.getMap();

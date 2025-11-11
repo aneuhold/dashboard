@@ -5,9 +5,6 @@
   the `TaskRecurrenceInfo` component.
 -->
 <script lang="ts">
-  import WeekdaySegmentedButton from '$components/WeekdaySegmentedButton.svelte';
-  import InputBox from '$components/presentational/InputBox.svelte';
-  import { confirmationDialog } from '$components/singletons/dialogs/SingletonConfirmationDialog.svelte';
   import {
     RecurrenceBasis,
     RecurrenceEffect,
@@ -16,32 +13,36 @@
   } from '@aneuhold/core-ts-db-lib';
   import { DateService } from '@aneuhold/core-ts-lib';
   import Select, { Option } from '@smui/select';
-  import { writable, type Updater } from 'svelte/store';
+  import { type Updater, writable } from 'svelte/store';
+  import { InputBox } from '$components/presentational';
+  import { confirmationDialog } from '$components/singletons/dialogs/SingletonConfirmationDialog.svelte';
+  import WeekdaySegmentedButton from '$components/WeekdaySegmentedButton.svelte';
   import { TaskMapService } from '../../../services/Task/TaskMapService/TaskMapService';
   import TaskRecurrenceService from '../../../services/Task/TaskRecurrenceService';
   import TaskRecurrenceInfoIcon from './TaskRecurrenceInfoIcon.svelte';
   import TaskRecurrenceUpdateExample from './TaskRecurrenceUpdateExample.svelte';
   import TaskRecurrenceWeekdayOfMonth from './TaskRecurrenceWeekdayOfMonth.svelte';
 
-  export let taskId: string;
-  export let recurrenceInfo: RecurrenceInfo;
+  let { taskId, recurrenceInfo }: { taskId: string; recurrenceInfo: RecurrenceInfo } = $props();
 
-  $: task = TaskMapService.getTaskStore(taskId);
+  let task = $derived(TaskMapService.getTaskStore(taskId));
   /**
    * Stored so that the changes can be reverted
    */
-  $: previousRInfoString = JSON.stringify(recurrenceInfo);
-  $: disabled = !$task.recurrenceInfo || !!$task.parentRecurringTaskInfo;
-  $: startDate = $task.startDate;
-  $: dueDate = $task.dueDate;
-  $: parentRecurringTaskInfo = $task.parentRecurringTaskInfo;
-  $: exampleOfRecurrence = TaskRecurrenceService.createExampleOfRecurrence(
-    startDate,
-    dueDate,
-    recurrenceInfo,
-    parentRecurringTaskInfo
+  let previousRInfoString = $derived(JSON.stringify(recurrenceInfo));
+  let disabled = $derived(!$task.recurrenceInfo || !!$task.parentRecurringTaskInfo);
+  let startDate = $derived($task.startDate);
+  let dueDate = $derived($task.dueDate);
+  let parentRecurringTaskInfo = $derived($task.parentRecurringTaskInfo);
+  let exampleOfRecurrence = $derived(
+    TaskRecurrenceService.createExampleOfRecurrence(
+      startDate,
+      dueDate,
+      recurrenceInfo,
+      parentRecurringTaskInfo
+    )
   );
-  $: rInfo = createRInfoStore(recurrenceInfo);
+  let rInfo = $derived(createRInfoStore(recurrenceInfo));
 
   function createRInfoStore(initialRInfo: RecurrenceInfo) {
     let currentFrequencyType = initialRInfo.frequency.type;
@@ -55,9 +56,17 @@
       if (checkDate && updateWouldTriggerRecurrence(newRInfo)) {
         return;
       }
-      previousRInfoString = JSON.stringify(newRInfo);
-      set(newRInfo);
-      $task.recurrenceInfo = newRInfo;
+      const newRInfoString = JSON.stringify(newRInfo);
+      // Only update the task if the recurrence info has actually changed
+      // This prevents unnecessary DB writes when the store is recreated
+      if (newRInfoString !== previousRInfoString) {
+        previousRInfoString = newRInfoString;
+        set(newRInfo);
+        $task.recurrenceInfo = newRInfo;
+      } else {
+        // Still update the store for UI consistency
+        set(newRInfo);
+      }
     };
     return {
       subscribe,
@@ -74,7 +83,7 @@
     };
   }
 
-  const updateWouldTriggerRecurrence = (newRInfo: RecurrenceInfo): boolean => {
+  function updateWouldTriggerRecurrence(newRInfo: RecurrenceInfo): boolean {
     const simulatedDate = TaskRecurrenceService.getSimulatedRecurrenceDate($task, (task) => {
       task.recurrenceInfo = newRInfo;
       return task;
@@ -97,9 +106,9 @@
       return true;
     }
     return false;
-  };
+  }
 
-  const handleTypeChange = (newRInfo: RecurrenceInfo) => {
+  function handleTypeChange(newRInfo: RecurrenceInfo) {
     switch (newRInfo.frequency.type) {
       case RecurrenceFrequencyType.everyXTimeUnit:
         newRInfo.frequency.everyXTimeUnit = {
@@ -120,16 +129,16 @@
         break;
     }
     clearOtherTypes(newRInfo);
-  };
+  }
 
-  const clearOtherTypes = (newRInfo: RecurrenceInfo) => {
+  function clearOtherTypes(newRInfo: RecurrenceInfo) {
     Object.keys(newRInfo.frequency).forEach((key) => {
       if (key !== newRInfo.frequency.type.toString() && key !== 'type') {
         // Little hacky, but does the job
         (newRInfo.frequency as { [key: string]: unknown })[key] = undefined;
       }
     });
-  };
+  }
 </script>
 
 <div class={disabled ? ' dimmed-color' : ''}>

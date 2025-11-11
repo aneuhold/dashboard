@@ -9,13 +9,18 @@
   import type { DocumentStore } from '../../../../services/DocumentMapStoreService';
   import { nonogramKatanaUpgradesDisplayInfo } from '../upgrades/nonogramKatanaUpgradesDisplayInfo';
 
-  export let itemName: NonogramKatanaItemName;
-  export let relatedUpgrade: DocumentStore<NonogramKatanaUpgrade>;
+  interface Props {
+    itemName: NonogramKatanaItemName;
+    relatedUpgrade: DocumentStore<NonogramKatanaUpgrade>;
+  }
 
-  $: upgradeDisplayInfo = nonogramKatanaUpgradesDisplayInfo[$relatedUpgrade.upgradeName];
-  $: requiredItemAmount = upgradeDisplayInfo.requiredItems.find(
-    (requiredItem) => requiredItem.itemName === itemName
-  )?.requiredAmount;
+  let { itemName, relatedUpgrade }: Props = $props();
+
+  let upgradeDisplayInfo = $derived(nonogramKatanaUpgradesDisplayInfo[$relatedUpgrade.upgradeName]);
+  let requiredItemAmount = $derived(
+    upgradeDisplayInfo.requiredItems.find((requiredItem) => requiredItem.itemName === itemName)
+      ?.requiredAmount
+  );
 </script>
 
 {#if requiredItemAmount}

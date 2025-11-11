@@ -1,22 +1,26 @@
 <script lang="ts">
-  import InputBox from '$components/presentational/InputBox.svelte';
-  import { nonogramKatanaItemDialog } from '$components/singletons/dialogs/SingletonNonogramKatanaItemDialog.svelte';
   import Card, { Content as CardContent } from '@smui/card';
   import { Icon } from '@smui/common';
   import IconButton from '@smui/icon-button';
+  import { InputBox } from '$components/presentational';
+  import { nonogramKatanaItemDialog } from '$components/singletons/dialogs/SingletonNonogramKatanaItemDialog.svelte';
   import { NonogramKatanaItemMapService } from '../../../../services/NonogramKatana/NonogramKatanaItemMapService';
   import { NonogramKatanaUpgradeMapService } from '../../../../services/NonogramKatana/NonogramKatanaUpgradeMapService';
-  import NonogramKatanaRelatedUpgrade from './NonogramKatanaRelatedUpgrade.svelte';
   import { nonogramKatanaItemsDisplayInfo } from './nonogramKatanaItemsDisplayInfo';
+  import NonogramKatanaRelatedUpgrade from './NonogramKatanaRelatedUpgrade.svelte';
 
-  export let itemId: string;
+  interface Props {
+    itemId: string;
+  }
 
-  $: item = NonogramKatanaItemMapService.getItemStore(itemId);
-  $: displayInfo = nonogramKatanaItemsDisplayInfo[$item.itemName];
-  $: upgradesThatRequireThisItem = NonogramKatanaUpgradeMapService.getUpgradeStoresByItemName(
-    $item.itemName
+  let { itemId }: Props = $props();
+
+  let item = $derived(NonogramKatanaItemMapService.getItemStore(itemId));
+  let displayInfo = $derived(nonogramKatanaItemsDisplayInfo[$item.itemName]);
+  let upgradesThatRequireThisItem = $derived(
+    NonogramKatanaUpgradeMapService.getUpgradeStoresByItemName($item.itemName)
   );
-  $: amountThatCanBeSpent = $item.currentAmount - ($item.minDesired ?? 0);
+  let amountThatCanBeSpent = $derived($item.currentAmount - ($item.minDesired ?? 0));
 </script>
 
 <div class="container">
@@ -26,7 +30,7 @@
         <div class="left-side">
           {#if displayInfo.icon}
             <Icon class="material-icons">
-              <svelte:component this={displayInfo.icon} size={30} />
+              <displayInfo.icon size={30} />
             </Icon>
           {/if}
           <div>
@@ -67,7 +71,7 @@
                 <span>Used for: </span>
                 <ul class="dependencies-list">
                   {#if upgradesThatRequireThisItem.length > 0}
-                    {#each upgradesThatRequireThisItem as upgrade}
+                    {#each upgradesThatRequireThisItem as upgrade, i (i)}
                       <NonogramKatanaRelatedUpgrade
                         itemName={$item.itemName}
                         relatedUpgrade={upgrade}
@@ -75,7 +79,7 @@
                     {/each}
                   {/if}
                   {#if displayInfo.usedFor && displayInfo.usedFor.length > 0}
-                    {#each displayInfo.usedFor as usedFor}
+                    {#each displayInfo.usedFor as usedFor (usedFor)}
                       <li>{usedFor}</li>
                     {/each}
                   {/if}
@@ -86,7 +90,7 @@
               <div class="mdc-typography--caption mdc-theme--text-hint-on-background dependencies">
                 <span>Acquired from: </span>
                 <ul class="dependencies-list">
-                  {#each displayInfo.collectedFrom as collectedFrom}
+                  {#each displayInfo.collectedFrom as collectedFrom (collectedFrom)}
                     <li>{collectedFrom}</li>
                   {/each}
                 </ul>
@@ -95,7 +99,7 @@
           </div>
         </div>
         <IconButton
-          on:click={() => {
+          onclick={() => {
             nonogramKatanaItemDialog.open(itemId);
           }}><Icon class="material-icons dimmed-color">edit</Icon></IconButton
         >

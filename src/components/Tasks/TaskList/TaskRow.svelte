@@ -4,6 +4,9 @@
   A single task that can be displayed in a row format.
 -->
 <script lang="ts">
+  import { DashboardTask, DashboardTaskService, RecurrenceEffect } from '@aneuhold/core-ts-db-lib';
+  import Card, { Content as CardContent } from '@smui/card';
+  import { Icon } from '@smui/icon-button';
   import { goto } from '$app/navigation';
   import ClickableDiv from '$components/presentational/ClickableDiv.svelte';
   import type { MenuButtonItem } from '$components/presentational/MenuButton.svelte';
@@ -13,9 +16,6 @@
   import { taskSharingDialog } from '$components/singletons/dialogs/SingletonTaskSharingDialog/SingletonTaskSharingDialog.svelte';
   import { currentUserId } from '$stores/derived/currentUserId';
   import { userSettings } from '$stores/userSettings/userSettings';
-  import { DashboardTask, DashboardTaskService, RecurrenceEffect } from '@aneuhold/core-ts-db-lib';
-  import Card, { Content as CardContent } from '@smui/card';
-  import { Icon } from '@smui/icon-button';
   import { TaskMapService } from '../../../services/Task/TaskMapService/TaskMapService';
   import TaskRecurrenceService from '../../../services/Task/TaskRecurrenceService';
   import TaskService from '../../../services/Task/TaskService';
@@ -24,52 +24,25 @@
   import TaskRowTagHeader from '../TaskTags/TaskRowTagHeader.svelte';
   import TaskRowSubtaskInfo from './TaskRowSubtaskInfo.svelte';
 
-  export let taskId: string;
-  /**
-   * If set, it will display the tag as a header above the task.
-   */
-  export let tagHeaderName: string | undefined = undefined;
+  interface Props {
+    taskId: string;
+    /**
+     * If set, it will display the tag as a header above the task.
+     */
+    tagHeaderName?: string | undefined;
+  }
+
+  let { taskId, tagHeaderName = undefined }: Props = $props();
+
+  const taskMap = TaskMapService.getStore();
+  let task = $derived(TaskMapService.getTaskStore(taskId));
 
   /**
    * Used so that the animation doesn't play every time the task shows up,
    * only when completed is clicked.
    */
-  let completeAnimationShouldShow = false;
-  let previousTaskCompletedState: boolean;
-  const taskMap = TaskMapService.getStore();
-
-  $: task = TaskMapService.getTaskStore(taskId);
-  $: allChildrenIds = DashboardTaskService.getChildrenIds(
-    Object.values($taskMap).filter((task) => task !== undefined),
-    [$task._id]
-  );
-  $: hasExtraTaskInfo = allChildrenIds.length > 0 || $task.assignedTo;
-  $: finalSharedParentId = TaskService.findParentIdWithSameSharedWith($task);
-  $: usersTaskTags = $task.tags[$currentUserId];
-  $: menuItems = getMenuItems($task);
-  $: currentStrikeClass =
-    completeAnimationShouldShow && $task.completed
-      ? ' strikeAnimate'
-      : $task.completed
-        ? ' strike'
-        : '';
-  $: currentDimClass =
-    completeAnimationShouldShow && $task.completed ? ' dimAnimate' : $task.completed ? ' dim' : '';
-  $: trimmedTaskDescription = $task.description
-    ? $task.description.length > 100
-      ? `${$task.description.substring(0, 100)}...`
-      : $task.description
-    : '';
-  $: assignedToMe = $task.assignedTo ? $task.assignedTo.toString() === $currentUserId : false;
-  $: assignedToName = $task.assignedTo
-    ? assignedToMe
-      ? 'Me'
-      : $userSettings.collaborators[$task.assignedTo.toString()].userName
-    : '';
-
-  $: if ($task.completed !== previousTaskCompletedState) {
-    completeAnimationShouldShow = true;
-  }
+  let completeAnimationShouldShow = $state(false);
+  let previousTaskCompletedState = $state($task.completed);
 
   function goToTask() {
     goto(TaskService.getTaskRoute(taskId));
@@ -165,6 +138,50 @@
     });
     return menuItems;
   }
+
+  let allChildrenIds = $derived(
+    DashboardTaskService.getChildrenIds(
+      Object.values($taskMap).filter((task) => task !== undefined),
+      [$task._id]
+    )
+  );
+  let hasExtraTaskInfo = $derived(allChildrenIds.length > 0 || $task.assignedTo);
+  let finalSharedParentId = $derived(TaskService.findParentIdWithSameSharedWith($task));
+  let usersTaskTags = $derived($task.tags[$currentUserId]);
+  let menuItems = $derived(getMenuItems($task));
+  $effect(() => {
+    if ($task.completed !== previousTaskCompletedState) {
+      completeAnimationShouldShow = true;
+      previousTaskCompletedState = $task.completed;
+    }
+  });
+  let currentStrikeClass = $derived(
+    completeAnimationShouldShow && $task.completed
+      ? ' strikeAnimate'
+      : $task.completed
+        ? ' strike'
+        : ''
+  );
+  let currentDimClass = $derived(
+    completeAnimationShouldShow && $task.completed ? ' dimAnimate' : $task.completed ? ' dim' : ''
+  );
+  let trimmedTaskDescription = $derived(
+    $task.description
+      ? $task.description.length > 100
+        ? `${$task.description.substring(0, 100)}...`
+        : $task.description
+      : ''
+  );
+  let assignedToMe = $derived(
+    $task.assignedTo ? $task.assignedTo.toString() === $currentUserId : false
+  );
+  let assignedToName = $derived(
+    $task.assignedTo
+      ? assignedToMe
+        ? 'Me'
+        : $userSettings.collaborators[$task.assignedTo.toString()].userName
+      : ''
+  );
 </script>
 
 {#if tagHeaderName}
@@ -192,7 +209,7 @@
               {#if usersTaskTags && usersTaskTags.length > 0}
                 <div class="tagsContainer">
                   <Icon class="material-icons dimmed-color small-icon">sell</Icon>
-                  {#each usersTaskTags as tag, index}
+                  {#each usersTaskTags as tag, index (tag)}
                     <i class="mdc-typography--caption mdc-theme--text-hint-on-background no-before">
                       {`${tag}${index === usersTaskTags.length - 1 ? '' : ', '}`}
                     </i>

@@ -6,15 +6,30 @@
   } from '@aneuhold/core-ts-db-lib';
   import Card, { Content } from '@smui/card';
   import Checkbox from '@smui/checkbox';
+  import { preventDefault } from '@smui/common/events';
   import IconButton, { Icon } from '@smui/icon-button';
   import SegmentedButton, { Segment } from '@smui/segmented-button';
-  import { createEventDispatcher } from 'svelte';
 
-  export let sortSetting: DashboardTaskSortSetting;
-  export let disabled: boolean;
-
-  $: sortName = getSortName(sortSetting.sortBy);
-  $: tagContentClass = disabled ? 'card-content dimmed-color' : 'card-content colorWhite';
+  let {
+    sortSetting,
+    disabled,
+    onEnable,
+    onDisable,
+    onIncrementPriority,
+    onDecrementPriority,
+    onDirectionChange
+  }: {
+    sortSetting: DashboardTaskSortSetting;
+    disabled: boolean;
+    onEnable?: (sortBy: DashboardTaskSortBy) => void;
+    onDisable?: (sortBy: DashboardTaskSortBy) => void;
+    onIncrementPriority?: (sortBy: DashboardTaskSortBy) => void;
+    onDecrementPriority?: (sortBy: DashboardTaskSortBy) => void;
+    onDirectionChange?: (
+      sortBy: DashboardTaskSortBy,
+      direction: DashboardTaskSortDirection
+    ) => void;
+  } = $props();
 
   type SortDirectionChoice = {
     value: DashboardTaskSortDirection;
@@ -31,28 +46,18 @@
       iconName: 'arrow_upward'
     }
   ];
-  $: sortDirectionChoice = sortDirectionChoices.find(
-    (choice) => choice.value === sortSetting.sortDirection
-  );
-
-  const dispatch = createEventDispatcher<{
-    enable: DashboardTaskSortBy;
-    disable: DashboardTaskSortBy;
-    incrementPriority: DashboardTaskSortBy;
-    decrementPriority: DashboardTaskSortBy;
-  }>();
 
   const enable = () => {
-    dispatch('enable', sortSetting.sortBy);
+    onEnable?.(sortSetting.sortBy);
   };
   const disable = () => {
-    dispatch('disable', sortSetting.sortBy);
+    onDisable?.(sortSetting.sortBy);
   };
   const incrementPriority = () => {
-    dispatch('incrementPriority', sortSetting.sortBy);
+    onIncrementPriority?.(sortSetting.sortBy);
   };
   const decrementPriority = () => {
-    dispatch('decrementPriority', sortSetting.sortBy);
+    onDecrementPriority?.(sortSetting.sortBy);
   };
   const getSortName = (sortBy: DashboardTaskSortBy) => {
     switch (sortBy) {
@@ -72,6 +77,13 @@
         return 'Unknown';
     }
   };
+  let sortName = $derived(getSortName(sortSetting.sortBy));
+  let tagContentClass = $derived(
+    disabled ? 'card-content dimmed-color' : 'card-content colorWhite'
+  );
+  let sortDirectionChoice = $derived(
+    sortDirectionChoices.find((choice) => choice.value === sortSetting.sortDirection)
+  );
 </script>
 
 <div>
@@ -83,7 +95,7 @@
             checked={!disabled}
             touch
             class="tagCheckbox"
-            on:click={() => {
+            onclick={() => {
               if (disabled) {
                 enable();
               } else {
@@ -92,10 +104,10 @@
             }}
           />
           {#if !disabled}
-            <IconButton size="button" on:click={decrementPriority}>
+            <IconButton size="button" onclick={decrementPriority}>
               <Icon class="material-icons">arrow_downward</Icon>
             </IconButton>
-            <IconButton size="button" on:click={incrementPriority}>
+            <IconButton size="button" onclick={incrementPriority}>
               <Icon class="material-icons">arrow_upward</Icon>
             </IconButton>
           {/if}
@@ -107,21 +119,22 @@
           <div class="iconSet">
             <SegmentedButton
               segments={sortDirectionChoices}
-              let:segment
               singleSelect
               selected={sortDirectionChoice}
-              key={(segment) => segment.value}
+              key={(segment) => segment.value.toString()}
               class="tagSegmentedButton"
             >
-              <Segment
-                {segment}
-                title={segment.value}
-                on:click$preventDefault={() => {
-                  sortSetting.sortDirection = segment.value;
-                }}
-              >
-                <Icon class="material-icons">{segment.iconName}</Icon>
-              </Segment>
+              {#snippet segment(choice: SortDirectionChoice)}
+                <Segment
+                  segment={choice}
+                  title={choice.value.toString()}
+                  onclick={preventDefault(() => {
+                    onDirectionChange?.(sortSetting.sortBy, choice.value);
+                  })}
+                >
+                  <Icon class="material-icons">{choice.iconName}</Icon>
+                </Segment>
+              {/snippet}
             </SegmentedButton>
           </div>
         {/if}

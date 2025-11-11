@@ -14,6 +14,8 @@
  *   surveyQuestionDisplayType: createEnumArgType(SurveyQuestionDisplayType)
  * }
  * ```
+ *
+ * @param enumType The enum type to create the argType for.
  */
 export function createEnumArgType(enumType: object): object {
   return {
@@ -32,9 +34,11 @@ export function createEnumArgType(enumType: object): object {
  *
  * ```
  * argTypes: {
- *    ...createInvisibleArgTypes('staticText', 'SurveyQuestionDisplayType')
+ *   ...createInvisibleArgTypes('staticText', 'SurveyQuestionDisplayType')
  * },
  * ```
+ *
+ * @param args The names of the component properties to make invisible.
  */
 export function createInvisibleArgTypes(...args: string[]) {
   return args.reduce((acc, arg) => ({ ...acc, [arg]: { table: { disable: true } } }), {});

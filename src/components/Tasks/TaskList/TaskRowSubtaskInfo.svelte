@@ -4,20 +4,24 @@
 Info about subtasks within a task row.
 -->
 <script lang="ts">
-  import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
-  import { currentUserId } from '$stores/derived/currentUserId';
   import { DashboardTask } from '@aneuhold/core-ts-db-lib';
   import type { ObjectId } from 'bson';
+  import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
+  import { currentUserId } from '$stores/derived/currentUserId';
 
-  export let allChildrenIds: ObjectId[];
+  interface Props {
+    allChildrenIds: ObjectId[];
+  }
 
-  $: allChildTasks = allChildrenIds.map(
-    (id) => TaskMapService.getMap()[id.toString()]
-  ) as DashboardTask[];
-  $: allCompletedTasks = allChildTasks.filter((task) => task.completed);
-  $: allIncompleteTasks = allChildTasks.filter((task) => !task.completed);
-  $: allIncompleteTasksAssignedToMe = allIncompleteTasks.filter(
-    (task) => task.assignedTo?.toString() === $currentUserId
+  let { allChildrenIds }: Props = $props();
+
+  let allChildTasks = $derived(
+    allChildrenIds.map((id) => TaskMapService.getMap()[id.toString()]) as DashboardTask[]
+  );
+  let allCompletedTasks = $derived(allChildTasks.filter((task) => task.completed));
+  let allIncompleteTasks = $derived(allChildTasks.filter((task) => !task.completed));
+  let allIncompleteTasksAssignedToMe = $derived(
+    allIncompleteTasks.filter((task) => task.assignedTo?.toString() === $currentUserId)
   );
 </script>
 

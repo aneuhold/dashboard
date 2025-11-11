@@ -1,14 +1,21 @@
 <script lang="ts">
-  import { goto } from '$app/navigation';
-  import GitHubIcon from '$lib/svgs/GitHubIcon.svelte';
   import IconButton, { Icon } from '@smui/icon-button';
   import TopAppBar, { AutoAdjust, Row, Section, Title } from '@smui/top-app-bar';
+  import type { Snippet } from 'svelte';
+  import { goto } from '$app/navigation';
+  import GitHubIcon from '$lib/svgs/GitHubIcon.svelte';
   import { apiKey } from '../stores/apiKey';
   import { LoginState, loginState } from '../stores/loginState';
   import { navDrawerOpen } from '../stores/visual/navDrawerOpen';
   import NavDrawer from './NavDrawer.svelte';
 
-  let topAppBar: TopAppBar;
+  let {
+    children
+  }: {
+    children?: Snippet;
+  } = $props();
+
+  let topAppBar: TopAppBar | null = $state(null);
 
   function handleLogOut() {
     apiKey.set(null);
@@ -21,13 +28,13 @@
     <Section>
       <IconButton
         class="material-icons"
-        on:click={() => {
+        onclick={() => {
           $navDrawerOpen = true;
         }}>menu</IconButton
       >
       <div class="dashboard-title">
         <Title
-          on:click={() => {
+          onclick={() => {
             goto('/');
           }}
         >
@@ -39,13 +46,13 @@
       <IconButton
         class="material-icons"
         aria-label="GitHub"
-        on:click={() => {
+        onclick={() => {
           window.open('https://github.com/aneuhold?tab=repositories', '_blank');
         }}
       >
-        <Icon><svelte:component this={GitHubIcon} size={24} /></Icon>
+        <Icon><GitHubIcon size={24} /></Icon>
       </IconButton>
-      <IconButton class="material-icons" aria-label="Log Out" on:click={handleLogOut}>
+      <IconButton class="material-icons" aria-label="Log Out" onclick={handleLogOut}>
         logout
       </IconButton>
     </Section>
@@ -54,7 +61,7 @@
 
 <AutoAdjust {topAppBar}>
   <NavDrawer />
-  <slot />
+  {@render children?.()}
 </AutoAdjust>
 
 <style>

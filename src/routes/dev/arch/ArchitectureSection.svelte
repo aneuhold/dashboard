@@ -5,12 +5,16 @@
 -->
 <script lang="ts">
   import Paper, { Content, Subtitle, Title } from '@smui/paper';
-  import ArchitectureItemCard from './ArchitectureItemCard.svelte';
   import type { ArchitectureContextComponent } from '../../../util/ArchitectureInfo/architectureContextInfo';
+  import ArchitectureItemCard from './ArchitectureItemCard.svelte';
 
-  export let title: string;
-  export let subtitle: string | null = null;
-  export let components: ArchitectureContextComponent[];
+  interface Props {
+    title: string;
+    subtitle?: string | null;
+    components: ArchitectureContextComponent[];
+  }
+
+  let { title, subtitle = null, components }: Props = $props();
 </script>
 
 <Paper>
@@ -19,7 +23,7 @@
     <Subtitle>{subtitle}</Subtitle>
   {/if}
   <Content>
-    {#each components as { component, contextSpecificDescription }}
+    {#each components as { component, contextSpecificDescription } (component.title)}
       <ArchitectureItemCard archComponent={component}>
         {#if contextSpecificDescription}
           <span><b>Context Specific Description:</b> {contextSpecificDescription}</span>

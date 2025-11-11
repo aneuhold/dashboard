@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
   export type BreadCrumbArray = Array<{
     name: string;
     /**
@@ -9,28 +9,30 @@
 </script>
 
 <script lang="ts">
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
 
-  export let breadCrumbArray: BreadCrumbArray | null = null;
+  let {
+    breadCrumbArray = null
+  }: {
+    breadCrumbArray?: BreadCrumbArray | null;
+  } = $props();
 
-  let activeRoute: string = '/';
-  let previousLink: string | undefined;
-  $: routeArray = breadCrumbArray
-    ? breadCrumbArray
-    : activeRoute
-        .split('/')
-        .filter((route) => route !== '')
-        .map((route) => {
-          const routeLink = previousLink ? previousLink + '/' + route : route;
-          previousLink = routeLink;
-          return { name: route, link: routeLink };
-        });
+  let activeRoute = $derived(page.route.id ?? '/');
+  let routeArray = $derived(
+    breadCrumbArray ? breadCrumbArray : buildActiveRouteSegments(activeRoute)
+  );
 
-  page.subscribe((pageData) => {
-    if (pageData.route.id) {
-      activeRoute = pageData.route.id;
-    }
-  });
+  function buildActiveRouteSegments(routeString: string) {
+    let previousLink: string | undefined = undefined;
+    return routeString
+      .split('/')
+      .filter((route) => route !== '')
+      .map((route) => {
+        const routeLink = previousLink ? previousLink + '/' + route : route;
+        previousLink = routeLink;
+        return { name: route, link: routeLink };
+      });
+  }
 </script>
 
 <span class="breadcrumb-container">
@@ -40,7 +42,7 @@
     <a href="/">home</a>
     <span>/</span>
   {/if}
-  {#each routeArray as route, index}
+  {#each routeArray as route, index (route.link)}
     {#if index > 0}
       <span>/</span>
     {/if}

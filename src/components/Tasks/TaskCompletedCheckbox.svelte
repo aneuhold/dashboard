@@ -1,26 +1,31 @@
 <script lang="ts">
-  import { triggerConfetti } from '$components/singletons/Confetti/Confetti.svelte';
-  import { snackbar } from '$components/singletons/SingletonSnackbar.svelte';
-  import { confirmationDialog } from '$components/singletons/dialogs/SingletonConfirmationDialog.svelte';
   import { RecurrenceEffect } from '@aneuhold/core-ts-db-lib';
   import Checkbox from '@smui/checkbox';
+  import { triggerConfetti } from '$components/singletons/Confetti/Confetti.svelte';
+  import { confirmationDialog } from '$components/singletons/dialogs/SingletonConfirmationDialog.svelte';
+  import { snackbar } from '$components/singletons/SingletonSnackbar.svelte';
   import { TaskMapService } from '../../services/Task/TaskMapService/TaskMapService';
-  import ClickableDiv, { type ClickEvent } from '../presentational/ClickableDiv.svelte';
+  import ClickableDiv from '../presentational/ClickableDiv.svelte';
 
-  export let taskId: string;
+  interface Props {
+    taskId: string;
+  }
+
+  let { taskId }: Props = $props();
 
   // X and Y of the most recent click event for use in confetti
   let clickX = 0;
   let clickY = 0;
 
-  $: task = TaskMapService.getTaskStore(taskId);
-  $: preventDefault =
+  let task = $derived(TaskMapService.getTaskStore(taskId));
+  let preventDefault = $derived(
     !$task.parentRecurringTaskInfo &&
-    !$task.completed &&
-    $task.recurrenceInfo &&
-    $task.recurrenceInfo.recurrenceEffect === RecurrenceEffect.rollOnCompletion;
+      !$task.completed &&
+      $task.recurrenceInfo &&
+      $task.recurrenceInfo.recurrenceEffect === RecurrenceEffect.rollOnCompletion
+  );
 
-  function handleCheckboxClick(event?: ClickEvent) {
+  function handleCheckboxClick(event?: MouseEvent) {
     if (event) {
       clickX = event.clientX;
       clickY = event.clientY;
@@ -53,7 +58,7 @@
   <Checkbox
     checked={$task.completed}
     touch
-    on:click={(event) => {
+    onclick={(event) => {
       if (preventDefault) {
         event.preventDefault();
       }

@@ -1,7 +1,7 @@
-import LocalData, { localDataReady } from '$util/LocalData/LocalData';
-import DashboardAPIService from '$util/api/DashboardAPIService';
 import * as Sentry from '@sentry/sveltekit';
 import { writable } from 'svelte/store';
+import DashboardAPIService from '$util/api/DashboardAPIService';
+import LocalData, { localDataReady } from '$util/LocalData/LocalData';
 
 export enum LoginState {
   Initializing = 'Initializing',

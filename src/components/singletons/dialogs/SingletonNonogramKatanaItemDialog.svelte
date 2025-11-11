@@ -4,11 +4,11 @@
   This component is a singleton, and should only ever be used once. Use the
   exported functions to show the dialog.
 -->
-<script lang="ts" context="module">
-  import SmartDialog from '$components/presentational/SmartDialog.svelte';
+<script lang="ts" module>
   import Button, { Label } from '@smui/button';
   import { Actions, Content, Title } from '@smui/dialog';
   import { writable } from 'svelte/store';
+  import SmartDialog from '$components/presentational/SmartDialog.svelte';
   import { NonogramKatanaItemMapService } from '../../../services/NonogramKatana/NonogramKatanaItemMapService';
 
   /**
@@ -26,15 +26,23 @@
 </script>
 
 <script lang="ts">
-  import InputBox from '$components/presentational/InputBox.svelte';
   import Checkbox from '@smui/checkbox';
+  import { InputBox } from '$components/presentational';
   import { nonogramKatanaItemsDisplayInfo } from '../../../routes/entertainment/nonogramkatana/items/nonogramKatanaItemsDisplayInfo';
 
-  $: item = $currentItemId ? NonogramKatanaItemMapService.getItemStore($currentItemId) : null;
-  $: displayInfo = $item ? nonogramKatanaItemsDisplayInfo[$item.itemName] : null;
-  $: minDesiredPresent = $item && $item.minDesired !== undefined && $item.minDesired !== null;
-  $: maxDesiredPresent = $item && $item.maxDesired !== undefined && $item.maxDesired !== null;
-  $: storageCapPresent = $item && $item.storageCap !== undefined && $item.storageCap !== null;
+  let item = $derived(
+    $currentItemId ? NonogramKatanaItemMapService.getItemStore($currentItemId) : null
+  );
+  let displayInfo = $derived($item ? nonogramKatanaItemsDisplayInfo[$item.itemName] : null);
+  let minDesiredPresent = $derived(
+    $item && $item.minDesired !== undefined && $item.minDesired !== null
+  );
+  let maxDesiredPresent = $derived(
+    $item && $item.maxDesired !== undefined && $item.maxDesired !== null
+  );
+  let storageCapPresent = $derived(
+    $item && $item.storageCap !== undefined && $item.storageCap !== null
+  );
 </script>
 
 <SmartDialog bind:open={$open}>
@@ -44,7 +52,7 @@
       <div class="content">
         <Checkbox
           checked={minDesiredPresent}
-          on:click={() => {
+          onclick={() => {
             if ($item && minDesiredPresent) {
               $item.minDesired = undefined;
             } else if ($item) {
@@ -65,7 +73,7 @@
         {/if}
         <Checkbox
           checked={maxDesiredPresent}
-          on:click={() => {
+          onclick={() => {
             if ($item && maxDesiredPresent) {
               $item.maxDesired = undefined;
             } else if ($item) {
@@ -86,7 +94,7 @@
         {/if}
         <Checkbox
           checked={storageCapPresent}
-          on:click={() => {
+          onclick={() => {
             if ($item && storageCapPresent) {
               $item.storageCap = undefined;
             } else if ($item) {
@@ -110,7 +118,7 @@
     </Content>
     <Actions>
       <Button
-        on:click={() => {
+        onclick={() => {
           $open = false;
         }}
       >

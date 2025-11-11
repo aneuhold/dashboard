@@ -8,11 +8,15 @@
   import type { LinkInfo } from './LinkListItem.svelte';
   import LinkListItem from './LinkListItem.svelte';
 
-  export let links: Array<LinkInfo>;
+  interface Props {
+    links: Array<LinkInfo>;
+  }
+
+  let { links }: Props = $props();
 </script>
 
 <List twoLine={true}>
-  {#each links as linkInfo}
+  {#each links as linkInfo (linkInfo.title)}
     <LinkListItem {linkInfo} />
   {/each}
 </List>

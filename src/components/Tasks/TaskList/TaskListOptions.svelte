@@ -1,66 +1,41 @@
 <script lang="ts">
+  import {
+    DashboardTask,
+    type DashboardTaskListFilterSettings,
+    type DashboardTaskListSortSettings,
+    getDefaultTaskListFilterSettings
+  } from '@aneuhold/core-ts-db-lib';
   import ClickableDiv from '$components/presentational/ClickableDiv.svelte';
   import SquareIconButton from '$components/presentational/SquareIconButton.svelte';
   import { currentUserId } from '$stores/derived/currentUserId';
   import { userSettings } from '$stores/userSettings/userSettings';
-  import {
-    DashboardTask,
-    getDefaultTaskListFilterSettings,
-    type DashboardTaskListFilterSettings,
-    type DashboardTaskListSortSettings
-  } from '@aneuhold/core-ts-db-lib';
   import type { DocumentStore } from '../../../services/DocumentMapStoreService';
   import { TaskMapService } from '../../../services/Task/TaskMapService/TaskMapService';
   import TaskTagsService from '../../../services/Task/TaskTagsService';
   import TaskListFilterDialog from './TaskListFilterDialog.svelte';
   import TaskListSortingDialog from './TaskListSortingDialog.svelte';
 
-  export let category: string;
-  export let parentTask: DocumentStore<DashboardTask> | undefined = undefined;
-  export let parentTaskSortSettings: DashboardTaskListSortSettings | undefined = undefined;
-  export let userTaskSortSettings: DashboardTaskListSortSettings | undefined = undefined;
-  export let currentSortSettings: DashboardTaskListSortSettings;
-  export let removedTaskIds: string[];
+  let {
+    category,
+    parentTask,
+    parentTaskSortSettings,
+    userTaskSortSettings,
+    currentSortSettings,
+    removedTaskIds
+  }: {
+    category: string;
+    parentTask?: DocumentStore<DashboardTask>;
+    parentTaskSortSettings?: DashboardTaskListSortSettings;
+    userTaskSortSettings?: DashboardTaskListSortSettings;
+    currentSortSettings: DashboardTaskListSortSettings;
+    removedTaskIds: string[];
+  } = $props();
 
   const globalTags = TaskTagsService.getStore();
   const taskMap = TaskMapService.getStore();
 
-  $: parentTaskFilterSettings = $parentTask
-    ? $parentTask.filterSettings[$currentUserId]
-    : undefined;
-  $: userTaskFilterSettings = $userSettings.config.taskListFilterSettings[category];
-  $: currentFilterSettings =
-    parentTaskFilterSettings ??
-    userTaskFilterSettings ??
-    getDefaultTaskListFilterSettings($currentUserId);
-  $: sortingDimmed = $parentTask ? !parentTaskSortSettings : !userTaskSortSettings;
-  $: filterDimmed = $parentTask ? !parentTaskFilterSettings : !userTaskFilterSettings;
-  $: taskSpecificText = getTaskSpecificText({
-    parentTask: $parentTask,
-    parentTaskSortSettings,
-    parentTaskFilterSettings
-  });
-  $: tagsWithRemovedIds = removedTaskIds.reduce((tagSet, id) => {
-    const task = $taskMap[id];
-    const currentUserTags = task?.tags[$currentUserId];
-    if (task && currentUserTags) {
-      currentUserTags.forEach((tag) => tagSet.add(tag));
-    }
-    return tagSet;
-  }, new Set<string>());
-  /**
-   * Tags that are hidden, but only those that actually have tasks with removed
-   * ids.
-   */
-  $: hiddenTags = $globalTags.filter(
-    (tag) =>
-      currentFilterSettings.tags[tag] &&
-      !currentFilterSettings.tags[tag].show &&
-      tagsWithRemovedIds.has(tag)
-  );
-
-  let sortingDialogOpen = false;
-  let filterDialogOpen = false;
+  let sortingDialogOpen = $state(false);
+  let filterDialogOpen = $state(false);
 
   const getTaskSpecificText = (settingsInfo: {
     parentTask?: DashboardTask;
@@ -80,8 +55,7 @@
     return '';
   };
 
-  const handleUpdateSortSettings = (event: CustomEvent<DashboardTaskListSortSettings>) => {
-    const newSortSettings = event.detail;
+  const handleUpdateSortSettings = (newSortSettings: DashboardTaskListSortSettings) => {
     if ($parentTask) {
       $parentTask.sortSettings[$currentUserId] = newSortSettings;
     } else {
@@ -99,8 +73,7 @@
       $userSettings.config.taskListSortSettings = sortSettings;
     }
   };
-  const handleUpdateFilterSettings = (event: CustomEvent<DashboardTaskListFilterSettings>) => {
-    const newFilterSettings = event.detail;
+  const handleUpdateFilterSettings = (newFilterSettings: DashboardTaskListFilterSettings) => {
     if ($parentTask) {
       $parentTask.filterSettings[$currentUserId] = newFilterSettings;
     } else {
@@ -118,6 +91,46 @@
       $userSettings.config.taskListFilterSettings = filterSettings;
     }
   };
+  let parentTaskFilterSettings = $derived(
+    $parentTask ? $parentTask.filterSettings[$currentUserId] : undefined
+  );
+  let userTaskFilterSettings = $derived($userSettings.config.taskListFilterSettings[category]);
+  let currentFilterSettings = $derived(
+    parentTaskFilterSettings ??
+      userTaskFilterSettings ??
+      getDefaultTaskListFilterSettings($currentUserId)
+  );
+  let sortingDimmed = $derived($parentTask ? !parentTaskSortSettings : !userTaskSortSettings);
+  let filterDimmed = $derived($parentTask ? !parentTaskFilterSettings : !userTaskFilterSettings);
+  let taskSpecificText = $derived(
+    getTaskSpecificText({
+      parentTask: $parentTask,
+      parentTaskSortSettings,
+      parentTaskFilterSettings
+    })
+  );
+  let tagsWithRemovedIds = $derived(
+    removedTaskIds.reduce((tagSet, id) => {
+      const task = $taskMap[id];
+      const currentUserTags = task?.tags[$currentUserId];
+      if (task && currentUserTags) {
+        currentUserTags.forEach((tag) => tagSet.add(tag));
+      }
+      return tagSet;
+    }, new Set<string>())
+  );
+  /**
+   * Tags that are hidden, but only those that actually have tasks with removed
+   * ids.
+   */
+  let hiddenTags = $derived(
+    $globalTags.filter(
+      (tag) =>
+        currentFilterSettings.tags[tag] &&
+        !currentFilterSettings.tags[tag].show &&
+        tagsWithRemovedIds.has(tag)
+    )
+  );
 </script>
 
 <div class="container">
@@ -151,14 +164,14 @@
 <TaskListSortingDialog
   initialSettings={currentSortSettings}
   bind:open={sortingDialogOpen}
-  on:updateSettings={handleUpdateSortSettings}
-  on:reset={handleResetSortSettings}
+  onUpdateSettings={handleUpdateSortSettings}
+  onReset={handleResetSortSettings}
 />
 <TaskListFilterDialog
   initialSettings={currentFilterSettings}
   bind:open={filterDialogOpen}
-  on:updateSettings={handleUpdateFilterSettings}
-  on:reset={handleResetFilterSettings}
+  onUpdateSettings={handleUpdateFilterSettings}
+  onReset={handleResetFilterSettings}
 />
 
 <style>

@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
   export type MenuButtonItem = {
     title: string;
     iconName: string;
@@ -17,31 +17,37 @@
   import List, { Graphic, Item, Text } from '@smui/list';
   import MenuSurface from '@smui/menu-surface';
 
-  export let menuItems: MenuButtonItem[];
-  export let alignCenterVertically = false;
+  interface Props {
+    menuItems: MenuButtonItem[];
+    alignCenterVertically?: boolean;
+  }
+
+  let { menuItems, alignCenterVertically = false }: Props = $props();
 
   function handleItemClick(clickAction: () => void) {
-    menu.setOpen(false);
+    if (menu) {
+      menu.setOpen(false);
+    }
     // Wait for the ripple to stop, this also prevents an error for events
     // from SMUI if the component was deleted during the clickAction.
     setTimeout(clickAction, 50);
   }
 
-  let menu: MenuSurface;
-  let anchor: HTMLDivElement;
+  let menu: MenuSurface | null = $state(null);
+  let anchor: HTMLDivElement | null = $state(null);
 </script>
 
 <!--The extra div is required to keep the bounds of the menu contained -->
 <div class={alignCenterVertically ? 'alignCenter' : ''}>
   <div bind:this={anchor}>
-    <IconButton class="material-icons dimmed-color" on:click={() => menu.setOpen(true)}>
+    <IconButton class="material-icons dimmed-color" onclick={() => menu?.setOpen(true)}>
       menu
     </IconButton>
     <MenuSurface bind:this={menu} anchorElement={anchor} anchorCorner="BOTTOM_RIGHT">
       <List>
-        {#each menuItems as item}
+        {#each menuItems as item (item.title)}
           <Item
-            on:SMUI:action={() => {
+            onclick={() => {
               handleItemClick(item.clickAction);
             }}
           >

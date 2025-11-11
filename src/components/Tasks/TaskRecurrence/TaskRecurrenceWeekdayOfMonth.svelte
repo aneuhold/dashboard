@@ -1,10 +1,14 @@
 <script lang="ts">
-  import WeekdaySegmentedButton from '$components/WeekdaySegmentedButton.svelte';
   import Select, { Option } from '@smui/select';
+  import WeekdaySegmentedButton from '$components/WeekdaySegmentedButton.svelte';
 
-  export let weekDay: number;
-  export let weekOfMonth: number | 'last';
-  export let disabled = false;
+  interface Props {
+    weekDay: number;
+    weekOfMonth: number | 'last';
+    disabled?: boolean;
+  }
+
+  let { weekDay = $bindable(), weekOfMonth = $bindable(), disabled = false }: Props = $props();
 </script>
 
 <div class="container">
@@ -15,7 +19,7 @@
       <Option value={2}>2nd</Option>
       <Option value={3}>3rd</Option>
       <Option value={4}>4th</Option>
-      <Option value={'last'}>Last</Option>
+      <Option value="last">Last</Option>
     </Select>
   </div>
   <WeekdaySegmentedButton {disabled} bind:weekDaySetOrChoice={weekDay} />

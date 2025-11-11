@@ -1,13 +1,17 @@
 <script lang="ts">
-  import { snackbar } from '$components/singletons/SingletonSnackbar.svelte';
   import Button, { Label } from '@smui/button';
   import Card, { Content } from '@smui/card';
   import { Icon } from '@smui/icon-button';
+  import { snackbar } from '$components/singletons/SingletonSnackbar.svelte';
 
-  export let iconName: string;
-  export let title: string;
-  export let description: string;
-  export let automationTriggerUrl: string | undefined;
+  interface Props {
+    iconName: string;
+    title: string;
+    description: string;
+    automationTriggerUrl: string | undefined;
+  }
+
+  let { iconName, title, description, automationTriggerUrl }: Props = $props();
 
   function handleButtonClick() {
     if (automationTriggerUrl) {
@@ -29,7 +33,7 @@
         <Icon class="material-icons">{iconName}</Icon>
         <div class="action-container">
           {#if automationTriggerUrl}
-            <Button variant="raised" on:click={handleButtonClick}>
+            <Button variant="raised" onclick={handleButtonClick}>
               <Label>{title}</Label>
             </Button>
           {/if}

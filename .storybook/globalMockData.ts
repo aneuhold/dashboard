@@ -1,7 +1,7 @@
-import TaskMapServiceMock from '$services/Task/TaskMapService/TaskMapService.mock';
-import UserSettingsMock from '$stores/userSettings/userSettings.mock';
 import { type UserCTO } from '@aneuhold/core-ts-db-lib';
 import { ObjectId } from 'bson';
+import TaskMapServiceMock from '$services/Task/TaskMapService/TaskMapService.mock';
+import UserSettingsMock from '$stores/userSettings/userSettings.mock';
 
 /**
  * Global mock data for Storybook.

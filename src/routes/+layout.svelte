@@ -4,22 +4,27 @@
   The root of the application.
 -->
 <script lang="ts">
+  import '../globalStyles/global.css';
+  import CircularProgress from '@smui/circular-progress';
+  import { onDestroy, onMount } from 'svelte';
   import Confetti from '$components/singletons/Confetti/Confetti.svelte';
-  import SingletonSnackbar from '$components/singletons/SingletonSnackbar.svelte';
   import SingletonConfirmationDialog from '$components/singletons/dialogs/SingletonConfirmationDialog.svelte';
   import SingletonTaskAssignmentDialog from '$components/singletons/dialogs/SingletonTaskAssignmentDialog/SingletonTaskAssignmentDialog.svelte';
   import SingletonTaskSharingDialog from '$components/singletons/dialogs/SingletonTaskSharingDialog/SingletonTaskSharingDialog.svelte';
+  import SingletonSnackbar from '$components/singletons/SingletonSnackbar.svelte';
   import LocalData from '$util/LocalData/LocalData';
   import localOverride from '$util/localOverride';
-  import CircularProgress from '@smui/circular-progress';
-  import { onDestroy, onMount } from 'svelte';
   import Login from '../components/Login/Login.svelte';
   import NavBar from '../components/NavBar.svelte';
-  import '../globalStyles/global.css';
   import { appIsVisible } from '../stores/appIsVisible';
   import { LoginState, loginState } from '../stores/loginState';
+  interface Props {
+    children?: import('svelte').Snippet;
+  }
 
-  let mounted = false;
+  let { children }: Props = $props();
+
+  let mounted = $state(false);
 
   // Top-level initialization of local data. This should only be done here.
   LocalData.initialize();
@@ -60,7 +65,7 @@
       <Confetti />
       <NavBar>
         <div class="content">
-          <slot />
+          {@render children?.()}
         </div>
       </NavBar>
       <!-- Singleton Components -->

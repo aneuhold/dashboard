@@ -1,29 +1,26 @@
-<script lang="ts" context="module">
-  export type ClickEvent = MouseEvent & {
-    currentTarget: EventTarget & HTMLDivElement;
-  };
-</script>
-
 <!--
   @component
   
   A div that is clickable. It is setup to be accessible.
 -->
 <script lang="ts">
-  export let clickAction: (event?: ClickEvent) => void;
+  import type { Snippet } from 'svelte';
+
+  let { clickAction, children }: { clickAction: (event?: MouseEvent) => void; children: Snippet } =
+    $props();
 </script>
 
 <div
-  on:click={(event) => {
+  onclick={(event) => {
     clickAction(event);
   }}
   role="button"
   tabindex="0"
-  on:keypress={() => {
+  onkeypress={() => {
     clickAction();
   }}
 >
-  <slot />
+  {@render children()}
 </div>
 
 <style>

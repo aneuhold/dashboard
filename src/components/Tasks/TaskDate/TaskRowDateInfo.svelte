@@ -2,9 +2,9 @@
   import { DateService } from '@aneuhold/core-ts-lib';
   import { TaskMapService } from '../../../services/Task/TaskMapService/TaskMapService';
 
-  export let taskId: string;
-  $: task = TaskMapService.getTaskStore(taskId);
-  $: pastDue = $task.dueDate && $task.dueDate < new Date();
+  let { taskId }: { taskId: string } = $props();
+  let task = $derived(TaskMapService.getTaskStore(taskId));
+  let pastDue = $derived($task.dueDate && $task.dueDate < new Date());
 </script>
 
 <div class="container no-before mdc-typography--caption mdc-theme--text-hint-on-background">

@@ -1,18 +1,22 @@
 <script lang="ts">
-  import { nonogramKatanaUpgradeDialog } from '$components/singletons/dialogs/SingletonNonogramKatanaUpgradeDialog.svelte';
   import type { NonogramKatanaUpgradeName } from '@aneuhold/core-ts-db-lib';
   import Card, { Content as CardContent } from '@smui/card';
   import Checkbox from '@smui/checkbox';
   import { Icon } from '@smui/common';
   import IconButton from '@smui/icon-button';
+  import { nonogramKatanaUpgradeDialog } from '$components/singletons/dialogs/SingletonNonogramKatanaUpgradeDialog.svelte';
   import { NonogramKatanaUpgradeMapService } from '../../../../services/NonogramKatana/NonogramKatanaUpgradeMapService';
   import NonogramKatanaRequiredItem from './NonogramKatanaRequiredItem.svelte';
   import NonogramKatanaRequiredUpgrade from './NonogramKatanaRequiredUpgrade.svelte';
   import { nonogramKatanaUpgradesDisplayInfo } from './nonogramKatanaUpgradesDisplayInfo';
 
-  export let upgradeName: NonogramKatanaUpgradeName;
-  $: upgrade = NonogramKatanaUpgradeMapService.getUpgradeStoreByName(upgradeName);
-  $: displayInfo = nonogramKatanaUpgradesDisplayInfo[upgradeName];
+  interface Props {
+    upgradeName: NonogramKatanaUpgradeName;
+  }
+
+  let { upgradeName }: Props = $props();
+  let upgrade = $derived(NonogramKatanaUpgradeMapService.getUpgradeStoreByName(upgradeName));
+  let displayInfo = $derived(nonogramKatanaUpgradesDisplayInfo[upgradeName]);
 </script>
 
 <div class="container">
@@ -23,7 +27,7 @@
           <Checkbox bind:checked={$upgrade.completed} touch />
           {#if displayInfo.icon}
             <Icon class="material-icons">
-              <svelte:component this={displayInfo.icon} size={30} />
+              <displayInfo.icon size={30} />
             </Icon>
           {/if}
           <div>
@@ -33,7 +37,7 @@
             <div class="mdc-typography--caption mdc-theme--text-hint-on-background dependencies">
               <span>Required items: </span>
               <ul class="dependencies-list">
-                {#each displayInfo.requiredItems as requiredItem}
+                {#each displayInfo.requiredItems as requiredItem (requiredItem.itemName)}
                   <NonogramKatanaRequiredItem
                     requiredAmount={requiredItem.requiredAmount}
                     currentAmount={$upgrade.currentItemAmounts[requiredItem.itemName] ?? 0}
@@ -46,7 +50,7 @@
               <div class="mdc-typography--caption mdc-theme--text-hint-on-background dependencies">
                 <span>Required upgrades: </span>
                 <ul class="dependencies-list">
-                  {#each displayInfo.requiredUpgrades as requiredUpgrade}
+                  {#each displayInfo.requiredUpgrades as requiredUpgrade (requiredUpgrade)}
                     <NonogramKatanaRequiredUpgrade upgradeName={requiredUpgrade} />
                   {/each}
                 </ul>
@@ -54,7 +58,7 @@
             {/if}
           </div>
         </div>
-        <IconButton on:click={() => nonogramKatanaUpgradeDialog.open($upgrade._id.toString())}>
+        <IconButton onclick={() => nonogramKatanaUpgradeDialog.open($upgrade._id.toString())}>
           <Icon class="material-icons dimmed-color">edit</Icon>
         </IconButton>
       </div>

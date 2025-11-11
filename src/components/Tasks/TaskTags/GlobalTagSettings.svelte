@@ -1,28 +1,32 @@
 <script lang="ts">
-  import InfoIcon from '$components/InfoIcon.svelte';
-  import { userSettings } from '$stores/userSettings/userSettings';
   import Button from '@smui/button';
   import { flip } from 'svelte/animate';
+  import InfoIcon from '$components/InfoIcon.svelte';
+  import { userSettings } from '$stores/userSettings/userSettings';
   import GlobalTagEditor from './GlobalTagEditor.svelte';
   import GlobalTagRow from './GlobalTagRow.svelte';
 
-  $: tagSettings = $userSettings.config.tagSettings;
-  $: sortableTagList = Object.keys(tagSettings)
-    .filter((tagName) => {
-      return tagSettings[tagName].priority !== 0;
+  let tagSettings = $derived($userSettings.config.tagSettings);
+  let sortableTagList = $derived(
+    Object.keys(tagSettings)
+      .filter((tagName) => {
+        return tagSettings[tagName].priority !== 0;
+      })
+      .sort((a, b) => {
+        return tagSettings[b].priority - tagSettings[a].priority;
+      })
+  );
+  let nonSortableTagList = $derived(
+    Object.keys(tagSettings).filter((tagName) => {
+      return tagSettings[tagName].priority === 0;
     })
-    .sort((a, b) => {
-      return tagSettings[b].priority - tagSettings[a].priority;
-    });
-  $: nonSortableTagList = Object.keys(tagSettings).filter((tagName) => {
-    return tagSettings[tagName].priority === 0;
-  });
+  );
 
-  let editorOpen = false;
-  let editorOpenForTag: string | undefined = '';
+  let editorOpen = $state(false);
+  let editorOpenForTag: string | undefined = $state('');
 
-  const handleOpenEditor = (event: CustomEvent<string>) => {
-    editorOpenForTag = event.detail;
+  const handleOpenEditor = (tagName: string) => {
+    editorOpenForTag = tagName;
     editorOpen = true;
   };
 </script>
@@ -66,17 +70,17 @@
       <GlobalTagRow
         maxPriority={sortableTagList.length}
         {tagName}
-        on:openEditor={handleOpenEditor}
+        onOpenEditor={handleOpenEditor}
       />
     </div>
   {/each}
-  {#each nonSortableTagList as tagName}
-    <GlobalTagRow maxPriority={sortableTagList.length} {tagName} on:openEditor={handleOpenEditor} />
+  {#each nonSortableTagList as tagName (tagName)}
+    <GlobalTagRow maxPriority={sortableTagList.length} {tagName} onOpenEditor={handleOpenEditor} />
   {/each}
   <div class="addTagButtonContainer">
     <Button
       variant="outlined"
-      on:click={() => {
+      onclick={() => {
         editorOpenForTag = undefined;
         editorOpen = true;
       }}>Add New Tag</Button

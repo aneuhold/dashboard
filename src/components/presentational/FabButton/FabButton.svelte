@@ -6,13 +6,19 @@
 <script lang="ts">
   import Fab, { Icon, Label } from '@smui/fab';
 
-  export let clickHandler: () => void;
-  export let iconName: string;
-  export let label: string | null = null;
+  let {
+    clickHandler,
+    iconName,
+    label
+  }: {
+    clickHandler: () => void;
+    iconName: string;
+    label?: string;
+  } = $props();
 </script>
 
 <div class="fabButton">
-  <Fab color="primary" on:click={clickHandler} extended={!!label}>
+  <Fab color="primary" onclick={clickHandler} extended={!!label}>
     <Icon class="material-icons">{iconName}</Icon>
     {#if label}
       <Label>{label}</Label>

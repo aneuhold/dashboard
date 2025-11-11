@@ -1,7 +1,7 @@
 <script lang="ts">
   import IconButton, { Icon } from '@smui/icon-button';
 
-  let imageUrl = 'https://i.imgur.com/czx5YDq.gif';
+  let imageUrl = $state('https://i.imgur.com/czx5YDq.gif');
   async function getImage() {
     const image = await fetch('https://api.thecatapi.com/v1/images/search');
     const imageUrls = await image.json();
@@ -12,7 +12,7 @@
 
 <div class="imageContainer">
   <IconButton
-    on:click={() => {
+    onclick={() => {
       getImage();
     }}
   >

@@ -4,13 +4,13 @@
   This component is a singleton, and should only ever be used once. Use the
   exported functions to show the dialog.
 -->
-<script lang="ts" context="module">
-  import InputBox from '$components/presentational/InputBox.svelte';
-  import SmartDialog from '$components/presentational/SmartDialog.svelte';
+<script lang="ts" module>
   import Button, { Label } from '@smui/button';
   import Checkbox from '@smui/checkbox';
   import { Actions, Content, Title } from '@smui/dialog';
   import { writable } from 'svelte/store';
+  import { InputBox } from '$components/presentational';
+  import SmartDialog from '$components/presentational/SmartDialog.svelte';
   import { nonogramKatanaItemsDisplayInfo } from '../../../routes/entertainment/nonogramkatana/items/nonogramKatanaItemsDisplayInfo';
   import { nonogramKatanaUpgradesDisplayInfo } from '../../../routes/entertainment/nonogramkatana/upgrades/nonogramKatanaUpgradesDisplayInfo';
   import { NonogramKatanaUpgradeMapService } from '../../../services/NonogramKatana/NonogramKatanaUpgradeMapService';
@@ -32,10 +32,12 @@
 <script lang="ts">
   import { NonogramKatanaItemName } from '@aneuhold/core-ts-db-lib';
 
-  $: upgrade = $currentUpgradeId
-    ? NonogramKatanaUpgradeMapService.getUpgradeStore($currentUpgradeId)
-    : null;
-  $: displayInfo = $upgrade ? nonogramKatanaUpgradesDisplayInfo[$upgrade.upgradeName] : null;
+  let upgrade = $derived(
+    $currentUpgradeId ? NonogramKatanaUpgradeMapService.getUpgradeStore($currentUpgradeId) : null
+  );
+  let displayInfo = $derived(
+    $upgrade ? nonogramKatanaUpgradesDisplayInfo[$upgrade.upgradeName] : null
+  );
 
   function getItemAmount(itemName: NonogramKatanaItemName) {
     return $upgrade ? $upgrade.currentItemAmounts[itemName] : 0;
@@ -54,10 +56,10 @@
     <Content>
       <div class="content">
         {#if displayInfo.requiredItems.length > 0}
-          {#each displayInfo.requiredItems as requiredItem}
+          {#each displayInfo.requiredItems as requiredItem (requiredItem.itemName)}
             <Checkbox
               checked={getItemAmount(requiredItem.itemName) === requiredItem.requiredAmount}
-              on:click={() => {
+              onclick={() => {
                 if (getItemAmount(requiredItem.itemName) !== requiredItem.requiredAmount) {
                   updateItemToAmount(requiredItem.itemName, requiredItem.requiredAmount);
                 } else {
@@ -90,7 +92,7 @@
     </Content>
     <Actions>
       <Button
-        on:click={() => {
+        onclick={() => {
           $open = false;
         }}
       >

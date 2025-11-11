@@ -3,15 +3,21 @@
   import { NonogramKatanaItemMapService } from '../../../../services/NonogramKatana/NonogramKatanaItemMapService';
   import { nonogramKatanaItemsDisplayInfo } from '../items/nonogramKatanaItemsDisplayInfo';
 
-  export let itemName: NonogramKatanaItemName;
-  export let requiredAmount: number;
-  export let currentAmount: number;
+  interface Props {
+    itemName: NonogramKatanaItemName;
+    requiredAmount: number;
+    currentAmount: number;
+  }
 
-  $: item = NonogramKatanaItemMapService.getItemStoreByName(itemName);
-  $: itemDisplayInfo = nonogramKatanaItemsDisplayInfo[itemName];
-  $: amountThatCanBeSpent = Math.min(
-    Math.max(0, $item.currentAmount - ($item.minDesired ?? 0)),
-    requiredAmount - currentAmount
+  let { itemName, requiredAmount, currentAmount }: Props = $props();
+
+  let item = $derived(NonogramKatanaItemMapService.getItemStoreByName(itemName));
+  let itemDisplayInfo = $derived(nonogramKatanaItemsDisplayInfo[itemName]);
+  let amountThatCanBeSpent = $derived(
+    Math.min(
+      Math.max(0, $item.currentAmount - ($item.minDesired ?? 0)),
+      requiredAmount - currentAmount
+    )
   );
 </script>
 

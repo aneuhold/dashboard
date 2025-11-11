@@ -9,19 +9,26 @@
   import LocalData from '$util/LocalData/LocalData';
   import { TaskMapService } from '../../../services/Task/TaskMapService/TaskMapService';
 
-  export let taskId: string;
+  interface Props {
+    taskId: string;
+  }
 
-  $: task = TaskMapService.getTaskStore(taskId);
-  $: collaborators = $userSettings.collaborators;
+  let { taskId }: Props = $props();
+
+  let task = $derived(TaskMapService.getTaskStore(taskId));
+  let collaborators = $derived($userSettings.collaborators);
   // The below needs to be updated with a new store that has the user's info
   // in it.
-  $: assignedUser = $task.assignedTo
-    ? $currentUserId.toString() === $task.assignedTo.toString()
-      ? { _id: $currentUserId, userName: LocalData.username }
-      : collaborators[$task.assignedTo.toString()]
-    : undefined;
-  $: assignedUserIsCurrentuser =
-    assignedUser && assignedUser._id.toString() === $currentUserId.toString();
+  let assignedUser = $derived(
+    $task.assignedTo
+      ? $currentUserId === $task.assignedTo.toString()
+        ? { _id: $currentUserId, userName: LocalData.username }
+        : collaborators[$task.assignedTo.toString()]
+      : undefined
+  );
+  let assignedUserIsCurrentuser = $derived(
+    assignedUser && assignedUser._id.toString() === $currentUserId
+  );
 </script>
 
 {#if assignedUser}

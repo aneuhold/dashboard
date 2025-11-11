@@ -9,15 +9,14 @@
   the task needs to be dynamic.
 -->
 <script lang="ts">
-  import { goto } from '$app/navigation';
-  import BreadCrumb from '$components/BreadCrumb.svelte';
-  import PageTitle from '$components/PageTitle.svelte';
-  import FabButton from '$components/presentational/FabButton/FabButton.svelte';
-  import InputBox from '$components/presentational/InputBox.svelte';
-  import { userSettings } from '$stores/userSettings/userSettings';
   import { DashboardTask, DashboardTaskService } from '@aneuhold/core-ts-db-lib';
   import Button, { Icon } from '@smui/button';
   import Paper, { Content } from '@smui/paper';
+  import { goto } from '$app/navigation';
+  import BreadCrumb from '$components/BreadCrumb.svelte';
+  import PageTitle from '$components/PageTitle.svelte';
+  import { FabButton, InputBox } from '$components/presentational';
+  import { userSettings } from '$stores/userSettings/userSettings';
   import TaskListService from '../../../services/Task/TaskListService';
   import { TaskMapService } from '../../../services/Task/TaskMapService/TaskMapService';
   import TaskService from '../../../services/Task/TaskService';
@@ -31,27 +30,34 @@
   import TaskShareButton from './TaskShareButton.svelte';
   import TaskSharingInfo from './TaskSharingInfo.svelte';
 
-  export let taskId: string;
+  interface Props {
+    taskId: string;
+  }
+
+  let { taskId }: Props = $props();
 
   const taskMap = TaskMapService.getStore();
-  $: task = $taskMap[taskId] ? TaskMapService.getTaskStore(taskId) : undefined;
-  $: allChildrenIds = $task
-    ? DashboardTaskService.getChildrenIds(Object.values($taskMap) as DashboardTask[], [
-        $task._id
-      ]).map((id) => id.toString())
-    : [];
-  $: sortAndFilterResult = TaskListService.getTaskIdsForTask(
-    $taskMap,
-    $userSettings,
-    allChildrenIds,
+  let task = $derived($taskMap[taskId] ? TaskMapService.getTaskStore(taskId) : undefined);
+  let allChildrenIds = $derived(
     $task
+      ? DashboardTaskService.getChildrenIds(Object.values($taskMap) as DashboardTask[], [
+          $task._id
+        ]).map((id) => id.toString())
+      : []
+  );
+  let sortAndFilterResult = $derived(
+    TaskListService.getTaskIdsForTask($taskMap, $userSettings, allChildrenIds, $task)
   );
   // Explicitly include `task` so that it reactively updates
-  $: breadCrumbArray = TaskService.getBreadCrumbArray($task ? $task._id.toString() : taskId);
-  $: parentTaskId = $task ? $task.parentTaskId : undefined;
-  $: parentRoute = parentTaskId
-    ? TaskService.getTaskRoute(parentTaskId.toString())
-    : TaskService.getTaskCategoryRoute(taskId);
+  let breadCrumbArray = $derived(
+    TaskService.getBreadCrumbArray($task ? $task._id.toString() : taskId)
+  );
+  let parentTaskId = $derived($task ? $task.parentTaskId : undefined);
+  let parentRoute = $derived(
+    parentTaskId
+      ? TaskService.getTaskRoute(parentTaskId.toString())
+      : TaskService.getTaskCategoryRoute(taskId)
+  );
 
   function addSubTask() {
     if (!$task) return;
@@ -110,7 +116,7 @@
             <Button
               variant="outlined"
               class="danger-button"
-              on:click={() => {
+              onclick={() => {
                 TaskService.handleDeleteTaskClick(allChildrenIds.length, deleteTask, $task?.title);
               }}
             >
@@ -127,7 +133,7 @@
 
           <div class="doneButton">
             <Button
-              on:click={() => goto(parentRoute)}
+              onclick={() => goto(parentRoute)}
               style="width: 100%; max-width: 500px"
               variant="outlined"
               class="primary-button"

@@ -4,17 +4,18 @@
   A page for Financial info.
 -->
 <script lang="ts">
+  import Paper, { Content, Title } from '@smui/paper';
   import LinkList from '$components/LinkList.svelte';
   import type { LinkInfo } from '$components/LinkListItem.svelte';
   import PageTitle from '$components/PageTitle.svelte';
   import { TR, translations } from '$stores/translations';
-  import Paper, { Content, Title } from '@smui/paper';
   import { financePageInfo } from './pageInfo';
 
-  let tr = new TR($translations);
-  $: tr = new TR($translations);
+  // Reactive translation object that updates when translations change
+  let tr = $derived(new TR($translations));
 
-  const bankingAndFinanceStorageLinks: Array<LinkInfo> = [
+  // Make links derived so they update with translations
+  let bankingAndFinanceStorageLinks = $derived<Array<LinkInfo>>([
     {
       title: tr.key('finance.banking-links.onpoint.title'),
       description: tr.key('finance.banking-links.onpoint.description'),
@@ -47,9 +48,9 @@
       },
       iconName: 'trending_up'
     }
-  ];
+  ]);
 
-  const debtAndLoansLinks: Array<LinkInfo> = [
+  let debtAndLoansLinks = $derived<Array<LinkInfo>>([
     {
       title: tr.key('finance.debt-links.student-loan.title'),
       description: tr.key('finance.debt-links.student-loan.description'),
@@ -66,8 +67,9 @@
       },
       iconName: 'house'
     }
-  ];
+  ]);
 
+  // These don't use tr, so they can remain const
   const shoppingLocationLinks: Array<LinkInfo> = [
     {
       title: 'Amazon',

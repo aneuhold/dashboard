@@ -1,13 +1,13 @@
 <script lang="ts">
-  import PageTitle from '$components/PageTitle.svelte';
-  import InputBox from '$components/presentational/InputBox.svelte';
-  import SingletonNonogramKatanaUpgradeDialog from '$components/singletons/dialogs/SingletonNonogramKatanaUpgradeDialog.svelte';
-  import { userSettings } from '$stores/userSettings/userSettings';
   import { NonogramKatanaUpgrade, NonogramKatanaUpgradeName } from '@aneuhold/core-ts-db-lib';
   import Button from '@smui/button';
   import Checkbox from '@smui/checkbox';
   import Paper, { Content } from '@smui/paper';
   import { flip } from 'svelte/animate';
+  import PageTitle from '$components/PageTitle.svelte';
+  import { InputBox } from '$components/presentational';
+  import SingletonNonogramKatanaUpgradeDialog from '$components/singletons/dialogs/SingletonNonogramKatanaUpgradeDialog.svelte';
+  import { userSettings } from '$stores/userSettings/userSettings';
   import { NonogramKatanaUpgradeMapService } from '../../../../services/NonogramKatana/NonogramKatanaUpgradeMapService';
   import NonogramKatanaUpgradeRow from './NonogramKatanaUpgradeRow.svelte';
   import { nonogramKatanaUpgradesPageInfo } from './pageInfo';
@@ -25,19 +25,26 @@
   };
 
   const upgradeMap = NonogramKatanaUpgradeMapService.getStore();
-  let showAll = false;
-  let searchInput = '';
-  $: allUpgrades = Object.values($upgradeMap)
-    .filter((upgrade) => upgrade !== undefined)
-    .sort(sortFunction);
-  $: workableUpgrades = Object.values(
-    NonogramKatanaUpgradeMapService.getWorkableUpgrades($upgradeMap)
-  ).sort(sortFunction);
-  $: currentlyShownUpgrades = (showAll ? allUpgrades : workableUpgrades).filter((upgrade) =>
-    upgrade.upgradeName.toLowerCase().includes(searchInput.toLowerCase().trim())
+  let showAll = $state(false);
+  let searchInput = $state('');
+  let allUpgrades = $derived(
+    Object.values($upgradeMap)
+      .filter((upgrade) => upgrade !== undefined)
+      .sort(sortFunction)
   );
-  $: upgradesMissing =
-    Object.values($upgradeMap).length < Object.values(NonogramKatanaUpgradeName).length;
+  let workableUpgrades = $derived(
+    Object.values(NonogramKatanaUpgradeMapService.getWorkableUpgrades($upgradeMap)).sort(
+      sortFunction
+    )
+  );
+  let currentlyShownUpgrades = $derived(
+    (showAll ? allUpgrades : workableUpgrades).filter((upgrade) =>
+      upgrade.upgradeName.toLowerCase().includes(searchInput.toLowerCase().trim())
+    )
+  );
+  let upgradesMissing = $derived(
+    Object.values($upgradeMap).length < Object.values(NonogramKatanaUpgradeName).length
+  );
 </script>
 
 <svelte:head>
@@ -55,7 +62,7 @@
       <div class="topSettingsRow">
         {#if upgradesMissing}
           <Button
-            on:click={() => {
+            onclick={() => {
               NonogramKatanaUpgradeMapService.createOrUpdateUpgrades($userSettings.config.userId);
             }}
           >

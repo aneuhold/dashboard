@@ -4,45 +4,55 @@
   A list of tasks.
 -->
 <script lang="ts">
-  import TaskRow from '$components/Tasks/TaskList/TaskRow.svelte';
-  import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
-  import { currentUserId } from '$stores/derived/currentUserId';
-  import { userSettings } from '$stores/userSettings/userSettings';
+  import type { DashboardTaskFilterAndSortResult } from '@aneuhold/core-ts-db-lib';
   import {
     DashboardTaskService,
     DashboardTaskSortBy,
     getDefaultTaskListSortSettings
   } from '@aneuhold/core-ts-db-lib';
-  import type { DashboardTaskFilterAndSortResult } from '@aneuhold/core-ts-db-lib/lib/services/dashboard/Task/TaskService';
   import { flip } from 'svelte/animate';
   import { slide } from 'svelte/transition';
+  import TaskRow from '$components/Tasks/TaskList/TaskRow.svelte';
+  import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
+  import { currentUserId } from '$stores/derived/currentUserId';
+  import { userSettings } from '$stores/userSettings/userSettings';
   import TaskListOptions from './TaskListOptions.svelte';
 
-  export let sortAndFilterResult: DashboardTaskFilterAndSortResult;
-  export let category: string;
-  export let parentTaskId: string | undefined = undefined;
+  let {
+    sortAndFilterResult,
+    category,
+    parentTaskId = undefined
+  }: {
+    sortAndFilterResult: DashboardTaskFilterAndSortResult;
+    category: string;
+    parentTaskId?: string | undefined;
+  } = $props();
 
   const taskMap = TaskMapService.getStore();
-  $: parentTask = parentTaskId ? TaskMapService.getTaskStore(parentTaskId) : undefined;
-  $: parentTaskSortSettings = $parentTask ? $parentTask.sortSettings[$currentUserId] : undefined;
-  $: userTaskSortSettings = $userSettings.config.taskListSortSettings[category];
-  $: currentSortSettings =
-    parentTaskSortSettings ??
-    userTaskSortSettings ??
-    getDefaultTaskListSortSettings($currentUserId);
-  $: isSortedByTagsFirst =
+  let parentTask = $derived(parentTaskId ? TaskMapService.getTaskStore(parentTaskId) : undefined);
+  let parentTaskSortSettings = $derived(
+    $parentTask ? $parentTask.sortSettings[$currentUserId] : undefined
+  );
+  let userTaskSortSettings = $derived($userSettings.config.taskListSortSettings[category]);
+  let currentSortSettings = $derived(
+    parentTaskSortSettings ?? userTaskSortSettings ?? getDefaultTaskListSortSettings($currentUserId)
+  );
+  let isSortedByTagsFirst = $derived(
     currentSortSettings.sortList.length !== 0 &&
-    currentSortSettings.sortList[0].sortBy === DashboardTaskSortBy.tags;
-  $: tagHeaderMap = isSortedByTagsFirst
-    ? DashboardTaskService.getTagHeaderMap(
-        $taskMap,
-        sortAndFilterResult.filteredAndSortedIds,
-        $currentUserId,
-        $userSettings.config.tagSettings,
-        'No Priority',
-        currentSortSettings.sortList[0].sortDirection
-      )
-    : undefined;
+      currentSortSettings.sortList[0].sortBy === DashboardTaskSortBy.tags
+  );
+  let tagHeaderMap = $derived(
+    isSortedByTagsFirst
+      ? DashboardTaskService.getTagHeaderMap(
+          $taskMap,
+          sortAndFilterResult.filteredAndSortedIds,
+          $currentUserId,
+          $userSettings.config.tagSettings,
+          'No Priority',
+          currentSortSettings.sortList[0].sortDirection
+        )
+      : undefined
+  );
 </script>
 
 <div class="content">

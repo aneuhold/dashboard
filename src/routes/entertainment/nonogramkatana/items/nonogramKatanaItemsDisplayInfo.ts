@@ -1,9 +1,9 @@
 import { NonogramKatanaItemName } from '@aneuhold/core-ts-db-lib';
-import type { ComponentType } from 'svelte';
+import type { Component } from 'svelte';
 
 type NonogramKatanaItemDisplayInfo = {
   displayName: string;
-  icon?: ComponentType;
+  icon?: Component;
   /**
    * The things that this item is used for, besides upgrades.
    */

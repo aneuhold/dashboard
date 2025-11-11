@@ -1,6 +1,6 @@
-import { localDataReady } from '$util/LocalData/LocalData';
 import type { BaseDocument, DocumentMap } from '@aneuhold/core-ts-db-lib';
-import { writable, type Readable, type Updater, type Writable } from 'svelte/store';
+import { type Readable, type Updater, type Writable, writable } from 'svelte/store';
+import { localDataReady } from '$util/LocalData/LocalData';
 
 /**
  * A store that has persistence capabilities and is a child of a
@@ -173,6 +173,8 @@ export default abstract class DocumentMapStoreService<T extends BaseDocument> {
   /**
    * Gets the store for the specified document ID. If the store does not exist,
    * it will be created.
+   *
+   * @param docId
    */
   protected getDocStore(docId: string): DocumentChildStore<T> {
     let childStore = this.childStores[docId];
@@ -367,6 +369,8 @@ export default abstract class DocumentMapStoreService<T extends BaseDocument> {
       /**
        * Sets the document map. This should only be used when the store is
        * initialized from data that comes from the backend.
+       *
+       * @param newMap
        */
       set: (newMap) => {
         this.documentMap = newMap;

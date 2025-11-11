@@ -1,25 +1,25 @@
 <script lang="ts">
-  import InputBox from '$components/presentational/InputBox.svelte';
-  import { apiKey } from '$stores/apiKey';
-  import { dashboardConfig } from '$stores/dashboardConfig';
-  import { LoginState, loginState } from '$stores/loginState';
-  import { password } from '$stores/password';
-  import LocalData from '$util/LocalData/LocalData';
-  import DashboardAPIService from '$util/api/DashboardAPIService';
   import {
-    APIService,
     type APIResponse,
+    APIService,
     type AuthValidateUserOutput
   } from '@aneuhold/core-ts-api-lib';
   import Button, { Label } from '@smui/button';
   import CircularProgress from '@smui/circular-progress';
+  import { InputBox } from '$components/presentational';
+  import { apiKey } from '$stores/apiKey';
+  import { dashboardConfig } from '$stores/dashboardConfig';
+  import { LoginState, loginState } from '$stores/loginState';
+  import { password } from '$stores/password';
+  import DashboardAPIService from '$util/api/DashboardAPIService';
+  import LocalData from '$util/LocalData/LocalData';
 
-  let typedUserName = LocalData.username;
-  let typedPassword = LocalData.password;
-  $: processingCredentials = $loginState === LoginState.ProcessingCredentials;
-  let invalidCredentials = false;
+  let typedUserName = $state(LocalData.username);
+  let typedPassword = $state(LocalData.password);
+  let processingCredentials = $derived($loginState === LoginState.ProcessingCredentials);
+  let invalidCredentials = $state(false);
 
-  function handleSubmit(event: CustomEvent) {
+  function handleSubmit(event: MouseEvent) {
     // Prevent the page from refreshing
     event.preventDefault();
 
@@ -69,7 +69,7 @@
     <InputBox
       label="Password"
       spellCheck={false}
-      autocompleteLabel="password"
+      autocompleteLabel="current-password"
       bind:inputValue={typedPassword}
       inputType="password"
     />
@@ -78,7 +78,7 @@
         style="width: 100%;"
         variant="raised"
         class="material-icons dimmed-color"
-        on:click={handleSubmit}
+        onclick={handleSubmit}
         disabled={processingCredentials}
         data-testid="login-submit-button"
       >

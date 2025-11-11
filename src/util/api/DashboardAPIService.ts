@@ -1,9 +1,3 @@
-import { snackbar } from '$components/singletons/SingletonSnackbar.svelte';
-import { apiKey } from '$stores/apiKey';
-import { LoginState, loginState } from '$stores/loginState';
-import { translations } from '$stores/translations';
-import { userSettings } from '$stores/userSettings/userSettings';
-import LocalData from '$util/LocalData/LocalData';
 import {
   APIService,
   type ProjectDashboardOptions,
@@ -11,6 +5,12 @@ import {
 } from '@aneuhold/core-ts-api-lib';
 import type { BaseDocument, DashboardUserConfig, UserCTO } from '@aneuhold/core-ts-db-lib';
 import type { UUID } from 'crypto';
+import { snackbar } from '$components/singletons/SingletonSnackbar.svelte';
+import { apiKey } from '$stores/apiKey';
+import { LoginState, loginState } from '$stores/loginState';
+import { translations } from '$stores/translations';
+import { userSettings } from '$stores/userSettings/userSettings';
+import LocalData from '$util/LocalData/LocalData';
 import { NonogramKatanaItemMapService } from '../../services/NonogramKatana/NonogramKatanaItemMapService';
 import { NonogramKatanaUpgradeMapService } from '../../services/NonogramKatana/NonogramKatanaUpgradeMapService';
 import { TaskMapService } from '../../services/Task/TaskMapService/TaskMapService';
@@ -33,6 +33,8 @@ export default class DashboardAPIService {
    *
    * If an API request is already being processed, this will be added
    * to the queue and executed after the previous request is done.
+   *
+   * @param apiOptions
    */
   static queryApi(apiOptions: ProjectDashboardOptions) {
     // Add the options to the queue
@@ -110,6 +112,8 @@ export default class DashboardAPIService {
 
   /**
    * This processes separately from the queue because it is a special case.
+   *
+   * @param username
    */
   static async checkIfUsernameIsValid(username: string): Promise<UserCTO | null> {
     const apiKeyValue = this.checkOrSetupDashboardAPI();
@@ -189,6 +193,8 @@ export default class DashboardAPIService {
 
   /**
    * Processes the final output of a series of API requests.
+   *
+   * @param output
    */
   private static processDashboardApiOutput(output: ProjectDashboardOutput) {
     if (output.translations) {

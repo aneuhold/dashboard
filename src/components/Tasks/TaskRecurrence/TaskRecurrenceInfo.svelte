@@ -4,8 +4,6 @@
   Reccurence information for use in the Task Details component.
 -->
 <script lang="ts">
-  import ClickableDiv from '$components/presentational/ClickableDiv.svelte';
-  import SmartDialog from '$components/presentational/SmartDialog.svelte';
   import {
     DashboardTask,
     RecurrenceBasis,
@@ -14,33 +12,28 @@
     type RecurrenceInfo
   } from '@aneuhold/core-ts-db-lib';
   import { DateService } from '@aneuhold/core-ts-lib';
-  import Accordion, { Content, Panel } from '@smui-extra/accordion';
   import Button, { Label } from '@smui/button';
   import Checkbox from '@smui/checkbox';
   import { Actions, Content as DialogContent, Title } from '@smui/dialog';
   import IconButton, { Icon } from '@smui/icon-button';
+  import Accordion, { Content, Panel } from '@smui-extra/accordion';
+  import ClickableDiv from '$components/presentational/ClickableDiv.svelte';
+  import SmartDialog from '$components/presentational/SmartDialog.svelte';
   import { TaskMapService } from '../../../services/Task/TaskMapService/TaskMapService';
   import TaskRecurrenceService from '../../../services/Task/TaskRecurrenceService';
   import TaskService from '../../../services/Task/TaskService';
   import TaskRecurrenceDetails from './TaskRecurrenceDetails.svelte';
 
-  export let taskId: string;
-  export let childTaskIds: string[];
+  let { taskId, childTaskIds }: { taskId: string; childTaskIds: string[] } = $props();
 
-  let recurringInfoOpen = false;
+  let recurringInfoOpen = $state(false);
   const taskMap = TaskMapService.getStore();
-  let previousTaskId = taskId;
-  let errorInfoDialogOpen = false;
-  let errorInfoDialogTitle = '';
-  let errorInfoDialogContent = '';
-  let defaultRecurrenceInfo: RecurrenceInfo;
-  $: task = TaskMapService.getTaskStore(taskId);
-  $: isRecurring = !!$task.recurrenceInfo;
-  $: hasParentRecurringTask = !!$task.parentRecurringTaskInfo;
-  $: hasChildRecurringTask = childTaskIds.some(
-    (childTaskId) => !!$taskMap[childTaskId]?.recurrenceInfo
-  );
-  $: defaultRecurrenceInfo = {
+  let previousTaskId = $state(taskId);
+  let errorInfoDialogOpen = $state(false);
+  let errorInfoDialogTitle = $state('');
+  let errorInfoDialogContent = $state('');
+  let task = $derived(TaskMapService.getTaskStore(taskId));
+  let defaultRecurrenceInfo: RecurrenceInfo = $derived({
     frequency: {
       type: RecurrenceFrequencyType.everyXTimeUnit,
       everyXTimeUnit: {
@@ -50,19 +43,26 @@
     },
     recurrenceBasis: $task.dueDate ? RecurrenceBasis.dueDate : RecurrenceBasis.startDate,
     recurrenceEffect: RecurrenceEffect.rollOnCompletion
-  };
+  });
+  let isRecurring = $derived(!!$task.recurrenceInfo);
+  let hasParentRecurringTask = $derived(!!$task.parentRecurringTaskInfo);
+  let hasChildRecurringTask = $derived(
+    childTaskIds.some((childTaskId) => !!$taskMap[childTaskId]?.recurrenceInfo)
+  );
 
   /**
    * This is purposefully not synced to the task store, so that updates
    * can happen separately.
    */
-  $: currentRecurrenceInfo = $task.recurrenceInfo ?? defaultRecurrenceInfo;
+  let currentRecurrenceInfo = $derived($task.recurrenceInfo ?? defaultRecurrenceInfo);
 
   // Auto-close the accordion when switching tasks
-  $: if (previousTaskId !== taskId) {
-    previousTaskId = taskId;
-    recurringInfoOpen = false;
-  }
+  $effect(() => {
+    if (previousTaskId !== taskId) {
+      previousTaskId = taskId;
+      recurringInfoOpen = false;
+    }
+  });
 
   const handleRecurringClick = () => {
     if (isRecurring) {
@@ -149,7 +149,7 @@
   <DialogContent>{errorInfoDialogContent}</DialogContent>
   <Actions>
     <Button
-      on:click={() => {
+      onclick={() => {
         errorInfoDialogOpen = false;
       }}
     >

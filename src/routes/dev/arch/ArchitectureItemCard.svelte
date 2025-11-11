@@ -10,54 +10,65 @@
   in styles when using the menu component.
 -->
 <script lang="ts">
-  import type { MenuButtonItem } from '$components/presentational/MenuButton.svelte';
-  import MenuButton from '$components/presentational/MenuButton.svelte';
-  import ArchitectureInfo from '$util/ArchitectureInfo/ArchitectureInfo';
-  import type { ArchitectureComponent } from '$util/ArchitectureInfo/architectureComponents';
   import Card, { Content as CardContent } from '@smui/card';
   import { Icon } from '@smui/icon-button';
   import Tooltip, { Wrapper } from '@smui/tooltip';
+  import type { Snippet } from 'svelte';
+  import type { MenuButtonItem } from '$components/presentational/MenuButton.svelte';
+  import MenuButton from '$components/presentational/MenuButton.svelte';
+  import type { ArchitectureComponent } from '$util/ArchitectureInfo/architectureComponents';
+  import ArchitectureInfo from '$util/ArchitectureInfo/ArchitectureInfo';
 
-  export let archComponent: ArchitectureComponent;
-
-  $: title = archComponent.title;
-  $: categories = archComponent.categories;
-  $: archComponentType = archComponent.type;
-  $: iconComponent = archComponent.icon;
-  $: dependencyNames = archComponent.dependencies?.map((component) => component.title);
-
-  const menuItems: MenuButtonItem[] = [];
-  $: if (archComponent.configurationUrl) {
-    menuItems.push({
-      title: 'Configure',
-      iconName: 'build',
-      clickAction: () => {
-        openUrl(archComponent.configurationUrl);
-      }
-    });
-  }
-  $: if (archComponent.docsUrl) {
-    menuItems.push({
-      title: 'Docs',
-      iconName: 'article',
-      clickAction: () => {
-        openUrl(archComponent.docsUrl);
-      }
-    });
-  }
-  $: if (archComponent.latestExampleProjectUrl) {
-    menuItems.push({
-      title: 'Latest Example Project or Code',
-      iconName: 'code',
-      clickAction: () => {
-        openUrl(archComponent.latestExampleProjectUrl);
-      }
-    });
-  }
+  let {
+    archComponent,
+    children
+  }: {
+    archComponent: ArchitectureComponent;
+    children?: Snippet;
+  } = $props();
 
   function openUrl(url: string | undefined) {
     if (url) window.open(url, '_blank');
   }
+  let title = $derived(archComponent.title);
+  let categories = $derived(archComponent.categories);
+  let archComponentType = $derived(archComponent.type);
+  let iconComponent = $derived(archComponent.icon);
+  let dependencyNames = $derived(archComponent.dependencies?.map((component) => component.title));
+
+  let menuItems = $derived<MenuButtonItem[]>(
+    (() => {
+      const items: MenuButtonItem[] = [];
+      if (archComponent.configurationUrl) {
+        items.push({
+          title: 'Configure',
+          iconName: 'build',
+          clickAction: () => {
+            openUrl(archComponent.configurationUrl);
+          }
+        });
+      }
+      if (archComponent.docsUrl) {
+        items.push({
+          title: 'Docs',
+          iconName: 'article',
+          clickAction: () => {
+            openUrl(archComponent.docsUrl);
+          }
+        });
+      }
+      if (archComponent.latestExampleProjectUrl) {
+        items.push({
+          title: 'Latest Example Project or Code',
+          iconName: 'code',
+          clickAction: () => {
+            openUrl(archComponent.latestExampleProjectUrl);
+          }
+        });
+      }
+      return items;
+    })()
+  );
 </script>
 
 <div class="container">
@@ -66,7 +77,8 @@
       <div class="card-content">
         <div class="left-side">
           {#if iconComponent}
-            <Icon class="material-icons"><svelte:component this={iconComponent} size={30} /></Icon>
+            {@const SvelteComponent = iconComponent}
+            <Icon class="material-icons"><SvelteComponent size={30} /></Icon>
           {/if}
           <div>
             <h4 class="mdc-typography--body1 title">
@@ -80,7 +92,7 @@
             </h4>
             {#if categories.length > 0}
               <div class="mdc-typography--caption mdc-theme--text-hint-on-background">
-                {#each categories as category, index}
+                {#each categories as category, index (category.title)}
                   <span><i>{category.title}</i></span>
                   {#if index !== categories.length - 1}
                     <span>, </span>
@@ -88,16 +100,16 @@
                 {/each}
               </div>
             {/if}
-            {#if $$slots.default}
+            {#if children}
               <div class="mdc-deprecated-list-item__secondary-text subtitle no-before">
-                <slot />
+                {@render children()}
               </div>
             {/if}
             {#if dependencyNames}
               <div class="mdc-typography--caption mdc-theme--text-hint-on-background dependencies">
                 <span>Dependencies: </span>
                 <ul class="dependencies-list">
-                  {#each dependencyNames as dependencyName}
+                  {#each dependencyNames as dependencyName (dependencyName)}
                     <li>{dependencyName}</li>
                   {/each}
                 </ul>

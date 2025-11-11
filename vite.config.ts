@@ -19,14 +19,14 @@ if (!sentryAuthToken) {
 const viteConfig: UserConfig = {
   plugins: [
     // Make sure `sentrySvelteKit` is registered before `sveltekit`
-    process.env.CI === 'true' && 
-    sentrySvelteKit({
-      sourceMapsUploadOptions: {
-        org: 'anton-neuhold',
-        project: 'dashboard',
-        authToken: sentryAuthToken
-      }
-    }),
+    process.env.CI === 'true' &&
+      sentrySvelteKit({
+        sourceMapsUploadOptions: {
+          org: 'anton-neuhold',
+          project: 'dashboard',
+          authToken: sentryAuthToken
+        }
+      }),
     sveltekit(),
     // Added so that certain node packages work in the browser. The below
     // 3 are needed specifically for crypto it seems.

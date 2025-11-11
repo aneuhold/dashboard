@@ -1,3 +1,4 @@
+import { defineMeta } from '@storybook/addon-svelte-csf';
 import SbConfettiDecorator from '$components/singletons/Confetti/SBConfettiDecorator.svelte';
 import SbSingletonTaskAssignmentDialogDecorator from '$components/singletons/dialogs/SingletonTaskAssignmentDialog/SBSingletonTaskAssignmentDialogDecorator.svelte';
 import SbSingletonTaskSharingDialogDecorator from '$components/singletons/dialogs/SingletonTaskSharingDialog/SBSingletonTaskSharingDialogDecorator.svelte';
@@ -8,10 +9,9 @@ import {
   MockTaskSubTasks
 } from '$services/Task/TaskMapService/TaskMapService.mock';
 import { createEnumArgType } from '$storybook/storybookUtil';
-import type { Meta } from '@storybook/svelte';
 import SbTaskListExample from './SBTaskListExample.svelte';
 
-const sbTaskListMeta = {
+const sbTaskListMetaBase: Parameters<typeof defineMeta>[0] = {
   title: 'Stateful Components/TaskList',
   component: SbTaskListExample,
   decorators: [
@@ -37,5 +37,6 @@ const sbTaskListMeta = {
     descriptions: MockTaskDescription.none,
     subtasks: MockTaskSubTasks.none
   }
-} satisfies Meta<SbTaskListExample>;
-export default sbTaskListMeta;
+};
+
+export default sbTaskListMetaBase;
