@@ -30,11 +30,11 @@
   import TaskShareButton from './TaskShareButton.svelte';
   import TaskSharingInfo from './TaskSharingInfo.svelte';
 
-  interface Props {
+  let {
+    taskId
+  }: {
     taskId: string;
-  }
-
-  let { taskId }: Props = $props();
+  } = $props();
 
   const taskMap = TaskMapService.getStore();
   let task = $derived($taskMap[taskId] ? TaskMapService.getTaskStore(taskId) : undefined);

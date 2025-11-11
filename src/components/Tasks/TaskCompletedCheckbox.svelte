@@ -7,11 +7,11 @@
   import { TaskMapService } from '../../services/Task/TaskMapService/TaskMapService';
   import ClickableDiv from '../presentational/ClickableDiv.svelte';
 
-  interface Props {
+  let {
+    taskId
+  }: {
     taskId: string;
-  }
-
-  let { taskId }: Props = $props();
+  } = $props();
 
   // X and Y of the most recent click event for use in confetti
   let clickX = 0;

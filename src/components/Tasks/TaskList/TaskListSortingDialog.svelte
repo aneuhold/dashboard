@@ -12,14 +12,17 @@
   import SmartDialog from '$components/presentational/SmartDialog.svelte';
   import TaskSortSetting from './TaskSortSetting.svelte';
 
-  interface Props {
+  let {
+    open = $bindable(),
+    initialSettings,
+    onUpdateSettings,
+    onReset
+  }: {
     open: boolean;
     initialSettings: DashboardTaskListSortSettings;
     onUpdateSettings?: (settings: DashboardTaskListSortSettings) => void;
     onReset?: () => void;
-  }
-
-  let { open = $bindable(), initialSettings, onUpdateSettings, onReset }: Props = $props();
+  } = $props();
 
   let previousOpen = $state(false);
 

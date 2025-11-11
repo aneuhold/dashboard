@@ -1,16 +1,6 @@
 <script lang="ts">
   import { DateService } from '@aneuhold/core-ts-lib';
 
-  interface Props {
-    originalStartDate?: Date;
-    originalDueDate?: Date;
-    newStartDate?: Date;
-    newDueDate?: Date;
-    recurrenceIsRemoved?: boolean;
-    recurrenceIsAdded?: boolean;
-    completedRemoved?: boolean;
-  }
-
   let {
     originalStartDate,
     originalDueDate,
@@ -19,7 +9,15 @@
     recurrenceIsRemoved = false,
     recurrenceIsAdded = false,
     completedRemoved = false
-  }: Props = $props();
+  }: {
+    originalStartDate?: Date;
+    originalDueDate?: Date;
+    newStartDate?: Date;
+    newDueDate?: Date;
+    recurrenceIsRemoved?: boolean;
+    recurrenceIsAdded?: boolean;
+    completedRemoved?: boolean;
+  } = $props();
 
   let noChangesAtAll = $derived(
     !originalStartDate &&

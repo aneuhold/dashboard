@@ -10,11 +10,11 @@
   import { TaskMapService } from '../../../services/Task/TaskMapService/TaskMapService';
   import TaskTagsService from '../../../services/Task/TaskTagsService';
 
-  interface Props {
+  let {
+    taskId
+  }: {
     taskId: string;
-  }
-
-  let { taskId }: Props = $props();
+  } = $props();
 
   let task = $derived(TaskMapService.getTaskStore(taskId));
   let globalTags = $derived(TaskTagsService.getStore());

@@ -6,15 +6,19 @@
   import { userSettings } from '$stores/userSettings/userSettings';
   import TaskTagsService from '../../../services/Task/TaskTagsService';
 
-  interface Props {
+  let {
+    open = $bindable(false),
+    /**
+     * The tag name to update. If not provided, the editor will be in "add" mode.
+     */
+    tagName
+  }: {
     open?: boolean;
     /**
      * The tag name to update. If not provided, the editor will be in "add" mode.
      */
     tagName?: string;
-  }
-
-  let { open = $bindable(false), tagName }: Props = $props();
+  } = $props();
 
   function handleCancel() {
     open = false;

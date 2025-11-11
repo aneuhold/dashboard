@@ -9,11 +9,11 @@ Info about subtasks within a task row.
   import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
   import { currentUserId } from '$stores/derived/currentUserId';
 
-  interface Props {
+  let {
+    allChildrenIds
+  }: {
     allChildrenIds: ObjectId[];
-  }
-
-  let { allChildrenIds }: Props = $props();
+  } = $props();
 
   let allChildTasks = $derived(
     allChildrenIds.map((id) => TaskMapService.getMap()[id.toString()]) as DashboardTask[]

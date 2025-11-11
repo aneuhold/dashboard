@@ -24,15 +24,19 @@
   import TaskRowTagHeader from '../TaskTags/TaskRowTagHeader.svelte';
   import TaskRowSubtaskInfo from './TaskRowSubtaskInfo.svelte';
 
-  interface Props {
+  let {
+    taskId,
+    /**
+     * If set, it will display the tag as a header above the task.
+     */
+    tagHeaderName
+  }: {
     taskId: string;
     /**
      * If set, it will display the tag as a header above the task.
      */
     tagHeaderName?: string;
-  }
-
-  let { taskId, tagHeaderName }: Props = $props();
+  } = $props();
 
   const taskMap = TaskMapService.getStore();
   let task = $derived(TaskMapService.getTaskStore(taskId));

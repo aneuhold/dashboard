@@ -1,7 +1,16 @@
 <script lang="ts">
   import Button, { Icon } from '@smui/button';
 
-  interface Props {
+  let {
+    variant,
+    disabled = false,
+    color = 'primary',
+    iconName,
+    /**
+     * Callback fired when the button is clicked.
+     */
+    onclick
+  }: {
     variant?: 'outlined' | 'raised';
     disabled?: boolean;
     color?: 'primary' | 'secondary';
@@ -10,9 +19,7 @@
      * Callback fired when the button is clicked.
      */
     onclick?: () => void;
-  }
-
-  let { variant, disabled = false, color = 'primary', iconName, onclick }: Props = $props();
+  } = $props();
 </script>
 
 <div>
