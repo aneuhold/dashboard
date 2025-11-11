@@ -37,11 +37,11 @@
   let sortingDialogOpen = $state(false);
   let filterDialogOpen = $state(false);
 
-  const getTaskSpecificText = (settingsInfo: {
+  function getTaskSpecificText(settingsInfo: {
     parentTask?: DashboardTask;
     parentTaskSortSettings?: DashboardTaskListSortSettings;
     parentTaskFilterSettings?: DashboardTaskListFilterSettings;
-  }) => {
+  }) {
     const { parentTask, parentTaskSortSettings, parentTaskFilterSettings } = settingsInfo;
     if (parentTask) {
       if (parentTaskSortSettings && parentTaskFilterSettings) {
@@ -53,16 +53,16 @@
       }
     }
     return '';
-  };
+  }
 
-  const handleUpdateSortSettings = (newSortSettings: DashboardTaskListSortSettings) => {
+  function handleUpdateSortSettings(newSortSettings: DashboardTaskListSortSettings) {
     if ($parentTask) {
       $parentTask.sortSettings[$currentUserId] = newSortSettings;
     } else {
       $userSettings.config.taskListSortSettings[category] = newSortSettings;
     }
-  };
-  const handleResetSortSettings = () => {
+  }
+  function handleResetSortSettings() {
     if ($parentTask) {
       const sortSettings = $parentTask.sortSettings;
       delete sortSettings[$currentUserId];
@@ -72,15 +72,15 @@
       delete sortSettings[category];
       $userSettings.config.taskListSortSettings = sortSettings;
     }
-  };
-  const handleUpdateFilterSettings = (newFilterSettings: DashboardTaskListFilterSettings) => {
+  }
+  function handleUpdateFilterSettings(newFilterSettings: DashboardTaskListFilterSettings) {
     if ($parentTask) {
       $parentTask.filterSettings[$currentUserId] = newFilterSettings;
     } else {
       $userSettings.config.taskListFilterSettings[category] = newFilterSettings;
     }
-  };
-  const handleResetFilterSettings = () => {
+  }
+  function handleResetFilterSettings() {
     if ($parentTask) {
       const filterSettings = $parentTask.filterSettings;
       delete filterSettings[$currentUserId];
@@ -90,7 +90,7 @@
       delete filterSettings[category];
       $userSettings.config.taskListFilterSettings = filterSettings;
     }
-  };
+  }
   let parentTaskFilterSettings = $derived(
     $parentTask ? $parentTask.filterSettings[$currentUserId] : undefined
   );

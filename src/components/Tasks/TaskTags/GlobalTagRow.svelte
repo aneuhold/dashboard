@@ -13,7 +13,7 @@
     onOpenEditor
   }: { tagName: string; maxPriority: number; onOpenEditor?: (tagName: string) => void } = $props();
 
-  const getMenuItems = (currentTagSettings?: DashboardTagSetting) => {
+  function getMenuItems(currentTagSettings?: DashboardTagSetting) {
     const menuItems: MenuButtonItem[] = [
       {
         title: 'Edit',
@@ -44,9 +44,9 @@
       });
     }
     return menuItems;
-  };
+  }
 
-  const incrementPriority = () => {
+  function incrementPriority() {
     userSettings.update((settings) => {
       const currentTagSettings = settings.config.tagSettings[tagName] as
         | DashboardTagSetting
@@ -63,9 +63,9 @@
       settings.config.tagSettings[tagName].priority += 1;
       return settings;
     });
-  };
+  }
 
-  const decrementPriority = () => {
+  function decrementPriority() {
     userSettings.update((settings) => {
       const currentTagSettings = settings.config.tagSettings[tagName] as
         | DashboardTagSetting
@@ -82,9 +82,9 @@
       settings.config.tagSettings[tagName].priority -= 1;
       return settings;
     });
-  };
+  }
 
-  const addPriorityToTag = () => {
+  function addPriorityToTag() {
     userSettings.update((settings) => {
       Object.keys(settings.config.tagSettings).forEach((otherTagName) => {
         // Increment all the existing non-zero tags priority by 1
@@ -95,9 +95,9 @@
       settings.config.tagSettings[tagName].priority = 1;
       return settings;
     });
-  };
+  }
 
-  const removePriorityFromTag = () => {
+  function removePriorityFromTag() {
     userSettings.update((settings) => {
       const currentTagSettings = settings.config.tagSettings[tagName] as
         | DashboardTagSetting
@@ -118,7 +118,7 @@
       settings.config.tagSettings[tagName].priority = 0;
       return settings;
     });
-  };
+  }
   let tagSettings = $derived(
     $userSettings.config.tagSettings[tagName] as DashboardTagSetting | undefined
   );

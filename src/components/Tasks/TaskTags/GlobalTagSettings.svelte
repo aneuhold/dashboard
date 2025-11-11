@@ -25,10 +25,10 @@
   let editorOpen = $state(false);
   let editorOpenForTag: string | undefined = $state('');
 
-  const handleOpenEditor = (tagName: string) => {
+  function handleOpenEditor(tagName: string) {
     editorOpenForTag = tagName;
     editorOpen = true;
-  };
+  }
 </script>
 
 <div class="container">

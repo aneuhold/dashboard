@@ -5,11 +5,11 @@
 
   let snackBarRef: Snackbar | undefined;
 
-  const openSnackBar = () => {
+  function openSnackBar() {
     if (snackBarRef) {
       snackBarRef.open();
     }
-  };
+  }
 
   export const snackbar = {
     success: (message: string, timeout = 5000) => {

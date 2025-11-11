@@ -33,17 +33,17 @@
     previousOpen = open;
   });
 
-  const handleDone = () => {
+  function handleDone() {
     onUpdateSettings?.(currentSettings);
     open = false;
-  };
-  const handleCancel = () => {
+  }
+  function handleCancel() {
     open = false;
-  };
-  const handleReset = () => {
+  }
+  function handleReset() {
     onReset?.();
     open = false;
-  };
+  }
 </script>
 
 <SmartDialog bind:open>

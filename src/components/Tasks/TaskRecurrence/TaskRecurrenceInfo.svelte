@@ -64,7 +64,7 @@
     }
   });
 
-  const handleRecurringClick = () => {
+  function handleRecurringClick() {
     if (isRecurring) {
       $task.recurrenceInfo = undefined;
       recurringInfoOpen = false;
@@ -83,15 +83,15 @@
       $task.recurrenceInfo = defaultRecurrenceInfoClone;
       recurringInfoOpen = true;
     }
-  };
+  }
 
-  const getNextRecurrenceDate = (task: DashboardTask): string => {
+  function getNextRecurrenceDate(task: DashboardTask): string {
     const date = TaskRecurrenceService.getNextRecurrenceDate(task);
     if (!date) {
       return 'Error: please tell Tony aboot this';
     }
     return DateService.getDateTimeString(date);
-  };
+  }
 </script>
 
 <div class="container">

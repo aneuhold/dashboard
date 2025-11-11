@@ -48,7 +48,7 @@
     let currentFrequencyType = initialRInfo.frequency.type;
     const { set, subscribe } = writable<RecurrenceInfo>(initialRInfo);
 
-    const setRInfo = (newRInfo: RecurrenceInfo, checkDate = true) => {
+    function setRInfo(newRInfo: RecurrenceInfo, checkDate = true) {
       if (newRInfo.frequency.type !== currentFrequencyType) {
         handleTypeChange(newRInfo);
       }
@@ -67,7 +67,7 @@
         // Still update the store for UI consistency
         set(newRInfo);
       }
-    };
+    }
     return {
       subscribe,
       set: (value: RecurrenceInfo) => {

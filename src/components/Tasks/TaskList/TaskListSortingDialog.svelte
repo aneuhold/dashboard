@@ -30,17 +30,17 @@
   let currentSortList = $derived(currentSettings.sortList);
   let disabledSortSettings = $derived(getDisabledSortSettings(currentSettings));
 
-  const handleDone = () => {
+  function handleDone() {
     onUpdateSettings?.(currentSettings);
     open = false;
-  };
-  const handleCancel = () => {
+  }
+  function handleCancel() {
     open = false;
-  };
-  const handleReset = () => {
+  }
+  function handleReset() {
     onReset?.();
     open = false;
-  };
+  }
 
   function getDisabledSortSettings(settings: DashboardTaskListSortSettings): DashboardTaskSortBy[] {
     const disabledSettings = new SvelteSet(Object.keys(DashboardTaskSortBy));
@@ -50,21 +50,21 @@
     return Array.from(disabledSettings) as DashboardTaskSortBy[];
   }
 
-  const handleEnable = (sortBy: DashboardTaskSortBy) => {
+  function handleEnable(sortBy: DashboardTaskSortBy) {
     currentSettings.sortList.push({
       sortBy,
       sortDirection: DashboardTaskSortDirection.descending
     });
     currentSortList = currentSettings.sortList;
     disabledSortSettings = getDisabledSortSettings(currentSettings);
-  };
-  const handleDisable = (sortBy: DashboardTaskSortBy) => {
+  }
+  function handleDisable(sortBy: DashboardTaskSortBy) {
     currentSettings.sortList = currentSettings.sortList.filter(
       (sortSetting) => sortSetting.sortBy !== sortBy
     );
     currentSortList = currentSettings.sortList;
     disabledSortSettings = getDisabledSortSettings(currentSettings);
-  };
+  }
 
   /**
    * Moves the sort setting up in priority.
@@ -74,39 +74,39 @@
    *
    * @param sortBy The sort by to increment priority for.
    */
-  const handleIncrement = (sortBy: DashboardTaskSortBy) => {
+  function handleIncrement(sortBy: DashboardTaskSortBy) {
     const sortList = currentSettings.sortList;
     const settingIndex = sortList.findIndex((sortSetting) => sortSetting.sortBy === sortBy);
     if (settingIndex === -1 || settingIndex === 0) return;
     // Swap elements
     moveSortSetting(settingIndex, settingIndex - 1);
-  };
-  const handleDecrement = (sortBy: DashboardTaskSortBy) => {
+  }
+  function handleDecrement(sortBy: DashboardTaskSortBy) {
     const sortList = currentSettings.sortList;
     const settingIndex = sortList.findIndex((sortSetting) => sortSetting.sortBy === sortBy);
     if (settingIndex === -1 || settingIndex === sortList.length - 1) return;
     // Swap elements
     moveSortSetting(settingIndex, settingIndex + 1);
-  };
+  }
 
-  const moveSortSetting = (fromIndex: number, toIndex: number) => {
+  function moveSortSetting(fromIndex: number, toIndex: number) {
     const sortList = currentSettings.sortList;
     const temp = sortList[fromIndex];
     sortList[fromIndex] = sortList[toIndex];
     sortList[toIndex] = temp;
     currentSettings.sortList = sortList;
     currentSortList = sortList;
-  };
+  }
 
-  const handleDirectionChange = (
+  function handleDirectionChange(
     sortBy: DashboardTaskSortBy,
     direction: DashboardTaskSortDirection
-  ) => {
+  ) {
     const sortSetting = currentSettings.sortList.find((s) => s.sortBy === sortBy);
     if (sortSetting) {
       sortSetting.sortDirection = direction;
     }
-  };
+  }
 
   $effect(() => {
     if (open !== previousOpen) {

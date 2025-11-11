@@ -16,10 +16,10 @@
 
   let { open = $bindable(false), tagName = undefined }: Props = $props();
 
-  const handleCancel = () => {
+  function handleCancel() {
     open = false;
-  };
-  const handleDone = () => {
+  }
+  function handleDone() {
     if (tagEditorValue !== tagName) {
       if (tagName) {
         TaskTagsService.updateTag(tagName, tagEditorValue);
@@ -28,12 +28,12 @@
       }
     }
     open = false;
-  };
+  }
 
-  const validateTagEditorValue = (value: string) => {
+  function validateTagEditorValue(value: string) {
     if (tagEditorValue === '') return false;
     return tagEditorValue === tagName || !$userSettings.config.tagSettings[value];
-  };
+  }
   let tagEditorValue = $derived(tagName ?? '');
   let tagValueIsValid = $derived(validateTagEditorValue(tagEditorValue));
   let buttonIsDisabled = $derived(!tagValueIsValid || tagEditorValue === tagName);
