@@ -31,8 +31,8 @@
     removedTaskIds: string[];
   } = $props();
 
-  const globalTags = TaskTagsService.getStore();
   const taskMap = TaskMapService.getStore();
+  const globalTags = TaskTagsService.getStore(taskMap);
 
   let sortingDialogOpen = $state(false);
   let filterDialogOpen = $state(false);

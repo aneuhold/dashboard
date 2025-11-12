@@ -9,7 +9,7 @@
     "lint": "eslint",
     "theme": "smui-theme compile static/smui.css -i src/globalStyles -i node_modules/.pnpm/node_modules -i node_modules",
     "test": "vitest",
-    "check": "svelte-check",
+    "check": "svelte-check && pnpm check:circular",
     "check:circular": "madge --circular --extensions ts,svelte src/",
     "check:visual": "madge --image deps.svg --extensions ts,svelte src/",
     "upgrade:core": "pnpm up '@aneuhold/*'",

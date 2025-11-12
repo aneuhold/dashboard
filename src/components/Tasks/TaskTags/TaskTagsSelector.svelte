@@ -16,8 +16,9 @@
     taskId: string;
   } = $props();
 
+  const globalTags = TaskTagsService.getStore(TaskMapService.getStore());
+
   let task = $derived(TaskMapService.getTaskStore(taskId));
-  let globalTags = $derived(TaskTagsService.getStore());
   let unselectedTags = $derived(
     $globalTags.filter((tag) => !$task.tags[$currentUserId]?.includes(tag))
   );
