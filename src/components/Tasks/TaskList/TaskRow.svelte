@@ -17,7 +17,6 @@
   import { currentUserId } from '$stores/derived/currentUserId';
   import { userSettings } from '$stores/userSettings/userSettings';
   import { TaskMapService } from '../../../services/Task/TaskMapService/TaskMapService';
-  import TaskRecurrenceService from '../../../services/Task/TaskRecurrenceService';
   import TaskService from '../../../services/Task/TaskService';
   import TaskCompletedCheckbox from '../TaskCompletedCheckbox.svelte';
   import TaskRowDateInfo from '../TaskDate/TaskRowDateInfo.svelte';
@@ -79,7 +78,7 @@
         `This is nice if you want to skip a task instead of completing it ` +
         `because it wasn't actually done. Save that dopamine! ❤️`,
       onConfirm: () => {
-        TaskRecurrenceService.executeRecurrenceForTask($task);
+        TaskMapService.executeRecurrenceIfNeeded($task);
       }
     });
   }

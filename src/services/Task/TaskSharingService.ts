@@ -1,6 +1,6 @@
 import type { DashboardTask } from '@aneuhold/core-ts-db-lib';
 import type { DocumentMapStoreSubscriber } from '../DocumentMapStoreService';
-import { TaskMapService } from './TaskMapService/TaskMapService';
+import TaskOperationsService from './TaskOperationsService';
 
 export default class TaskSharingService {
   static getSubscribersForTaskMap(): DocumentMapStoreSubscriber<DashboardTask> {
@@ -14,10 +14,14 @@ export default class TaskSharingService {
       },
       validateDocUpdate(map, oldDoc, newDoc) {
         if (oldDoc?.sharedWith.length !== newDoc.sharedWith.length) {
-          return TaskMapService.getUpdateTaskAndAllChildrenInfo(newDoc._id.toString(), (task) => {
-            task.sharedWith = newDoc.sharedWith;
-            return task;
-          });
+          return TaskOperationsService.getUpdateTaskAndAllChildrenInfo(
+            map,
+            newDoc._id.toString(),
+            (task) => {
+              task.sharedWith = newDoc.sharedWith;
+              return task;
+            }
+          );
         }
         return null;
       }

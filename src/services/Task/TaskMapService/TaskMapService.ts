@@ -1,11 +1,9 @@
 import {
   type DashboardTask,
   DashboardTaskService,
-  type DocumentMap,
-  DocumentService
+  type DocumentMap
 } from '@aneuhold/core-ts-db-lib';
 import { DateService } from '@aneuhold/core-ts-lib';
-import { ObjectId } from 'bson';
 import type { Updater } from 'svelte/store';
 import { userSettings } from '$stores/userSettings/userSettings';
 import DashboardTaskAPIService from '$util/api/DashboardTaskAPIService';
@@ -17,6 +15,7 @@ import type {
   UpsertManyInfo
 } from '../../DocumentMapStoreService';
 import DocumentMapStoreService from '../../DocumentMapStoreService';
+import TaskOperationsService from '../TaskOperationsService';
 import TaskRecurrenceService from '../TaskRecurrenceService';
 import TaskSharingService from '../TaskSharingService';
 import TaskTagsService from '../TaskTagsService';
@@ -43,10 +42,29 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
     return this.instance.documentMap;
   }
 
+  /**
+   * Executes recurrence for the provided task if needed. This is a facade
+   * method that delegates to TaskRecurrenceService.
+   *
+   * @param task The task to check and execute recurrence for
+   */
+  static executeRecurrenceIfNeeded(task: DashboardTask): void {
+    TaskRecurrenceService.executeRecurrenceIfNeeded(task, this.instance.documentMap, (info) => {
+      this.instance.store.upsertMany(info);
+    });
+  }
+
   protected setupSubscribers(): void {
     // Basic task things
     this.subscribers.push({
       afterMapSet(map) {
+        // Check if any tasks need to recur after everything has been set
+        Object.values(map).forEach((task) => {
+          if (task) {
+            TaskMapService.executeRecurrenceIfNeeded(task);
+          }
+        });
+        TaskRecurrenceService.buildTaskRecurrenceSubMapFresh(map);
         TaskMapService.autoDeleteTasksPostSet(map);
       },
       beforeDocAddition(map, newDoc) {
@@ -59,7 +77,7 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
       },
       validateDocDeletion(map, docToDelete) {
         const docIdsToDelete: string[] = [docToDelete._id.toString()];
-        const allTasks = TaskMapService.getAllTasks(map);
+        const allTasks = TaskOperationsService.getAllTasks(map);
         docIdsToDelete.push(
           ...DashboardTaskService.getChildrenIds(allTasks, [docToDelete._id]).map((id) =>
             id.toString()
@@ -91,86 +109,37 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
     newTaskUpdater: Updater<DashboardTask>,
     originalTaskUpdater?: Updater<DashboardTask>
   ): UpsertManyInfo<DashboardTask> {
-    const map = this.instance.documentMap;
-    const parentTask = map[taskId];
-    if (!parentTask) {
-      throw new Error(`Task with ID ${taskId} not found while trying to duplicate.`);
-    }
-    const allRelatedTaskIds = DashboardTaskService.getChildrenIds(this.getAllTasks(map), [
-      parentTask._id
-    ]);
-    allRelatedTaskIds.push(parentTask._id);
-    const tasksToInsert: DashboardTask[] = [];
-    const oldTaskIdToNewTaskId: { [oldId: string]: ObjectId } = {};
-    allRelatedTaskIds.forEach((id) => {
-      const doc = map[id.toString()];
-      if (!doc) {
-        throw new Error(`Task with ID ${id.toString()} not found while trying to duplicate.`);
-      }
-      let newTask = DocumentService.deepCopy(doc);
-      newTask._id = new ObjectId();
-      oldTaskIdToNewTaskId[id.toString()] = newTask._id;
-      newTask = newTaskUpdater(newTask);
-      tasksToInsert.push(newTask);
-    });
-    // Map back through and update parent task IDs. Don't update the
-    // original task though, as that should retain it's current parent.
-    tasksToInsert.forEach((task) => {
-      if (task.parentTaskId && task._id.toString() !== taskId) {
-        task.parentTaskId = oldTaskIdToNewTaskId[task.parentTaskId.toString()];
-      }
-    });
-    // The below could be made into something more performant
-    const allRelatedTaskIdStrings = allRelatedTaskIds.map((id) => id.toString());
-    if (originalTaskUpdater) {
-      const filter = (task: DashboardTask) => allRelatedTaskIdStrings.includes(task._id.toString());
-      const updater = originalTaskUpdater;
-      return {
-        filter: filter,
-        updater: updater,
-        newDocs: tasksToInsert
-      };
-    }
-    return {
-      filter: () => false,
-      updater: (task) => task,
-      newDocs: tasksToInsert
-    };
+    return TaskOperationsService.getDuplicateTaskUpdateInfo(
+      this.instance.documentMap,
+      taskId,
+      newTaskUpdater,
+      originalTaskUpdater
+    );
   }
 
   /**
    * Gets the update info for a task and all of its children based on the
    * provided updater.
    *
-   * @param taskId
-   * @param updater
+   * @param taskId The ID of the parent task
+   * @param updater Function to update each task
    */
   static getUpdateTaskAndAllChildrenInfo(
     taskId: string,
     updater: Updater<DashboardTask>
   ): UpsertManyInfo<DashboardTask> {
-    const map = this.instance.documentMap;
-    const parentTask = map[taskId];
-    if (!parentTask) {
-      throw new Error(`Task with ID ${taskId} not found.`);
-    }
-    const allRelatedTaskIds = DashboardTaskService.getChildrenIds(TaskMapService.getAllTasks(map), [
-      parentTask._id
-    ]);
-    allRelatedTaskIds.push(parentTask._id);
-    const allRelatedTaskIdStrings = allRelatedTaskIds.map((id) => id.toString());
-    return {
-      filter: (currentDoc) => allRelatedTaskIdStrings.includes(currentDoc._id.toString()),
-      updater,
-      newDocs: []
-    };
+    return TaskOperationsService.getUpdateTaskAndAllChildrenInfo(
+      this.instance.documentMap,
+      taskId,
+      updater
+    );
   }
 
   /**
    * Auto-deletes tasks that are older than the user's auto task deletion
    * settings.
    *
-   * @param map
+   * @param map The task map to check for auto-deletion
    */
   private static autoDeleteTasksPostSet(map: DocumentMap<DashboardTask>) {
     // Check for any tasks that need to be auto-deleted.
@@ -201,14 +170,5 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
       console.log(`Deleting ${taskIdsToDelete.length} tasks due to auto task deletion.`);
       this.getStore().deleteMany(taskIdsToDelete);
     }
-  }
-
-  /**
-   * Simply gets all the tasks in the provided task map excluding any undefined.
-   *
-   * @param map
-   */
-  private static getAllTasks(map: DocumentMap<DashboardTask>): DashboardTask[] {
-    return Object.values(map).filter((task): task is DashboardTask => task !== undefined);
   }
 }
