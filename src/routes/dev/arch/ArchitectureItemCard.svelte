@@ -14,8 +14,7 @@
   import { Icon } from '@smui/icon-button';
   import Tooltip, { Wrapper } from '@smui/tooltip';
   import type { Snippet } from 'svelte';
-  import type { MenuButtonItem } from '$components/presentational/MenuButton.svelte';
-  import MenuButton from '$components/presentational/MenuButton.svelte';
+  import { MenuButton, type MenuButtonItem } from '$components/presentational';
   import type { ArchitectureComponent } from '$util/ArchitectureInfo/architectureComponents';
   import ArchitectureInfo from '$util/ArchitectureInfo/ArchitectureInfo';
 

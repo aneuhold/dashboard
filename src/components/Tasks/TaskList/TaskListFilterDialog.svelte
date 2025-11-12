@@ -2,7 +2,7 @@
   import type { DashboardTaskListFilterSettings } from '@aneuhold/core-ts-db-lib';
   import Button, { Label } from '@smui/button';
   import { Actions, Content, Title } from '@smui/dialog';
-  import SmartDialog from '$components/presentational/SmartDialog.svelte';
+  import { SmartDialog } from '$components/presentational';
   import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
   import TaskTagsService from '../../../services/Task/TaskTagsService';
   import TaskFilterSetting from './TaskFilterSetting.svelte';

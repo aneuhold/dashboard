@@ -8,20 +8,23 @@ import type { Action } from 'svelte/action';
  *
  * ```svelte
  * <script>
- *  import { clickOutside } from "src/actions/clickOutside";
- *  let show = false;
+ * import { clickOutside } from "src/actions/clickOutside";
+ * let show = false;
  * </script>
  *
  * <button on:click={() => show = true}>Show</button>
  *
  * {#if show}
- *  <div class="modal" use:clickOutside={() => {
- *    show = false;
- *  }}>
- *    <button on:click={() => show = false}>Close</button>
- *  </div>
+ * <div class="modal" use:clickOutside={() => {
+ * show = false;
+ * }}>
+ * <button on:click={() => show = false}>Close</button>
+ * </div>
  * {/if}
  * ```
+ *
+ * @param node
+ * @param callbackFunction
  */
 export const clickOutside: Action<HTMLElement, () => void> = (node, callbackFunction) => {
   const handleClick = (event: MouseEvent) => {

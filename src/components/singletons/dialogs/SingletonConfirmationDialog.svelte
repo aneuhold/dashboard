@@ -8,7 +8,7 @@
   import Button, { Label } from '@smui/button';
   import { Actions, Content, Title } from '@smui/dialog';
   import { writable } from 'svelte/store';
-  import SmartDialog from '$components/presentational/SmartDialog.svelte';
+  import { SmartDialog } from '$components/presentational';
 
   export type ConfirmationDialogSettings = {
     title: string;

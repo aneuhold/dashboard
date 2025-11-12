@@ -9,7 +9,7 @@
   import { flip } from 'svelte/animate';
   import { SvelteSet } from 'svelte/reactivity';
   import { slide } from 'svelte/transition';
-  import SmartDialog from '$components/presentational/SmartDialog.svelte';
+  import { SmartDialog } from '$components/presentational';
   import TaskSortSetting from './TaskSortSetting.svelte';
 
   let {

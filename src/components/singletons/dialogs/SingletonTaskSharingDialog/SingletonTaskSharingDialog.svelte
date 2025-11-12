@@ -11,7 +11,7 @@
   import FormField from '@smui/form-field';
   import type { ObjectId } from 'bson';
   import { writable } from 'svelte/store';
-  import SmartDialog from '$components/presentational/SmartDialog.svelte';
+  import { SmartDialog } from '$components/presentational';
   import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
   import { currentUserId } from '$stores/derived/currentUserId';
   import { userSettings } from '$stores/userSettings/userSettings';
