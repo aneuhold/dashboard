@@ -9,30 +9,32 @@
   import { Icon } from '@smui/icon-button';
   import { goto } from '$app/navigation';
   import ClickableDiv from '$components/presentational/ClickableDiv.svelte';
-  import type { MenuButtonItem } from '$components/presentational/MenuButton.svelte';
-  import MenuButton from '$components/presentational/MenuButton.svelte';
+  import MenuButton, { type MenuButtonItem } from '$components/presentational/MenuButton.svelte';
   import { confirmationDialog } from '$components/singletons/dialogs/SingletonConfirmationDialog.svelte';
   import { taskAssignmentDialog } from '$components/singletons/dialogs/SingletonTaskAssignmentDialog/SingletonTaskAssignmentDialog.svelte';
   import { taskSharingDialog } from '$components/singletons/dialogs/SingletonTaskSharingDialog/SingletonTaskSharingDialog.svelte';
+  import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
+  import TaskService from '$services/Task/TaskService';
   import { currentUserId } from '$stores/derived/currentUserId';
   import { userSettings } from '$stores/userSettings/userSettings';
-  import { TaskMapService } from '../../../services/Task/TaskMapService/TaskMapService';
-  import TaskRecurrenceService from '../../../services/Task/TaskRecurrenceService';
-  import TaskService from '../../../services/Task/TaskService';
   import TaskCompletedCheckbox from '../TaskCompletedCheckbox.svelte';
   import TaskRowDateInfo from '../TaskDate/TaskRowDateInfo.svelte';
   import TaskRowTagHeader from '../TaskTags/TaskRowTagHeader.svelte';
   import TaskRowSubtaskInfo from './TaskRowSubtaskInfo.svelte';
 
-  interface Props {
+  let {
+    taskId,
+    /**
+     * If set, it will display the tag as a header above the task.
+     */
+    tagHeaderName
+  }: {
     taskId: string;
     /**
      * If set, it will display the tag as a header above the task.
      */
-    tagHeaderName?: string | undefined;
-  }
-
-  let { taskId, tagHeaderName = undefined }: Props = $props();
+    tagHeaderName?: string;
+  } = $props();
 
   const taskMap = TaskMapService.getStore();
   let task = $derived(TaskMapService.getTaskStore(taskId));
@@ -75,7 +77,7 @@
         `This is nice if you want to skip a task instead of completing it ` +
         `because it wasn't actually done. Save that dopamine! ❤️`,
       onConfirm: () => {
-        TaskRecurrenceService.executeRecurrenceForTask($task);
+        TaskMapService.executeRecurrenceIfNeeded($task);
       }
     });
   }

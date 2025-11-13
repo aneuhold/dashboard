@@ -14,7 +14,7 @@ import { appIsVisible } from '$stores/appIsVisible';
 import { timeMinute } from '$stores/timeMinute';
 import DashboardAPIService from '$util/api/DashboardAPIService';
 import type { DocumentMapStoreSubscriber, UpsertManyInfo } from '../DocumentMapStoreService';
-import { TaskMapService } from './TaskMapService/TaskMapService';
+import TaskOperationsService from './TaskOperationsService';
 
 type TaskRecurrenceSubMap = { [taskId: string]: Unsubscriber | undefined };
 
@@ -53,15 +53,19 @@ export default class TaskRecurrenceService {
   }
 
   /**
-   * Executes recurrence for the provided task if it is time to do so. Only
-   * executes for the top-level recurring task and not child tasks, because
-   * child tasks are handled by the parent task.
+   * Executes recurrence if needed for the provided task.
    *
-   * @param task
+   * @param task The task to check for recurrence
+   * @param taskMap The current task map
+   * @param upsertMany The function to call to upsert the recurrence changes
    */
-  static executeRecurrenceIfNeeded(task: DashboardTask) {
+  static executeRecurrenceIfNeeded(
+    task: DashboardTask,
+    taskMap: DashboardTaskMap,
+    upsertMany: (info: UpsertManyInfo<DashboardTask>) => void
+  ) {
     if (this.taskShouldRecur(task)) {
-      this.executeRecurrenceForTask(task);
+      this.executeRecurrenceForTask(task, taskMap, upsertMany);
     }
   }
 
@@ -77,12 +81,12 @@ export default class TaskRecurrenceService {
     ) {
       return true;
     } else {
-      const nextRecurreceDate = this.getNextRecurrenceDate(task);
-      if (!nextRecurreceDate) {
+      const nextRecurrenceDate = this.getNextRecurrenceDate(task);
+      if (!nextRecurrenceDate) {
         return false;
       }
       const currentDate = new Date();
-      if (nextRecurreceDate < currentDate) {
+      if (nextRecurrenceDate < currentDate) {
         return true;
       }
     }
@@ -102,28 +106,24 @@ export default class TaskRecurrenceService {
    *
    * This will not take any action if there is no recurrence info on the task.
    *
-   * @param task
+   * @param task The task to execute recurrence for
+   * @param taskMap The current task map
+   * @param upsertMany The function to call to upsert the recurrence changes
    */
-  static executeRecurrenceForTask(task: DashboardTask) {
+  static executeRecurrenceForTask(
+    task: DashboardTask,
+    taskMap: DashboardTaskMap,
+    upsertMany: (info: UpsertManyInfo<DashboardTask>) => void
+  ) {
     if (!task.recurrenceInfo || task.parentRecurringTaskInfo) {
       return;
     }
     console.log('Executing recurrence for task', task);
-    const taskMap = TaskMapService.getStore();
-    taskMap.upsertMany(this.getRecurrenceUpdateInfo(task));
+    upsertMany(this.getRecurrenceUpdateInfo(taskMap, task));
   }
 
   static getSubscribersForTaskMap(): DocumentMapStoreSubscriber<DashboardTask> {
     return {
-      // Check if any tasks need to recur after everything has been set
-      afterMapSet: (newMap) => {
-        Object.values(newMap).forEach((task) => {
-          if (task) {
-            TaskRecurrenceService.executeRecurrenceIfNeeded(task);
-          }
-        });
-        TaskRecurrenceService.buildTaskRecurrenceSubMapFresh(newMap);
-      },
       afterDocAddition(map, newDoc) {
         TaskRecurrenceService.updateOrRemoveTaskTimeSubscription(newDoc);
       },
@@ -133,29 +133,33 @@ export default class TaskRecurrenceService {
           newDoc.startDate?.getTime() !== oldDoc?.startDate?.getTime() ||
           newDoc.dueDate?.getTime() !== oldDoc?.dueDate?.getTime();
         if (watchRecurrenceInfo && TaskRecurrenceService.taskShouldRecur(newDoc)) {
-          return TaskRecurrenceService.getRecurrenceUpdateInfo(newDoc);
+          return TaskRecurrenceService.getRecurrenceUpdateInfo(map, newDoc);
         } else if (watchRecurrenceInfo || oldDoc?.recurrenceInfo || datesAreDifferent) {
           const recurrenceInfoChanged =
             JSON.stringify(oldDoc?.recurrenceInfo) !== JSON.stringify(newDoc.recurrenceInfo);
           if (recurrenceInfoChanged) {
             TaskRecurrenceService.updateOrRemoveTaskTimeSubscription(newDoc);
-            return TaskMapService.getUpdateTaskAndAllChildrenInfo(newDoc._id.toString(), (task) => {
-              if (task._id.toString() === newDoc._id.toString()) {
+            return TaskOperationsService.getUpdateTaskAndAllChildrenInfo(
+              map,
+              newDoc._id.toString(),
+              (task) => {
+                if (task._id.toString() === newDoc._id.toString()) {
+                  return task;
+                }
+                if (newDoc.recurrenceInfo) {
+                  task.parentRecurringTaskInfo = {
+                    taskId: newDoc._id,
+                    startDate: newDoc.startDate,
+                    dueDate: newDoc.dueDate
+                  };
+                  task.recurrenceInfo = newDoc.recurrenceInfo;
+                } else {
+                  task.parentRecurringTaskInfo = undefined;
+                  task.recurrenceInfo = undefined;
+                }
                 return task;
               }
-              if (newDoc.recurrenceInfo) {
-                task.parentRecurringTaskInfo = {
-                  taskId: newDoc._id,
-                  startDate: newDoc.startDate,
-                  dueDate: newDoc.dueDate
-                };
-                task.recurrenceInfo = newDoc.recurrenceInfo;
-              } else {
-                task.parentRecurringTaskInfo = undefined;
-                task.recurrenceInfo = undefined;
-              }
-              return task;
-            });
+            );
           }
         }
         return null;
@@ -163,12 +167,23 @@ export default class TaskRecurrenceService {
     };
   }
 
-  private static getRecurrenceUpdateInfo(task: DashboardTask): UpsertManyInfo<DashboardTask> {
+  /**
+   * Gets the recurrence update info for the provided task. This includes
+   * information about which tasks to update and how to update them.
+   *
+   * @param taskMap The current task map
+   * @param task The task to get recurrence update info for
+   */
+  private static getRecurrenceUpdateInfo(
+    taskMap: DashboardTaskMap,
+    task: DashboardTask
+  ): UpsertManyInfo<DashboardTask> {
     if (!task.recurrenceInfo || task.parentRecurringTaskInfo) {
       throw new Error('Task does not have recurrence info and should not be updated');
     }
     if (task.recurrenceInfo.recurrenceEffect === RecurrenceEffect.stack && !task.completed) {
-      return TaskMapService.getDuplicateTaskUpdateInfo(
+      return TaskOperationsService.getDuplicateTaskUpdateInfo(
+        taskMap,
         task._id.toString(),
         (task) => {
           task.completed = true;
@@ -182,11 +197,15 @@ export default class TaskRecurrenceService {
         }
       );
     } else {
-      return TaskMapService.getUpdateTaskAndAllChildrenInfo(task._id.toString(), (task) => {
-        TaskRecurrenceService.updateDatesForRecurrence(task);
-        task.completed = false;
-        return task;
-      });
+      return TaskOperationsService.getUpdateTaskAndAllChildrenInfo(
+        taskMap,
+        task._id.toString(),
+        (task) => {
+          TaskRecurrenceService.updateDatesForRecurrence(task);
+          task.completed = false;
+          return task;
+        }
+      );
     }
   }
 

@@ -62,8 +62,6 @@ This repository is a SvelteKit app (Svelte 5) managed with pnpm.
 - Use relative imports within package, package references for external packages
 - Use named imports only (never `import * as`)
 - Import at file top (inline only when absolutely necessary)
-- Use a group-level barrel: each component group (e.g., index.ts) is the canonical public surface and must re-export components directly from their .svelte files (e.g., export { default as DatePickerDialog } from './DatePickerDialog.svelte';).
-- Only add a per-component index.ts when the folder needs to expose multiple symbols (component + helpers); when present, re-export explicitly as named exports (e.g., export { default as X } from './X.svelte'; `export * from './helpers'`);
 
 ### Enums
 

@@ -6,15 +6,16 @@
 -->
 <script lang="ts">
   import { NonogramKatanaItemName, NonogramKatanaUpgrade } from '@aneuhold/core-ts-db-lib';
-  import type { DocumentStore } from '../../../../services/DocumentMapStoreService';
+  import type { DocumentStore } from '$services/DocumentMapStoreService';
   import { nonogramKatanaUpgradesDisplayInfo } from '../upgrades/nonogramKatanaUpgradesDisplayInfo';
 
-  interface Props {
+  let {
+    itemName,
+    relatedUpgrade
+  }: {
     itemName: NonogramKatanaItemName;
     relatedUpgrade: DocumentStore<NonogramKatanaUpgrade>;
-  }
-
-  let { itemName, relatedUpgrade }: Props = $props();
+  } = $props();
 
   let upgradeDisplayInfo = $derived(nonogramKatanaUpgradesDisplayInfo[$relatedUpgrade.upgradeName]);
   let requiredItemAmount = $derived(

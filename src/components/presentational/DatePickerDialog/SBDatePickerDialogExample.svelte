@@ -21,14 +21,14 @@
   let open = $state(false);
   let selectedDate = $state<Date | null>(null);
 
-  const handleSelected = (date: Date | null) => {
+  function handleSelected(date: Date | null) {
     selectedDate = date;
     onSelected?.(date);
-  };
+  }
 
-  const openDialog = () => {
+  function openDialog() {
     open = true;
-  };
+  }
 </script>
 
 <div style="padding: 20px;">

@@ -19,9 +19,9 @@
   import Accordion, { Content, Panel } from '@smui-extra/accordion';
   import ClickableDiv from '$components/presentational/ClickableDiv.svelte';
   import SmartDialog from '$components/presentational/SmartDialog.svelte';
-  import { TaskMapService } from '../../../services/Task/TaskMapService/TaskMapService';
-  import TaskRecurrenceService from '../../../services/Task/TaskRecurrenceService';
-  import TaskService from '../../../services/Task/TaskService';
+  import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
+  import TaskRecurrenceService from '$services/Task/TaskRecurrenceService';
+  import TaskService from '$services/Task/TaskService';
   import TaskRecurrenceDetails from './TaskRecurrenceDetails.svelte';
 
   let { taskId, childTaskIds }: { taskId: string; childTaskIds: string[] } = $props();
@@ -64,7 +64,7 @@
     }
   });
 
-  const handleRecurringClick = () => {
+  function handleRecurringClick() {
     if (isRecurring) {
       $task.recurrenceInfo = undefined;
       recurringInfoOpen = false;
@@ -83,15 +83,15 @@
       $task.recurrenceInfo = defaultRecurrenceInfoClone;
       recurringInfoOpen = true;
     }
-  };
+  }
 
-  const getNextRecurrenceDate = (task: DashboardTask): string => {
+  function getNextRecurrenceDate(task: DashboardTask): string {
     const date = TaskRecurrenceService.getNextRecurrenceDate(task);
     if (!date) {
       return 'Error: please tell Tony aboot this';
     }
     return DateService.getDateTimeString(date);
-  };
+  }
 </script>
 
 <div class="container">

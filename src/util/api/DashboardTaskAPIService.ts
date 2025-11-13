@@ -1,6 +1,6 @@
 import type { ProjectDashboardOptions } from '@aneuhold/core-ts-api-lib';
 import type { DashboardTask } from '@aneuhold/core-ts-db-lib';
-import type { DocumentInsertOrUpdateInfo } from '../../services/DocumentMapStoreService';
+import type { DocumentInsertOrUpdateInfo } from '$services/DocumentMapStoreService';
 import DashboardAPIService from './DashboardAPIService';
 
 /**

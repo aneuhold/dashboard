@@ -1,25 +1,29 @@
 <script lang="ts">
   import Button, { Label } from '@smui/button';
   import { Actions, Content, Title } from '@smui/dialog';
-  import { InputBox } from '$components/presentational';
+  import InputBox from '$components/presentational/InputBox/InputBox.svelte';
   import SmartDialog from '$components/presentational/SmartDialog.svelte';
+  import TaskTagsService from '$services/Task/TaskTagsService';
   import { userSettings } from '$stores/userSettings/userSettings';
-  import TaskTagsService from '../../../services/Task/TaskTagsService';
 
-  interface Props {
+  let {
+    open = $bindable(false),
+    /**
+     * The tag name to update. If not provided, the editor will be in "add" mode.
+     */
+    tagName
+  }: {
     open?: boolean;
     /**
      * The tag name to update. If not provided, the editor will be in "add" mode.
      */
-    tagName?: string | undefined;
-  }
+    tagName?: string;
+  } = $props();
 
-  let { open = $bindable(false), tagName = undefined }: Props = $props();
-
-  const handleCancel = () => {
+  function handleCancel() {
     open = false;
-  };
-  const handleDone = () => {
+  }
+  function handleDone() {
     if (tagEditorValue !== tagName) {
       if (tagName) {
         TaskTagsService.updateTag(tagName, tagEditorValue);
@@ -28,12 +32,12 @@
       }
     }
     open = false;
-  };
+  }
 
-  const validateTagEditorValue = (value: string) => {
+  function validateTagEditorValue(value: string) {
     if (tagEditorValue === '') return false;
     return tagEditorValue === tagName || !$userSettings.config.tagSettings[value];
-  };
+  }
   let tagEditorValue = $derived(tagName ?? '');
   let tagValueIsValid = $derived(validateTagEditorValue(tagEditorValue));
   let buttonIsDisabled = $derived(!tagValueIsValid || tagEditorValue === tagName);

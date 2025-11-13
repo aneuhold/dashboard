@@ -21,15 +21,7 @@
 </script>
 
 <script lang="ts">
-  interface Props {
-    /**
-     * Determines if the link is internal to the site or not. If it isn't,
-     * then a link icon will be next to the title.
-     */
-    linkInfo: LinkInfo;
-  }
-
-  let { linkInfo }: Props = $props();
+  let { linkInfo }: { linkInfo: LinkInfo } = $props();
 </script>
 
 <Item onclick={linkInfo.clickAction}>

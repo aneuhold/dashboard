@@ -5,16 +5,12 @@
   import { Icon } from '@smui/common';
   import IconButton from '@smui/icon-button';
   import { nonogramKatanaUpgradeDialog } from '$components/singletons/dialogs/SingletonNonogramKatanaUpgradeDialog.svelte';
-  import { NonogramKatanaUpgradeMapService } from '../../../../services/NonogramKatana/NonogramKatanaUpgradeMapService';
+  import { NonogramKatanaUpgradeMapService } from '$services/NonogramKatana/NonogramKatanaUpgradeMapService';
   import NonogramKatanaRequiredItem from './NonogramKatanaRequiredItem.svelte';
   import NonogramKatanaRequiredUpgrade from './NonogramKatanaRequiredUpgrade.svelte';
   import { nonogramKatanaUpgradesDisplayInfo } from './nonogramKatanaUpgradesDisplayInfo';
 
-  interface Props {
-    upgradeName: NonogramKatanaUpgradeName;
-  }
-
-  let { upgradeName }: Props = $props();
+  let { upgradeName }: { upgradeName: NonogramKatanaUpgradeName } = $props();
   let upgrade = $derived(NonogramKatanaUpgradeMapService.getUpgradeStoreByName(upgradeName));
   let displayInfo = $derived(nonogramKatanaUpgradesDisplayInfo[upgradeName]);
 </script>

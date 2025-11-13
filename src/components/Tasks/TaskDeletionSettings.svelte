@@ -1,6 +1,6 @@
 <script lang="ts">
   import InfoIcon from '$components/InfoIcon.svelte';
-  import { InputBox } from '$components/presentational';
+  import InputBox from '$components/presentational/InputBox/InputBox.svelte';
   import { userSettings } from '$stores/userSettings/userSettings';
 </script>
 

@@ -1,9 +1,9 @@
 <script lang="ts" module>
   import { writable } from 'svelte/store';
 
-  export const triggerConfetti = (centerX: number, centerY: number, durationMs?: number) => {
+  export function triggerConfetti(centerX: number, centerY: number, durationMs?: number) {
     confettiSettings.set({ centerX, centerY, durationMs, show: true });
-  };
+  }
 
   type ConfettiSettings = {
     centerX: number;
@@ -13,7 +13,7 @@
   };
 
   function createConfettiSettings() {
-    let currentTimeout: NodeJS.Timeout | undefined = undefined;
+    let currentTimeout: NodeJS.Timeout | undefined;
     const { subscribe, set } = writable<ConfettiSettings>({
       centerX: 100,
       centerY: 100,

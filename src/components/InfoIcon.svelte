@@ -14,14 +14,10 @@
   import Button, { Label } from '@smui/button';
   import { Actions, Content, Title } from '@smui/dialog';
   import IconButton, { Icon } from '@smui/icon-button';
+  import type { Snippet } from 'svelte';
   import SmartDialog from './presentational/SmartDialog.svelte';
 
-  interface Props {
-    title: string;
-    children?: import('svelte').Snippet;
-  }
-
-  let { title, children }: Props = $props();
+  let { title, children }: { title: string; children?: Snippet } = $props();
 
   let open = $state(false);
 </script>

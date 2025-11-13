@@ -4,14 +4,14 @@
   import { goto } from '$app/navigation';
   import { taskSharingDialog } from '$components/singletons/dialogs/SingletonTaskSharingDialog/SingletonTaskSharingDialog.svelte';
   import type { DocumentStore } from '$services/DocumentMapStoreService';
+  import TaskService from '$services/Task/TaskService';
   import { userSettings } from '$stores/userSettings/userSettings';
-  import TaskService from '../../../services/Task/TaskService';
 
-  interface Props {
+  let {
+    task
+  }: {
     task: DocumentStore<DashboardTask>;
-  }
-
-  let { task }: Props = $props();
+  } = $props();
 
   let sharingDisabled = $derived(
     $task.userId.toString() !== $userSettings.config.userId.toString()

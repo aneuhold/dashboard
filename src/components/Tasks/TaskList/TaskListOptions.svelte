@@ -7,11 +7,11 @@
   } from '@aneuhold/core-ts-db-lib';
   import ClickableDiv from '$components/presentational/ClickableDiv.svelte';
   import SquareIconButton from '$components/presentational/SquareIconButton.svelte';
+  import type { DocumentStore } from '$services/DocumentMapStoreService';
+  import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
+  import TaskTagsService from '$services/Task/TaskTagsService';
   import { currentUserId } from '$stores/derived/currentUserId';
   import { userSettings } from '$stores/userSettings/userSettings';
-  import type { DocumentStore } from '../../../services/DocumentMapStoreService';
-  import { TaskMapService } from '../../../services/Task/TaskMapService/TaskMapService';
-  import TaskTagsService from '../../../services/Task/TaskTagsService';
   import TaskListFilterDialog from './TaskListFilterDialog.svelte';
   import TaskListSortingDialog from './TaskListSortingDialog.svelte';
 
@@ -31,17 +31,17 @@
     removedTaskIds: string[];
   } = $props();
 
-  const globalTags = TaskTagsService.getStore();
   const taskMap = TaskMapService.getStore();
+  const globalTags = TaskTagsService.getStore(taskMap);
 
   let sortingDialogOpen = $state(false);
   let filterDialogOpen = $state(false);
 
-  const getTaskSpecificText = (settingsInfo: {
+  function getTaskSpecificText(settingsInfo: {
     parentTask?: DashboardTask;
     parentTaskSortSettings?: DashboardTaskListSortSettings;
     parentTaskFilterSettings?: DashboardTaskListFilterSettings;
-  }) => {
+  }) {
     const { parentTask, parentTaskSortSettings, parentTaskFilterSettings } = settingsInfo;
     if (parentTask) {
       if (parentTaskSortSettings && parentTaskFilterSettings) {
@@ -53,16 +53,16 @@
       }
     }
     return '';
-  };
+  }
 
-  const handleUpdateSortSettings = (newSortSettings: DashboardTaskListSortSettings) => {
+  function handleUpdateSortSettings(newSortSettings: DashboardTaskListSortSettings) {
     if ($parentTask) {
       $parentTask.sortSettings[$currentUserId] = newSortSettings;
     } else {
       $userSettings.config.taskListSortSettings[category] = newSortSettings;
     }
-  };
-  const handleResetSortSettings = () => {
+  }
+  function handleResetSortSettings() {
     if ($parentTask) {
       const sortSettings = $parentTask.sortSettings;
       delete sortSettings[$currentUserId];
@@ -72,15 +72,15 @@
       delete sortSettings[category];
       $userSettings.config.taskListSortSettings = sortSettings;
     }
-  };
-  const handleUpdateFilterSettings = (newFilterSettings: DashboardTaskListFilterSettings) => {
+  }
+  function handleUpdateFilterSettings(newFilterSettings: DashboardTaskListFilterSettings) {
     if ($parentTask) {
       $parentTask.filterSettings[$currentUserId] = newFilterSettings;
     } else {
       $userSettings.config.taskListFilterSettings[category] = newFilterSettings;
     }
-  };
-  const handleResetFilterSettings = () => {
+  }
+  function handleResetFilterSettings() {
     if ($parentTask) {
       const filterSettings = $parentTask.filterSettings;
       delete filterSettings[$currentUserId];
@@ -90,7 +90,7 @@
       delete filterSettings[category];
       $userSettings.config.taskListFilterSettings = filterSettings;
     }
-  };
+  }
   let parentTaskFilterSettings = $derived(
     $parentTask ? $parentTask.filterSettings[$currentUserId] : undefined
   );

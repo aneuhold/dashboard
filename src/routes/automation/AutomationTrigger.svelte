@@ -4,14 +4,17 @@
   import { Icon } from '@smui/icon-button';
   import { snackbar } from '$components/singletons/SingletonSnackbar.svelte';
 
-  interface Props {
+  let {
+    iconName,
+    title,
+    description,
+    automationTriggerUrl
+  }: {
     iconName: string;
     title: string;
     description: string;
     automationTriggerUrl: string | undefined;
-  }
-
-  let { iconName, title, description, automationTriggerUrl }: Props = $props();
+  } = $props();
 
   function handleButtonClick() {
     if (automationTriggerUrl) {

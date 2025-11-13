@@ -1,9 +1,9 @@
 <script lang="ts">
-  interface Props {
+  let {
+    size = 48
+  }: {
     size?: number;
-  }
-
-  let { size = 48 }: Props = $props();
+  } = $props();
   let sizePx = $derived(`${size}px`);
 </script>
 

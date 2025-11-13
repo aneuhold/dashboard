@@ -2,14 +2,14 @@ import type { DashboardTagSettings, DashboardTask } from '@aneuhold/core-ts-db-l
 import { ArrayService } from '@aneuhold/core-ts-lib';
 import { type Unsubscriber, type Writable, writable } from 'svelte/store';
 import { userSettings } from '$stores/userSettings/userSettings';
-import type { DocumentMapStoreSubscriber } from '../DocumentMapStoreService';
-import { TaskMapService } from './TaskMapService/TaskMapService';
+import type { DocumentMapStore, DocumentMapStoreSubscriber } from '../DocumentMapStoreService';
 
 /**
  * A service responsible for managing tags for tasks.
  */
 export default class TaskTagsService {
   private static taskTagsStore: Writable<string[]> | undefined;
+  private static taskMapStore: DocumentMapStore<DashboardTask> | undefined;
   private static currentTagSettings: DashboardTagSettings = {};
   private static userId: string | undefined;
   private static userSettingsUnsub: undefined | Unsubscriber = undefined;
@@ -21,8 +21,13 @@ export default class TaskTagsService {
 
   /**
    * Gets the store of all tags used by the current user on tasks.
+   *
+   * @param taskMapStore
    */
-  static getStore(): Writable<string[]> {
+  static getStore(taskMapStore: DocumentMapStore<DashboardTask>): Writable<string[]> {
+    if (!this.taskMapStore) {
+      this.taskMapStore = taskMapStore;
+    }
     if (!this.taskTagsStore) {
       this.taskTagsStore = this.createStore();
     }
@@ -188,10 +193,10 @@ export default class TaskTagsService {
    */
   private static removeTagFromAllTasks(tag: string) {
     const userId = this.userId;
-    if (!userId) {
+    if (!userId || !this.taskMapStore) {
       return;
     }
-    TaskMapService.getStore().updateMany(
+    this.taskMapStore.updateMany(
       (task) => {
         const userTags = task.tags[userId];
         if (userTags && userTags.includes(tag)) {
@@ -218,10 +223,10 @@ export default class TaskTagsService {
    */
   private static updateTagInAllTasks(oldTag: string, newTag: string) {
     const userId = this.userId;
-    if (!userId) {
+    if (!userId || !this.taskMapStore) {
       return;
     }
-    TaskMapService.getStore().updateMany(
+    this.taskMapStore.updateMany(
       (task) => {
         const userTags = task.tags[userId];
         if (userTags && userTags.includes(oldTag)) {

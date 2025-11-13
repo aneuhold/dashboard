@@ -4,14 +4,14 @@
   import { triggerConfetti } from '$components/singletons/Confetti/Confetti.svelte';
   import { confirmationDialog } from '$components/singletons/dialogs/SingletonConfirmationDialog.svelte';
   import { snackbar } from '$components/singletons/SingletonSnackbar.svelte';
-  import { TaskMapService } from '../../services/Task/TaskMapService/TaskMapService';
+  import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
   import ClickableDiv from '../presentational/ClickableDiv.svelte';
 
-  interface Props {
+  let {
+    taskId
+  }: {
     taskId: string;
-  }
-
-  let { taskId }: Props = $props();
+  } = $props();
 
   // X and Y of the most recent click event for use in confetti
   let clickX = 0;

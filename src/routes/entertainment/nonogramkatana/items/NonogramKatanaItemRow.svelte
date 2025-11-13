@@ -2,18 +2,14 @@
   import Card, { Content as CardContent } from '@smui/card';
   import { Icon } from '@smui/common';
   import IconButton from '@smui/icon-button';
-  import { InputBox } from '$components/presentational';
+  import InputBox from '$components/presentational/InputBox/InputBox.svelte';
   import { nonogramKatanaItemDialog } from '$components/singletons/dialogs/SingletonNonogramKatanaItemDialog.svelte';
-  import { NonogramKatanaItemMapService } from '../../../../services/NonogramKatana/NonogramKatanaItemMapService';
-  import { NonogramKatanaUpgradeMapService } from '../../../../services/NonogramKatana/NonogramKatanaUpgradeMapService';
+  import { NonogramKatanaItemMapService } from '$services/NonogramKatana/NonogramKatanaItemMapService';
+  import { NonogramKatanaUpgradeMapService } from '$services/NonogramKatana/NonogramKatanaUpgradeMapService';
   import { nonogramKatanaItemsDisplayInfo } from './nonogramKatanaItemsDisplayInfo';
   import NonogramKatanaRelatedUpgrade from './NonogramKatanaRelatedUpgrade.svelte';
 
-  interface Props {
-    itemId: string;
-  }
-
-  let { itemId }: Props = $props();
+  let { itemId }: { itemId: string } = $props();
 
   let item = $derived(NonogramKatanaItemMapService.getItemStore(itemId));
   let displayInfo = $derived(nonogramKatanaItemsDisplayInfo[$item.itemName]);

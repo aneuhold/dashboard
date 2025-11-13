@@ -1,7 +1,7 @@
 <script lang="ts">
   import Card, { Content } from '@smui/card';
   import Checkbox from '@smui/checkbox';
-  import { ClickableDiv } from '$components/presentational';
+  import ClickableDiv from '$components/presentational/ClickableDiv.svelte';
 
   let {
     settingName,

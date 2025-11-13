@@ -6,14 +6,14 @@ import {
 import type { BaseDocument, DashboardUserConfig, UserCTO } from '@aneuhold/core-ts-db-lib';
 import type { UUID } from 'crypto';
 import { snackbar } from '$components/singletons/SingletonSnackbar.svelte';
+import { NonogramKatanaItemMapService } from '$services/NonogramKatana/NonogramKatanaItemMapService';
+import { NonogramKatanaUpgradeMapService } from '$services/NonogramKatana/NonogramKatanaUpgradeMapService';
+import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
 import { apiKey } from '$stores/apiKey';
 import { LoginState, loginState } from '$stores/loginState';
 import { translations } from '$stores/translations';
 import { userSettings } from '$stores/userSettings/userSettings';
 import LocalData from '$util/LocalData/LocalData';
-import { NonogramKatanaItemMapService } from '../../services/NonogramKatana/NonogramKatanaItemMapService';
-import { NonogramKatanaUpgradeMapService } from '../../services/NonogramKatana/NonogramKatanaUpgradeMapService';
-import { TaskMapService } from '../../services/Task/TaskMapService/TaskMapService';
 
 const SECONDS_TO_WAIT_BEFORE_FETCHING_INITIAL_DATA = 10;
 

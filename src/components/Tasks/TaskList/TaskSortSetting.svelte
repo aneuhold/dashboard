@@ -47,19 +47,19 @@
     }
   ];
 
-  const enable = () => {
+  function enable() {
     onEnable?.(sortSetting.sortBy);
-  };
-  const disable = () => {
+  }
+  function disable() {
     onDisable?.(sortSetting.sortBy);
-  };
-  const incrementPriority = () => {
+  }
+  function incrementPriority() {
     onIncrementPriority?.(sortSetting.sortBy);
-  };
-  const decrementPriority = () => {
+  }
+  function decrementPriority() {
     onDecrementPriority?.(sortSetting.sortBy);
-  };
-  const getSortName = (sortBy: DashboardTaskSortBy) => {
+  }
+  function getSortName(sortBy: DashboardTaskSortBy) {
     switch (sortBy) {
       case DashboardTaskSortBy.tags:
         return 'Tags';
@@ -76,7 +76,7 @@
       default:
         return 'Unknown';
     }
-  };
+  }
   let sortName = $derived(getSortName(sortSetting.sortBy));
   let tagContentClass = $derived(
     disabled ? 'card-content dimmed-color' : 'card-content colorWhite'

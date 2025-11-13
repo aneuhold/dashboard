@@ -1,12 +1,13 @@
 <script lang="ts">
   import SegmentedButton, { Label, Segment } from '@smui/segmented-button';
 
-  interface Props {
+  let {
+    weekDaySetOrChoice = $bindable(),
+    disabled = false
+  }: {
     weekDaySetOrChoice: Array<number> | number;
     disabled?: boolean;
-  }
-
-  let { weekDaySetOrChoice = $bindable(), disabled = false }: Props = $props();
+  } = $props();
 
   type WeekDaySegment = {
     name: string;

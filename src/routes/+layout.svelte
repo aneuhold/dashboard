@@ -6,7 +6,7 @@
 <script lang="ts">
   import '../globalStyles/global.css';
   import CircularProgress from '@smui/circular-progress';
-  import { onDestroy, onMount } from 'svelte';
+  import { onDestroy, onMount, type Snippet } from 'svelte';
   import Confetti from '$components/singletons/Confetti/Confetti.svelte';
   import SingletonConfirmationDialog from '$components/singletons/dialogs/SingletonConfirmationDialog.svelte';
   import SingletonTaskAssignmentDialog from '$components/singletons/dialogs/SingletonTaskAssignmentDialog/SingletonTaskAssignmentDialog.svelte';
@@ -18,11 +18,7 @@
   import NavBar from '../components/NavBar.svelte';
   import { appIsVisible } from '../stores/appIsVisible';
   import { LoginState, loginState } from '../stores/loginState';
-  interface Props {
-    children?: import('svelte').Snippet;
-  }
-
-  let { children }: Props = $props();
+  let { children }: { children?: Snippet } = $props();
 
   let mounted = $state(false);
 
