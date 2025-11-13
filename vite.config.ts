@@ -33,6 +33,19 @@ const viteConfig: UserConfig = {
     nodePolyfills({
       include: ['crypto', 'util', 'stream']
     })
+    /**
+     * Bundle visualizer for analyzing the bundle size.
+     *
+     * Also import `import { visualizer } from 'rollup-plugin-visualizer';` at the top.
+     */
+    /*
+    visualizer({
+      open: true,
+      filename: 'bundle-analysis.html',
+      gzipSize: true,
+      brotliSize: true
+    })
+    */
   ],
   resolve: {
     dedupe: ['svelte']
