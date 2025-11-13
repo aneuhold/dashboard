@@ -5,10 +5,10 @@ import {
   NonogramKatanaUpgradeName
 } from '@aneuhold/core-ts-db-lib';
 import type { ObjectId } from 'bson';
+import nonogramKatanaItemNameToUpgradesMap from '$routes/entertainment/nonogramkatana/upgrades/nonogramKatanaItemNameToUpgradesMap';
+import { nonogramKatanaUpgradesDisplayInfo } from '$routes/entertainment/nonogramkatana/upgrades/nonogramKatanaUpgradesDisplayInfo';
 import DashboardAPIService from '$util/api/DashboardAPIService';
 import LocalData from '$util/LocalData/LocalData';
-import nonogramKatanaItemNameToUpgradesMap from '../../routes/entertainment/nonogramkatana/upgrades/nonogramKatanaItemNameToUpgradesMap';
-import { nonogramKatanaUpgradesDisplayInfo } from '../../routes/entertainment/nonogramkatana/upgrades/nonogramKatanaUpgradesDisplayInfo';
 import type {
   DocumentInsertOrUpdateInfo,
   DocumentMapStore,

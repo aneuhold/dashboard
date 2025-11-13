@@ -16,7 +16,7 @@
   import { SvelteDate } from 'svelte/reactivity';
   import SveltyPicker, { formatDate } from 'svelty-picker';
   import { en } from 'svelty-picker/i18n';
-  import { SmartDialog } from '$components/presentational';
+  import SmartDialog from '$components/presentational/SmartDialog.svelte';
 
   /**
    * Pulled from the library. See docs here: https://svelty-picker.vercel.app/properties

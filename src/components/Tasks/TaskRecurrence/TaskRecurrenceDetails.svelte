@@ -14,11 +14,11 @@
   import { DateService } from '@aneuhold/core-ts-lib';
   import Select, { Option } from '@smui/select';
   import { type Updater, writable } from 'svelte/store';
-  import { InputBox } from '$components/presentational';
+  import InputBox from '$components/presentational/InputBox/InputBox.svelte';
   import { confirmationDialog } from '$components/singletons/dialogs/SingletonConfirmationDialog.svelte';
   import WeekdaySegmentedButton from '$components/WeekdaySegmentedButton.svelte';
-  import { TaskMapService } from '../../../services/Task/TaskMapService/TaskMapService';
-  import TaskRecurrenceService from '../../../services/Task/TaskRecurrenceService';
+  import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
+  import TaskRecurrenceService from '$services/Task/TaskRecurrenceService';
   import TaskRecurrenceInfoIcon from './TaskRecurrenceInfoIcon.svelte';
   import TaskRecurrenceUpdateExample from './TaskRecurrenceUpdateExample.svelte';
   import TaskRecurrenceWeekdayOfMonth from './TaskRecurrenceWeekdayOfMonth.svelte';

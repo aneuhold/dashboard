@@ -8,8 +8,8 @@
   import Button, { Label } from '@smui/button';
   import { Actions, Content, Title } from '@smui/dialog';
   import { writable } from 'svelte/store';
-  import { SmartDialog } from '$components/presentational';
-  import { NonogramKatanaItemMapService } from '../../../services/NonogramKatana/NonogramKatanaItemMapService';
+  import SmartDialog from '$components/presentational/SmartDialog.svelte';
+  import { NonogramKatanaItemMapService } from '$services/NonogramKatana/NonogramKatanaItemMapService';
 
   /**
    * A Nonogram Katana item dialog which can be used anywhere in the app.
@@ -27,8 +27,8 @@
 
 <script lang="ts">
   import Checkbox from '@smui/checkbox';
-  import { InputBox } from '$components/presentational';
-  import { nonogramKatanaItemsDisplayInfo } from '../../../routes/entertainment/nonogramkatana/items/nonogramKatanaItemsDisplayInfo';
+  import InputBox from '$components/presentational/InputBox/InputBox.svelte';
+  import { nonogramKatanaItemsDisplayInfo } from '$routes/entertainment/nonogramkatana/items/nonogramKatanaItemsDisplayInfo';
 
   let item = $derived(
     $currentItemId ? NonogramKatanaItemMapService.getItemStore($currentItemId) : null

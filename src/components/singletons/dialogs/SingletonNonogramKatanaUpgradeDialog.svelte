@@ -9,10 +9,11 @@
   import Checkbox from '@smui/checkbox';
   import { Actions, Content, Title } from '@smui/dialog';
   import { writable } from 'svelte/store';
-  import { InputBox, SmartDialog } from '$components/presentational';
-  import { nonogramKatanaItemsDisplayInfo } from '../../../routes/entertainment/nonogramkatana/items/nonogramKatanaItemsDisplayInfo';
-  import { nonogramKatanaUpgradesDisplayInfo } from '../../../routes/entertainment/nonogramkatana/upgrades/nonogramKatanaUpgradesDisplayInfo';
-  import { NonogramKatanaUpgradeMapService } from '../../../services/NonogramKatana/NonogramKatanaUpgradeMapService';
+  import InputBox from '$components/presentational/InputBox/InputBox.svelte';
+  import SmartDialog from '$components/presentational/SmartDialog.svelte';
+  import { nonogramKatanaItemsDisplayInfo } from '$routes/entertainment/nonogramkatana/items/nonogramKatanaItemsDisplayInfo';
+  import { nonogramKatanaUpgradesDisplayInfo } from '$routes/entertainment/nonogramkatana/upgrades/nonogramKatanaUpgradesDisplayInfo';
+  import { NonogramKatanaUpgradeMapService } from '$services/NonogramKatana/NonogramKatanaUpgradeMapService';
 
   /**
    * A Nonogram Katana upgrade dialog which can be used anywhere in the app.

@@ -10,9 +10,9 @@
   import List, { Graphic, Item, Separator, Text } from '@smui/list';
   import { goto } from '$app/navigation';
   import { page } from '$app/state';
+  import { settingsPageInfo } from '$routes/settings/pageInfo';
   import type { PageInfo } from '$util/navInfo';
   import { clickOutside } from '../actions/clickOutside';
-  import { settingsPageInfo } from '../routes/settings/pageInfo';
   import { enabledPages } from '../stores/visual/enabledPages';
   import { navDrawerOpen } from '../stores/visual/navDrawerOpen';
 

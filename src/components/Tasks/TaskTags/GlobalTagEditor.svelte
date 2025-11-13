@@ -1,9 +1,10 @@
 <script lang="ts">
   import Button, { Label } from '@smui/button';
   import { Actions, Content, Title } from '@smui/dialog';
-  import { InputBox, SmartDialog } from '$components/presentational';
+  import InputBox from '$components/presentational/InputBox/InputBox.svelte';
+  import SmartDialog from '$components/presentational/SmartDialog.svelte';
+  import TaskTagsService from '$services/Task/TaskTagsService';
   import { userSettings } from '$stores/userSettings/userSettings';
-  import TaskTagsService from '../../../services/Task/TaskTagsService';
 
   let {
     open = $bindable(false),

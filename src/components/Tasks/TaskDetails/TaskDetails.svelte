@@ -15,11 +15,12 @@
   import { goto } from '$app/navigation';
   import BreadCrumb from '$components/BreadCrumb.svelte';
   import PageTitle from '$components/PageTitle.svelte';
-  import { FabButton, InputBox } from '$components/presentational';
+  import FabButton from '$components/presentational/FabButton/FabButton.svelte';
+  import InputBox from '$components/presentational/InputBox/InputBox.svelte';
+  import TaskListService from '$services/Task/TaskListService';
+  import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
+  import TaskService from '$services/Task/TaskService';
   import { userSettings } from '$stores/userSettings/userSettings';
-  import TaskListService from '../../../services/Task/TaskListService';
-  import { TaskMapService } from '../../../services/Task/TaskMapService/TaskMapService';
-  import TaskService from '../../../services/Task/TaskService';
   import TaskCompletedCheckbox from '../TaskCompletedCheckbox.svelte';
   import TaskDateInfo from '../TaskDate/TaskDateInfo.svelte';
   import TaskList from '../TaskList/TaskList.svelte';

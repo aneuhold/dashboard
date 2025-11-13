@@ -1,6 +1,6 @@
 <script lang="ts">
   import { NonogramKatanaItemName } from '@aneuhold/core-ts-db-lib';
-  import { NonogramKatanaItemMapService } from '../../../../services/NonogramKatana/NonogramKatanaItemMapService';
+  import { NonogramKatanaItemMapService } from '$services/NonogramKatana/NonogramKatanaItemMapService';
   import { nonogramKatanaItemsDisplayInfo } from '../items/nonogramKatanaItemsDisplayInfo';
 
   let {

@@ -4,7 +4,7 @@
   import { triggerConfetti } from '$components/singletons/Confetti/Confetti.svelte';
   import { confirmationDialog } from '$components/singletons/dialogs/SingletonConfirmationDialog.svelte';
   import { snackbar } from '$components/singletons/SingletonSnackbar.svelte';
-  import { TaskMapService } from '../../services/Task/TaskMapService/TaskMapService';
+  import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
   import ClickableDiv from '../presentational/ClickableDiv.svelte';
 
   let {

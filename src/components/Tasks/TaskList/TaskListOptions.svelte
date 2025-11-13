@@ -7,11 +7,11 @@
   } from '@aneuhold/core-ts-db-lib';
   import ClickableDiv from '$components/presentational/ClickableDiv.svelte';
   import SquareIconButton from '$components/presentational/SquareIconButton.svelte';
+  import type { DocumentStore } from '$services/DocumentMapStoreService';
+  import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
+  import TaskTagsService from '$services/Task/TaskTagsService';
   import { currentUserId } from '$stores/derived/currentUserId';
   import { userSettings } from '$stores/userSettings/userSettings';
-  import type { DocumentStore } from '../../../services/DocumentMapStoreService';
-  import { TaskMapService } from '../../../services/Task/TaskMapService/TaskMapService';
-  import TaskTagsService from '../../../services/Task/TaskTagsService';
   import TaskListFilterDialog from './TaskListFilterDialog.svelte';
   import TaskListSortingDialog from './TaskListSortingDialog.svelte';
 

@@ -4,8 +4,8 @@
   import { goto } from '$app/navigation';
   import { taskSharingDialog } from '$components/singletons/dialogs/SingletonTaskSharingDialog/SingletonTaskSharingDialog.svelte';
   import type { DocumentStore } from '$services/DocumentMapStoreService';
+  import TaskService from '$services/Task/TaskService';
   import { userSettings } from '$stores/userSettings/userSettings';
-  import TaskService from '../../../services/Task/TaskService';
 
   let {
     task

@@ -4,9 +4,9 @@ import {
   NonogramKatanaItemName
 } from '@aneuhold/core-ts-db-lib';
 import type { ObjectId } from 'bson';
+import { nonogramKatanaItemsDisplayInfo } from '$routes/entertainment/nonogramkatana/items/nonogramKatanaItemsDisplayInfo';
 import DashboardAPIService from '$util/api/DashboardAPIService';
 import LocalData from '$util/LocalData/LocalData';
-import { nonogramKatanaItemsDisplayInfo } from '../../routes/entertainment/nonogramkatana/items/nonogramKatanaItemsDisplayInfo';
 import type {
   DocumentInsertOrUpdateInfo,
   DocumentMapStore,

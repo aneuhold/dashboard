@@ -8,14 +8,15 @@
   import Card, { Content as CardContent } from '@smui/card';
   import { Icon } from '@smui/icon-button';
   import { goto } from '$app/navigation';
-  import { ClickableDiv, MenuButton, type MenuButtonItem } from '$components/presentational';
+  import ClickableDiv from '$components/presentational/ClickableDiv.svelte';
+  import MenuButton, { type MenuButtonItem } from '$components/presentational/MenuButton.svelte';
   import { confirmationDialog } from '$components/singletons/dialogs/SingletonConfirmationDialog.svelte';
   import { taskAssignmentDialog } from '$components/singletons/dialogs/SingletonTaskAssignmentDialog/SingletonTaskAssignmentDialog.svelte';
   import { taskSharingDialog } from '$components/singletons/dialogs/SingletonTaskSharingDialog/SingletonTaskSharingDialog.svelte';
+  import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
+  import TaskService from '$services/Task/TaskService';
   import { currentUserId } from '$stores/derived/currentUserId';
   import { userSettings } from '$stores/userSettings/userSettings';
-  import { TaskMapService } from '../../../services/Task/TaskMapService/TaskMapService';
-  import TaskService from '../../../services/Task/TaskService';
   import TaskCompletedCheckbox from '../TaskCompletedCheckbox.svelte';
   import TaskRowDateInfo from '../TaskDate/TaskRowDateInfo.svelte';
   import TaskRowTagHeader from '../TaskTags/TaskRowTagHeader.svelte';

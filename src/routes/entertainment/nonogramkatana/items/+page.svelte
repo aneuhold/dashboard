@@ -4,10 +4,10 @@
   import Paper, { Content } from '@smui/paper';
   import { flip } from 'svelte/animate';
   import PageTitle from '$components/PageTitle.svelte';
-  import { InputBox } from '$components/presentational';
+  import InputBox from '$components/presentational/InputBox/InputBox.svelte';
   import SingletonNonogramKatanaItemDialog from '$components/singletons/dialogs/SingletonNonogramKatanaItemDialog.svelte';
+  import { NonogramKatanaItemMapService } from '$services/NonogramKatana/NonogramKatanaItemMapService';
   import { userSettings } from '$stores/userSettings/userSettings';
-  import { NonogramKatanaItemMapService } from '../../../../services/NonogramKatana/NonogramKatanaItemMapService';
   import NonogramKatanaItemRow from './NonogramKatanaItemRow.svelte';
   import { nonogramKatanaItemsPageInfo } from './pageInfo';
 

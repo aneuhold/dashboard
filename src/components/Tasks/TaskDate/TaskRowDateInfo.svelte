@@ -1,6 +1,6 @@
 <script lang="ts">
   import { DateService } from '@aneuhold/core-ts-lib';
-  import { TaskMapService } from '../../../services/Task/TaskMapService/TaskMapService';
+  import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
 
   let { taskId }: { taskId: string } = $props();
   let task = $derived(TaskMapService.getTaskStore(taskId));

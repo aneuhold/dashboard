@@ -17,10 +17,11 @@
   import { Actions, Content as DialogContent, Title } from '@smui/dialog';
   import IconButton, { Icon } from '@smui/icon-button';
   import Accordion, { Content, Panel } from '@smui-extra/accordion';
-  import { ClickableDiv, SmartDialog } from '$components/presentational';
-  import { TaskMapService } from '../../../services/Task/TaskMapService/TaskMapService';
-  import TaskRecurrenceService from '../../../services/Task/TaskRecurrenceService';
-  import TaskService from '../../../services/Task/TaskService';
+  import ClickableDiv from '$components/presentational/ClickableDiv.svelte';
+  import SmartDialog from '$components/presentational/SmartDialog.svelte';
+  import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
+  import TaskRecurrenceService from '$services/Task/TaskRecurrenceService';
+  import TaskService from '$services/Task/TaskService';
   import TaskRecurrenceDetails from './TaskRecurrenceDetails.svelte';
 
   let { taskId, childTaskIds }: { taskId: string; childTaskIds: string[] } = $props();

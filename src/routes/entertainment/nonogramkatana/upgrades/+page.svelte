@@ -5,10 +5,10 @@
   import Paper, { Content } from '@smui/paper';
   import { flip } from 'svelte/animate';
   import PageTitle from '$components/PageTitle.svelte';
-  import { InputBox } from '$components/presentational';
+  import InputBox from '$components/presentational/InputBox/InputBox.svelte';
   import SingletonNonogramKatanaUpgradeDialog from '$components/singletons/dialogs/SingletonNonogramKatanaUpgradeDialog.svelte';
+  import { NonogramKatanaUpgradeMapService } from '$services/NonogramKatana/NonogramKatanaUpgradeMapService';
   import { userSettings } from '$stores/userSettings/userSettings';
-  import { NonogramKatanaUpgradeMapService } from '../../../../services/NonogramKatana/NonogramKatanaUpgradeMapService';
   import NonogramKatanaUpgradeRow from './NonogramKatanaUpgradeRow.svelte';
   import { nonogramKatanaUpgradesPageInfo } from './pageInfo';
 

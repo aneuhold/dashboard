@@ -4,8 +4,8 @@
   Sharing information for use in the Task Details component.
 -->
 <script lang="ts">
+  import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
   import { userSettings } from '$stores/userSettings/userSettings';
-  import { TaskMapService } from '../../../services/Task/TaskMapService/TaskMapService';
 
   let { taskId }: { taskId: string } = $props();
 

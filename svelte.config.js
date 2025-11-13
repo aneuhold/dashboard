@@ -19,6 +19,7 @@ const config = {
       // Prefix all of these with $ to avoid conflicts with built-in packages.
       // Use a slash at the end if it doesn't automatically treat it like a
       // directory (the built tsconfig doesn't have a dir/* alias)
+      $routes: 'src/routes',
       $components: 'src/components',
       $util: 'src/util',
       $actions: 'src/actions',
