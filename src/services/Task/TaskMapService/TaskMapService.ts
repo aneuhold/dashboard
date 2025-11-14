@@ -54,6 +54,18 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
     });
   }
 
+  /**
+   * Executes recurrence for the provided task. This is a facade method that
+   * delegates to TaskRecurrenceService.
+   *
+   * @param task The task to execute recurrence for
+   */
+  static executeRecurrenceForTask(task: DashboardTask): void {
+    TaskRecurrenceService.executeRecurrenceForTask(task, this.instance.documentMap, (info) => {
+      this.instance.store.upsertMany(info);
+    });
+  }
+
   protected setupSubscribers(): void {
     // Basic task things
     this.subscribers.push({
