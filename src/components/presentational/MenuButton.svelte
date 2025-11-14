@@ -34,8 +34,8 @@
     setTimeout(clickAction, 50);
   }
 
-  let menu: MenuSurface | null = $state(null);
-  let anchor: HTMLDivElement | null = $state(null);
+  let menu: MenuSurface | undefined = $state();
+  let anchor: HTMLDivElement | undefined = $state();
 </script>
 
 <!--The extra div is required to keep the bounds of the menu contained -->

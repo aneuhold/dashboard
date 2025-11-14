@@ -35,6 +35,10 @@ This repository is a SvelteKit app (Svelte 5) managed with pnpm.
 - Examples to reference when making edits:
   - Aliases useful for imports: `$components`, `$stores`, `$services` (defined in `svelte.config.js`).
 
+## Tool Information
+
+- When using the Sentry MCP server, the organization slug is `anton-neuhold`.
+
 ## Code Style
 
 ### Types & Functions

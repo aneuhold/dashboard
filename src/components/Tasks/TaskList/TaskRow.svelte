@@ -77,7 +77,7 @@
         `This is nice if you want to skip a task instead of completing it ` +
         `because it wasn't actually done. Save that dopamine! ❤️`,
       onConfirm: () => {
-        TaskMapService.executeRecurrenceIfNeeded($task);
+        TaskMapService.executeRecurrenceForTask($task);
       }
     });
   }
