@@ -25,7 +25,7 @@
   "scriptsComments": {
     "theme": "This has the extra parameters for node_modules so it works with pnpm. Otherwise it fails when SASS tries to resolve imports."
   },
-  "packageManager": "pnpm@10.17.1",
+  "packageManager": "pnpm@10.22.0",
   "type": "module",
   "dependencies": {
     "@sentry/sveltekit": "^10.22.0"
