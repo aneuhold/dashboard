@@ -50,12 +50,6 @@
     childTaskIds.some((childTaskId) => !!$taskMap[childTaskId]?.recurrenceInfo)
   );
 
-  /**
-   * This is purposefully not synced to the task store, so that updates
-   * can happen separately.
-   */
-  let currentRecurrenceInfo = $derived($task.recurrenceInfo ?? defaultRecurrenceInfo);
-
   // Auto-close the accordion when switching tasks
   $effect(() => {
     if (previousTaskId !== taskId) {
@@ -138,7 +132,7 @@
         </IconButton>
       </div>
       <Content class="recurringPaperContent">
-        <TaskRecurrenceDetails {taskId} recurrenceInfo={currentRecurrenceInfo} />
+        <TaskRecurrenceDetails {taskId} {defaultRecurrenceInfo} />
       </Content>
     </Panel>
   </Accordion>

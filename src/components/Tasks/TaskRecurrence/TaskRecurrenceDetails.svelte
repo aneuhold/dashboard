@@ -23,29 +23,49 @@
   import TaskRecurrenceUpdateExample from './TaskRecurrenceUpdateExample.svelte';
   import TaskRecurrenceWeekdayOfMonth from './TaskRecurrenceWeekdayOfMonth.svelte';
 
-  let { taskId, recurrenceInfo }: { taskId: string; recurrenceInfo: RecurrenceInfo } = $props();
+  let {
+    taskId,
+    defaultRecurrenceInfo
+  }: {
+    taskId: string;
+    /**
+     * The default recurrence info to use if the task has none.
+     */
+    defaultRecurrenceInfo: RecurrenceInfo;
+  } = $props();
 
   let task = $derived(TaskMapService.getTaskStore(taskId));
-  /**
-   * Stored so that the changes can be reverted
-   */
-  let previousRInfoString = $derived(JSON.stringify(recurrenceInfo));
-  let disabled = $derived(!$task.recurrenceInfo || !!$task.parentRecurringTaskInfo);
+  let parentRecurringTaskInfo = $derived($task.parentRecurringTaskInfo);
+  let disabled = $derived(!$task.recurrenceInfo || !!parentRecurringTaskInfo);
   let startDate = $derived($task.startDate);
   let dueDate = $derived($task.dueDate);
-  let parentRecurringTaskInfo = $derived($task.parentRecurringTaskInfo);
   let exampleOfRecurrence = $derived(
     TaskRecurrenceService.createExampleOfRecurrence(
       startDate,
       dueDate,
-      recurrenceInfo,
+      $task.recurrenceInfo ?? defaultRecurrenceInfo,
       parentRecurringTaskInfo
     )
   );
-  let rInfo = $derived(createRInfoStore(recurrenceInfo));
 
+  /**
+   * The store that contains the recurrence info being edited or viewed.
+   *
+   * This purposefully re-runs every time the recurrence info is updated. It handles that issue
+   * just fine. The main purpose behind the approach is to reset whenever the current task being
+   * viewed changes, or the recurrence info is changed externally or the task is disabled / enabled
+   * (which means the recurrence info was added / deleted all together).
+   */
+  let rInfo = $derived(createRInfoStore($task.recurrenceInfo ?? defaultRecurrenceInfo));
+
+  /**
+   * This is purposefully re-ran on every
+   *
+   * @param initialRInfo The initial recurrence info to base the store on.
+   */
   function createRInfoStore(initialRInfo: RecurrenceInfo) {
     let currentFrequencyType = initialRInfo.frequency.type;
+    let previousRInfoString = JSON.stringify(initialRInfo);
     const { set, subscribe } = writable<RecurrenceInfo>(initialRInfo);
 
     function setRInfo(newRInfo: RecurrenceInfo, checkDate = true) {
@@ -56,17 +76,9 @@
       if (checkDate && updateWouldTriggerRecurrence(newRInfo)) {
         return;
       }
-      const newRInfoString = JSON.stringify(newRInfo);
-      // Only update the task if the recurrence info has actually changed
-      // This prevents unnecessary DB writes when the store is recreated
-      if (newRInfoString !== previousRInfoString) {
-        previousRInfoString = newRInfoString;
-        set(newRInfo);
-        $task.recurrenceInfo = newRInfo;
-      } else {
-        // Still update the store for UI consistency
-        set(newRInfo);
-      }
+      previousRInfoString = JSON.stringify(newRInfo);
+      set(newRInfo);
+      $task.recurrenceInfo = newRInfo;
     }
     return {
       subscribe,
@@ -77,8 +89,8 @@
         const newRInfo = updater(value);
         setRInfo(newRInfo);
       },
-      setWithoutCheck(value: RecurrenceInfo) {
-        setRInfo(value, false);
+      setWithoutCheck(value?: RecurrenceInfo) {
+        setRInfo(value ?? (JSON.parse(previousRInfoString) as RecurrenceInfo), false);
       }
     };
   }
@@ -100,7 +112,7 @@
           rInfo.setWithoutCheck(newRInfo);
         },
         onCancel: () => {
-          rInfo.setWithoutCheck(JSON.parse(previousRInfoString) as RecurrenceInfo);
+          rInfo.setWithoutCheck();
         }
       });
       return true;
