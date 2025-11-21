@@ -48,7 +48,8 @@ const viteConfig: UserConfig = {
     */
   ],
   resolve: {
-    dedupe: ['svelte']
+    dedupe: ['svelte'],
+    conditions: process.env.VITEST ? ['browser'] : undefined
   },
   css: {
     postcss: {}
@@ -57,7 +58,8 @@ const viteConfig: UserConfig = {
 
 const vitestConfig = defineConfig({
   test: {
-    include: ['src/**/*.{test,spec}.{js,ts}']
+    include: ['src/**/*.{test,spec}.{js,ts}'],
+    environment: 'jsdom'
   }
 });
 
