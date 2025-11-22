@@ -8,8 +8,8 @@ import {
 } from '@aneuhold/core-ts-db-lib';
 import { fireEvent, render, screen } from '@testing-library/svelte';
 import { ObjectId } from 'bson';
-import { type Writable, writable } from 'svelte/store';
-import { beforeEach, describe, expect, it, type Mock, vi } from 'vitest';
+import { type Writable } from 'svelte/store';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { confirmationDialog } from '$components/singletons/dialogs/SingletonConfirmationDialog.svelte';
 import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
 import TaskMapServiceMock from '$services/Task/TaskMapService/TaskMapService.mock';
@@ -35,7 +35,7 @@ describe('TaskRecurrenceDetails', () => {
     recurrenceEffect: RecurrenceEffect.rollOnBasis
   };
 
-  let taskStore: Writable<Partial<DashboardTask>>;
+  let taskStore: Writable<DashboardTask>;
   let taskId: ObjectId;
 
   beforeEach(() => {
@@ -47,11 +47,15 @@ describe('TaskRecurrenceDetails', () => {
     });
     taskId = task._id;
 
-    // Initialize the store with the created task, adding recurrence info
-    task.recurrenceInfo = { ...defaultRecurrenceInfo };
+    // Get the real store for the task
+    taskStore = TaskMapService.getTaskStore(taskId.toString());
 
-    taskStore = writable(task);
-    (TaskMapService.getTaskStore as Mock).mockReturnValue(taskStore);
+    // Update the task with recurrence info
+    taskStore.update((t) => {
+      t.recurrenceInfo = { ...defaultRecurrenceInfo };
+      return t;
+    });
+
     vi.clearAllMocks();
   });
 
@@ -65,14 +69,14 @@ describe('TaskRecurrenceDetails', () => {
   });
 
   it('disables controls when task has parentRecurringTaskInfo', () => {
-    taskStore.update((t) => ({
-      ...t,
-      parentRecurringTaskInfo: {
+    taskStore.update((t) => {
+      t.parentRecurringTaskInfo = {
         taskId: new ObjectId(),
         startDate: new Date(),
         dueDate: new Date()
-      }
-    }));
+      };
+      return t;
+    });
 
     const { container } = render(TaskRecurrenceDetails, {
       taskId: taskId.toString(),
@@ -85,9 +89,9 @@ describe('TaskRecurrenceDetails', () => {
 
   it('triggers confirmation dialog when update would cause immediate recurrence', async () => {
     // Mock getSimulatedRecurrenceDate to return a past date
-    (TaskRecurrenceService.getSimulatedRecurrenceDate as Mock).mockReturnValue(
-      new Date(Date.now() - 10000)
-    );
+    const spy = vi
+      .spyOn(TaskRecurrenceService, 'getSimulatedRecurrenceDate')
+      .mockReturnValue(new Date(Date.now() - 10000));
 
     const { container } = render(TaskRecurrenceDetails, {
       taskId: taskId.toString(),
@@ -111,5 +115,6 @@ describe('TaskRecurrenceDetails', () => {
     // The component calls rInfo.set -> setRInfo -> updateWouldTriggerRecurrence
 
     expect(confirmationDialog.open).toHaveBeenCalled();
+    spy.mockRestore();
   });
 });
