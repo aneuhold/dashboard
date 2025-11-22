@@ -18,11 +18,6 @@ import TaskRecurrenceService from '$services/Task/TaskRecurrenceService';
 import TestUsers from '$testUtils/TestUsers';
 import TaskRecurrenceDetails from './TaskRecurrenceDetails.svelte';
 
-// Mock child components to avoid complexity and duplicate text issues
-vi.mock('./TaskRecurrenceInfoIcon.svelte', () => ({ default: () => {} }));
-vi.mock('./TaskRecurrenceUpdateExample.svelte', () => ({ default: () => {} }));
-vi.mock('./TaskRecurrenceWeekdayOfMonth.svelte', () => ({ default: () => {} }));
-
 describe('TaskRecurrenceDetails', () => {
   const userId = TestUsers.currentUserCto._id;
   const mockService = new TaskMapServiceMock(userId);
@@ -83,9 +78,9 @@ describe('TaskRecurrenceDetails', () => {
   it('renders correctly with initial recurrence info', () => {
     render(TaskRecurrenceDetails, { taskId: taskId.toString(), defaultRecurrenceInfo });
 
-    expect(screen.getByText('Frequency')).toBeInTheDocument();
-    expect(screen.getByText('Basis')).toBeInTheDocument();
-    expect(screen.getByText('Effect')).toBeInTheDocument();
+    expect(screen.getAllByText('Frequency')[0]).toBeInTheDocument();
+    expect(screen.getAllByText('Basis')[0]).toBeInTheDocument();
+    expect(screen.getAllByText('Effect')[0]).toBeInTheDocument();
     expect(screen.getByText('Recurring every')).toBeInTheDocument();
   });
 
