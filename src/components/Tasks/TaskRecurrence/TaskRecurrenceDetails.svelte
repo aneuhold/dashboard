@@ -59,16 +59,23 @@
   let rInfo = $derived(createRInfoStore($task.recurrenceInfo ?? defaultRecurrenceInfo));
 
   /**
-   * This is purposefully re-ran on every
+   * This is purposefully re-ran on every render.
    *
    * @param initialRInfo The initial recurrence info to base the store on.
    */
   function createRInfoStore(initialRInfo: RecurrenceInfo) {
     let currentFrequencyType = initialRInfo.frequency.type;
     let previousRInfoString = JSON.stringify(initialRInfo);
-    const { set, subscribe } = writable<RecurrenceInfo>(initialRInfo);
+    const { set, subscribe } = writable(initialRInfo);
 
     function setRInfo(newRInfo: RecurrenceInfo, checkDate = true) {
+      const newRInfoString = JSON.stringify(newRInfo);
+
+      // Only update if something actually changed. This is needed because it seems a few SMUI
+      // components kick off change detections even when the value is the same.
+      if (newRInfoString === previousRInfoString) {
+        return;
+      }
       if (newRInfo.frequency.type !== currentFrequencyType) {
         handleTypeChange(newRInfo);
       }
@@ -76,9 +83,14 @@
       if (checkDate && updateWouldTriggerRecurrence(newRInfo)) {
         return;
       }
-      previousRInfoString = JSON.stringify(newRInfo);
+      previousRInfoString = newRInfoString;
       set(newRInfo);
-      $task.recurrenceInfo = newRInfo;
+
+      // Only set it when the task has recurrence info. Initially adding recurrence info is
+      // handled elsewhere.
+      if ($task.recurrenceInfo) {
+        $task.recurrenceInfo = newRInfo;
+      }
     }
     return {
       subscribe,

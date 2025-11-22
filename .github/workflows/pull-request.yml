@@ -32,8 +32,8 @@ jobs:
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
 
-      #- name: Run tests
-      #  run: pnpm test
+      - name: Run tests
+        run: pnpm test
 
       - name: Run Linting
         run: pnpm lint

@@ -4,7 +4,7 @@
     MockTaskAssignment,
     MockTaskSharedWith
   } from '$services/Task/TaskMapService/TaskMapService.mock';
-  import SBMockData from '$storybook/globalMockData';
+  import MockData from '$testUtils/MockData';
   import TaskDetails from '../TaskDetails.svelte';
 
   let {
@@ -21,9 +21,9 @@
   let taskId = $derived(mainTask ? mainTask._id.toString() : 'nonExistentTaskId');
 
   $effect(() => {
-    SBMockData.taskMapServiceMock.reset();
+    MockData.taskMapServiceMock.reset();
     if (mainTaskExists) {
-      mainTask = SBMockData.taskMapServiceMock.addTask({
+      mainTask = MockData.taskMapServiceMock.addTask({
         title: 'TestTask',
         sharedWith: sharedWith,
         assignedTo: assignedTo

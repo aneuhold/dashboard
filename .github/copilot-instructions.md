@@ -43,6 +43,7 @@ This repository is a SvelteKit app (Svelte 5) managed with pnpm.
 
 ### Types & Functions
 
+- Never use `any` (use `unknown` if necessary, and only if absolutely unavoidable)
 - Add explicit types when unclear; extract complex object types to separate `type` declarations
 - Use PascalCase for type names; file names should match the primary exported type
 - Use arrow functions and `const`/`let` (never `var`)
