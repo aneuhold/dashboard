@@ -1,4 +1,3 @@
-import * as Sentry from '@sentry/sveltekit';
 import { writable } from 'svelte/store';
 import DashboardAPIService from '$util/api/DashboardAPIService';
 import LocalData, { localDataReady } from '$util/LocalData/LocalData';
@@ -10,6 +9,19 @@ export enum LoginState {
   LoggedIn = 'LoggedIn'
 }
 
+const Sentry = process.env.VITEST ? null : (await import('@sentry/sveltekit')).default;
+
+/**
+ * Sets the Sentry user, but only if not testing.
+ *
+ * @param username - The username to set in Sentry.
+ */
+function setSentryUser(username?: string) {
+  if (Sentry) {
+    Sentry.setUser({ username });
+  }
+}
+
 function createLoginStateStore() {
   let _loginState = LoginState.Initializing;
   const { subscribe, set } = writable<LoginState>(_loginState);
@@ -18,7 +30,7 @@ function createLoginStateStore() {
     _loginState = newState;
     // Add the Sentry info for the user here
     if (newState === LoginState.LoggedIn) {
-      Sentry.setUser({ username: LocalData.username });
+      setSentryUser(LocalData.username);
     }
     set(_loginState);
   }

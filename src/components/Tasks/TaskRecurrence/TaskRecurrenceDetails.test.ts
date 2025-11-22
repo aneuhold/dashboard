@@ -12,14 +12,35 @@ import { type Writable, writable } from 'svelte/store';
 import { beforeEach, describe, expect, it, type Mock, vi } from 'vitest';
 import { confirmationDialog } from '$components/singletons/dialogs/SingletonConfirmationDialog.svelte';
 import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
+import TaskMapServiceMock from '$services/Task/TaskMapService/TaskMapService.mock';
 import TaskRecurrenceService from '$services/Task/TaskRecurrenceService';
 import TaskRecurrenceDetails from './TaskRecurrenceDetails.svelte';
 
+// Mock SBMockData to avoid circular dependency
+vi.mock('$storybook/globalMockData', async () => {
+  const { ObjectId } = await import('bson');
+  return {
+    default: {
+      currentUserCto: { _id: new ObjectId(), userName: 'mockUser' },
+      collaborator1: { _id: new ObjectId(), userName: 'collab1' },
+      collaborator2: { _id: new ObjectId(), userName: 'collab2' }
+    }
+  };
+});
+
 // Mock dependencies
 vi.mock('$services/Task/TaskMapService/TaskMapService', () => {
+  const mockStore = {
+    set: vi.fn(),
+    subscribe: vi.fn(),
+    addDoc: vi.fn(),
+    upsertMany: vi.fn()
+  };
   return {
     TaskMapService: {
-      getTaskStore: vi.fn()
+      getTaskStore: vi.fn(),
+      getStore: vi.fn(() => mockStore),
+      getMap: vi.fn()
     }
   };
 });
@@ -44,6 +65,18 @@ vi.mock('$components/singletons/dialogs/SingletonConfirmationDialog.svelte', () 
   };
 });
 
+vi.mock('$services/Task/TaskTagsService', () => ({
+  default: {
+    addTagForUser: vi.fn()
+  }
+}));
+
+vi.mock('$services/Task/TaskListService', () => ({
+  default: {
+    getTaskIds: vi.fn()
+  }
+}));
+
 // Mock child components to avoid complexity and duplicate text issues
 // In Svelte 5, components are functions.
 vi.mock('./TaskRecurrenceInfoIcon.svelte', () => ({ default: () => {} }));
@@ -52,7 +85,9 @@ vi.mock('./TaskRecurrenceWeekdayOfMonth.svelte', () => ({ default: () => {} }));
 vi.mock('@smui/select', () => ({ default: () => {}, Option: () => {} }));
 
 describe('TaskRecurrenceDetails', () => {
-  const taskId = new ObjectId();
+  const userId = new ObjectId();
+  const mockService = new TaskMapServiceMock(userId);
+
   const defaultRecurrenceInfo: RecurrenceInfo = {
     frequency: {
       type: RecurrenceFrequencyType.everyXTimeUnit,
@@ -63,16 +98,21 @@ describe('TaskRecurrenceDetails', () => {
   };
 
   let taskStore: Writable<Partial<DashboardTask>>;
+  let taskId: ObjectId;
 
   beforeEach(() => {
-    taskStore = writable({
-      _id: taskId,
-      recurrenceInfo: { ...defaultRecurrenceInfo },
+    // Use the mock service to create a task
+    const task = mockService.addTask({
+      title: 'Test Task',
       startDate: new Date(),
-      dueDate: new Date(),
-      parentRecurringTaskInfo: undefined,
-      completed: false
-    } as unknown as DashboardTask);
+      dueDate: new Date()
+    });
+    taskId = task._id;
+
+    // Initialize the store with the created task, adding recurrence info
+    task.recurrenceInfo = { ...defaultRecurrenceInfo };
+
+    taskStore = writable(task);
     (TaskMapService.getTaskStore as Mock).mockReturnValue(taskStore);
     vi.clearAllMocks();
   });
@@ -87,18 +127,14 @@ describe('TaskRecurrenceDetails', () => {
   });
 
   it('disables controls when task has parentRecurringTaskInfo', () => {
-    taskStore.set({
-      _id: taskId,
-      recurrenceInfo: { ...defaultRecurrenceInfo },
-      startDate: new Date(),
-      dueDate: new Date(),
+    taskStore.update((t) => ({
+      ...t,
       parentRecurringTaskInfo: {
         taskId: new ObjectId(),
         startDate: new Date(),
         dueDate: new Date()
-      },
-      completed: false
-    } as unknown as DashboardTask);
+      }
+    }));
 
     const { container } = render(TaskRecurrenceDetails, {
       taskId: taskId.toString(),

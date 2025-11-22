@@ -12,8 +12,31 @@ if (process.env.SENTRY_AUTH_TOKEN && process.env.SENTRY_AUTH_TOKEN !== '') {
   const env = loadEnv('', process.cwd(), 'SENTRY_AUTH_TOKEN');
   sentryAuthToken = env.SENTRY_AUTH_TOKEN;
 }
-if (!sentryAuthToken) {
+if (!sentryAuthToken && !process.env.VITEST) {
   console.error('No Sentry Auth Token found in the environment variables.');
+}
+
+// Vitest specific logic to run
+if (process.env.VITEST) {
+  // Define the list of messages to suppress
+  const messagesToSuppress = [/^Sourcemap for .* points to missing source files/];
+
+  // It needs to be suppressed in this way instead of using customLogger from vite or onConsoleLog
+  // from vitest because it seems that Vite or Rollup logs these warnings directly to stderr and not
+  // through those hooks.
+  const originalStderrWrite = process.stderr.write.bind(process.stderr);
+  process.stderr.write = (chunk, ...args) => {
+    const str = chunk.toString();
+    if (messagesToSuppress.some((regex) => regex.test(str))) {
+      return true;
+    }
+
+    // This is a crazy type because process.stderr.write can take different argument types
+    return originalStderrWrite(
+      chunk,
+      ...(args as [BufferEncoding?, ((err?: Error | null) => void)?])
+    );
+  };
 }
 
 const viteConfig: UserConfig = {
@@ -49,6 +72,8 @@ const viteConfig: UserConfig = {
   ],
   resolve: {
     dedupe: ['svelte'],
+    // This is needed to make sure that Svelte uses the browser build when running tests with Vitest
+    // even though it is running in Node.
     conditions: process.env.VITEST ? ['browser'] : undefined
   },
   css: {
