@@ -5,10 +5,10 @@ import {
   RecurrenceEffect,
   RecurrenceFrequencyType
 } from '@aneuhold/core-ts-db-lib';
-import { cleanup, render, screen } from '@testing-library/svelte';
+import { render, screen } from '@testing-library/svelte';
 import { ObjectId } from 'bson';
 import { get, type Writable } from 'svelte/store';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
 import TaskMapServiceMock from '$services/Task/TaskMapService/TaskMapService.mock';
 import TestUsers from '$testUtils/TestUsers';
