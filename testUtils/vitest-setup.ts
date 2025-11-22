@@ -1,9 +1,14 @@
-import { beforeEach, vi } from 'vitest';
+import { cleanup } from '@testing-library/svelte';
+import { afterEach, beforeEach, vi } from 'vitest';
 import TestSetup from './TestSetup';
 
 // Run global setup before each test
 beforeEach(() => {
   TestSetup.setupGlobalMocks(vi.spyOn);
+});
+
+afterEach(() => {
+  cleanup();
 });
 
 // --- Global Mocks ---
@@ -16,6 +21,3 @@ vi.mock('$components/singletons/dialogs/SingletonConfirmationDialog.svelte', () 
     }
   };
 });
-
-// SMUI Select
-vi.mock('@smui/select', () => ({ default: () => {}, Option: () => {} }));

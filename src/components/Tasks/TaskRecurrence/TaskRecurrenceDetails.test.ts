@@ -8,6 +8,7 @@ import {
 } from '@aneuhold/core-ts-db-lib';
 import { fireEvent, render, screen } from '@testing-library/svelte';
 import { ObjectId } from 'bson';
+import { get } from 'svelte/store';
 import { type Writable } from 'svelte/store';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { confirmationDialog } from '$components/singletons/dialogs/SingletonConfirmationDialog.svelte';
@@ -55,8 +56,28 @@ describe('TaskRecurrenceDetails', () => {
       t.recurrenceInfo = { ...defaultRecurrenceInfo };
       return t;
     });
+  });
 
-    vi.clearAllMocks();
+  it("doesn't set recurrenceInfo just by rendering", () => {
+    // Create a fresh task that DOES NOT have recurrence info set
+    const freshTask = mockService.addTask({
+      title: 'Fresh Task',
+      startDate: new Date(),
+      dueDate: new Date()
+    });
+
+    const freshStore = TaskMapService.getTaskStore(freshTask._id.toString());
+    // ensure store has no recurrence before render
+    expect(get(freshStore).recurrenceInfo).toBeUndefined();
+
+    render(TaskRecurrenceDetails, {
+      taskId: freshTask._id.toString(),
+      defaultRecurrenceInfo
+    });
+
+    // After rendering the details component for a task that had no recurrence
+    // info, we should still have no recurrenceInfo set.
+    expect(get(freshStore).recurrenceInfo).toBeUndefined();
   });
 
   it('renders correctly with initial recurrence info', () => {
