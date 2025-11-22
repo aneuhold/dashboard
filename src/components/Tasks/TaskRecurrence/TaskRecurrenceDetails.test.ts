@@ -14,78 +14,16 @@ import { confirmationDialog } from '$components/singletons/dialogs/SingletonConf
 import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
 import TaskMapServiceMock from '$services/Task/TaskMapService/TaskMapService.mock';
 import TaskRecurrenceService from '$services/Task/TaskRecurrenceService';
+import TestUsers from '$testUtils/TestUsers';
 import TaskRecurrenceDetails from './TaskRecurrenceDetails.svelte';
 
-// Mock SBMockData to avoid circular dependency
-vi.mock('$storybook/globalMockData', async () => {
-  const { ObjectId } = await import('bson');
-  return {
-    default: {
-      currentUserCto: { _id: new ObjectId(), userName: 'mockUser' },
-      collaborator1: { _id: new ObjectId(), userName: 'collab1' },
-      collaborator2: { _id: new ObjectId(), userName: 'collab2' }
-    }
-  };
-});
-
-// Mock dependencies
-vi.mock('$services/Task/TaskMapService/TaskMapService', () => {
-  const mockStore = {
-    set: vi.fn(),
-    subscribe: vi.fn(),
-    addDoc: vi.fn(),
-    upsertMany: vi.fn()
-  };
-  return {
-    TaskMapService: {
-      getTaskStore: vi.fn(),
-      getStore: vi.fn(() => mockStore),
-      getMap: vi.fn()
-    }
-  };
-});
-
-vi.mock('$services/Task/TaskRecurrenceService', () => {
-  return {
-    default: {
-      createExampleOfRecurrence: vi.fn().mockReturnValue({
-        startDate: new Date(),
-        dueDate: new Date()
-      }),
-      getSimulatedRecurrenceDate: vi.fn().mockReturnValue(new Date(Date.now() + 10000)) // Future date
-    }
-  };
-});
-
-vi.mock('$components/singletons/dialogs/SingletonConfirmationDialog.svelte', () => {
-  return {
-    confirmationDialog: {
-      open: vi.fn()
-    }
-  };
-});
-
-vi.mock('$services/Task/TaskTagsService', () => ({
-  default: {
-    addTagForUser: vi.fn()
-  }
-}));
-
-vi.mock('$services/Task/TaskListService', () => ({
-  default: {
-    getTaskIds: vi.fn()
-  }
-}));
-
 // Mock child components to avoid complexity and duplicate text issues
-// In Svelte 5, components are functions.
 vi.mock('./TaskRecurrenceInfoIcon.svelte', () => ({ default: () => {} }));
 vi.mock('./TaskRecurrenceUpdateExample.svelte', () => ({ default: () => {} }));
 vi.mock('./TaskRecurrenceWeekdayOfMonth.svelte', () => ({ default: () => {} }));
-vi.mock('@smui/select', () => ({ default: () => {}, Option: () => {} }));
 
 describe('TaskRecurrenceDetails', () => {
-  const userId = new ObjectId();
+  const userId = TestUsers.currentUserCto._id;
   const mockService = new TaskMapServiceMock(userId);
 
   const defaultRecurrenceInfo: RecurrenceInfo = {

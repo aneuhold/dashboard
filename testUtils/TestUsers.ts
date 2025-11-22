@@ -1,12 +1,10 @@
 import { type UserCTO } from '@aneuhold/core-ts-db-lib';
 import { ObjectId } from 'bson';
-import TaskMapServiceMock from '$services/Task/TaskMapService/TaskMapService.mock';
-import UserSettingsMock from '$stores/userSettings/userSettings.mock';
 
 /**
- * Global mock data for Storybook.
+ * Static user data for testing to avoid circular dependencies.
  */
-export default class SBMockData {
+export default class TestUsers {
   static currentUserCto: UserCTO = {
     _id: new ObjectId(),
     userName: 'storybookUser'
@@ -19,6 +17,4 @@ export default class SBMockData {
     _id: new ObjectId(),
     userName: 'Collaborator2'
   };
-  static taskMapServiceMock = new TaskMapServiceMock(SBMockData.currentUserCto._id);
-  static userSettingsMock = new UserSettingsMock(SBMockData.currentUserCto._id);
 }

@@ -25,7 +25,8 @@ const config = {
       $actions: 'src/actions',
       $stores: 'src/stores',
       $services: 'src/services',
-      $storybook: '.storybook/'
+      $storybook: '.storybook/',
+      $testUtils: 'testUtils/'
     }
   }
 };
