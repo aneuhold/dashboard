@@ -1,7 +1,7 @@
 import { DashboardTask, type DashboardTaskFilterAndSortResult } from '@aneuhold/core-ts-db-lib';
 import type { ObjectId } from 'bson';
 import { userSettings } from '$stores/userSettings/userSettings';
-import SBMockData from '$storybook/globalMockData';
+import TestUsers from '$testUtils/TestUsers';
 import TaskListService from '../TaskListService';
 import TaskTagsService from '../TaskTagsService';
 import { TaskMapService } from './TaskMapService';
@@ -280,14 +280,14 @@ export default class TaskMapServiceMock {
       case MockTaskSharedWith.none:
         break;
       case MockTaskSharedWith.withMe:
-        task.sharedWith.push(SBMockData.currentUserCto._id);
-        task.userId = SBMockData.collaborator1._id;
+        task.sharedWith.push(TestUsers.currentUserCto._id);
+        task.userId = TestUsers.collaborator1._id;
         break;
       case MockTaskSharedWith.withSinglePerson:
-        task.sharedWith.push(SBMockData.collaborator1._id);
+        task.sharedWith.push(TestUsers.collaborator1._id);
         break;
       case MockTaskSharedWith.withMultiplePeople:
-        task.sharedWith.push(SBMockData.collaborator1._id, SBMockData.collaborator2._id);
+        task.sharedWith.push(TestUsers.collaborator1._id, TestUsers.collaborator2._id);
         break;
     }
 
@@ -296,10 +296,10 @@ export default class TaskMapServiceMock {
       case MockTaskAssignment.none:
         break;
       case MockTaskAssignment.toMe:
-        task.assignedTo = SBMockData.currentUserCto._id;
+        task.assignedTo = TestUsers.currentUserCto._id;
         break;
       case MockTaskAssignment.toOther:
-        task.assignedTo = SBMockData.collaborator1._id;
+        task.assignedTo = TestUsers.collaborator1._id;
         break;
     }
 

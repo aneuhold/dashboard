@@ -1,6 +1,6 @@
-import * as Sentry from '@sentry/sveltekit';
 import { writable } from 'svelte/store';
 import DashboardAPIService from '$util/api/DashboardAPIService';
+import { createLazyModuleGetter } from '$util/createLazyModuleGetter';
 import LocalData, { localDataReady } from '$util/LocalData/LocalData';
 
 export enum LoginState {
@@ -10,6 +10,12 @@ export enum LoginState {
   LoggedIn = 'LoggedIn'
 }
 
+// Sentry dynamic import to avoid loading it during tests. This also avoids top-level await
+// which is broken in Safari as of 11/2025.
+const getSentry = createLazyModuleGetter(
+  !process.env.VITEST ? import('@sentry/sveltekit') : undefined
+);
+
 function createLoginStateStore() {
   let _loginState = LoginState.Initializing;
   const { subscribe, set } = writable<LoginState>(_loginState);
@@ -18,7 +24,7 @@ function createLoginStateStore() {
     _loginState = newState;
     // Add the Sentry info for the user here
     if (newState === LoginState.LoggedIn) {
-      Sentry.setUser({ username: LocalData.username });
+      getSentry()?.setUser({ username: LocalData.username });
     }
     set(_loginState);
   }

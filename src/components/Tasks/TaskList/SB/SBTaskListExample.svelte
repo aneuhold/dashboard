@@ -8,7 +8,7 @@
     MockTaskSubTasks
   } from '$services/Task/TaskMapService/TaskMapService.mock';
   import { userSettings } from '$stores/userSettings/userSettings';
-  import SBMockData from '$storybook/globalMockData';
+  import MockData from '$testUtils/MockData';
   import TaskList from '../TaskList.svelte';
 
   let {
@@ -36,8 +36,8 @@
   } = $props();
 
   $effect(() => {
-    SBMockData.taskMapServiceMock.reset();
-    SBMockData.taskMapServiceMock.addTasks({
+    MockData.taskMapServiceMock.reset();
+    MockData.taskMapServiceMock.addTasks({
       numTasks,
       includeStartDates,
       includeStartDatesInFuture,

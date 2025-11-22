@@ -1,8 +1,7 @@
 import '../src/globalStyles/global.css';
-import { APIService } from '@aneuhold/core-ts-api-lib';
 import type { Preview } from '@storybook/sveltekit';
 import { spyOn } from 'storybook/test';
-import SBMockData from './globalMockData';
+import TestSetup from '$testUtils/TestSetup';
 
 // Hide the warning about SlotDecorator. This happens whenever a decorator
 // is used.
@@ -21,21 +20,7 @@ console.warn = (...args) => {
 
 const preview: Preview = {
   beforeEach: () => {
-    // Global mocks
-    spyOn(APIService, 'callDashboardAPI').mockImplementation((input) => {
-      console.log('mocked', input);
-      return Promise.resolve({
-        success: true,
-        errors: [],
-        data: {}
-      });
-    });
-    // Global setup for stores
-    SBMockData.taskMapServiceMock.reset();
-    SBMockData.userSettingsMock.reset();
-    SBMockData.userSettingsMock.enableConfetti();
-    SBMockData.userSettingsMock.addCollaborator(SBMockData.collaborator1);
-    SBMockData.userSettingsMock.addCollaborator(SBMockData.collaborator2);
+    TestSetup.setupGlobalMocks(spyOn);
   },
   parameters: {
     controls: {
