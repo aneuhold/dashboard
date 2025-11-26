@@ -59,9 +59,9 @@
         <InputBox label="Search" bind:inputValue={searchInput} />
       </div>
       {#if items.length > 0}
-        {#each items as item (item._id.toString())}
+        {#each items as item (item._id)}
           <div animate:flip={{ duration: 200 }}>
-            <NonogramKatanaItemRow itemId={item._id.toString()} />
+            <NonogramKatanaItemRow itemId={item._id} />
           </div>
         {/each}
       {/if}

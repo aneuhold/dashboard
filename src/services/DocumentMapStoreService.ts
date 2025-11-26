@@ -1,4 +1,5 @@
 import type { BaseDocument, DocumentMap } from '@aneuhold/core-ts-db-lib';
+import type { UUID } from 'crypto';
 import { type Readable, type Updater, type Writable, writable } from 'svelte/store';
 import { localDataReady } from '$util/LocalData/LocalData';
 
@@ -19,7 +20,7 @@ export interface PersistentParentStore<T> {
    * Persists just the child with the provided ID, then updates the child store
    * with the new previous state.
    */
-  persistChild: (childId: string) => void;
+  persistChild: (childId: UUID) => void;
   /**
    * Updates many children stores and persists them.
    *
@@ -33,8 +34,8 @@ export interface PersistentParentStore<T> {
    */
   upsertMany: (upsertInfo: UpsertManyInfo<T>) => void;
   addDoc: (doc: T) => void;
-  deleteDoc: (docId: string) => void;
-  deleteMany: (docIds: string[]) => void;
+  deleteDoc: (docId: UUID) => void;
+  deleteMany: (docIds: UUID[]) => void;
 }
 
 export interface SetableStore<T> extends Readable<T> {
@@ -96,7 +97,7 @@ export type DocumentMapStoreSubscriber<T extends BaseDocument> = {
    *
    * This runs before the `beforeDocDeletion` hook.
    */
-  validateDocDeletion?: (map: DocumentMap<T>, docToDelete: T) => string[];
+  validateDocDeletion?: (map: DocumentMap<T>, docToDelete: T) => UUID[];
   beforeDocDeletion?: (map: DocumentMap<T>, docToDelete: T) => void;
   afterDocDeletion?: (map: DocumentMap<T>, docsDeleted: T[]) => void;
   /**
@@ -131,14 +132,14 @@ export type DocumentMapStoreSubscriber<T extends BaseDocument> = {
  * - `private getInstance()`: returns the singleton instance of the service or creates
  * it if it does not exist
  * - `getStore`: returns the store for the service
- * - `getDocStore(docId: string)`: returns the specified document store, or
+ * - `getDocStore(docId: UUID)`: returns the specified document store, or
  * creates it if it does not exist
  * - `getMap()`: returns the current `documentMap`
  */
 export default abstract class DocumentMapStoreService<T extends BaseDocument> {
   protected documentMap: DocumentMap<T> = {};
   protected store: DocumentMapStore<T> = this.createMapStore();
-  protected childStores: Record<string, DocumentChildStore<T> | undefined> = {};
+  protected childStores: Record<UUID, DocumentChildStore<T> | undefined> = {};
   protected previousState: DocumentMap<T> = {};
   /**
    * This should be refactored to be more specific once things are in a working
@@ -174,9 +175,9 @@ export default abstract class DocumentMapStoreService<T extends BaseDocument> {
    * Gets the store for the specified document ID. If the store does not exist,
    * it will be created.
    *
-   * @param docId
+   * @param docId The document ID to get the store for
    */
-  protected getDocStore(docId: string): DocumentChildStore<T> {
+  protected getDocStore(docId: UUID): DocumentChildStore<T> {
     let childStore = this.childStores[docId];
     if (!childStore) {
       childStore = this.createDocStore(docId);
@@ -185,7 +186,7 @@ export default abstract class DocumentMapStoreService<T extends BaseDocument> {
     return childStore;
   }
 
-  private createDocStore(docId: string): DocumentChildStore<T> {
+  private createDocStore(docId: UUID): DocumentChildStore<T> {
     const document = this.documentMap[docId];
     if (!document) {
       throw new Error(`Cannot create doc store for doc that does not exist. Doc ID: ${docId}`);
@@ -278,7 +279,7 @@ export default abstract class DocumentMapStoreService<T extends BaseDocument> {
         (doc) => doc && filter(doc)
       ) as T[];
       return docsToUpdate.map((doc) => {
-        const docId = doc._id.toString();
+        const docId = doc._id;
         const updatedDoc = updater(doc);
         this.documentMap[docId] = updatedDoc;
         // Run subscribers
@@ -306,12 +307,12 @@ export default abstract class DocumentMapStoreService<T extends BaseDocument> {
           }
           return updateDoc;
         }, doc);
-        this.documentMap[doc._id.toString()] = newDoc;
+        this.documentMap[doc._id] = newDoc;
         return newDoc;
       });
     };
 
-    const deleteManyDocs = (docIds: string[]): void => {
+    const deleteManyDocs = (docIds: UUID[]): void => {
       const docsToDelete: T[] = [];
       docIds.forEach((id) => {
         const doc = this.documentMap[id];
@@ -331,7 +332,7 @@ export default abstract class DocumentMapStoreService<T extends BaseDocument> {
           });
         }
         return newDocIdsToDelete;
-      }, new Set<string>());
+      }, new Set<UUID>());
       // Run before deletion hooks
       const allDocsToDelete: T[] = [];
       docIdsToDelete.forEach((id) => {
@@ -370,7 +371,7 @@ export default abstract class DocumentMapStoreService<T extends BaseDocument> {
        * Sets the document map. This should only be used when the store is
        * initialized from data that comes from the backend.
        *
-       * @param newMap
+       * @param newMap The new document map
        */
       set: (newMap) => {
         this.documentMap = newMap;
@@ -389,7 +390,7 @@ export default abstract class DocumentMapStoreService<T extends BaseDocument> {
           }
         });
       },
-      persistChild: (childId: string) => {
+      persistChild: (childId: UUID) => {
         this.previousState = this.persistToLocalData();
         const doc = this.documentMap[childId];
         if (!doc) {
@@ -439,10 +440,10 @@ export default abstract class DocumentMapStoreService<T extends BaseDocument> {
           insert: [updatedDoc]
         });
       },
-      deleteMany: (docIds: string[]) => {
+      deleteMany: (docIds: UUID[]) => {
         deleteManyDocs(docIds);
       },
-      deleteDoc: (docId: string) => {
+      deleteDoc: (docId: UUID) => {
         deleteManyDocs([docId]);
       }
     };

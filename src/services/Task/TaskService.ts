@@ -45,12 +45,12 @@ export default class TaskService {
     while (currentTask) {
       parentTaskChain.unshift({
         name: currentTask.title && currentTask.title !== '' ? currentTask.title : 'Untitled Task',
-        link: this.getTaskRoute(currentTask._id.toString(), false)
+        link: this.getTaskRoute(currentTask._id, false)
       });
       if (!currentTask.parentTaskId) {
         break;
       }
-      currentTask = TaskMapService.getMap()[currentTask.parentTaskId.toString()];
+      currentTask = TaskMapService.getMap()[currentTask.parentTaskId];
     }
     breadCrumbs.push(...parentTaskChain);
     return breadCrumbs;
@@ -90,21 +90,21 @@ export default class TaskService {
    */
   static findParentIdWithSameSharedWith(task: DashboardTask): string {
     if (!task.parentTaskId || task.sharedWith.length === 0) {
-      return task._id.toString();
+      return task._id;
     }
-    const parentTask = TaskMapService.getMap()[task.parentTaskId.toString()];
+    const parentTask = TaskMapService.getMap()[task.parentTaskId];
     if (!parentTask) {
-      return task._id.toString();
+      return task._id;
     }
     if (
       ArrayService.arraysHaveSamePrimitiveValues(
-        task.sharedWith.map((id) => id.toString()),
-        parentTask.sharedWith.map((id) => id.toString())
+        task.sharedWith.map((id) => id),
+        parentTask.sharedWith.map((id) => id)
       )
     ) {
       return this.findParentIdWithSameSharedWith(parentTask);
     }
-    return task._id.toString();
+    return task._id;
   }
 
   static getTaskCategoryRoute(taskId: string, includeFirstSlash = true) {

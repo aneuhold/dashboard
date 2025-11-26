@@ -18,7 +18,7 @@
   } = $props();
 
   let mainTask: DashboardTask | undefined = $state();
-  let taskId = $derived(mainTask ? mainTask._id.toString() : 'nonExistentTaskId');
+  let taskId = $derived(mainTask ? mainTask._id : 'nonExistentTaskId');
 
   $effect(() => {
     MockData.taskMapServiceMock.reset();

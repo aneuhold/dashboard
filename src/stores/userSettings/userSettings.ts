@@ -1,5 +1,4 @@
-import { DashboardUserConfig, type UserCTO } from '@aneuhold/core-ts-db-lib';
-import { ObjectId } from 'bson';
+import { DashboardUserConfig, DocumentService, type UserCTO } from '@aneuhold/core-ts-db-lib';
 import { type Updater, writable } from 'svelte/store';
 import DashboardAPIService from '$util/api/DashboardAPIService';
 import LocalData, { localDataReady } from '$util/LocalData/LocalData';
@@ -12,7 +11,7 @@ export type UserSettings = {
 function createUserSettingsStore() {
   let currentSettings: UserSettings = {
     // Just a dummy config to avoid null checks.
-    config: new DashboardUserConfig(new ObjectId()),
+    config: new DashboardUserConfig(DocumentService.generateID()),
     collaborators: {}
   };
   const { subscribe, set } = writable<UserSettings>(currentSettings);
@@ -46,7 +45,7 @@ function createUserSettingsStore() {
     addCollaborator: (user: UserCTO) => {
       updateUserSettingsAndSave((settings) => {
         settings.config.collaborators.push(user._id);
-        settings.collaborators[user._id.toString()] = user;
+        settings.collaborators[user._id] = user;
         return settings;
       });
     },
@@ -60,9 +59,9 @@ function createUserSettingsStore() {
           return settings;
         }
         settings.config.collaborators = settings.config.collaborators.filter(
-          (id) => id.toString() !== collaboratorId.toString()
+          (id) => id !== collaboratorId
         );
-        delete settings.collaborators[collaboratorId.toString()];
+        delete settings.collaborators[collaboratorId];
         return settings;
       });
     },

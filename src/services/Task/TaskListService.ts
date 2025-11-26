@@ -19,10 +19,10 @@ export default class TaskListService {
   ): DashboardTaskFilterAndSortResult {
     const taskFilterSettings =
       userSettings.config.taskListFilterSettings[category] ??
-      getDefaultTaskListFilterSettings(userSettings.config.userId.toString());
+      getDefaultTaskListFilterSettings(userSettings.config.userId);
     const taskSortSettings =
       userSettings.config.taskListSortSettings[category] ??
-      getDefaultTaskListSortSettings(userSettings.config.userId.toString());
+      getDefaultTaskListSortSettings(userSettings.config.userId);
     return DashboardTaskService.getFilteredAndSortedTaskIds(
       taskMap,
       category,
@@ -44,7 +44,7 @@ export default class TaskListService {
         removedIds: []
       };
     }
-    const userId = userSettings.config.userId.toString();
+    const userId = userSettings.config.userId;
     const taskFilterSettings =
       task.filterSettings[userId] ??
       userSettings.config.taskListFilterSettings[task.category] ??
@@ -60,7 +60,7 @@ export default class TaskListService {
       taskSortSettings,
       userSettings.config.tagSettings,
       {
-        taskId: task._id.toString(),
+        taskId: task._id,
         allChildrenIds: allChildrenIds
       }
     );

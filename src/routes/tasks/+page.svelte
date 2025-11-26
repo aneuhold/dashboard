@@ -5,6 +5,7 @@
 -->
 <script lang="ts">
   import { DashboardTask } from '@aneuhold/core-ts-db-lib';
+  import type { UUID } from 'crypto';
   import { goto } from '$app/navigation';
   import { page } from '$app/stores';
   import PageTitle from '$components/PageTitle.svelte';
@@ -22,13 +23,13 @@
   let sortAndFilterResult = $derived(
     TaskListService.getTaskIds($taskMap, $userSettings, 'default')
   );
-  let taskId = $derived($page.url.searchParams.get('taskId'));
+  let taskId = $derived($page.url.searchParams.get('taskId') as UUID | undefined);
   let task = $derived(taskId && $taskMap[taskId] ? $taskMap[taskId] : undefined);
 
   function addTask() {
     const newTask = new DashboardTask($userSettings.config.userId);
     taskMap.addDoc(newTask);
-    goto(TaskService.getTaskRoute(newTask._id.toString()));
+    goto(TaskService.getTaskRoute(newTask._id));
   }
 </script>
 

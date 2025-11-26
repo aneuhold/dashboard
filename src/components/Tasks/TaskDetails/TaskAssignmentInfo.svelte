@@ -17,14 +17,12 @@
   // in it.
   let assignedUser = $derived(
     $task.assignedTo
-      ? $currentUserId === $task.assignedTo.toString()
+      ? $currentUserId === $task.assignedTo
         ? { _id: $currentUserId, userName: LocalData.username }
-        : collaborators[$task.assignedTo.toString()]
+        : collaborators[$task.assignedTo]
       : undefined
   );
-  let assignedUserIsCurrentuser = $derived(
-    assignedUser && assignedUser._id.toString() === $currentUserId
-  );
+  let assignedUserIsCurrentuser = $derived(assignedUser && assignedUser._id === $currentUserId);
 </script>
 
 {#if assignedUser}

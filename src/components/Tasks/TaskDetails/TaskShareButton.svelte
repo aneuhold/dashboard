@@ -13,11 +13,9 @@
     task: DocumentStore<DashboardTask>;
   } = $props();
 
-  let sharingDisabled = $derived(
-    $task.userId.toString() !== $userSettings.config.userId.toString()
-  );
+  let sharingDisabled = $derived($task.userId !== $userSettings.config.userId);
   let finalParentId = $derived(TaskService.findParentIdWithSameSharedWith($task));
-  let taskId = $derived($task._id.toString());
+  let taskId = $derived($task._id);
   let buttonText = $derived(
     finalParentId === taskId || sharingDisabled ? 'Share' : 'Configure Sharing'
   );

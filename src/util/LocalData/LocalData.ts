@@ -9,7 +9,6 @@ import type {
   NonogramKatanaItem,
   NonogramKatanaUpgrade
 } from '@aneuhold/core-ts-db-lib';
-import { sleep } from '@aneuhold/core-ts-lib';
 import { EJSON } from 'bson';
 import { writable } from 'svelte/store';
 import type { UserSettings } from '$stores/userSettings/userSettings';
@@ -30,7 +29,7 @@ export default class LocalData {
    * A prefix before all stored key names in case cache busting needs to happen
    * at some point.
    */
-  private static PREFIX = 'v1-';
+  private static PREFIX = 'v2-';
 
   private static localStorageAvailable = false;
 
@@ -53,20 +52,9 @@ export default class LocalData {
    * functions in this class are called. This is because sometimes the JS
    * loads before the window somehow.
    */
-  static async initialize() {
-    let attempts = 0;
-    while (typeof window === 'undefined' && attempts < 10) {
-      await sleep(5);
-      attempts += 1;
-    }
+  static initialize() {
     if (typeof window !== 'undefined') {
       this.localStorageAvailable = true;
-      console.info(`LocalData successfully initialized after ${attempts} attempts.`);
-    } else {
-      console.info(
-        `LocalData could not be initialized after ${attempts} attempts. All usage of LocalData will be ignored. ` +
-          `This is probably because the JS is running on the server.`
-      );
     }
     localDataReady.set(true);
   }

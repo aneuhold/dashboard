@@ -4,7 +4,7 @@ import {
   NonogramKatanaUpgrade,
   NonogramKatanaUpgradeName
 } from '@aneuhold/core-ts-db-lib';
-import type { ObjectId } from 'bson';
+import type { UUID } from 'crypto';
 import nonogramKatanaItemNameToUpgradesMap from '$routes/entertainment/nonogramkatana/upgrades/nonogramKatanaItemNameToUpgradesMap';
 import { nonogramKatanaUpgradesDisplayInfo } from '$routes/entertainment/nonogramkatana/upgrades/nonogramKatanaUpgradesDisplayInfo';
 import DashboardAPIService from '$util/api/DashboardAPIService';
@@ -27,7 +27,7 @@ export class NonogramKatanaUpgradeMapService extends DocumentMapStoreService<Non
    * always have a value, because upgrades might not be in the DB yet for the
    * current user.
    */
-  private static nameToIdMap: { [key in NonogramKatanaUpgradeName]?: string } = {};
+  private static nameToIdMap: { [key in NonogramKatanaUpgradeName]?: UUID } = {};
 
   private constructor() {
     super();
@@ -40,9 +40,9 @@ export class NonogramKatanaUpgradeMapService extends DocumentMapStoreService<Non
   /**
    * Gets the {@link NonogramKatanaUpgrade} store with the provided `upgradeId`.
    *
-   * @param upgradeId
+   * @param upgradeId The upgrade ID
    */
-  static getUpgradeStore(upgradeId: string): DocumentStore<NonogramKatanaUpgrade> {
+  static getUpgradeStore(upgradeId: UUID): DocumentStore<NonogramKatanaUpgrade> {
     const upgradeStore = this.instance.getDocStore(upgradeId);
     const upgradeDoc = this.getMap()[upgradeId];
     if (!upgradeDoc) {
@@ -61,15 +61,16 @@ export class NonogramKatanaUpgradeMapService extends DocumentMapStoreService<Non
     if (!this.nameToIdMap[upgradeName]) {
       this.createNameToIdMap(this.getMap());
     }
-    return this.getUpgradeStore(this.nameToIdMap[upgradeName] as string);
+    return this.getUpgradeStore(this.nameToIdMap[upgradeName] as UUID);
   }
 
   /**
    * Gets the array of {@link NonogramKatanaUpgrade} stores that require
    * the given item name.
    *
-   * @param itemName
-   * @param filterToOnlyWorkableUpgrades
+   * @param itemName The item name to get upgrades for
+   * @param filterToOnlyWorkableUpgrades Whether to only return upgrades that
+   *   are currently workable
    */
   static getUpgradeStoresByItemName(
     itemName: NonogramKatanaItemName,
@@ -117,7 +118,7 @@ export class NonogramKatanaUpgradeMapService extends DocumentMapStoreService<Non
    * Workable upgrades are upgrades that are not completed and have all their
    * required upgrades completed.
    *
-   * @param upgradeMap
+   * @param upgradeMap The map of upgrade IDs to upgrades
    */
   static getWorkableUpgrades(upgradeMap: DocumentMap<NonogramKatanaUpgrade>): {
     [key in NonogramKatanaUpgradeName]?: NonogramKatanaUpgrade;
@@ -166,14 +167,14 @@ export class NonogramKatanaUpgradeMapService extends DocumentMapStoreService<Non
    * Currently just creates new upgrades that don't already exist. Should
    * probably be enhanced so that it can update existing ones in the DB.
    *
-   * @param userId
+   * @param userId the user ID to create or update upgrades for
    */
-  static createOrUpdateUpgrades(userId: ObjectId): void {
+  static createOrUpdateUpgrades(userId: UUID): void {
     const currentMap = this.getMap();
     const existingUpgrades = Object.values(currentMap).filter((upgrade) => upgrade !== undefined);
     const existingUpgradeNames = new Set(existingUpgrades.map((upgrade) => upgrade.upgradeName));
     const upgradesToAdd: NonogramKatanaUpgrade[] = [];
-    const newUpgradeIds: Set<string> = new Set();
+    const newUpgradeIds: Set<UUID> = new Set();
     Object.values(NonogramKatanaUpgradeName).forEach((upgradeName) => {
       if (!existingUpgradeNames.has(upgradeName)) {
         const newUpgrade = new NonogramKatanaUpgrade(userId, upgradeName);
@@ -185,13 +186,13 @@ export class NonogramKatanaUpgradeMapService extends DocumentMapStoreService<Non
         upgradeDisplayInfo.requiredItems.forEach((requiredItem) => {
           newUpgrade.currentItemAmounts[requiredItem.itemName] = 0;
         });
-        newUpgradeIds.add(newUpgrade._id.toString());
+        newUpgradeIds.add(newUpgrade._id);
         upgradesToAdd.push(newUpgrade);
       }
     });
     if (upgradesToAdd.length > 0) {
       this.getStore().upsertMany({
-        filter: (doc) => newUpgradeIds.has(doc._id.toString()),
+        filter: (doc) => newUpgradeIds.has(doc._id),
         newDocs: upgradesToAdd,
         updater: (doc) => doc
       });
@@ -225,7 +226,7 @@ export class NonogramKatanaUpgradeMapService extends DocumentMapStoreService<Non
   /**
    * Creates a couple helper maps for easier access to the upgrades.
    *
-   * @param map
+   * @param map The upgrade map
    */
   private static createNameToIdMap(map: DocumentMap<NonogramKatanaUpgrade>) {
     this.nameToIdMap = {};
@@ -233,7 +234,7 @@ export class NonogramKatanaUpgradeMapService extends DocumentMapStoreService<Non
       if (!upgrade) {
         return;
       }
-      this.nameToIdMap[upgrade.upgradeName] = upgrade._id.toString();
+      this.nameToIdMap[upgrade.upgradeName] = upgrade._id;
     });
   }
 }

@@ -9,7 +9,7 @@
   import Checkbox from '@smui/checkbox';
   import { Actions, Content, Title } from '@smui/dialog';
   import FormField from '@smui/form-field';
-  import type { ObjectId } from 'bson';
+  import type { UUID } from 'crypto';
   import { writable } from 'svelte/store';
   import SmartDialog from '$components/presentational/SmartDialog.svelte';
   import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
@@ -50,21 +50,18 @@
 <script lang="ts">
   let task = $derived($currentTaskId ? TaskMapService.getTaskStore($currentTaskId) : null);
   let title = $derived($task?.title ?? 'Task Assignment');
-  let sharedWithIds = $derived($task ? $task.sharedWith.map((id) => id.toString()) : []);
+  let sharedWithIds = $derived($task ? $task.sharedWith.map((id) => id) : []);
   let collaborators = $derived($userSettings.collaborators);
   let sharedWithUsers = $derived([
     { _id: $userSettings.config.userId, userName: 'Me' },
     ...Object.values(collaborators).filter((collaborator) => {
-      return (
-        sharedWithIds.includes(collaborator._id.toString()) ||
-        collaborator._id.toString() === $task?.userId.toString()
-      );
+      return sharedWithIds.includes(collaborator._id) || collaborator._id === $task?.userId;
     })
   ]);
 
-  function toggleAssignment(id: ObjectId) {
+  function toggleAssignment(id: UUID) {
     if (!$task) return;
-    if (id.toString() === $task.assignedTo?.toString()) {
+    if (id === $task.assignedTo) {
       $task.assignedTo = undefined;
     } else {
       $task.assignedTo = id;
@@ -82,10 +79,10 @@
           <a href="/settings">Add one in settings here!</a>
         {:else if sharedWithIds.length > 0}
           <span class="sectionTitle mdc-typography--body1">Assign To</span>
-          {#each Object.values(sharedWithUsers) as sharedWithUser (sharedWithUser._id.toString())}
+          {#each Object.values(sharedWithUsers) as sharedWithUser (sharedWithUser._id)}
             <FormField>
               <Checkbox
-                checked={$task.assignedTo?.toString() === sharedWithUser._id.toString()}
+                checked={$task.assignedTo === sharedWithUser._id}
                 onclick={() => {
                   toggleAssignment(sharedWithUser._id);
                 }}

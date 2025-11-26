@@ -103,13 +103,8 @@
           {/if}
           <div class="headerText">
             <Icon class="material-icons">autorenew</Icon>
-            {#if $task.parentRecurringTaskInfo && $taskMap[$task.parentRecurringTaskInfo.taskId.toString()]}
-              <a
-                href={TaskService.getTaskRoute(
-                  $task.parentRecurringTaskInfo.taskId.toString(),
-                  true
-                )}
-              >
+            {#if $task.parentRecurringTaskInfo && $taskMap[$task.parentRecurringTaskInfo.taskId]}
+              <a href={TaskService.getTaskRoute($task.parentRecurringTaskInfo.taskId, true)}>
                 Parent
               </a>
             {/if}

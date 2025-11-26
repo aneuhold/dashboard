@@ -9,7 +9,8 @@
   import Checkbox from '@smui/checkbox';
   import { Actions, Content, Title } from '@smui/dialog';
   import FormField from '@smui/form-field';
-  import type { ObjectId } from 'bson';
+  // ids are strings (UUIDs)
+  import type { UUID } from 'crypto';
   import { writable } from 'svelte/store';
   import SmartDialog from '$components/presentational/SmartDialog.svelte';
   import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
@@ -50,18 +51,18 @@
 
 <script lang="ts">
   let task = $derived($currentTaskId ? TaskMapService.getTaskStore($currentTaskId) : null);
-  let sharedWithIds = $derived($task ? $task.sharedWith.map((id) => id.toString()) : []);
+  let sharedWithIds = $derived($task ? $task.sharedWith.map((id) => id) : []);
   let collaborators = $derived($userSettings.collaborators);
-  let currentUserIsOwner = $derived($task ? $task.userId.toString() === $currentUserId : false);
+  let currentUserIsOwner = $derived($task ? $task.userId === $currentUserId : false);
   let title = $derived($task ? `Share "${$task.title}"` : 'There was an error, please tell Tony');
 
-  function toggleSharedWith(id: ObjectId) {
+  function toggleSharedWith(id: UUID) {
     if (!$task) return;
-    if (sharedWithIds.includes(id.toString())) {
+    if (sharedWithIds.includes(id)) {
       $task.sharedWith = $task.sharedWith.filter((sharedWithId) => {
-        return sharedWithId.toString() !== id.toString();
+        return sharedWithId !== id;
       });
-      if ($task.assignedTo?.toString() === id.toString() || $task.sharedWith.length === 0) {
+      if ($task.assignedTo === id || $task.sharedWith.length === 0) {
         $task.assignedTo = undefined;
       }
     } else {
@@ -82,10 +83,10 @@
         {:else if currentUserIsOwner}
           <span class="sectionTitle mdc-typography--body1">Share With</span>
           <span>Note that sharing automatically applies to all sub-tasks if enabled.</span>
-          {#each Object.values(collaborators) as collaborator (collaborator._id.toString())}
+          {#each Object.values(collaborators) as collaborator (collaborator._id)}
             <FormField>
               <Checkbox
-                checked={sharedWithIds.includes(collaborator._id.toString())}
+                checked={sharedWithIds.includes(collaborator._id)}
                 onclick={() => {
                   toggleSharedWith(collaborator._id);
                 }}

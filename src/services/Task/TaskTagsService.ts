@@ -149,8 +149,8 @@ export default class TaskTagsService {
 
     if (!this.userSettingsUnsub) {
       this.userSettingsUnsub = userSettings.subscribe((newSettings) => {
-        if (newSettings.config.userId.toString() !== this.userId) {
-          this.userId = newSettings.config.userId.toString();
+        if (newSettings.config.userId !== this.userId) {
+          this.userId = newSettings.config.userId;
           updateTaskTags(newSettings.config.tagSettings);
           // Return early if the user ID changed.
           return;

@@ -57,8 +57,7 @@
         // Conditional to find the original task that is being duplicated
         if (
           !task.parentTaskId ||
-          (currentTask.parentTaskId &&
-            task.parentTaskId.toString() === currentTask.parentTaskId.toString())
+          (currentTask.parentTaskId && task.parentTaskId === currentTask.parentTaskId)
         ) {
           task.title = `${task.title} (Copy)`;
         }
@@ -102,7 +101,7 @@
         clickAction: handleSkipClick
       });
     }
-    if (task.userId.toString() === $currentUserId && finalSharedParentId === taskId) {
+    if (task.userId === $currentUserId && finalSharedParentId === taskId) {
       menuItems.push({
         title: 'Share',
         iconName: 'share',
@@ -174,14 +173,12 @@
         : $task.description
       : ''
   );
-  let assignedToMe = $derived(
-    $task.assignedTo ? $task.assignedTo.toString() === $currentUserId : false
-  );
+  let assignedToMe = $derived($task.assignedTo ? $task.assignedTo === $currentUserId : false);
   let assignedToName = $derived(
     $task.assignedTo
       ? assignedToMe
         ? 'Me'
-        : $userSettings.collaborators[$task.assignedTo.toString()].userName
+        : $userSettings.collaborators[$task.assignedTo].userName
       : ''
   );
 </script>

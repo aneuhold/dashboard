@@ -194,7 +194,7 @@ export default class DashboardAPIService {
   /**
    * Processes the final output of a series of API requests.
    *
-   * @param output
+   * @param output The combined output of all API requests
    */
   private static processDashboardApiOutput(output: ProjectDashboardOutput) {
     if (output.translations) {
@@ -251,7 +251,7 @@ export default class DashboardAPIService {
     documents: T[]
   ): Record<string, T> {
     return documents.reduce<Record<string, T>>((map, document) => {
-      map[document._id.toString()] = document;
+      map[document._id] = document;
       return map;
     }, {});
   }
@@ -259,7 +259,7 @@ export default class DashboardAPIService {
   static getCollaboratorsFromResult(data: ProjectDashboardOutput): Record<string, UserCTO> {
     if (data.collaborators) {
       return data.collaborators.reduce<Record<string, UserCTO>>((collaboratorsMap, userCto) => {
-        collaboratorsMap[userCto._id.toString()] = userCto;
+        collaboratorsMap[userCto._id] = userCto;
         return collaboratorsMap;
       }, {});
     } else {
