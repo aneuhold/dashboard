@@ -12,6 +12,7 @@
   import { DashboardTask, DashboardTaskService } from '@aneuhold/core-ts-db-lib';
   import Button, { Icon } from '@smui/button';
   import Paper, { Content } from '@smui/paper';
+  import type { UUID } from 'crypto';
   import { goto } from '$app/navigation';
   import BreadCrumb from '$components/BreadCrumb.svelte';
   import PageTitle from '$components/PageTitle.svelte';
@@ -34,30 +35,24 @@
   let {
     taskId
   }: {
-    taskId: string;
+    taskId: UUID;
   } = $props();
 
   const taskMap = TaskMapService.getStore();
   let task = $derived($taskMap[taskId] ? TaskMapService.getTaskStore(taskId) : undefined);
   let allChildrenIds = $derived(
     $task
-      ? DashboardTaskService.getChildrenIds(Object.values($taskMap) as DashboardTask[], [
-          $task._id
-        ]).map((id) => id.toString())
+      ? DashboardTaskService.getChildrenIds(Object.values($taskMap) as DashboardTask[], [$task._id])
       : []
   );
   let sortAndFilterResult = $derived(
     TaskListService.getTaskIdsForTask($taskMap, $userSettings, allChildrenIds, $task)
   );
   // Explicitly include `task` so that it reactively updates
-  let breadCrumbArray = $derived(
-    TaskService.getBreadCrumbArray($task ? $task._id.toString() : taskId)
-  );
+  let breadCrumbArray = $derived(TaskService.getBreadCrumbArray($task ? $task._id : taskId));
   let parentTaskId = $derived($task ? $task.parentTaskId : undefined);
   let parentRoute = $derived(
-    parentTaskId
-      ? TaskService.getTaskRoute(parentTaskId.toString())
-      : TaskService.getTaskCategoryRoute(taskId)
+    parentTaskId ? TaskService.getTaskRoute(parentTaskId) : TaskService.getTaskCategoryRoute(taskId)
   );
 
   function addSubTask() {
@@ -75,14 +70,14 @@
         }
       : undefined;
     taskMap.addDoc(newTask);
-    goto(TaskService.getTaskRoute(newTask._id.toString()));
+    goto(TaskService.getTaskRoute(newTask._id));
   }
 
   function deleteTask() {
     if (!$task) return;
     // Purposefully set the task ID, and don't use the one from the component
     // otherwise the parent will be deleted.
-    const taskIdToDelete = $task._id.toString();
+    const taskIdToDelete = $task._id;
     goto(parentRoute).then(() => {
       taskMap.deleteDoc(taskIdToDelete);
     });

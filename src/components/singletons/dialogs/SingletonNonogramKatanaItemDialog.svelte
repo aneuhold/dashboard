@@ -7,6 +7,7 @@
 <script lang="ts" module>
   import Button, { Label } from '@smui/button';
   import { Actions, Content, Title } from '@smui/dialog';
+  import type { UUID } from 'crypto';
   import { writable } from 'svelte/store';
   import SmartDialog from '$components/presentational/SmartDialog.svelte';
   import { NonogramKatanaItemMapService } from '$services/NonogramKatana/NonogramKatanaItemMapService';
@@ -15,13 +16,13 @@
    * A Nonogram Katana item dialog which can be used anywhere in the app.
    */
   export const nonogramKatanaItemDialog = {
-    open: (itemId: string) => {
+    open: (itemId: UUID) => {
       currentItemId.set(itemId);
       open.set(true);
     }
   };
 
-  const currentItemId = writable<string | null>(null);
+  const currentItemId = writable<UUID | null>(null);
   const open = writable(false);
 </script>
 

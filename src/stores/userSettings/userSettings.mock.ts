@@ -1,5 +1,5 @@
 import { DashboardUserConfig, type UserCTO } from '@aneuhold/core-ts-db-lib';
-import { ObjectId } from 'bson';
+import type { UUID } from 'crypto';
 import { type UserSettings, userSettings } from './userSettings';
 
 /**
@@ -7,7 +7,7 @@ import { type UserSettings, userSettings } from './userSettings';
  * being mocked already so it doesn't try to contact the server.
  */
 export default class UserSettingsMock {
-  constructor(private userId: ObjectId) {
+  constructor(private userId: UUID) {
     this.reset();
   }
 
@@ -27,7 +27,7 @@ export default class UserSettingsMock {
 
   addCollaborator(collaborator: UserCTO): void {
     const currentUserSettings = userSettings.get();
-    currentUserSettings.collaborators[collaborator._id.toString()] = collaborator;
+    currentUserSettings.collaborators[collaborator._id] = collaborator;
     userSettings.setWithoutPropogation(currentUserSettings);
   }
 }

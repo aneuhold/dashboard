@@ -2,6 +2,7 @@
   import Card, { Content as CardContent } from '@smui/card';
   import { Icon } from '@smui/common';
   import IconButton from '@smui/icon-button';
+  import type { UUID } from 'crypto';
   import InputBox from '$components/presentational/InputBox/InputBox.svelte';
   import { nonogramKatanaItemDialog } from '$components/singletons/dialogs/SingletonNonogramKatanaItemDialog.svelte';
   import { NonogramKatanaItemMapService } from '$services/NonogramKatana/NonogramKatanaItemMapService';
@@ -9,7 +10,7 @@
   import { nonogramKatanaItemsDisplayInfo } from './nonogramKatanaItemsDisplayInfo';
   import NonogramKatanaRelatedUpgrade from './NonogramKatanaRelatedUpgrade.svelte';
 
-  let { itemId }: { itemId: string } = $props();
+  let { itemId }: { itemId: UUID } = $props();
 
   let item = $derived(NonogramKatanaItemMapService.getItemStore(itemId));
   let displayInfo = $derived(nonogramKatanaItemsDisplayInfo[$item.itemName]);

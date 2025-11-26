@@ -1,13 +1,14 @@
 <script lang="ts">
   import { RecurrenceBasis } from '@aneuhold/core-ts-db-lib';
   import { DateService } from '@aneuhold/core-ts-lib';
+  import type { UUID } from 'crypto';
   import DatePickerDialog from '$components/presentational/DatePickerDialog/DatePickerDialog.svelte';
   import { confirmationDialog } from '$components/singletons/dialogs/SingletonConfirmationDialog.svelte';
   import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
   import TaskRecurrenceService from '$services/Task/TaskRecurrenceService';
   import TaskDateButton from './TaskDateButton.svelte';
 
-  let { taskId }: { taskId: string } = $props();
+  let { taskId }: { taskId: UUID } = $props();
   let task = $derived(TaskMapService.getTaskStore(taskId));
 
   let currentlyChosenDateType: 'start' | 'due' = $state('start');

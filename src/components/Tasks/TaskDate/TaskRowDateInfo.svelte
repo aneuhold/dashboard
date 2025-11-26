@@ -1,8 +1,9 @@
 <script lang="ts">
   import { DateService } from '@aneuhold/core-ts-lib';
+  import type { UUID } from 'crypto';
   import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
 
-  let { taskId }: { taskId: string } = $props();
+  let { taskId }: { taskId: UUID } = $props();
   let task = $derived(TaskMapService.getTaskStore(taskId));
   let pastDue = $derived($task.dueDate && $task.dueDate < new Date());
 </script>

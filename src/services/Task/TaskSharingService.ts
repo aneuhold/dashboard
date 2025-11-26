@@ -6,7 +6,7 @@ export default class TaskSharingService {
   static getSubscribersForTaskMap(): DocumentMapStoreSubscriber<DashboardTask> {
     return {
       beforeDocAddition(map, newDoc) {
-        const parentTask = newDoc.parentTaskId ? map[newDoc.parentTaskId.toString()] : undefined;
+        const parentTask = newDoc.parentTaskId ? map[newDoc.parentTaskId] : undefined;
         if (parentTask) {
           newDoc.sharedWith = [...parentTask.sharedWith];
         }
@@ -14,14 +14,10 @@ export default class TaskSharingService {
       },
       validateDocUpdate(map, oldDoc, newDoc) {
         if (oldDoc?.sharedWith.length !== newDoc.sharedWith.length) {
-          return TaskOperationsService.getUpdateTaskAndAllChildrenInfo(
-            map,
-            newDoc._id.toString(),
-            (task) => {
-              task.sharedWith = newDoc.sharedWith;
-              return task;
-            }
-          );
+          return TaskOperationsService.getUpdateTaskAndAllChildrenInfo(map, newDoc._id, (task) => {
+            task.sharedWith = newDoc.sharedWith;
+            return task;
+          });
         }
         return null;
       }

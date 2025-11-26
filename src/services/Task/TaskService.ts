@@ -1,5 +1,6 @@
 import type { DashboardTask } from '@aneuhold/core-ts-db-lib';
 import { ArrayService } from '@aneuhold/core-ts-lib';
+import type { UUID } from 'crypto';
 import type { BreadCrumbArray } from '$components/BreadCrumb.svelte';
 import { confirmationDialog } from '$components/singletons/dialogs/SingletonConfirmationDialog.svelte';
 import { TaskMapService } from './TaskMapService/TaskMapService';
@@ -8,7 +9,7 @@ import { TaskMapService } from './TaskMapService/TaskMapService';
  * The main task utility service.
  */
 export default class TaskService {
-  static getTaskRoute(taskId: string, includeFirstSlash = true) {
+  static getTaskRoute(taskId: UUID, includeFirstSlash = true) {
     return `${includeFirstSlash ? '/' : ''}tasks?taskId=${taskId}`;
   }
 
@@ -17,7 +18,7 @@ export default class TaskService {
    *
    * @param taskId
    */
-  static getTaskCategoryBreadCrumbs(taskId: string): BreadCrumbArray {
+  static getTaskCategoryBreadCrumbs(taskId: UUID): BreadCrumbArray {
     const defaultBreadCrumbs = [{ name: 'tasks', link: 'tasks' }];
     const task = TaskMapService.getMap()[taskId];
     if (!task) {
@@ -31,7 +32,7 @@ export default class TaskService {
     }
   }
 
-  static getBreadCrumbArray(taskId: string): BreadCrumbArray {
+  static getBreadCrumbArray(taskId: UUID): BreadCrumbArray {
     const task = TaskMapService.getMap()[taskId];
     const breadCrumbs: BreadCrumbArray = [];
     if (!task)
@@ -45,12 +46,12 @@ export default class TaskService {
     while (currentTask) {
       parentTaskChain.unshift({
         name: currentTask.title && currentTask.title !== '' ? currentTask.title : 'Untitled Task',
-        link: this.getTaskRoute(currentTask._id.toString(), false)
+        link: this.getTaskRoute(currentTask._id, false)
       });
       if (!currentTask.parentTaskId) {
         break;
       }
-      currentTask = TaskMapService.getMap()[currentTask.parentTaskId.toString()];
+      currentTask = TaskMapService.getMap()[currentTask.parentTaskId];
     }
     breadCrumbs.push(...parentTaskChain);
     return breadCrumbs;
@@ -88,26 +89,26 @@ export default class TaskService {
    *
    * @param task
    */
-  static findParentIdWithSameSharedWith(task: DashboardTask): string {
+  static findParentIdWithSameSharedWith(task: DashboardTask): UUID {
     if (!task.parentTaskId || task.sharedWith.length === 0) {
-      return task._id.toString();
+      return task._id;
     }
-    const parentTask = TaskMapService.getMap()[task.parentTaskId.toString()];
+    const parentTask = TaskMapService.getMap()[task.parentTaskId];
     if (!parentTask) {
-      return task._id.toString();
+      return task._id;
     }
     if (
       ArrayService.arraysHaveSamePrimitiveValues(
-        task.sharedWith.map((id) => id.toString()),
-        parentTask.sharedWith.map((id) => id.toString())
+        task.sharedWith.map((id) => id),
+        parentTask.sharedWith.map((id) => id)
       )
     ) {
       return this.findParentIdWithSameSharedWith(parentTask);
     }
-    return task._id.toString();
+    return task._id;
   }
 
-  static getTaskCategoryRoute(taskId: string, includeFirstSlash = true) {
+  static getTaskCategoryRoute(taskId: UUID, includeFirstSlash = true) {
     const defaultRoute = `${includeFirstSlash ? '/' : ''}tasks`;
     const task = TaskMapService.getMap()[taskId];
     if (!task) {

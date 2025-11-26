@@ -5,23 +5,23 @@ Info about subtasks within a task row.
 -->
 <script lang="ts">
   import { DashboardTask } from '@aneuhold/core-ts-db-lib';
-  import type { ObjectId } from 'bson';
+  import type { UUID } from 'crypto';
   import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
   import { currentUserId } from '$stores/derived/currentUserId';
 
   let {
     allChildrenIds
   }: {
-    allChildrenIds: ObjectId[];
+    allChildrenIds: UUID[];
   } = $props();
 
   let allChildTasks = $derived(
-    allChildrenIds.map((id) => TaskMapService.getMap()[id.toString()]) as DashboardTask[]
+    allChildrenIds.map((id) => TaskMapService.getMap()[id]) as DashboardTask[]
   );
   let allCompletedTasks = $derived(allChildTasks.filter((task) => task.completed));
   let allIncompleteTasks = $derived(allChildTasks.filter((task) => !task.completed));
   let allIncompleteTasksAssignedToMe = $derived(
-    allIncompleteTasks.filter((task) => task.assignedTo?.toString() === $currentUserId)
+    allIncompleteTasks.filter((task) => task.assignedTo === $currentUserId)
   );
 </script>
 
