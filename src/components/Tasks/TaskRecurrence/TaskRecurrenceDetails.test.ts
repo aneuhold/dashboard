@@ -8,6 +8,7 @@ import {
 } from '@aneuhold/core-ts-db-lib';
 import { DocumentService } from '@aneuhold/core-ts-db-lib';
 import { fireEvent, render, screen } from '@testing-library/svelte';
+import type { UUID } from 'crypto';
 import { get } from 'svelte/store';
 import { type Writable } from 'svelte/store';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -32,7 +33,7 @@ describe('TaskRecurrenceDetails', () => {
   };
 
   let taskStore: Writable<DashboardTask>;
-  let taskId: string;
+  let taskId: UUID;
 
   beforeEach(() => {
     // Use the mock service to create a task

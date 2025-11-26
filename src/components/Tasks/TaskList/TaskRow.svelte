@@ -7,6 +7,7 @@
   import { DashboardTask, DashboardTaskService, RecurrenceEffect } from '@aneuhold/core-ts-db-lib';
   import Card, { Content as CardContent } from '@smui/card';
   import { Icon } from '@smui/icon-button';
+  import type { UUID } from 'crypto';
   import { goto } from '$app/navigation';
   import ClickableDiv from '$components/presentational/ClickableDiv.svelte';
   import MenuButton, { type MenuButtonItem } from '$components/presentational/MenuButton.svelte';
@@ -29,7 +30,7 @@
      */
     tagHeaderName
   }: {
-    taskId: string;
+    taskId: UUID;
     /**
      * If set, it will display the tag as a header above the task.
      */

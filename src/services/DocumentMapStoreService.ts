@@ -375,7 +375,8 @@ export default abstract class DocumentMapStoreService<T extends BaseDocument> {
        */
       set: (newMap) => {
         this.documentMap = newMap;
-        Object.entries(this.childStores).forEach(([docId, store]) => {
+        Object.entries(this.childStores).forEach(([docIdStr, store]) => {
+          const docId = docIdStr as UUID;
           const doc = this.documentMap[docId];
           if (!doc) {
             delete this.childStores[docId];

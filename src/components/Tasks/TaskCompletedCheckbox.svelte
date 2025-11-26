@@ -1,6 +1,7 @@
 <script lang="ts">
   import { RecurrenceEffect } from '@aneuhold/core-ts-db-lib';
   import Checkbox from '@smui/checkbox';
+  import type { UUID } from 'crypto';
   import { triggerConfetti } from '$components/singletons/Confetti/Confetti.svelte';
   import { confirmationDialog } from '$components/singletons/dialogs/SingletonConfirmationDialog.svelte';
   import { snackbar } from '$components/singletons/SingletonSnackbar.svelte';
@@ -10,7 +11,7 @@
   let {
     taskId
   }: {
-    taskId: string;
+    taskId: UUID;
   } = $props();
 
   // X and Y of the most recent click event for use in confetti

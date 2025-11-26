@@ -7,6 +7,7 @@ import {
 } from '@aneuhold/core-ts-db-lib';
 import { render, screen } from '@testing-library/svelte';
 // ids are strings (UUIDs)
+import type { UUID } from 'crypto';
 import { get, type Writable } from 'svelte/store';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
@@ -22,7 +23,7 @@ describe('TaskRecurrenceInfo', () => {
   const mockService = new TaskMapServiceMock(userId);
 
   let taskStore: Writable<DashboardTask>;
-  let taskId: string;
+  let taskId: UUID;
 
   beforeEach(() => {
     // Use the mock service to create a task

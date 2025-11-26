@@ -6,6 +6,7 @@ import {
   getDefaultTaskListFilterSettings,
   getDefaultTaskListSortSettings
 } from '@aneuhold/core-ts-db-lib';
+import type { UUID } from 'crypto';
 import type { UserSettings } from '$stores/userSettings/userSettings';
 
 /**
@@ -35,7 +36,7 @@ export default class TaskListService {
   static getTaskIdsForTask(
     taskMap: DashboardTaskMap,
     userSettings: UserSettings,
-    allChildrenIds: string[],
+    allChildrenIds: UUID[],
     task?: DashboardTask
   ): DashboardTaskFilterAndSortResult {
     if (!task) {

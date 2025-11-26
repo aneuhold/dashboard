@@ -8,6 +8,7 @@
   import Button, { Label } from '@smui/button';
   import Checkbox from '@smui/checkbox';
   import { Actions, Content, Title } from '@smui/dialog';
+  import type { UUID } from 'crypto';
   import { writable } from 'svelte/store';
   import InputBox from '$components/presentational/InputBox/InputBox.svelte';
   import SmartDialog from '$components/presentational/SmartDialog.svelte';
@@ -19,13 +20,13 @@
    * A Nonogram Katana upgrade dialog which can be used anywhere in the app.
    */
   export const nonogramKatanaUpgradeDialog = {
-    open: (upgradeId: string) => {
+    open: (upgradeId: UUID) => {
       currentUpgradeId.set(upgradeId);
       open.set(true);
     }
   };
 
-  const currentUpgradeId = writable<string | null>(null);
+  const currentUpgradeId = writable<UUID | null>(null);
   const open = writable(false);
 </script>
 

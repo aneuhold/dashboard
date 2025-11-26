@@ -21,13 +21,13 @@
    * A task sharing dialog which can be used anywhere in the app.
    */
   export const taskSharingDialog = {
-    open: (taskId: string) => {
+    open: (taskId: UUID) => {
       currentTaskId.set(taskId);
       open.set(true);
     }
   };
 
-  const currentTaskId = writable<string | null>(null);
+  const currentTaskId = writable<UUID | null>(null);
   const open = createOpenStore();
 
   function createOpenStore() {

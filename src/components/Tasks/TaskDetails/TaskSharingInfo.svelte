@@ -4,10 +4,11 @@
   Sharing information for use in the Task Details component.
 -->
 <script lang="ts">
+  import type { UUID } from 'crypto';
   import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
   import { userSettings } from '$stores/userSettings/userSettings';
 
-  let { taskId }: { taskId: string } = $props();
+  let { taskId }: { taskId: UUID } = $props();
 
   let task = $derived(TaskMapService.getTaskStore(taskId));
   /**

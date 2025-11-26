@@ -10,6 +10,7 @@
     DashboardTaskSortBy,
     getDefaultTaskListSortSettings
   } from '@aneuhold/core-ts-db-lib';
+  import type { UUID } from 'crypto';
   import { flip } from 'svelte/animate';
   import { slide } from 'svelte/transition';
   import TaskRow from '$components/Tasks/TaskList/TaskRow.svelte';
@@ -25,7 +26,7 @@
   }: {
     sortAndFilterResult: DashboardTaskFilterAndSortResult;
     category: string;
-    parentTaskId?: string;
+    parentTaskId?: UUID;
   } = $props();
 
   const taskMap = TaskMapService.getStore();

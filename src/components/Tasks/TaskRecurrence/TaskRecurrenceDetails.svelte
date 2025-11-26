@@ -13,6 +13,7 @@
   } from '@aneuhold/core-ts-db-lib';
   import { DateService } from '@aneuhold/core-ts-lib';
   import Select, { Option } from '@smui/select';
+  import type { UUID } from 'crypto';
   import { type Updater, writable } from 'svelte/store';
   import InputBox from '$components/presentational/InputBox/InputBox.svelte';
   import { confirmationDialog } from '$components/singletons/dialogs/SingletonConfirmationDialog.svelte';
@@ -27,7 +28,7 @@
     taskId,
     defaultRecurrenceInfo
   }: {
-    taskId: string;
+    taskId: UUID;
     /**
      * The default recurrence info to use if the task has none.
      */

@@ -17,6 +17,7 @@
   import { Actions, Content as DialogContent, Title } from '@smui/dialog';
   import IconButton, { Icon } from '@smui/icon-button';
   import Accordion, { Content, Panel } from '@smui-extra/accordion';
+  import type { UUID } from 'crypto';
   import ClickableDiv from '$components/presentational/ClickableDiv.svelte';
   import SmartDialog from '$components/presentational/SmartDialog.svelte';
   import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
@@ -24,11 +25,11 @@
   import TaskService from '$services/Task/TaskService';
   import TaskRecurrenceDetails from './TaskRecurrenceDetails.svelte';
 
-  let { taskId, childTaskIds }: { taskId: string; childTaskIds: string[] } = $props();
+  let { taskId, childTaskIds }: { taskId: UUID; childTaskIds: UUID[] } = $props();
 
   let recurringInfoOpen = $state(false);
   const taskMap = TaskMapService.getStore();
-  let previousTaskId = $state(taskId);
+  let previousTaskId: UUID = $state(taskId);
   let errorInfoDialogOpen = $state(false);
   let errorInfoDialogTitle = $state('');
   let errorInfoDialogContent = $state('');

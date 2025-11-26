@@ -12,6 +12,7 @@
   import { DashboardTask, DashboardTaskService } from '@aneuhold/core-ts-db-lib';
   import Button, { Icon } from '@smui/button';
   import Paper, { Content } from '@smui/paper';
+  import type { UUID } from 'crypto';
   import { goto } from '$app/navigation';
   import BreadCrumb from '$components/BreadCrumb.svelte';
   import PageTitle from '$components/PageTitle.svelte';
@@ -34,13 +35,15 @@
   let {
     taskId
   }: {
-    taskId: string;
+    taskId: UUID;
   } = $props();
 
   const taskMap = TaskMapService.getStore();
   let task = $derived($taskMap[taskId] ? TaskMapService.getTaskStore(taskId) : undefined);
   let allChildrenIds = $derived(
-    $task ? DashboardTaskService.getChildrenIds(Object.values($taskMap), [$task._id]) : []
+    $task
+      ? DashboardTaskService.getChildrenIds(Object.values($taskMap) as DashboardTask[], [$task._id])
+      : []
   );
   let sortAndFilterResult = $derived(
     TaskListService.getTaskIdsForTask($taskMap, $userSettings, allChildrenIds, $task)
