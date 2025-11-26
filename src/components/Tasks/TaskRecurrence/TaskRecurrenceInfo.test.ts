@@ -6,7 +6,6 @@ import {
   RecurrenceFrequencyType
 } from '@aneuhold/core-ts-db-lib';
 import { render, screen } from '@testing-library/svelte';
-// ids are strings (UUIDs)
 import type { UUID } from 'crypto';
 import { get, type Writable } from 'svelte/store';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
