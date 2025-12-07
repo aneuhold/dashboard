@@ -147,9 +147,6 @@ importers:
       '@typescript-eslint/parser':
         specifier: ^8.47.0
         version: 8.47.0(eslint@9.39.1)(typescript@5.9.3)
-      bson:
-        specifier: ^7.0.0
-        version: 7.0.0
       eslint:
         specifier: ^9.39.1
         version: 9.39.1

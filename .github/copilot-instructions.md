@@ -10,7 +10,7 @@ This repository is a SvelteKit app (Svelte 5) managed with pnpm.
   - Lint: `pnpm lint` (ESLint)
 
 - Important project files to consult:
-  - `package.json` — scripts, pnpm configuration, important resolutions/patches (e.g. `bson` patch).
+  - `package.json` — scripts, pnpm configuration.
   - `README.md` — architecture notes (store flow, singletons, recurring tasks) and local development tips.
   - `svelte.config.js` — adapter (static), and path aliases ($components, $stores, $services, ...).
   - `vite.config.ts` — Sentry integration, node polyfills for browser crypto, Vitest merge.
