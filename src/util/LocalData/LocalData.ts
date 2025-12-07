@@ -9,7 +9,7 @@ import type {
   NonogramKatanaItem,
   NonogramKatanaUpgrade
 } from '@aneuhold/core-ts-db-lib';
-import { EJSON } from 'bson';
+import { DateService } from '@aneuhold/core-ts-lib';
 import { writable } from 'svelte/store';
 import type { UserSettings } from '$stores/userSettings/userSettings';
 
@@ -29,7 +29,7 @@ export default class LocalData {
    * A prefix before all stored key names in case cache busting needs to happen
    * at some point.
    */
-  private static PREFIX = 'v2-';
+  private static PREFIX = 'v3-';
 
   private static localStorageAvailable = false;
 
@@ -109,10 +109,7 @@ export default class LocalData {
   }
 
   static set dashboardConfig(newDashboardConfig: DashboardConfig | null) {
-    this.storeValue(
-      LocalData.storedKeyNames.dashboardConfig,
-      EJSON.stringify(newDashboardConfig, { relaxed: false })
-    );
+    this.storeValue(LocalData.storedKeyNames.dashboardConfig, JSON.stringify(newDashboardConfig));
   }
 
   static get dashboardConfig() {
@@ -120,10 +117,7 @@ export default class LocalData {
   }
 
   static set translations(newTranslations: Translations | null) {
-    this.storeValue(
-      LocalData.storedKeyNames.translations,
-      EJSON.stringify(newTranslations, { relaxed: false })
-    );
+    this.storeValue(LocalData.storedKeyNames.translations, JSON.stringify(newTranslations));
   }
 
   static get translations() {
@@ -131,10 +125,7 @@ export default class LocalData {
   }
 
   static set userSettings(newSettings: UserSettings | null) {
-    this.storeValue(
-      LocalData.storedKeyNames.userSettings,
-      EJSON.stringify(newSettings, { relaxed: false })
-    );
+    this.storeValue(LocalData.storedKeyNames.userSettings, JSON.stringify(newSettings));
   }
 
   static get userSettings() {
@@ -142,16 +133,13 @@ export default class LocalData {
   }
 
   static set taskMap(newTaskMap: DashboardTaskMap | null) {
-    this.storeValue(
-      LocalData.storedKeyNames.taskMap,
-      EJSON.stringify(newTaskMap, { relaxed: false })
-    );
+    this.storeValue(LocalData.storedKeyNames.taskMap, JSON.stringify(newTaskMap));
   }
 
   static setAndGetTaskMap(newTaskMap: DashboardTaskMap): DashboardTaskMap {
-    const stringifiedTaskMap = EJSON.stringify(newTaskMap, { relaxed: false });
+    const stringifiedTaskMap = JSON.stringify(newTaskMap);
     this.storeValue(LocalData.storedKeyNames.taskMap, stringifiedTaskMap);
-    return EJSON.parse(stringifiedTaskMap) as DashboardTaskMap;
+    return JSON.parse(stringifiedTaskMap) as DashboardTaskMap;
   }
 
   static get taskMap() {
@@ -161,9 +149,12 @@ export default class LocalData {
   static setAndGetNonogramKatanaItemMap(
     newItemMap: DocumentMap<NonogramKatanaItem>
   ): DocumentMap<NonogramKatanaItem> {
-    const stringifiedItemMap = EJSON.stringify(newItemMap, { relaxed: false });
+    const stringifiedItemMap = JSON.stringify(newItemMap);
     this.storeValue(LocalData.storedKeyNames.nonogramKatanaItemMap, stringifiedItemMap);
-    return EJSON.parse(stringifiedItemMap) as DocumentMap<NonogramKatanaItem>;
+    return JSON.parse(
+      stringifiedItemMap,
+      DateService.dateReviver
+    ) as DocumentMap<NonogramKatanaItem>;
   }
 
   static get nonogramKatanaItemMap(): DocumentMap<NonogramKatanaItem> | null {
@@ -175,9 +166,12 @@ export default class LocalData {
   static setAndGetNonogramKatanaUpgradeMap(
     newUpgradeMap: DocumentMap<NonogramKatanaUpgrade>
   ): DocumentMap<NonogramKatanaUpgrade> {
-    const stringifiedUpgradeMap = EJSON.stringify(newUpgradeMap, { relaxed: false });
+    const stringifiedUpgradeMap = JSON.stringify(newUpgradeMap);
     this.storeValue(LocalData.storedKeyNames.nonogramKatanaUpgradeMap, stringifiedUpgradeMap);
-    return EJSON.parse(stringifiedUpgradeMap) as DocumentMap<NonogramKatanaUpgrade>;
+    return JSON.parse(
+      stringifiedUpgradeMap,
+      DateService.dateReviver
+    ) as DocumentMap<NonogramKatanaUpgrade>;
   }
 
   static get nonogramKatanaUpgradeMap(): Record<string, NonogramKatanaUpgrade> | null {
@@ -187,7 +181,7 @@ export default class LocalData {
   }
 
   static set currentApiRequest(newApiRequest: ProjectDashboardOptions | undefined) {
-    this.storeValue(LocalData.storedKeyNames.currentApiRequest, EJSON.stringify(newApiRequest));
+    this.storeValue(LocalData.storedKeyNames.currentApiRequest, JSON.stringify(newApiRequest));
   }
 
   static get currentApiRequest(): ProjectDashboardOptions | undefined {
@@ -201,7 +195,7 @@ export default class LocalData {
   }
 
   static set apiRequestQueue(newRequestQueue: ProjectDashboardOptions[]) {
-    this.storeValue(LocalData.storedKeyNames.apiRequestQueue, EJSON.stringify(newRequestQueue));
+    this.storeValue(LocalData.storedKeyNames.apiRequestQueue, JSON.stringify(newRequestQueue));
   }
 
   static get apiRequestQueue(): ProjectDashboardOptions[] {
@@ -228,7 +222,7 @@ export default class LocalData {
       currentlyStoredValue !== 'undefined' &&
       typeof currentlyStoredValue === 'string'
     ) {
-      const jsonObject: unknown = EJSON.parse(currentlyStoredValue);
+      const jsonObject: unknown = JSON.parse(currentlyStoredValue, DateService.dateReviver);
       if (typeof jsonObject === 'object') {
         return jsonObject as ObjectType;
       }
