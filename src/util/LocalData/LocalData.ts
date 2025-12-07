@@ -139,7 +139,7 @@ export default class LocalData {
   static setAndGetTaskMap(newTaskMap: DashboardTaskMap): DashboardTaskMap {
     const stringifiedTaskMap = JSON.stringify(newTaskMap);
     this.storeValue(LocalData.storedKeyNames.taskMap, stringifiedTaskMap);
-    return JSON.parse(stringifiedTaskMap) as DashboardTaskMap;
+    return JSON.parse(stringifiedTaskMap, DateService.dateReviver) as DashboardTaskMap;
   }
 
   static get taskMap() {
