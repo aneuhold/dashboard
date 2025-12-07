@@ -1,5 +1,5 @@
 import { DashboardTask, type DashboardTaskFilterAndSortResult } from '@aneuhold/core-ts-db-lib';
-import type { ObjectId } from 'bson';
+import type { UUID } from 'crypto';
 import { userSettings } from '$stores/userSettings/userSettings';
 import TestUsers from '$testUtils/TestUsers';
 import TaskListService from '../TaskListService';
@@ -71,7 +71,7 @@ export enum MockTaskSubTasks {
  * being mocked already so it doesn't try to contact the server.
  */
 export default class TaskMapServiceMock {
-  constructor(private userId: ObjectId) {}
+  constructor(private userId: UUID) {}
 
   reset(): void {
     TaskMapService.getStore().set({});
@@ -269,7 +269,7 @@ export default class TaskMapServiceMock {
     task.completed = options.completed ?? false;
 
     // tags setup
-    task.tags = { [this.userId.toString()]: options.tags ?? [] };
+    task.tags = { [this.userId]: options.tags ?? [] };
     options.tags?.forEach((tag) => {
       TaskTagsService.addTagForUser(tag);
     });

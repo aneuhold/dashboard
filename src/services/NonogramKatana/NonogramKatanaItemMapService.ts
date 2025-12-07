@@ -3,7 +3,7 @@ import {
   NonogramKatanaItem,
   NonogramKatanaItemName
 } from '@aneuhold/core-ts-db-lib';
-import type { ObjectId } from 'bson';
+import type { UUID } from 'crypto';
 import { nonogramKatanaItemsDisplayInfo } from '$routes/entertainment/nonogramkatana/items/nonogramKatanaItemsDisplayInfo';
 import DashboardAPIService from '$util/api/DashboardAPIService';
 import LocalData from '$util/LocalData/LocalData';
@@ -19,7 +19,7 @@ import DocumentMapStoreService from '../DocumentMapStoreService';
  */
 export class NonogramKatanaItemMapService extends DocumentMapStoreService<NonogramKatanaItem> {
   private static instance = new NonogramKatanaItemMapService();
-  private static nameToIdMap: { [itemName: string]: string } = {};
+  private static nameToIdMap: { [itemName: string]: UUID } = {};
 
   private constructor() {
     super();
@@ -29,7 +29,7 @@ export class NonogramKatanaItemMapService extends DocumentMapStoreService<Nonogr
     return this.instance.store;
   }
 
-  static getItemStore(itemId: string): DocumentStore<NonogramKatanaItem> {
+  static getItemStore(itemId: UUID): DocumentStore<NonogramKatanaItem> {
     const itemStore = this.instance.getDocStore(itemId);
     const itemDoc = this.getMap()[itemId];
     if (!itemDoc) {
@@ -58,25 +58,25 @@ export class NonogramKatanaItemMapService extends DocumentMapStoreService<Nonogr
    *
    * @param userId
    */
-  static createOrUpdateItems(userId: ObjectId): void {
+  static createOrUpdateItems(userId: UUID): void {
     const currentMap = this.getMap();
     const existingItems = Object.values(currentMap).filter((item) => item !== undefined);
     const existingItemNames = new Set(existingItems.map((item) => item.itemName));
     const itemsToAdd: NonogramKatanaItem[] = [];
-    const newItemIds: Set<string> = new Set();
+    const newItemIds: Set<UUID> = new Set();
     Object.values(NonogramKatanaItemName).forEach((itemName) => {
       if (!existingItemNames.has(itemName)) {
         const newItem = new NonogramKatanaItem(userId, itemName);
         const itemDisplayInfo = nonogramKatanaItemsDisplayInfo[itemName];
         newItem.currentAmount = 0;
         newItem.priority = itemDisplayInfo.defaultPriority ?? -50;
-        newItemIds.add(newItem._id.toString());
+        newItemIds.add(newItem._id);
         itemsToAdd.push(newItem);
       }
     });
     if (itemsToAdd.length > 0) {
       this.getStore().upsertMany({
-        filter: (doc) => newItemIds.has(doc._id.toString()),
+        filter: (doc) => newItemIds.has(doc._id),
         newDocs: itemsToAdd,
         updater: (doc) => doc
       });
@@ -113,7 +113,7 @@ export class NonogramKatanaItemMapService extends DocumentMapStoreService<Nonogr
       if (!item) {
         return;
       }
-      this.nameToIdMap[item.itemName] = item._id.toString();
+      this.nameToIdMap[item.itemName] = item._id;
     });
   }
 }

@@ -1,5 +1,6 @@
 <script lang="ts">
   import { DashboardTask } from '@aneuhold/core-ts-db-lib';
+  import type { UUID } from 'crypto';
   import {
     MockTaskAssignment,
     MockTaskSharedWith
@@ -18,7 +19,7 @@
   } = $props();
 
   let mainTask: DashboardTask | undefined = $state();
-  let taskId = $derived(mainTask ? mainTask._id.toString() : 'nonExistentTaskId');
+  let taskId = $derived(mainTask ? mainTask._id : ('non-existent-id' as UUID));
 
   $effect(() => {
     MockData.taskMapServiceMock.reset();

@@ -6,6 +6,7 @@ import {
   getDefaultTaskListFilterSettings,
   getDefaultTaskListSortSettings
 } from '@aneuhold/core-ts-db-lib';
+import type { UUID } from 'crypto';
 import type { UserSettings } from '$stores/userSettings/userSettings';
 
 /**
@@ -19,10 +20,10 @@ export default class TaskListService {
   ): DashboardTaskFilterAndSortResult {
     const taskFilterSettings =
       userSettings.config.taskListFilterSettings[category] ??
-      getDefaultTaskListFilterSettings(userSettings.config.userId.toString());
+      getDefaultTaskListFilterSettings(userSettings.config.userId);
     const taskSortSettings =
       userSettings.config.taskListSortSettings[category] ??
-      getDefaultTaskListSortSettings(userSettings.config.userId.toString());
+      getDefaultTaskListSortSettings(userSettings.config.userId);
     return DashboardTaskService.getFilteredAndSortedTaskIds(
       taskMap,
       category,
@@ -35,7 +36,7 @@ export default class TaskListService {
   static getTaskIdsForTask(
     taskMap: DashboardTaskMap,
     userSettings: UserSettings,
-    allChildrenIds: string[],
+    allChildrenIds: UUID[],
     task?: DashboardTask
   ): DashboardTaskFilterAndSortResult {
     if (!task) {
@@ -44,7 +45,7 @@ export default class TaskListService {
         removedIds: []
       };
     }
-    const userId = userSettings.config.userId.toString();
+    const userId = userSettings.config.userId;
     const taskFilterSettings =
       task.filterSettings[userId] ??
       userSettings.config.taskListFilterSettings[task.category] ??
@@ -60,7 +61,7 @@ export default class TaskListService {
       taskSortSettings,
       userSettings.config.tagSettings,
       {
-        taskId: task._id.toString(),
+        taskId: task._id,
         allChildrenIds: allChildrenIds
       }
     );

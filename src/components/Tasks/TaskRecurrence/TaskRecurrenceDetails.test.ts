@@ -6,8 +6,9 @@ import {
   RecurrenceFrequencyType,
   type RecurrenceInfo
 } from '@aneuhold/core-ts-db-lib';
+import { DocumentService } from '@aneuhold/core-ts-db-lib';
 import { fireEvent, render, screen } from '@testing-library/svelte';
-import { ObjectId } from 'bson';
+import type { UUID } from 'crypto';
 import { get } from 'svelte/store';
 import { type Writable } from 'svelte/store';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -32,7 +33,7 @@ describe('TaskRecurrenceDetails', () => {
   };
 
   let taskStore: Writable<DashboardTask>;
-  let taskId: ObjectId;
+  let taskId: UUID;
 
   beforeEach(() => {
     // Use the mock service to create a task
@@ -44,7 +45,7 @@ describe('TaskRecurrenceDetails', () => {
     taskId = task._id;
 
     // Get the real store for the task
-    taskStore = TaskMapService.getTaskStore(taskId.toString());
+    taskStore = TaskMapService.getTaskStore(taskId);
 
     // Update the task with recurrence info
     taskStore.update((t) => {
@@ -61,12 +62,12 @@ describe('TaskRecurrenceDetails', () => {
       dueDate: new Date()
     });
 
-    const freshStore = TaskMapService.getTaskStore(freshTask._id.toString());
+    const freshStore = TaskMapService.getTaskStore(freshTask._id);
     // ensure store has no recurrence before render
     expect(get(freshStore).recurrenceInfo).toBeUndefined();
 
     render(TaskRecurrenceDetails, {
-      taskId: freshTask._id.toString(),
+      taskId: freshTask._id,
       defaultRecurrenceInfo
     });
 
@@ -76,7 +77,7 @@ describe('TaskRecurrenceDetails', () => {
   });
 
   it('renders correctly with initial recurrence info', () => {
-    render(TaskRecurrenceDetails, { taskId: taskId.toString(), defaultRecurrenceInfo });
+    render(TaskRecurrenceDetails, { taskId: taskId, defaultRecurrenceInfo });
 
     expect(screen.getAllByText('Frequency')[0]).toBeInTheDocument();
     expect(screen.getAllByText('Basis')[0]).toBeInTheDocument();
@@ -87,7 +88,7 @@ describe('TaskRecurrenceDetails', () => {
   it('disables controls when task has parentRecurringTaskInfo', () => {
     taskStore.update((t) => {
       t.parentRecurringTaskInfo = {
-        taskId: new ObjectId(),
+        taskId: DocumentService.generateID(),
         startDate: new Date(),
         dueDate: new Date()
       };
@@ -95,7 +96,7 @@ describe('TaskRecurrenceDetails', () => {
     });
 
     const { container } = render(TaskRecurrenceDetails, {
-      taskId: taskId.toString(),
+      taskId: taskId,
       defaultRecurrenceInfo
     });
 
@@ -110,7 +111,7 @@ describe('TaskRecurrenceDetails', () => {
       .mockReturnValue(new Date(Date.now() - 10000));
 
     const { container } = render(TaskRecurrenceDetails, {
-      taskId: taskId.toString(),
+      taskId: taskId,
       defaultRecurrenceInfo
     });
 

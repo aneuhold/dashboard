@@ -6,6 +6,7 @@
 <script lang="ts">
   import Chip, { Set, Text, TrailingAction } from '@smui/chips';
   import Autocomplete from '@smui-extra/autocomplete';
+  import type { UUID } from 'crypto';
   import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
   import TaskTagsService from '$services/Task/TaskTagsService';
   import { currentUserId } from '$stores/derived/currentUserId';
@@ -13,7 +14,7 @@
   let {
     taskId
   }: {
-    taskId: string;
+    taskId: UUID;
   } = $props();
 
   const globalTags = TaskTagsService.getStore(TaskMapService.getStore());

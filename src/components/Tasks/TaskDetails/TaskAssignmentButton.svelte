@@ -7,7 +7,7 @@
   let { task }: { task: DocumentStore<DashboardTask> } = $props();
 
   function handleClick() {
-    taskAssignmentDialog.open($task._id.toString());
+    taskAssignmentDialog.open($task._id);
   }
 </script>
 

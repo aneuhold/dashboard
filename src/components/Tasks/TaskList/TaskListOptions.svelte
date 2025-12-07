@@ -5,6 +5,7 @@
     type DashboardTaskListSortSettings,
     getDefaultTaskListFilterSettings
   } from '@aneuhold/core-ts-db-lib';
+  import type { UUID } from 'crypto';
   import ClickableDiv from '$components/presentational/ClickableDiv.svelte';
   import SquareIconButton from '$components/presentational/SquareIconButton.svelte';
   import type { DocumentStore } from '$services/DocumentMapStoreService';
@@ -28,7 +29,7 @@
     parentTaskSortSettings?: DashboardTaskListSortSettings;
     userTaskSortSettings?: DashboardTaskListSortSettings;
     currentSortSettings: DashboardTaskListSortSettings;
-    removedTaskIds: string[];
+    removedTaskIds: UUID[];
   } = $props();
 
   const taskMap = TaskMapService.getStore();

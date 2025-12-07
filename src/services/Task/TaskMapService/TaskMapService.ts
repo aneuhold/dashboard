@@ -4,6 +4,7 @@ import {
   type DocumentMap
 } from '@aneuhold/core-ts-db-lib';
 import { DateService } from '@aneuhold/core-ts-lib';
+import type { UUID } from 'crypto';
 import type { Updater } from 'svelte/store';
 import { userSettings } from '$stores/userSettings/userSettings';
 import DashboardTaskAPIService from '$util/api/DashboardTaskAPIService';
@@ -34,7 +35,7 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
     return this.instance.store;
   }
 
-  static getTaskStore(taskId: string): DocumentStore<DashboardTask> {
+  static getTaskStore(taskId: UUID): DocumentStore<DashboardTask> {
     return this.instance.getDocStore(taskId);
   }
 
@@ -81,24 +82,20 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
       },
       beforeDocAddition(map, newDoc) {
         newDoc.description = newDoc.description || '';
-        const parentTask = newDoc.parentTaskId ? map[newDoc.parentTaskId.toString()] : undefined;
+        const parentTask = newDoc.parentTaskId ? map[newDoc.parentTaskId] : undefined;
         if (parentTask) {
           newDoc.userId = parentTask.userId;
         }
         return newDoc;
       },
       validateDocDeletion(map, docToDelete) {
-        const docIdsToDelete: string[] = [docToDelete._id.toString()];
+        const docIdsToDelete: UUID[] = [docToDelete._id];
         const allTasks = TaskOperationsService.getAllTasks(map);
-        docIdsToDelete.push(
-          ...DashboardTaskService.getChildrenIds(allTasks, [docToDelete._id]).map((id) =>
-            id.toString()
-          )
-        );
+        docIdsToDelete.push(...DashboardTaskService.getChildrenIds(allTasks, [docToDelete._id]));
         return docIdsToDelete;
       },
       beforeDocDeletion(map, docToDelete) {
-        TaskRecurrenceService.removeTaskTimeSubscription(docToDelete._id.toString());
+        TaskRecurrenceService.removeTaskTimeSubscription(docToDelete._id);
       }
     });
     this.subscribers.push(TaskRecurrenceService.getSubscribersForTaskMap());
@@ -117,7 +114,7 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
   }
 
   static getDuplicateTaskUpdateInfo(
-    taskId: string,
+    taskId: UUID,
     newTaskUpdater: Updater<DashboardTask>,
     originalTaskUpdater?: Updater<DashboardTask>
   ): UpsertManyInfo<DashboardTask> {
@@ -137,7 +134,7 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
    * @param updater Function to update each task
    */
   static getUpdateTaskAndAllChildrenInfo(
-    taskId: string,
+    taskId: UUID,
     updater: Updater<DashboardTask>
   ): UpsertManyInfo<DashboardTask> {
     return TaskOperationsService.getUpdateTaskAndAllChildrenInfo(
@@ -158,8 +155,7 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
     const userConfig = userSettings.get().config;
     if (userConfig.autoTaskDeletionDays < 5 || userConfig.autoTaskDeletionDays > 90) {
       console.error(
-        `User ${userConfig.userId.toString()} has an invalid autoTaskDeletionDays ` +
-          `value of ${userConfig.autoTaskDeletionDays}.`
+        `User ${userConfig.userId} has an invalid autoTaskDeletionDays value of ${userConfig.autoTaskDeletionDays}.`
       );
       return;
     }
@@ -169,7 +165,7 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
     const tasksToDelete = Object.values(map).filter((task) => {
       return (
         task &&
-        task.userId.toString() === userConfig.userId.toString() &&
+        task.userId === userConfig.userId &&
         task.completed &&
         !task.parentTaskId &&
         !task.parentRecurringTaskInfo &&
@@ -177,7 +173,7 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
         task.lastUpdatedDate < dateThreshold
       );
     }) as DashboardTask[];
-    const taskIdsToDelete = tasksToDelete.map((task) => task._id.toString());
+    const taskIdsToDelete = tasksToDelete.map((task) => task._id);
     if (taskIdsToDelete.length !== 0) {
       console.log(`Deleting ${taskIdsToDelete.length} tasks due to auto task deletion.`);
       this.getStore().deleteMany(taskIdsToDelete);

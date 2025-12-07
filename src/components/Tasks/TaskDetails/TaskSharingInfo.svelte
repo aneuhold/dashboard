@@ -4,10 +4,11 @@
   Sharing information for use in the Task Details component.
 -->
 <script lang="ts">
+  import type { UUID } from 'crypto';
   import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
   import { userSettings } from '$stores/userSettings/userSettings';
 
-  let { taskId }: { taskId: string } = $props();
+  let { taskId }: { taskId: UUID } = $props();
 
   let task = $derived(TaskMapService.getTaskStore(taskId));
   /**
@@ -15,10 +16,10 @@
    * with.
    */
   let sharedWithIds = $derived(
-    $task.sharedWith.map((id) => id.toString()).filter((id) => $userSettings.collaborators[id])
+    $task.sharedWith.map((id) => id).filter((id) => $userSettings.collaborators[id])
   );
   let collaborators = $derived($userSettings.collaborators);
-  let userIsNotOwner = $derived($task.userId.toString() !== $userSettings.config.userId.toString());
+  let userIsNotOwner = $derived($task.userId !== $userSettings.config.userId);
 </script>
 
 <div class="container">
@@ -26,7 +27,7 @@
     <div class="taskOwnerTitle">
       <span>Task Owner</span>
       <span class="dimmed-color">
-        {collaborators[$task.userId.toString()].userName}
+        {collaborators[$task.userId].userName}
       </span>
     </div>
   {:else if Object.values(collaborators).length > 0}
