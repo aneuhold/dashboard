@@ -71,10 +71,10 @@
                 return task;
               }
               if (currentlyChosenDateType === 'start') {
-                task.startDate = undefined;
+                task.startDate = null;
                 task.recurrenceInfo.recurrenceBasis = RecurrenceBasis.dueDate;
               } else {
-                task.dueDate = undefined;
+                task.dueDate = null;
                 task.recurrenceInfo.recurrenceBasis = RecurrenceBasis.startDate;
               }
               return task;
@@ -92,11 +92,11 @@
           onConfirm: () => {
             task.update((task) => {
               if (currentlyChosenDateType === 'start') {
-                task.startDate = undefined;
+                task.startDate = null;
               } else {
-                task.dueDate = undefined;
+                task.dueDate = null;
               }
-              task.recurrenceInfo = undefined;
+              task.recurrenceInfo = null;
               return task;
             });
           }

@@ -6,6 +6,7 @@ import {
   RecurrenceFrequencyType
 } from '@aneuhold/core-ts-db-lib';
 import { render, screen } from '@testing-library/svelte';
+import userEvent from '@testing-library/user-event';
 import type { UUID } from 'crypto';
 import { get, type Writable } from 'svelte/store';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -65,5 +66,60 @@ describe('TaskRecurrenceInfo', () => {
 
     const checkbox = screen.getByRole('checkbox');
     expect(checkbox).toBeChecked();
+  });
+
+  it('can check and then uncheck the recurrence checkbox', async () => {
+    const user = userEvent.setup();
+    render(TaskRecurrenceInfo, { taskId: taskId, childTaskIds: [] });
+
+    const checkbox = screen.getByRole('checkbox');
+
+    // Initially unchecked
+    expect(checkbox).not.toBeChecked();
+    expect(get(taskStore).recurrenceInfo).toBeUndefined();
+
+    // Click to check
+    await user.click(checkbox);
+
+    // Should be checked
+    expect(checkbox).toBeChecked();
+    expect(get(taskStore).recurrenceInfo).toBeDefined();
+
+    // Click again to uncheck
+    await user.click(checkbox);
+
+    // Should be unchecked again
+    expect(checkbox).not.toBeChecked();
+    expect(get(taskStore).recurrenceInfo).toBeNull();
+  });
+
+  it('clicking the checkbox wrapper also properly toggles recurrence', async () => {
+    const user = userEvent.setup();
+    render(TaskRecurrenceInfo, { taskId: taskId, childTaskIds: [] });
+
+    const checkbox = screen.getByRole('checkbox');
+    // The wrapper div is the parent of the checkbox
+    const wrapperDiv = checkbox.parentElement?.parentElement;
+    if (!wrapperDiv) {
+      throw new Error('Could not find wrapper div');
+    }
+
+    // Initially unchecked
+    expect(checkbox).not.toBeChecked();
+    expect(get(taskStore).recurrenceInfo).toBeUndefined();
+
+    // Click the wrapper div to check
+    await user.click(wrapperDiv);
+
+    // Should be checked
+    expect(checkbox).toBeChecked();
+    expect(get(taskStore).recurrenceInfo).toBeDefined();
+
+    // Click the wrapper div again to uncheck
+    await user.click(wrapperDiv);
+
+    // Should be unchecked again
+    expect(checkbox).not.toBeChecked();
+    expect(get(taskStore).recurrenceInfo).toBeNull();
   });
 });
