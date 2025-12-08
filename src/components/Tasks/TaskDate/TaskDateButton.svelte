@@ -8,7 +8,7 @@
     onclick
   }: {
     dateType: 'due' | 'start';
-    date?: Date;
+    date?: Date | null;
     /**
      * Callback fired when the chip is clicked.
      */

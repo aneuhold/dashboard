@@ -41,7 +41,7 @@
   );
 
   function getItemAmount(itemName: NonogramKatanaItemName) {
-    return $upgrade ? $upgrade.currentItemAmounts[itemName] : 0;
+    return $upgrade ? ($upgrade.currentItemAmounts[itemName] ?? 0) : 0;
   }
 
   function updateItemToAmount(itemName: NonogramKatanaItemName, amount: number) {

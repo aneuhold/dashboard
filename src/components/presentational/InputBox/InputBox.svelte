@@ -45,11 +45,11 @@
     /**
      * The minimum value if the input type is a number.
      */
-    min?: number;
+    min?: number | null;
     /**
      * The maximum value if the input type is a number.
      */
-    max?: number;
+    max?: number | null;
     /**
      * Determines if the input is a text area instead of just a single line.
      */
@@ -123,8 +123,8 @@
     !isValid ||
       (typeof inputValue === 'number' &&
         (isNaN(inputValue) ||
-          (min !== undefined && inputValue < min) ||
-          (max !== undefined && inputValue > max)))
+          (min !== undefined && min !== null && inputValue < min) ||
+          (max !== undefined && max !== null && inputValue > max)))
   );
 
   function handleKeyDown(event: CustomEvent | KeyboardEvent) {
