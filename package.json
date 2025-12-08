@@ -31,11 +31,11 @@
     "@sentry/sveltekit": "^10.26.0"
   },
   "devDependencies": {
-    "@aneuhold/core-ts-api-lib": "^3.0.2",
-    "@aneuhold/core-ts-db-lib": "^3.0.2",
-    "@aneuhold/core-ts-lib": "^2.3.12",
+    "@aneuhold/core-ts-api-lib": "^3.0.4",
+    "@aneuhold/core-ts-db-lib": "^4.0.0",
+    "@aneuhold/core-ts-lib": "^2.3.14",
     "@aneuhold/eslint-config": "^1.3.21",
-    "@aneuhold/local-npm-registry": "^0.2.19",
+    "@aneuhold/local-npm-registry": "^0.2.21",
     "@fontsource/fira-mono": "^5.2.7",
     "@neoconfetti/svelte": "^2.2.2",
     "@smui-extra/accordion": "^8.0.3",

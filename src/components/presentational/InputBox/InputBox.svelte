@@ -64,13 +64,13 @@
      * as the initial value. It will only be updated when the user leaves the
      * input box.
      */
-    onBlurValue?: string | number;
+    onBlurValue?: string | number | null;
     /**
      * The value of the `InputBox`. This will update automatically and can be
      * bound to. Alternatively, the onBlurValue can be bound to to only get
      * updates when the user blurs the input.
      */
-    inputValue?: string | number;
+    inputValue?: string | number | null;
     /**
      * If set, it will use the browser auto-complete features for the specified
      * label. For example `password`. If auto-complete is not desired, do not

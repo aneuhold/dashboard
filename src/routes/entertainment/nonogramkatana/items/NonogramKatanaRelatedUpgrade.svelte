@@ -5,7 +5,7 @@
   item.
 -->
 <script lang="ts">
-  import { NonogramKatanaItemName, NonogramKatanaUpgrade } from '@aneuhold/core-ts-db-lib';
+  import { NonogramKatanaItemName, type NonogramKatanaUpgrade } from '@aneuhold/core-ts-db-lib';
   import type { DocumentStore } from '$services/DocumentMapStoreService';
   import { nonogramKatanaUpgradesDisplayInfo } from '../upgrades/nonogramKatanaUpgradesDisplayInfo';
 

@@ -5,7 +5,7 @@
 -->
 <script lang="ts">
   import {
-    DashboardTask,
+    type DashboardTask,
     RecurrenceBasis,
     RecurrenceEffect,
     RecurrenceFrequencyType,

@@ -10,10 +10,10 @@
     recurrenceIsAdded = false,
     completedRemoved = false
   }: {
-    originalStartDate?: Date;
-    originalDueDate?: Date;
-    newStartDate?: Date;
-    newDueDate?: Date;
+    originalStartDate?: Date | null;
+    originalDueDate?: Date | null;
+    newStartDate?: Date | null;
+    newDueDate?: Date | null;
     recurrenceIsRemoved?: boolean;
     recurrenceIsAdded?: boolean;
     completedRemoved?: boolean;

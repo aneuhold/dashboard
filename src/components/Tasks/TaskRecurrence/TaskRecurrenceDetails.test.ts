@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom/vitest';
 import {
-  DashboardTask,
+  type DashboardTask,
   RecurrenceBasis,
   RecurrenceEffect,
   RecurrenceFrequencyType,

@@ -1,4 +1,4 @@
-import { DashboardUserConfig, type UserCTO } from '@aneuhold/core-ts-db-lib';
+import { DashboardUserConfigSchema, type UserCTO } from '@aneuhold/core-ts-db-lib';
 import type { UUID } from 'crypto';
 import { type UserSettings, userSettings } from './userSettings';
 
@@ -13,7 +13,7 @@ export default class UserSettingsMock {
 
   reset(): void {
     const mockSettings: UserSettings = {
-      config: new DashboardUserConfig(this.userId),
+      config: DashboardUserConfigSchema.parse({ userId: this.userId }),
       collaborators: {}
     };
     userSettings.setWithoutPropogation(mockSettings);

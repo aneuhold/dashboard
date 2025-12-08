@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { DashboardTask } from '@aneuhold/core-ts-db-lib';
+  import { type DashboardTask } from '@aneuhold/core-ts-db-lib';
   import Button, { Icon } from '@smui/button';
   import { goto } from '$app/navigation';
   import { taskSharingDialog } from '$components/singletons/dialogs/SingletonTaskSharingDialog/SingletonTaskSharingDialog.svelte';

@@ -1,4 +1,9 @@
-import { DashboardUserConfig, DocumentService, type UserCTO } from '@aneuhold/core-ts-db-lib';
+import {
+  type DashboardUserConfig,
+  DashboardUserConfigSchema,
+  DocumentService,
+  type UserCTO
+} from '@aneuhold/core-ts-db-lib';
 import { type Updater, writable } from 'svelte/store';
 import DashboardAPIService from '$util/api/DashboardAPIService';
 import LocalData, { localDataReady } from '$util/LocalData/LocalData';
@@ -11,7 +16,7 @@ export type UserSettings = {
 function createUserSettingsStore() {
   let currentSettings: UserSettings = {
     // Just a dummy config to avoid null checks.
-    config: new DashboardUserConfig(DocumentService.generateID()),
+    config: DashboardUserConfigSchema.parse({ userId: DocumentService.generateID() }),
     collaborators: {}
   };
   const { subscribe, set } = writable<UserSettings>(currentSettings);

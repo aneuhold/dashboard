@@ -4,7 +4,7 @@
 Info about subtasks within a task row.
 -->
 <script lang="ts">
-  import { DashboardTask } from '@aneuhold/core-ts-db-lib';
+  import { type DashboardTask } from '@aneuhold/core-ts-db-lib';
   import type { UUID } from 'crypto';
   import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
   import { currentUserId } from '$stores/derived/currentUserId';

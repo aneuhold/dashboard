@@ -4,7 +4,11 @@
   A single task that can be displayed in a row format.
 -->
 <script lang="ts">
-  import { DashboardTask, DashboardTaskService, RecurrenceEffect } from '@aneuhold/core-ts-db-lib';
+  import {
+    type DashboardTask,
+    DashboardTaskService,
+    RecurrenceEffect
+  } from '@aneuhold/core-ts-db-lib';
   import Card, { Content as CardContent } from '@smui/card';
   import { Icon } from '@smui/icon-button';
   import type { UUID } from 'crypto';

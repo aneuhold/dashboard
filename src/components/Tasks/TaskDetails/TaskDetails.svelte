@@ -9,7 +9,11 @@
   the task needs to be dynamic.
 -->
 <script lang="ts">
-  import { DashboardTask, DashboardTaskService } from '@aneuhold/core-ts-db-lib';
+  import {
+    type DashboardTask,
+    DashboardTaskSchema,
+    DashboardTaskService
+  } from '@aneuhold/core-ts-db-lib';
   import Button, { Icon } from '@smui/button';
   import Paper, { Content } from '@smui/paper';
   import type { UUID } from 'crypto';
@@ -57,18 +61,20 @@
 
   function addSubTask() {
     if (!$task) return;
-    const newTask = new DashboardTask($task.userId);
-    newTask.title = 'New Task';
-    newTask.parentTaskId = $task._id;
-    newTask.sharedWith = $task.sharedWith;
-    newTask.recurrenceInfo = $task.recurrenceInfo;
-    newTask.parentRecurringTaskInfo = $task.recurrenceInfo
-      ? {
-          taskId: $task._id,
-          startDate: $task.startDate,
-          dueDate: $task.dueDate
-        }
-      : undefined;
+    const newTask = DashboardTaskSchema.parse({
+      userId: $task.userId,
+      title: 'New Task',
+      parentTaskId: $task._id,
+      sharedWith: $task.sharedWith,
+      recurrenceInfo: $task.recurrenceInfo,
+      parentRecurringTaskInfo: $task.recurrenceInfo
+        ? {
+            taskId: $task._id,
+            startDate: $task.startDate,
+            dueDate: $task.dueDate
+          }
+        : undefined
+    });
     taskMap.addDoc(newTask);
     goto(TaskService.getTaskRoute(newTask._id));
   }

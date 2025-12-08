@@ -1,14 +1,14 @@
 <script lang="ts">
   import {
-    DashboardTask,
+    type DashboardTask,
     type DashboardTaskListFilterSettings,
-    type DashboardTaskListSortSettings,
-    getDefaultTaskListFilterSettings
+    type DashboardTaskListSortSettings
   } from '@aneuhold/core-ts-db-lib';
   import type { UUID } from 'crypto';
   import ClickableDiv from '$components/presentational/ClickableDiv.svelte';
   import SquareIconButton from '$components/presentational/SquareIconButton.svelte';
   import type { DocumentStore } from '$services/DocumentMapStoreService';
+  import TaskListService from '$services/Task/TaskListService';
   import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
   import TaskTagsService from '$services/Task/TaskTagsService';
   import { currentUserId } from '$stores/derived/currentUserId';
@@ -99,7 +99,7 @@
   let currentFilterSettings = $derived(
     parentTaskFilterSettings ??
       userTaskFilterSettings ??
-      getDefaultTaskListFilterSettings($currentUserId)
+      TaskListService.getDefaultTaskListFilterSettings($currentUserId)
   );
   let sortingDimmed = $derived($parentTask ? !parentTaskSortSettings : !userTaskSortSettings);
   let filterDimmed = $derived($parentTask ? !parentTaskFilterSettings : !userTaskFilterSettings);
