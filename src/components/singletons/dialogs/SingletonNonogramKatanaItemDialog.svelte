@@ -55,7 +55,7 @@
           checked={minDesiredPresent}
           onclick={() => {
             if ($item && minDesiredPresent) {
-              $item.minDesired = undefined;
+              $item.minDesired = null;
             } else if ($item) {
               $item.minDesired = 0;
             }
@@ -76,7 +76,7 @@
           checked={maxDesiredPresent}
           onclick={() => {
             if ($item && maxDesiredPresent) {
-              $item.maxDesired = undefined;
+              $item.maxDesired = null;
             } else if ($item) {
               $item.maxDesired = $item.storageCap ?? 400;
             }
@@ -97,7 +97,7 @@
           checked={storageCapPresent}
           onclick={() => {
             if ($item && storageCapPresent) {
-              $item.storageCap = undefined;
+              $item.storageCap = null;
             } else if ($item) {
               $item.storageCap = $item.maxDesired ?? 400;
             }

@@ -62,7 +62,7 @@
         return sharedWithId !== id;
       });
       if ($task.assignedTo === id || $task.sharedWith.length === 0) {
-        $task.assignedTo = undefined;
+        $task.assignedTo = null;
       }
     } else {
       $task.sharedWith.push(id);

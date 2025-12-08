@@ -156,8 +156,8 @@ export default class TaskRecurrenceService {
                   };
                   task.recurrenceInfo = newDoc.recurrenceInfo;
                 } else {
-                  task.parentRecurringTaskInfo = undefined;
-                  task.recurrenceInfo = undefined;
+                  task.parentRecurringTaskInfo = null;
+                  task.recurrenceInfo = null;
                 }
                 return task;
               }
@@ -193,8 +193,8 @@ export default class TaskRecurrenceService {
           return task;
         },
         (originalTask) => {
-          originalTask.recurrenceInfo = undefined;
-          originalTask.parentRecurringTaskInfo = undefined;
+          originalTask.recurrenceInfo = null;
+          originalTask.parentRecurringTaskInfo = null;
           return originalTask;
         }
       );

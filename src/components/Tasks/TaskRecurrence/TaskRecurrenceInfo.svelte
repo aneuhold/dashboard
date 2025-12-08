@@ -61,7 +61,7 @@
 
   function handleRecurringClick() {
     if (isRecurring) {
-      $task.recurrenceInfo = undefined;
+      $task.recurrenceInfo = null;
       recurringInfoOpen = false;
     } else if (!$task.startDate && !$task.dueDate) {
       errorInfoDialogTitle = 'Task is missing start date or due date';
