@@ -13,11 +13,11 @@ importers:
         version: 10.26.0(@sveltejs/kit@2.49.0(@opentelemetry/api@1.9.0)(@sveltejs/vite-plugin-svelte@4.0.4(svelte@5.43.14)(vite@5.4.21(@types/node@20.19.25)(sass@1.94.2)))(svelte@5.43.14)(vite@5.4.21(@types/node@20.19.25)(sass@1.94.2)))(svelte@5.43.14)(vite@5.4.21(@types/node@20.19.25)(sass@1.94.2))
     devDependencies:
       '@aneuhold/core-ts-api-lib':
-        specifier: ^3.0.4
-        version: 3.0.4
+        specifier: ^3.0.5
+        version: 3.0.5
       '@aneuhold/core-ts-db-lib':
-        specifier: ^4.0.0
-        version: 4.0.0
+        specifier: ^4.0.1
+        version: 4.0.1
       '@aneuhold/core-ts-lib':
         specifier: ^2.3.14
         version: 2.3.14
@@ -207,11 +207,11 @@ packages:
   '@adobe/css-tools@4.4.4':
     resolution: {integrity: sha512-Elp+iwUx5rN5+Y8xLt5/GRoG20WGoDCQ/1Fb+1LiGtvwbDavuSk0jhD/eZdckHAuzcDzccnkv+rEjyWfRx18gg==}
 
-  '@aneuhold/core-ts-api-lib@3.0.4':
-    resolution: {integrity: sha512-D46eJpLvDx7psXOFZjiCNjYYwwTuBq+Kep7rnZZDopB1tDhRQZGBT8Wq92ZoXrHLmrwpgK3HC3wO6+m/XcCikA==}
+  '@aneuhold/core-ts-api-lib@3.0.5':
+    resolution: {integrity: sha512-0w8z5CpXq438B6HxsSCwRkRR4fCIezv7xAV6pimQJxGk4D8heRxBGC7a6erII0lxbkZBlQUAFWM+/3fuZ9Iosg==}
 
-  '@aneuhold/core-ts-db-lib@4.0.0':
-    resolution: {integrity: sha512-d3tYN1C7Xae02P08W66ZttC9BjeeRolNVln38Yt4yC2UfntvL106PbVLVVc9TuftrXRSU9XRWwy4VnZ7vZPjjQ==}
+  '@aneuhold/core-ts-db-lib@4.0.1':
+    resolution: {integrity: sha512-ggTyCjDyt0P2hMSMgMYioY0IfyBEh1yKVDZzTgJ2Miu9NHqae7Zdy4r+dQZ1ZM4hpxkt56yReCYYl6cJu84+yw==}
 
   '@aneuhold/core-ts-lib@2.3.14':
     resolution: {integrity: sha512-lWt3oy2dSKewOMPv1hBt6H69M6RQUe48+EogtEqySxF428m7MiFhi1GfuyVuf/2DlnKG9zRBn6KxYFyBCIoRHw==}
@@ -5549,13 +5549,13 @@ snapshots:
 
   '@adobe/css-tools@4.4.4': {}
 
-  '@aneuhold/core-ts-api-lib@3.0.4':
+  '@aneuhold/core-ts-api-lib@3.0.5':
     dependencies:
-      '@aneuhold/core-ts-db-lib': 4.0.0
+      '@aneuhold/core-ts-db-lib': 4.0.1
       '@aneuhold/core-ts-lib': 2.3.14
       bson: 7.0.0
 
-  '@aneuhold/core-ts-db-lib@4.0.0':
+  '@aneuhold/core-ts-db-lib@4.0.1':
     dependencies:
       '@aneuhold/core-ts-lib': 2.3.14
       uuid: 13.0.0
