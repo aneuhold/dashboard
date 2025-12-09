@@ -1,4 +1,8 @@
-import { DashboardTask, type DashboardTaskFilterAndSortResult } from '@aneuhold/core-ts-db-lib';
+import {
+  type DashboardTask,
+  type DashboardTaskFilterAndSortResult,
+  DashboardTaskSchema
+} from '@aneuhold/core-ts-db-lib';
 import type { UUID } from 'crypto';
 import { userSettings } from '$stores/userSettings/userSettings';
 import TestUsers from '$testUtils/TestUsers';
@@ -262,20 +266,22 @@ export default class TaskMapServiceMock {
   }
 
   private createTask(options: AddTaskInfo): DashboardTask {
-    const task = new DashboardTask(this.userId);
-    task.title = options.title;
-    task.startDate = options.startDate;
-    task.dueDate = options.dueDate;
-    task.completed = options.completed ?? false;
+    const task = DashboardTaskSchema.parse({
+      userId: this.userId,
+      title: options.title,
+      startDate: options.startDate,
+      dueDate: options.dueDate,
+      completed: options.completed ?? false,
+      tags: { [this.userId]: options.tags ?? [] },
+      sharedWith: []
+    });
 
     // tags setup
-    task.tags = { [this.userId]: options.tags ?? [] };
     options.tags?.forEach((tag) => {
       TaskTagsService.addTagForUser(tag);
     });
 
     // sharedWith setup
-    task.sharedWith = [];
     switch (options.sharedWith ? options.sharedWith : MockTaskSharedWith.none) {
       case MockTaskSharedWith.none:
         break;

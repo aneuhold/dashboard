@@ -1,8 +1,9 @@
 import {
   type DocumentMap,
   NonogramKatanaItemName,
-  NonogramKatanaUpgrade,
-  NonogramKatanaUpgradeName
+  type NonogramKatanaUpgrade,
+  NonogramKatanaUpgradeName,
+  NonogramKatanaUpgradeSchema
 } from '@aneuhold/core-ts-db-lib';
 import type { UUID } from 'crypto';
 import nonogramKatanaItemNameToUpgradesMap from '$routes/entertainment/nonogramkatana/upgrades/nonogramKatanaItemNameToUpgradesMap';
@@ -177,14 +178,18 @@ export class NonogramKatanaUpgradeMapService extends DocumentMapStoreService<Non
     const newUpgradeIds: Set<UUID> = new Set();
     Object.values(NonogramKatanaUpgradeName).forEach((upgradeName) => {
       if (!existingUpgradeNames.has(upgradeName)) {
-        const newUpgrade = new NonogramKatanaUpgrade(userId, upgradeName);
         const upgradeDisplayInfo = nonogramKatanaUpgradesDisplayInfo[upgradeName];
-        newUpgrade.completed = false;
-        // -50 so that it goes after all the ones with a default priority
-        newUpgrade.priority = upgradeDisplayInfo.defaultPriority ?? -50;
-        newUpgrade.currentItemAmounts = {};
+        const currentItemAmounts: Record<string, number> = {};
         upgradeDisplayInfo.requiredItems.forEach((requiredItem) => {
-          newUpgrade.currentItemAmounts[requiredItem.itemName] = 0;
+          currentItemAmounts[requiredItem.itemName] = 0;
+        });
+        const newUpgrade = NonogramKatanaUpgradeSchema.parse({
+          userId,
+          upgradeName,
+          completed: false,
+          // -50 so it goes after all the ones with a default priority
+          priority: upgradeDisplayInfo.defaultPriority ?? -50,
+          currentItemAmounts
         });
         newUpgradeIds.add(newUpgrade._id);
         upgradesToAdd.push(newUpgrade);

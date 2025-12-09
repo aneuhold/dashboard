@@ -1,6 +1,7 @@
 import {
-  DashboardTask,
+  type DashboardTask,
   type DashboardTaskMap,
+  DashboardTaskSchema,
   DashboardTaskService,
   DocumentService,
   type ParentRecurringTaskInfo,
@@ -37,16 +38,18 @@ export default class TaskRecurrenceService {
    * @param parentRecurringTaskInfo
    */
   static createExampleOfRecurrence(
-    startDate: Date | undefined,
-    dueDate: Date | undefined,
     recurrenceInfo: RecurrenceInfo,
-    parentRecurringTaskInfo?: ParentRecurringTaskInfo
+    startDate?: Date | null,
+    dueDate?: Date | null,
+    parentRecurringTaskInfo?: ParentRecurringTaskInfo | null
   ): DashboardTask {
-    const newTask = new DashboardTask(DocumentService.generateID());
-    newTask.startDate = startDate;
-    newTask.dueDate = dueDate;
-    newTask.recurrenceInfo = recurrenceInfo;
-    newTask.parentRecurringTaskInfo = parentRecurringTaskInfo;
+    const newTask = DashboardTaskSchema.parse({
+      userId: DocumentService.generateID(),
+      startDate,
+      dueDate,
+      recurrenceInfo,
+      parentRecurringTaskInfo
+    });
     this.updateDatesForRecurrence(newTask);
     return newTask;
   }
@@ -153,8 +156,8 @@ export default class TaskRecurrenceService {
                   };
                   task.recurrenceInfo = newDoc.recurrenceInfo;
                 } else {
-                  task.parentRecurringTaskInfo = undefined;
-                  task.recurrenceInfo = undefined;
+                  task.parentRecurringTaskInfo = null;
+                  task.recurrenceInfo = null;
                 }
                 return task;
               }
@@ -190,8 +193,8 @@ export default class TaskRecurrenceService {
           return task;
         },
         (originalTask) => {
-          originalTask.recurrenceInfo = undefined;
-          originalTask.parentRecurringTaskInfo = undefined;
+          originalTask.recurrenceInfo = null;
+          originalTask.parentRecurringTaskInfo = null;
           return originalTask;
         }
       );
@@ -209,7 +212,7 @@ export default class TaskRecurrenceService {
    *
    * This returns a value for parent and sub tasks.
    *
-   * @param task
+   * @param task The task to get the next recurrence date for
    */
   static getNextRecurrenceDate(task: DashboardTask): Date | null {
     if (
@@ -218,7 +221,7 @@ export default class TaskRecurrenceService {
     ) {
       return null;
     }
-    let basisDate: Date | undefined;
+    let basisDate: Date | undefined | null;
     if (task.parentRecurringTaskInfo) {
       if (task.recurrenceInfo.recurrenceBasis === RecurrenceBasis.startDate) {
         basisDate = task.parentRecurringTaskInfo.startDate;
@@ -243,8 +246,8 @@ export default class TaskRecurrenceService {
    * a deep copy of the task first. If anything is invalid, or the task recurs
    * on completion, this will return null.
    *
-   * @param originalTask
-   * @param updater
+   * @param originalTask The original task
+   * @param updater The updater to apply to the task before getting the next recurrence date
    */
   static getSimulatedRecurrenceDate(
     originalTask: DashboardTask,
@@ -258,7 +261,7 @@ export default class TaskRecurrenceService {
   /**
    * This should only be called by the taskMap store when it is updated.
    *
-   * @param taskMap
+   * @param taskMap The current task map
    */
   static buildTaskRecurrenceSubMapFresh(taskMap: DashboardTaskMap): void {
     // Clear the current map
@@ -283,7 +286,7 @@ export default class TaskRecurrenceService {
    *
    * This should be called whenever a task's recurrence info is updated.
    *
-   * @param task
+   * @param task The task to update the time subscription for
    */
   static updateOrRemoveTaskTimeSubscription(task: DashboardTask) {
     // Remove the current subscription if it exists
@@ -322,7 +325,7 @@ export default class TaskRecurrenceService {
   /**
    * Updates the provided Tasks's dates based on the recurrence info in-place.
    *
-   * @param task
+   * @param task The task to update
    */
   static updateDatesForRecurrence(task: DashboardTask): void {
     if (!task.recurrenceInfo) {

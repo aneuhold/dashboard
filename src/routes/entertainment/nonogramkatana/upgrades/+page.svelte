@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { NonogramKatanaUpgrade, NonogramKatanaUpgradeName } from '@aneuhold/core-ts-db-lib';
+  import { type NonogramKatanaUpgrade, NonogramKatanaUpgradeName } from '@aneuhold/core-ts-db-lib';
   import Button from '@smui/button';
   import Checkbox from '@smui/checkbox';
   import Paper, { Content } from '@smui/paper';

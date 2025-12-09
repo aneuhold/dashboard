@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { DashboardTask } from '@aneuhold/core-ts-db-lib';
+  import { type DashboardTask } from '@aneuhold/core-ts-db-lib';
   import type { UUID } from 'crypto';
   import {
     MockTaskAssignment,

@@ -42,9 +42,9 @@
   let dueDate = $derived($task.dueDate);
   let exampleOfRecurrence = $derived(
     TaskRecurrenceService.createExampleOfRecurrence(
+      $task.recurrenceInfo ?? defaultRecurrenceInfo,
       startDate,
       dueDate,
-      $task.recurrenceInfo ?? defaultRecurrenceInfo,
       parentRecurringTaskInfo
     )
   );
@@ -158,8 +158,8 @@
 
   function clearOtherTypes(newRInfo: RecurrenceInfo) {
     Object.keys(newRInfo.frequency).forEach((key) => {
-      if (key !== newRInfo.frequency.type.toString() && key !== 'type') {
-        // Little hacky, but does the job
+      // Little hacky, but does the job
+      if (key !== (newRInfo.frequency.type as unknown as string) && key !== 'type') {
         (newRInfo.frequency as { [key: string]: unknown })[key] = undefined;
       }
     });

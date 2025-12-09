@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { NonogramKatanaItem, NonogramKatanaItemName } from '@aneuhold/core-ts-db-lib';
+  import { type NonogramKatanaItem, NonogramKatanaItemName } from '@aneuhold/core-ts-db-lib';
   import Button from '@smui/button';
   import Paper, { Content } from '@smui/paper';
   import { flip } from 'svelte/animate';

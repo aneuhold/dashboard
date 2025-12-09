@@ -1,9 +1,9 @@
 <script lang="ts">
   import {
-    DashboardTask,
+    type DashboardTask,
     type DashboardTaskListFilterSettings,
-    type DashboardTaskListSortSettings,
-    getDefaultTaskListFilterSettings
+    DashboardTaskListFilterSettingsSchema,
+    type DashboardTaskListSortSettings
   } from '@aneuhold/core-ts-db-lib';
   import type { UUID } from 'crypto';
   import ClickableDiv from '$components/presentational/ClickableDiv.svelte';
@@ -99,7 +99,7 @@
   let currentFilterSettings = $derived(
     parentTaskFilterSettings ??
       userTaskFilterSettings ??
-      getDefaultTaskListFilterSettings($currentUserId)
+      DashboardTaskListFilterSettingsSchema.parse($currentUserId)
   );
   let sortingDimmed = $derived($parentTask ? !parentTaskSortSettings : !userTaskSortSettings);
   let filterDimmed = $derived($parentTask ? !parentTaskFilterSettings : !userTaskFilterSettings);

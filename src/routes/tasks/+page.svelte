@@ -4,7 +4,7 @@
   A page for main tasks for the current user.
 -->
 <script lang="ts">
-  import { DashboardTask } from '@aneuhold/core-ts-db-lib';
+  import { DashboardTaskSchema } from '@aneuhold/core-ts-db-lib';
   import type { UUID } from 'crypto';
   import { goto } from '$app/navigation';
   import { page } from '$app/stores';
@@ -27,7 +27,7 @@
   let task = $derived(taskId && $taskMap[taskId] ? $taskMap[taskId] : undefined);
 
   function addTask() {
-    const newTask = new DashboardTask($userSettings.config.userId);
+    const newTask = DashboardTaskSchema.parse({ userId: $userSettings.config.userId });
     taskMap.addDoc(newTask);
     goto(TaskService.getTaskRoute(newTask._id));
   }

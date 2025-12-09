@@ -46,17 +46,17 @@
      * specified by the user, the time will automatically be set to 23:59:59.
      */
     dateIsEndDate?: boolean;
-    initialDate?: Date;
+    initialDate?: Date | null;
     /**
      * The first date that should be available for selection. This can be setup
      * with a time attached in the same date too.
      */
-    startDate?: Date;
+    startDate?: Date | null;
     /**
      * The last date that should be available for selection. This can be setup
      * with a time attached in the same date too.
      */
-    endDate?: Date;
+    endDate?: Date | null;
     /**
      * Callback fired when a date is selected (Done button clicked).
      */

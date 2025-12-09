@@ -62,7 +62,7 @@
   function toggleAssignment(id: UUID) {
     if (!$task) return;
     if (id === $task.assignedTo) {
-      $task.assignedTo = undefined;
+      $task.assignedTo = null;
     } else {
       $task.assignedTo = id;
     }

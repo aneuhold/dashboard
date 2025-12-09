@@ -1,7 +1,8 @@
 import {
   type DocumentMap,
-  NonogramKatanaItem,
-  NonogramKatanaItemName
+  type NonogramKatanaItem,
+  NonogramKatanaItemName,
+  NonogramKatanaItemSchema
 } from '@aneuhold/core-ts-db-lib';
 import type { UUID } from 'crypto';
 import { nonogramKatanaItemsDisplayInfo } from '$routes/entertainment/nonogramkatana/items/nonogramKatanaItemsDisplayInfo';
@@ -66,10 +67,13 @@ export class NonogramKatanaItemMapService extends DocumentMapStoreService<Nonogr
     const newItemIds: Set<UUID> = new Set();
     Object.values(NonogramKatanaItemName).forEach((itemName) => {
       if (!existingItemNames.has(itemName)) {
-        const newItem = new NonogramKatanaItem(userId, itemName);
         const itemDisplayInfo = nonogramKatanaItemsDisplayInfo[itemName];
-        newItem.currentAmount = 0;
-        newItem.priority = itemDisplayInfo.defaultPriority ?? -50;
+        const newItem = NonogramKatanaItemSchema.parse({
+          userId,
+          itemName,
+          currentAmount: 0,
+          priority: itemDisplayInfo.defaultPriority ?? -50
+        });
         newItemIds.add(newItem._id);
         itemsToAdd.push(newItem);
       }
