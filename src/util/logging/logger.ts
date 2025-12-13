@@ -7,7 +7,7 @@ export enum LogLevel {
   Error = 'error'
 }
 
-export type LogEntry = {
+type LogEntry = {
   level: LogLevel;
   tag: string;
   message: string;
