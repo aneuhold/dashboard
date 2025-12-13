@@ -4,7 +4,7 @@
   import LinkList from '$components/LinkList.svelte';
   import type { LinkInfo } from '$components/LinkListItem.svelte';
   import PageTitle from '$components/PageTitle.svelte';
-  import { userSettings } from '$stores/local/userSettings/userSettings';
+  import { userConfig } from '$stores/local/userConfig/userConfig';
   import { enabledPages } from '$stores/session/enabledPages';
   import type { PageInfo } from '$util/navInfo';
   import { homePageInfo } from './pageInfo';
@@ -71,14 +71,14 @@
       <LinkList links={tableOfContentsLinks} />
     </Content>
   </Paper>
-  {#if $userSettings.config.enabledFeatures.catImageOnHomePage}
+  {#if $userConfig.config.enabledFeatures.catImageOnHomePage}
     <Paper>
       <Content>
         <CatImage />
       </Content>
     </Paper>
   {/if}
-  {#if $userSettings.config.enabledFeatures.homePageLinks}
+  {#if $userConfig.config.enabledFeatures.homePageLinks}
     <Paper>
       <Title>Primary Links</Title>
       <Content>

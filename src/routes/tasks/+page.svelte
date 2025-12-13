@@ -15,19 +15,17 @@
   import TaskListService from '$services/Task/TaskListService';
   import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
   import TaskService from '$services/Task/TaskService';
-  import { userSettings } from '$stores/local/userSettings/userSettings';
+  import { userConfig } from '$stores/local/userConfig/userConfig';
   import { tasksPageInfo } from './pageInfo';
 
   const taskMap = TaskMapService.getStore();
 
-  let sortAndFilterResult = $derived(
-    TaskListService.getTaskIds($taskMap, $userSettings, 'default')
-  );
+  let sortAndFilterResult = $derived(TaskListService.getTaskIds($taskMap, $userConfig, 'default'));
   let taskId = $derived($page.url.searchParams.get('taskId') as UUID | undefined);
   let task = $derived(taskId && $taskMap[taskId] ? $taskMap[taskId] : undefined);
 
   function addTask() {
-    const newTask = DashboardTaskSchema.parse({ userId: $userSettings.config.userId });
+    const newTask = DashboardTaskSchema.parse({ userId: $userConfig.config.userId });
     taskMap.addDoc(newTask);
     goto(TaskService.getTaskRoute(newTask._id));
   }

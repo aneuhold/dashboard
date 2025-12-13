@@ -11,7 +11,7 @@ import type {
 } from '@aneuhold/core-ts-db-lib';
 import { DateService } from '@aneuhold/core-ts-lib';
 import { browser } from '$app/environment';
-import type { UserSettings } from '$stores/local/userSettings/userSettings';
+import type { UserConfig } from '$stores/local/userConfig/userConfig';
 
 export default class LocalData {
   /**
@@ -28,7 +28,7 @@ export default class LocalData {
     apiKey: `${this.PREFIX}apiKey`,
     dashboardConfig: `${this.PREFIX}dashboardConfig`,
     translations: `${this.PREFIX}translations`,
-    userSettings: `${this.PREFIX}userSettings`,
+    userConfig: `${this.PREFIX}userConfig`,
     taskMap: `${this.PREFIX}taskMap`,
     currentApiRequest: `${this.PREFIX}currentApiRequest`,
     apiRequestQueue: `${this.PREFIX}apiRequestQueue`,
@@ -101,12 +101,12 @@ export default class LocalData {
     return this.getStoredObject<Translations>(LocalData.storedKeyNames.translations);
   }
 
-  static set userSettings(newSettings: UserSettings | null) {
-    this.storeValue(LocalData.storedKeyNames.userSettings, JSON.stringify(newSettings));
+  static set userConfig(newSettings: UserConfig | null) {
+    this.storeValue(LocalData.storedKeyNames.userConfig, JSON.stringify(newSettings));
   }
 
-  static get userSettings() {
-    return this.getStoredObject<UserSettings>(LocalData.storedKeyNames.userSettings);
+  static get userConfig() {
+    return this.getStoredObject<UserConfig>(LocalData.storedKeyNames.userConfig);
   }
 
   static set taskMap(newTaskMap: DashboardTaskMap | null) {

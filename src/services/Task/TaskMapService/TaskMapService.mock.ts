@@ -4,7 +4,7 @@ import {
   DashboardTaskSchema
 } from '@aneuhold/core-ts-db-lib';
 import type { UUID } from 'crypto';
-import { userSettings } from '$stores/local/userSettings/userSettings';
+import { userConfig } from '$stores/local/userConfig/userConfig';
 import TestUsers from '$testUtils/TestUsers';
 import TaskListService from '../TaskListService';
 import TaskTagsService from '../TaskTagsService';
@@ -86,7 +86,7 @@ export default class TaskMapServiceMock {
    * at the top level.
    */
   get sortAndFilterResult() {
-    return TaskListService.getTaskIds(TaskMapService.getMap(), userSettings.get(), 'default');
+    return TaskListService.getTaskIds(TaskMapService.getMap(), userConfig.get(), 'default');
   }
 
   subscribeToSortAndFilterResult(

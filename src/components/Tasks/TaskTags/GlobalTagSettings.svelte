@@ -2,11 +2,11 @@
   import Button from '@smui/button';
   import { flip } from 'svelte/animate';
   import InfoIcon from '$components/InfoIcon.svelte';
-  import { userSettings } from '$stores/local/userSettings/userSettings';
+  import { userConfig } from '$stores/local/userConfig/userConfig';
   import GlobalTagEditor from './GlobalTagEditor.svelte';
   import GlobalTagRow from './GlobalTagRow.svelte';
 
-  let tagSettings = $derived($userSettings.config.tagSettings);
+  let tagSettings = $derived($userConfig.config.tagSettings);
   let sortableTagList = $derived(
     Object.keys(tagSettings)
       .filter((tagName) => {

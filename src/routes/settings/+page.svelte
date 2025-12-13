@@ -16,16 +16,16 @@
   import { snackbar } from '$components/singletons/SingletonSnackbar.svelte';
   import TaskDeletionSettings from '$components/Tasks/TaskDeletionSettings.svelte';
   import GlobalTagSettings from '$components/Tasks/TaskTags/GlobalTagSettings.svelte';
-  import { userSettings } from '$stores/local/userSettings/userSettings';
+  import { userConfig } from '$stores/local/userConfig/userConfig';
   import DashboardAPIService from '$util/api/DashboardAPIService';
   import { settingsPageInfo } from './pageInfo';
 
   let searchingForUser = $state(false);
   let userNameSearchValue = $state('');
-  let previousUseConfetti = $userSettings.config.enabledFeatures.useConfettiForTasks;
+  let previousUseConfetti = $userConfig.config.enabledFeatures.useConfettiForTasks;
 
   let collaboratorUserNames = $derived(
-    Object.values($userSettings.collaborators).map((userCto) => userCto.userName)
+    Object.values($userConfig.collaborators).map((userCto) => userCto.userName)
   );
 
   function handleSearchForUser() {
@@ -33,7 +33,7 @@
     searchingForUser = true;
     DashboardAPIService.checkIfUsernameIsValid(userNameSearchValue).then((userCto) => {
       if (userCto) {
-        userSettings.addCollaborator(userCto);
+        userConfig.addCollaborator(userCto);
         snackbar.success(`User ${userCto.userName} added to collaborators ✨`);
       } else {
         snackbar.error('User not found');
@@ -43,7 +43,7 @@
   }
 
   function handleCollaboratorRemoval(event: CustomEvent<{ chipId: string }>) {
-    userSettings.removeCollaborator(event.detail.chipId);
+    userConfig.removeCollaborator(event.detail.chipId);
   }
 
   function handleEnableConfetti(event: MouseEvent | PointerEvent) {
@@ -71,7 +71,7 @@
       <div class="content">
         <h6 class="sectionTitle mdc-typography--subtitle1">General Settings</h6>
         <FormField>
-          <Checkbox bind:checked={$userSettings.config.enableDevMode} touch />
+          <Checkbox bind:checked={$userConfig.config.enableDevMode} touch />
           {#snippet label()}
             <span>
               Enable dev mode
@@ -82,7 +82,7 @@
           {/snippet}
         </FormField>
         <FormField>
-          <Checkbox bind:checked={$userSettings.config.enabledFeatures.catImageOnHomePage} touch />
+          <Checkbox bind:checked={$userConfig.config.enabledFeatures.catImageOnHomePage} touch />
           {#snippet label()}
             <span>
               Enable cat image on home page 🐈
@@ -135,7 +135,7 @@
         <hr class="sectionSeparator" />
         <FormField>
           <Checkbox
-            bind:checked={$userSettings.config.enabledFeatures.useConfettiForTasks}
+            bind:checked={$userConfig.config.enabledFeatures.useConfettiForTasks}
             onclick={handleEnableConfetti}
             touch
           />

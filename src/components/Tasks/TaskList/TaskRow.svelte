@@ -21,7 +21,7 @@
   import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
   import TaskService from '$services/Task/TaskService';
   import { currentUserId } from '$stores/derived/currentUserId';
-  import { userSettings } from '$stores/local/userSettings/userSettings';
+  import { userConfig } from '$stores/local/userConfig/userConfig';
   import TaskCompletedCheckbox from '../TaskCompletedCheckbox.svelte';
   import TaskRowDateInfo from '../TaskDate/TaskRowDateInfo.svelte';
   import TaskRowTagHeader from '../TaskTags/TaskRowTagHeader.svelte';
@@ -183,7 +183,7 @@
     $task.assignedTo
       ? assignedToMe
         ? 'Me'
-        : $userSettings.collaborators[$task.assignedTo].userName
+        : $userConfig.collaborators[$task.assignedTo].userName
       : ''
   );
 </script>

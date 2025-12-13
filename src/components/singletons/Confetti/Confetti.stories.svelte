@@ -1,6 +1,6 @@
 <script module lang="ts">
   import { defineMeta } from '@storybook/addon-svelte-csf';
-  import { userSettings } from '$stores/local/userSettings/userSettings';
+  import { userConfig } from '$stores/local/userConfig/userConfig';
   import { createNumberArgTypes } from '$storybook/storybookUtil';
   import SbConfettiExample from './SBConfettiExample.svelte';
 
@@ -11,7 +11,7 @@
       ...createNumberArgTypes('numButtons')
     },
     beforeEach: () => {
-      userSettings.update((settings) => {
+      userConfig.update((settings) => {
         settings.config.enabledFeatures.useConfettiForTasks = true;
         return settings;
       });

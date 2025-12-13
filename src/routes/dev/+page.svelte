@@ -16,7 +16,7 @@
   import MongoDbIcon from '$lib/svgs/MongoDBIcon.svelte';
   import NetlifyIcon from '$lib/svgs/NetlifyIcon.svelte';
   import SentryIcon from '$lib/svgs/SentryIcon.svelte';
-  import { userSettings } from '$stores/local/userSettings/userSettings';
+  import { userConfig } from '$stores/local/userConfig/userConfig';
   import navInfo from '$util/navInfo';
   import { devPageInfo } from './pageInfo';
 
@@ -84,7 +84,7 @@
   <meta name="description" content={devPageInfo.title} />
 </svelte:head>
 
-{#if !$userSettings.config.enableDevMode}
+{#if !$userConfig.config.enableDevMode}
   <PageNotFound />
 {:else}
   <PageTitle title={devPageInfo.title} />

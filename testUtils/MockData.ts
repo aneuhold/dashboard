@@ -1,5 +1,5 @@
 import TaskMapServiceMock from '$services/Task/TaskMapService/TaskMapService.mock';
-import UserSettingsMock from '$stores/local/userSettings/userSettings.mock';
+import UserConfigMock from '$stores/local/userConfig/userConfig.mock';
 import TestUsers from './TestUsers';
 
 /**
@@ -7,5 +7,5 @@ import TestUsers from './TestUsers';
  */
 export default class MockData {
   static taskMapServiceMock = new TaskMapServiceMock(TestUsers.currentUserCto._id);
-  static userSettingsMock = new UserSettingsMock(TestUsers.currentUserCto._id);
+  static userSettingsMock = new UserConfigMock(TestUsers.currentUserCto._id);
 }

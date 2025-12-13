@@ -23,7 +23,7 @@ const log = createLogger('NonogramKatanaItemMapService.ts');
  */
 export class NonogramKatanaItemMapService extends DocumentMapStoreService<NonogramKatanaItem> {
   private static instance = new NonogramKatanaItemMapService();
-  private static nameToIdMap: { [itemName: string]: UUID } = {};
+  private static nameToIdMap: { [itemName: string]: UUID | undefined } = {};
 
   private constructor() {
     super();

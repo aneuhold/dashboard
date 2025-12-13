@@ -14,7 +14,7 @@
   import SmartDialog from '$components/presentational/SmartDialog.svelte';
   import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
   import { currentUserId } from '$stores/derived/currentUserId';
-  import { userSettings } from '$stores/local/userSettings/userSettings';
+  import { userConfig } from '$stores/local/userConfig/userConfig';
 
   /**
    * A task sharing dialog which can be used anywhere in the app.
@@ -51,7 +51,7 @@
 <script lang="ts">
   let task = $derived($currentTaskId ? TaskMapService.getTaskStore($currentTaskId) : null);
   let sharedWithIds = $derived($task ? $task.sharedWith.map((id) => id) : []);
-  let collaborators = $derived($userSettings.collaborators);
+  let collaborators = $derived($userConfig.collaborators);
   let currentUserIsOwner = $derived($task ? $task.userId === $currentUserId : false);
   let title = $derived($task ? `Share "${$task.title}"` : 'There was an error, please tell Tony');
 

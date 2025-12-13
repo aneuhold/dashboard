@@ -16,7 +16,7 @@
   import TaskRow from '$components/Tasks/TaskList/TaskRow.svelte';
   import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
   import { currentUserId } from '$stores/derived/currentUserId';
-  import { userSettings } from '$stores/local/userSettings/userSettings';
+  import { userConfig } from '$stores/local/userConfig/userConfig';
   import TaskListOptions from './TaskListOptions.svelte';
 
   let {
@@ -34,7 +34,7 @@
   let parentTaskSortSettings = $derived(
     $parentTask ? $parentTask.sortSettings[$currentUserId] : undefined
   );
-  let userTaskSortSettings = $derived($userSettings.config.taskListSortSettings[category]);
+  let userTaskSortSettings = $derived($userConfig.config.taskListSortSettings[category]);
   let currentSortSettings = $derived(
     parentTaskSortSettings ??
       userTaskSortSettings ??
@@ -50,7 +50,7 @@
           $taskMap,
           sortAndFilterResult.filteredAndSortedIds,
           $currentUserId,
-          $userSettings.config.tagSettings,
+          $userConfig.config.tagSettings,
           'No Priority',
           currentSortSettings.sortList[0].sortDirection
         )

@@ -54,9 +54,9 @@
         <Checkbox
           checked={minDesiredPresent}
           onclick={() => {
-            if ($item && minDesiredPresent) {
+            if (minDesiredPresent) {
               $item.minDesired = null;
-            } else if ($item) {
+            } else {
               $item.minDesired = 0;
             }
           }}
@@ -75,9 +75,9 @@
         <Checkbox
           checked={maxDesiredPresent}
           onclick={() => {
-            if ($item && maxDesiredPresent) {
+            if (maxDesiredPresent) {
               $item.maxDesired = null;
-            } else if ($item) {
+            } else {
               $item.maxDesired = $item.storageCap ?? 400;
             }
           }}
@@ -96,9 +96,9 @@
         <Checkbox
           checked={storageCapPresent}
           onclick={() => {
-            if ($item && storageCapPresent) {
+            if (storageCapPresent) {
               $item.storageCap = null;
-            } else if ($item) {
+            } else {
               $item.storageCap = $item.maxDesired ?? 400;
             }
           }}

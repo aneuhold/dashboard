@@ -13,7 +13,7 @@
   import { writable } from 'svelte/store';
   import SmartDialog from '$components/presentational/SmartDialog.svelte';
   import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
-  import { userSettings } from '$stores/local/userSettings/userSettings';
+  import { userConfig } from '$stores/local/userConfig/userConfig';
 
   /**
    * A task assignment dialog which can be used anywhere in the app.
@@ -51,9 +51,9 @@
   let task = $derived($currentTaskId ? TaskMapService.getTaskStore($currentTaskId) : null);
   let title = $derived($task?.title ?? 'Task Assignment');
   let sharedWithIds = $derived($task ? $task.sharedWith.map((id) => id) : []);
-  let collaborators = $derived($userSettings.collaborators);
+  let collaborators = $derived($userConfig.collaborators);
   let sharedWithUsers = $derived([
-    { _id: $userSettings.config.userId, userName: 'Me' },
+    { _id: $userConfig.config.userId, userName: 'Me' },
     ...Object.values(collaborators).filter((collaborator) => {
       return sharedWithIds.includes(collaborator._id) || collaborator._id === $task?.userId;
     })

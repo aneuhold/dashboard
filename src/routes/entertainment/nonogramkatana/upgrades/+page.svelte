@@ -8,7 +8,7 @@
   import InputBox from '$components/presentational/InputBox/InputBox.svelte';
   import SingletonNonogramKatanaUpgradeDialog from '$components/singletons/dialogs/SingletonNonogramKatanaUpgradeDialog.svelte';
   import { NonogramKatanaUpgradeMapService } from '$services/NonogramKatana/NonogramKatanaUpgradeMapService';
-  import { userSettings } from '$stores/local/userSettings/userSettings';
+  import { userConfig } from '$stores/local/userConfig/userConfig';
   import NonogramKatanaUpgradeRow from './NonogramKatanaUpgradeRow.svelte';
   import { nonogramKatanaUpgradesPageInfo } from './pageInfo';
 
@@ -63,7 +63,7 @@
         {#if upgradesMissing}
           <Button
             onclick={() => {
-              NonogramKatanaUpgradeMapService.createOrUpdateUpgrades($userSettings.config.userId);
+              NonogramKatanaUpgradeMapService.createOrUpdateUpgrades($userConfig.config.userId);
             }}
           >
             Add / Update Upgrades

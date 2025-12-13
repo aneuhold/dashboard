@@ -1,4 +1,4 @@
 import { derived } from 'svelte/store';
-import { userSettings } from '../local/userSettings/userSettings';
+import { userConfig } from '../local/userConfig/userConfig';
 
-export const currentUserId = derived(userSettings, ($userSettings) => $userSettings.config.userId);
+export const currentUserId = derived(userConfig, ($userConfig) => $userConfig.config.userId);

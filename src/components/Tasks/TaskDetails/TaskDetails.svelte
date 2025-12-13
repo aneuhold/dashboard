@@ -25,7 +25,7 @@
   import TaskListService from '$services/Task/TaskListService';
   import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
   import TaskService from '$services/Task/TaskService';
-  import { userSettings } from '$stores/local/userSettings/userSettings';
+  import { userConfig } from '$stores/local/userConfig/userConfig';
   import TaskCompletedCheckbox from '../TaskCompletedCheckbox.svelte';
   import TaskDateInfo from '../TaskDate/TaskDateInfo.svelte';
   import TaskList from '../TaskList/TaskList.svelte';
@@ -50,7 +50,7 @@
       : []
   );
   let sortAndFilterResult = $derived(
-    TaskListService.getTaskIdsForTask($taskMap, $userSettings, allChildrenIds, $task)
+    TaskListService.getTaskIdsForTask($taskMap, $userConfig, allChildrenIds, $task)
   );
   // Explicitly include `task` so that it reactively updates
   let breadCrumbArray = $derived(TaskService.getBreadCrumbArray($task ? $task._id : taskId));

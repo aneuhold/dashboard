@@ -7,13 +7,13 @@
   import type { UUID } from 'crypto';
   import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
   import { currentUserId } from '$stores/derived/currentUserId';
-  import { userSettings } from '$stores/local/userSettings/userSettings';
+  import { userConfig } from '$stores/local/userConfig/userConfig';
   import LocalData from '$util/LocalData/LocalData';
 
   let { taskId }: { taskId: UUID } = $props();
 
   let task = $derived(TaskMapService.getTaskStore(taskId));
-  let collaborators = $derived($userSettings.collaborators);
+  let collaborators = $derived($userConfig.collaborators);
   // The below needs to be updated with a new store that has the user's info
   // in it.
   let assignedUser = $derived(

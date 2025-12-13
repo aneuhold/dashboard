@@ -4,7 +4,7 @@
   import IconButton, { Icon } from '@smui/icon-button';
   import MenuButton, { type MenuButtonItem } from '$components/presentational/MenuButton.svelte';
   import TaskTagsService from '$services/Task/TaskTagsService';
-  import { userSettings } from '$stores/local/userSettings/userSettings';
+  import { userConfig } from '$stores/local/userConfig/userConfig';
 
   let {
     tagName,
@@ -46,7 +46,7 @@
   }
 
   function incrementPriority() {
-    userSettings.update((settings) => {
+    userConfig.update((settings) => {
       const currentTagSettings = settings.config.tagSettings[tagName] as
         | DashboardTagSetting
         | undefined;
@@ -65,7 +65,7 @@
   }
 
   function decrementPriority() {
-    userSettings.update((settings) => {
+    userConfig.update((settings) => {
       const currentTagSettings = settings.config.tagSettings[tagName] as
         | DashboardTagSetting
         | undefined;
@@ -84,7 +84,7 @@
   }
 
   function addPriorityToTag() {
-    userSettings.update((settings) => {
+    userConfig.update((settings) => {
       Object.keys(settings.config.tagSettings).forEach((otherTagName) => {
         // Increment all the existing non-zero tags priority by 1
         if (otherTagName !== tagName && settings.config.tagSettings[otherTagName].priority !== 0) {
@@ -97,7 +97,7 @@
   }
 
   function removePriorityFromTag() {
-    userSettings.update((settings) => {
+    userConfig.update((settings) => {
       const currentTagSettings = settings.config.tagSettings[tagName] as
         | DashboardTagSetting
         | undefined;
@@ -119,7 +119,7 @@
     });
   }
   let tagSettings = $derived(
-    $userSettings.config.tagSettings[tagName] as DashboardTagSetting | undefined
+    $userConfig.config.tagSettings[tagName] as DashboardTagSetting | undefined
   );
   let menuItems = $derived(tagSettings ? getMenuItems(tagSettings) : []);
 </script>

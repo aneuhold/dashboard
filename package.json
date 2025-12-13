@@ -16,8 +16,9 @@
     "upgrade:smui": "pnpm up '@smui/*' '@smui-extra/*' smui-theme",
     "storybook": "pnpm theme && storybook dev -p 6006",
     "sub": "pnpm sub:core-ts-api-lib",
-    "unsub": "pnpm unsub:core-ts-api-lib",
+    "unsub": "local-npm unsubscribe",
     "sub:core-ts-api-lib": "local-npm subscribe @aneuhold/core-ts-api-lib",
+    "sub:core-ts-db-lib": "local-npm subscribe @aneuhold/core-ts-db-lib",
     "sub:eslint-config": "local-npm subscribe @aneuhold/eslint-config",
     "unsub:core-ts-api-lib": "local-npm unsubscribe @aneuhold/core-ts-api-lib",
     "unsub:eslint-config": "local-npm unsubscribe @aneuhold/eslint-config"
@@ -32,8 +33,8 @@
     "socket.io-client": "^4.8.1"
   },
   "devDependencies": {
-    "@aneuhold/core-ts-api-lib": "^3.0.5",
-    "@aneuhold/core-ts-db-lib": "^4.0.1",
+    "@aneuhold/core-ts-api-lib": "^3.0.6",
+    "@aneuhold/core-ts-db-lib": "^4.0.2",
     "@aneuhold/core-ts-lib": "^2.3.14",
     "@aneuhold/eslint-config": "^1.3.21",
     "@aneuhold/local-npm-registry": "^0.2.21",

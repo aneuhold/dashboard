@@ -11,7 +11,7 @@ import { NonogramKatanaUpgradeMapService } from '$services/NonogramKatana/Nonogr
 import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
 import { apiKey } from '$stores/local/apiKey';
 import { translations } from '$stores/local/translations';
-import { userSettings } from '$stores/local/userSettings/userSettings';
+import { userConfig } from '$stores/local/userConfig/userConfig';
 import LocalData from '$util/LocalData/LocalData';
 import { createLogger } from '$util/logging/logger';
 
@@ -203,7 +203,7 @@ export default class DashboardAPIService {
       translations.set(output.translations);
     }
     if (output.userConfig) {
-      userSettings.setWithoutPropagation({
+      userConfig.setWithoutPropagation({
         config: output.userConfig,
         collaborators: this.getCollaboratorsFromResult(output)
       });

@@ -7,7 +7,7 @@
   import InputBox from '$components/presentational/InputBox/InputBox.svelte';
   import SingletonNonogramKatanaItemDialog from '$components/singletons/dialogs/SingletonNonogramKatanaItemDialog.svelte';
   import { NonogramKatanaItemMapService } from '$services/NonogramKatana/NonogramKatanaItemMapService';
-  import { userSettings } from '$stores/local/userSettings/userSettings';
+  import { userConfig } from '$stores/local/userConfig/userConfig';
   import NonogramKatanaItemRow from './NonogramKatanaItemRow.svelte';
   import { nonogramKatanaItemsPageInfo } from './pageInfo';
 
@@ -49,7 +49,7 @@
       {#if itemsMissing}
         <Button
           onclick={() => {
-            NonogramKatanaItemMapService.createOrUpdateItems($userSettings.config.userId);
+            NonogramKatanaItemMapService.createOrUpdateItems($userConfig.config.userId);
           }}
         >
           Add / Update Items with defaults

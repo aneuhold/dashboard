@@ -12,7 +12,7 @@
   import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
   import TaskTagsService from '$services/Task/TaskTagsService';
   import { currentUserId } from '$stores/derived/currentUserId';
-  import { userSettings } from '$stores/local/userSettings/userSettings';
+  import { userConfig } from '$stores/local/userConfig/userConfig';
   import TaskListFilterDialog from './TaskListFilterDialog.svelte';
   import TaskListSortingDialog from './TaskListSortingDialog.svelte';
 
@@ -60,7 +60,7 @@
     if ($parentTask) {
       $parentTask.sortSettings[$currentUserId] = newSortSettings;
     } else {
-      $userSettings.config.taskListSortSettings[category] = newSortSettings;
+      $userConfig.config.taskListSortSettings[category] = newSortSettings;
     }
   }
   function handleResetSortSettings() {
@@ -69,16 +69,16 @@
       delete sortSettings[$currentUserId];
       $parentTask.sortSettings = sortSettings;
     } else {
-      const sortSettings = $userSettings.config.taskListSortSettings;
+      const sortSettings = $userConfig.config.taskListSortSettings;
       delete sortSettings[category];
-      $userSettings.config.taskListSortSettings = sortSettings;
+      $userConfig.config.taskListSortSettings = sortSettings;
     }
   }
   function handleUpdateFilterSettings(newFilterSettings: DashboardTaskListFilterSettings) {
     if ($parentTask) {
       $parentTask.filterSettings[$currentUserId] = newFilterSettings;
     } else {
-      $userSettings.config.taskListFilterSettings[category] = newFilterSettings;
+      $userConfig.config.taskListFilterSettings[category] = newFilterSettings;
     }
   }
   function handleResetFilterSettings() {
@@ -87,15 +87,15 @@
       delete filterSettings[$currentUserId];
       $parentTask.filterSettings = filterSettings;
     } else {
-      const filterSettings = $userSettings.config.taskListFilterSettings;
+      const filterSettings = $userConfig.config.taskListFilterSettings;
       delete filterSettings[category];
-      $userSettings.config.taskListFilterSettings = filterSettings;
+      $userConfig.config.taskListFilterSettings = filterSettings;
     }
   }
   let parentTaskFilterSettings = $derived(
     $parentTask ? $parentTask.filterSettings[$currentUserId] : undefined
   );
-  let userTaskFilterSettings = $derived($userSettings.config.taskListFilterSettings[category]);
+  let userTaskFilterSettings = $derived($userConfig.config.taskListFilterSettings[category]);
   let currentFilterSettings = $derived(
     parentTaskFilterSettings ??
       userTaskFilterSettings ??

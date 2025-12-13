@@ -6,7 +6,7 @@
 <script lang="ts">
   import type { UUID } from 'crypto';
   import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
-  import { userSettings } from '$stores/local/userSettings/userSettings';
+  import { userConfig } from '$stores/local/userConfig/userConfig';
 
   let { taskId }: { taskId: UUID } = $props();
 
@@ -16,10 +16,10 @@
    * with.
    */
   let sharedWithIds = $derived(
-    $task.sharedWith.map((id) => id).filter((id) => $userSettings.collaborators[id])
+    $task.sharedWith.map((id) => id).filter((id) => $userConfig.collaborators[id])
   );
-  let collaborators = $derived($userSettings.collaborators);
-  let userIsNotOwner = $derived($task.userId !== $userSettings.config.userId);
+  let collaborators = $derived($userConfig.collaborators);
+  let userIsNotOwner = $derived($task.userId !== $userConfig.config.userId);
 </script>
 
 <div class="container">
