@@ -10,8 +10,8 @@ import {
   type RecurrenceInfo
 } from '@aneuhold/core-ts-db-lib';
 import type { Unsubscriber, Updater } from 'svelte/store';
-import { appIsVisible } from '$stores/appIsVisible';
-import { timeMinute } from '$stores/timeMinute';
+import { appIsVisible } from '$stores/session/appIsVisible';
+import { timeMinute } from '$stores/time/timeMinute';
 import DashboardAPIService from '$util/api/DashboardAPIService';
 import type { DocumentMapStoreSubscriber, UpsertManyInfo } from '../DocumentMapStoreService';
 import TaskOperationsService from './TaskOperationsService';

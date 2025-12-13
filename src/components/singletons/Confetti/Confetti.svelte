@@ -60,7 +60,7 @@
 <script lang="ts">
   import { confetti } from '@neoconfetti/svelte';
   import { tick } from 'svelte';
-  import { userSettings } from '$stores/userSettings/userSettings';
+  import { userSettings } from '$stores/user/userSettings';
 
   let confettiEnabled = $derived($userSettings.config.enabledFeatures.useConfettiForTasks);
   let showConfetti = $derived($confettiSettings.show && confettiEnabled);

@@ -7,16 +7,17 @@
   import '../globalStyles/global.css';
   import CircularProgress from '@smui/circular-progress';
   import { onDestroy, onMount, type Snippet } from 'svelte';
+  import { browser } from '$app/environment';
   import Confetti from '$components/singletons/Confetti/Confetti.svelte';
   import SingletonConfirmationDialog from '$components/singletons/dialogs/SingletonConfirmationDialog.svelte';
   import SingletonTaskAssignmentDialog from '$components/singletons/dialogs/SingletonTaskAssignmentDialog/SingletonTaskAssignmentDialog.svelte';
   import SingletonTaskSharingDialog from '$components/singletons/dialogs/SingletonTaskSharingDialog/SingletonTaskSharingDialog.svelte';
   import SingletonSnackbar from '$components/singletons/SingletonSnackbar.svelte';
+  import { appIsVisible } from '$stores/session/appIsVisible';
+  import { LoginState, loginState } from '$stores/session/loginState';
   import LocalData from '$util/LocalData/LocalData';
   import Login from '../components/Login/Login.svelte';
   import NavBar from '../components/NavBar.svelte';
-  import { appIsVisible } from '../stores/appIsVisible';
-  import { LoginState, loginState } from '../stores/loginState';
   let { children }: { children?: Snippet } = $props();
 
   let mounted = $state(false);
@@ -34,12 +35,12 @@
   };
 
   // Global app visibility change listener
-  if (typeof document !== 'undefined') {
+  if (browser) {
     document.addEventListener('visibilitychange', handleVisibilityChange);
   }
 
   onDestroy(() => {
-    if (typeof document !== 'undefined') {
+    if (browser) {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     }
   });

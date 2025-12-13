@@ -2,7 +2,7 @@
   import Button from '@smui/button';
   import { flip } from 'svelte/animate';
   import InfoIcon from '$components/InfoIcon.svelte';
-  import { userSettings } from '$stores/userSettings/userSettings';
+  import { userSettings } from '$stores/user/userSettings';
   import GlobalTagEditor from './GlobalTagEditor.svelte';
   import GlobalTagRow from './GlobalTagRow.svelte';
 

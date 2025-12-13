@@ -16,7 +16,7 @@
   import MongoDbIcon from '$lib/svgs/MongoDBIcon.svelte';
   import NetlifyIcon from '$lib/svgs/NetlifyIcon.svelte';
   import SentryIcon from '$lib/svgs/SentryIcon.svelte';
-  import { userSettings } from '$stores/userSettings/userSettings';
+  import { userSettings } from '$stores/user/userSettings';
   import navInfo from '$util/navInfo';
   import { devPageInfo } from './pageInfo';
 

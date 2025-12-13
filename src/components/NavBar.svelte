@@ -4,9 +4,9 @@
   import type { Snippet } from 'svelte';
   import { goto } from '$app/navigation';
   import GitHubIcon from '$lib/svgs/GitHubIcon.svelte';
-  import { apiKey } from '../stores/apiKey';
-  import { LoginState, loginState } from '../stores/loginState';
-  import { navDrawerOpen } from '../stores/visual/navDrawerOpen';
+  import { apiKey } from '$stores/local/apiKey';
+  import { LoginState, loginState } from '$stores/session/loginState';
+  import { navDrawerOpen } from '$stores/ui/navDrawerOpen';
   import NavDrawer from './NavDrawer.svelte';
 
   let {

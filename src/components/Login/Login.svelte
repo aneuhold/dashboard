@@ -8,10 +8,10 @@
   import CircularProgress from '@smui/circular-progress';
   import type { UUID } from 'crypto';
   import InputBox from '$components/presentational/InputBox/InputBox.svelte';
-  import { apiKey } from '$stores/apiKey';
-  import { dashboardConfig } from '$stores/dashboardConfig';
-  import { LoginState, loginState } from '$stores/loginState';
-  import { password } from '$stores/password';
+  import { apiKey } from '$stores/local/apiKey';
+  import { dashboardConfig } from '$stores/local/dashboardConfig';
+  import { password } from '$stores/local/password';
+  import { LoginState, loginState } from '$stores/session/loginState';
   import DashboardAPIService from '$util/api/DashboardAPIService';
   import LocalData from '$util/LocalData/LocalData';
 

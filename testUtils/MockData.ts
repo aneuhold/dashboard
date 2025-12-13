@@ -1,5 +1,5 @@
 import TaskMapServiceMock from '$services/Task/TaskMapService/TaskMapService.mock';
-import UserSettingsMock from '$stores/userSettings/userSettings.mock';
+import UserSettingsMock from '$stores/user/userSettings.mock';
 import TestUsers from './TestUsers';
 
 /**

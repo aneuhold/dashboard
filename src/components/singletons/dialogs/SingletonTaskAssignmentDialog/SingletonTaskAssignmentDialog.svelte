@@ -13,7 +13,7 @@
   import { writable } from 'svelte/store';
   import SmartDialog from '$components/presentational/SmartDialog.svelte';
   import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
-  import { userSettings } from '$stores/userSettings/userSettings';
+  import { userSettings } from '$stores/user/userSettings';
 
   /**
    * A task assignment dialog which can be used anywhere in the app.

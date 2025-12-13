@@ -8,7 +8,7 @@
   import InputBox from '$components/presentational/InputBox/InputBox.svelte';
   import SingletonNonogramKatanaUpgradeDialog from '$components/singletons/dialogs/SingletonNonogramKatanaUpgradeDialog.svelte';
   import { NonogramKatanaUpgradeMapService } from '$services/NonogramKatana/NonogramKatanaUpgradeMapService';
-  import { userSettings } from '$stores/userSettings/userSettings';
+  import { userSettings } from '$stores/user/userSettings';
   import NonogramKatanaUpgradeRow from './NonogramKatanaUpgradeRow.svelte';
   import { nonogramKatanaUpgradesPageInfo } from './pageInfo';
 

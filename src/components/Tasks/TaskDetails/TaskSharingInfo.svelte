@@ -6,7 +6,7 @@
 <script lang="ts">
   import type { UUID } from 'crypto';
   import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
-  import { userSettings } from '$stores/userSettings/userSettings';
+  import { userSettings } from '$stores/user/userSettings';
 
   let { taskId }: { taskId: UUID } = $props();
 

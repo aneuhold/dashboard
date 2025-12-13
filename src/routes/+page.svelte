@@ -4,12 +4,13 @@
   import LinkList from '$components/LinkList.svelte';
   import type { LinkInfo } from '$components/LinkListItem.svelte';
   import PageTitle from '$components/PageTitle.svelte';
-  import { userSettings } from '../stores/userSettings/userSettings';
-  import { enabledPages } from '../stores/visual/enabledPages';
+  import { enabledPages } from '$stores/derived/enabledPages';
+  import { userSettings } from '$stores/user/userSettings';
+  import type { PageInfo } from '$util/navInfo';
   import { homePageInfo } from './pageInfo';
 
   let tableOfContentsLinks = $derived(
-    $enabledPages.filter((pageInfo) => {
+    $enabledPages.filter((pageInfo: PageInfo) => {
       return pageInfo.nestingLevel === 0 && pageInfo.title !== homePageInfo.title;
     })
   );

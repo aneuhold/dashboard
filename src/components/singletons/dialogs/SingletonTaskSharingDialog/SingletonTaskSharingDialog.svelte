@@ -14,7 +14,7 @@
   import SmartDialog from '$components/presentational/SmartDialog.svelte';
   import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
   import { currentUserId } from '$stores/derived/currentUserId';
-  import { userSettings } from '$stores/userSettings/userSettings';
+  import { userSettings } from '$stores/user/userSettings';
 
   /**
    * A task sharing dialog which can be used anywhere in the app.

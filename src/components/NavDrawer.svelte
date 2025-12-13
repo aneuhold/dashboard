@@ -11,10 +11,10 @@
   import { goto } from '$app/navigation';
   import { page } from '$app/state';
   import { settingsPageInfo } from '$routes/settings/pageInfo';
+  import { enabledPages } from '$stores/derived/enabledPages';
+  import { navDrawerOpen } from '$stores/ui/navDrawerOpen';
   import type { PageInfo } from '$util/navInfo';
   import { clickOutside } from '../actions/clickOutside';
-  import { enabledPages } from '../stores/visual/enabledPages';
-  import { navDrawerOpen } from '../stores/visual/navDrawerOpen';
 
   let { activeRoute = $bindable('/') }: { activeRoute?: string } = $props();
 

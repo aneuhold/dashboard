@@ -1,7 +1,8 @@
 import { writable } from 'svelte/store';
+import { browser } from '$app/environment';
 import DashboardAPIService from '$util/api/DashboardAPIService';
 import { createLazyModuleGetter } from '$util/createLazyModuleGetter';
-import LocalData, { localDataReady } from '$util/LocalData/LocalData';
+import LocalData from '$util/LocalData/LocalData';
 
 export enum LoginState {
   Initializing = 'Initializing',
@@ -29,18 +30,13 @@ function createLoginStateStore() {
     set(_loginState);
   }
 
-  // If the local data is ready and the API key is set, then the user is logged
-  // in.
-  localDataReady.subscribe((ready) => {
-    if (ready) {
-      if (LocalData.apiKey && LocalData.apiKey !== '') {
-        setLoginState(LoginState.LoggedIn);
-        DashboardAPIService.getInitialDataIfNeeded();
-      } else {
-        setLoginState(LoginState.LoggedOut);
-      }
-    }
-  });
+  // Determine initial login state based on persisted API key.
+  if (browser && LocalData.apiKey && LocalData.apiKey !== '') {
+    setLoginState(LoginState.LoggedIn);
+    DashboardAPIService.getInitialDataIfNeeded();
+  } else {
+    setLoginState(LoginState.LoggedOut);
+  }
 
   return {
     subscribe,

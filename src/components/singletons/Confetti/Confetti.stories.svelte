@@ -1,6 +1,6 @@
 <script module lang="ts">
   import { defineMeta } from '@storybook/addon-svelte-csf';
-  import { userSettings } from '$stores/userSettings/userSettings';
+  import { userSettings } from '$stores/user/userSettings';
   import { createNumberArgTypes } from '$storybook/storybookUtil';
   import SbConfettiExample from './SBConfettiExample.svelte';
 

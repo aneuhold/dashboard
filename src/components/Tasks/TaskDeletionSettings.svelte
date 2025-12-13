@@ -1,7 +1,7 @@
 <script lang="ts">
   import InfoIcon from '$components/InfoIcon.svelte';
   import InputBox from '$components/presentational/InputBox/InputBox.svelte';
-  import { userSettings } from '$stores/userSettings/userSettings';
+  import { userSettings } from '$stores/user/userSettings';
 </script>
 
 <div class="titleContainer">

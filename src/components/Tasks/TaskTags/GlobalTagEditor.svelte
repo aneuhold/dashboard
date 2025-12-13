@@ -4,7 +4,7 @@
   import InputBox from '$components/presentational/InputBox/InputBox.svelte';
   import SmartDialog from '$components/presentational/SmartDialog.svelte';
   import TaskTagsService from '$services/Task/TaskTagsService';
-  import { userSettings } from '$stores/userSettings/userSettings';
+  import { userSettings } from '$stores/user/userSettings';
 
   let {
     open = $bindable(false),

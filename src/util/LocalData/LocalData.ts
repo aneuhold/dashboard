@@ -10,19 +10,8 @@ import type {
   NonogramKatanaUpgrade
 } from '@aneuhold/core-ts-db-lib';
 import { DateService } from '@aneuhold/core-ts-lib';
-import { writable } from 'svelte/store';
-import type { UserSettings } from '$stores/userSettings/userSettings';
-
-function createLocalDataReadyStore() {
-  const { subscribe, set } = writable<boolean>(false);
-
-  return {
-    subscribe,
-    set
-  };
-}
-
-export const localDataReady = createLocalDataReadyStore();
+import { browser } from '$app/environment';
+import type { UserSettings } from '$stores/user/userSettings';
 
 export default class LocalData {
   /**
@@ -53,10 +42,7 @@ export default class LocalData {
    * loads before the window somehow.
    */
   static initialize() {
-    if (typeof window !== 'undefined') {
-      this.localStorageAvailable = true;
-    }
-    localDataReady.set(true);
+    this.localStorageAvailable = browser;
   }
 
   private static storeValue(key: string, value: string) {

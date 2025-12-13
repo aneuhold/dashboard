@@ -1,15 +1,11 @@
-import {
-  type DashboardUserConfig,
-  DashboardUserConfigSchema,
-  DocumentService,
-  type UserCTO
-} from '@aneuhold/core-ts-db-lib';
+import { DashboardUserConfigSchema, DocumentService, type UserCTO } from '@aneuhold/core-ts-db-lib';
 import { type Updater, writable } from 'svelte/store';
+import { browser } from '$app/environment';
 import DashboardAPIService from '$util/api/DashboardAPIService';
-import LocalData, { localDataReady } from '$util/LocalData/LocalData';
+import LocalData from '$util/LocalData/LocalData';
 
 export type UserSettings = {
-  config: DashboardUserConfig;
+  config: ReturnType<typeof DashboardUserConfigSchema.parse>;
   collaborators: Record<string, UserCTO>;
 };
 
@@ -21,12 +17,11 @@ function createUserSettingsStore() {
   };
   const { subscribe, set } = writable<UserSettings>(currentSettings);
 
-  localDataReady.subscribe((ready) => {
-    const localDataUserSettings = LocalData.userSettings;
-    if (ready && localDataUserSettings) {
-      updateUserSettings(() => localDataUserSettings);
-    }
-  });
+  const localDataUserSettings = browser ? LocalData.userSettings : null;
+  if (localDataUserSettings) {
+    currentSettings = localDataUserSettings;
+    set(currentSettings);
+  }
 
   const updateUserSettings = (updater: Updater<UserSettings>) => {
     currentSettings = updater(currentSettings);
@@ -73,7 +68,7 @@ function createUserSettingsStore() {
     /**
      * Sets the user settings without updating the backend.
      *
-     * @param newSettings
+     * @param newSettings New user settings to set locally.
      */
     setWithoutPropogation: (newSettings: UserSettings) => {
       updateUserSettings(() => newSettings);

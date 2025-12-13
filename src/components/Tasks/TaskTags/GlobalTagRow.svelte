@@ -4,7 +4,7 @@
   import IconButton, { Icon } from '@smui/icon-button';
   import MenuButton, { type MenuButtonItem } from '$components/presentational/MenuButton.svelte';
   import TaskTagsService from '$services/Task/TaskTagsService';
-  import { userSettings } from '$stores/userSettings/userSettings';
+  import { userSettings } from '$stores/user/userSettings';
 
   let {
     tagName,

@@ -1,7 +1,7 @@
 import type { BaseDocument, DocumentMap } from '@aneuhold/core-ts-db-lib';
 import type { UUID } from 'crypto';
 import { type Readable, type Updater, type Writable, writable } from 'svelte/store';
-import { localDataReady } from '$util/LocalData/LocalData';
+import { browser } from '$app/environment';
 
 /**
  * A store that has persistence capabilities and is a child of a
@@ -258,13 +258,11 @@ export default abstract class DocumentMapStoreService<T extends BaseDocument> {
   private createMapStore(): DocumentMapStore<T> {
     const { subscribe, set } = writable<DocumentMap<T>>(this.documentMap);
 
-    localDataReady.subscribe((ready) => {
-      const localDataMap = this.getFromLocalData();
-      if (ready && localDataMap) {
-        this.documentMap = localDataMap;
-        set(localDataMap);
-      }
-    });
+    const localDataMap = browser ? this.getFromLocalData() : null;
+    if (localDataMap) {
+      this.documentMap = localDataMap;
+      set(localDataMap);
+    }
 
     const setMap = () => {
       set(this.documentMap);

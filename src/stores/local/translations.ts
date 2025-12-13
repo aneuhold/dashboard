@@ -1,15 +1,11 @@
 import type { Translations } from '@aneuhold/core-ts-api-lib';
 import { writable } from 'svelte/store';
-import LocalData, { localDataReady } from '$util/LocalData/LocalData';
+import { browser } from '$app/environment';
+import LocalData from '$util/LocalData/LocalData';
 
 function createTranslationsStore() {
-  const { subscribe, set } = writable<Translations>({});
-
-  localDataReady.subscribe((ready) => {
-    if (ready && LocalData.translations) {
-      set(LocalData.translations);
-    }
-  });
+  const initialTranslations = (browser ? LocalData.translations : null) ?? {};
+  const { subscribe, set } = writable<Translations>(initialTranslations);
 
   return {
     subscribe,
@@ -47,10 +43,9 @@ export class TR {
   constructor(private translations: Translations) {}
 
   key(keyName: string) {
-    const translation = this.translations[keyName];
-    if (translation) {
-      return translation.value;
-    } else {
+    try {
+      return this.translations[keyName].value;
+    } catch {
       return `###${keyName}###`;
     }
   }

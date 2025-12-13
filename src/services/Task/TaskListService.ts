@@ -7,7 +7,7 @@ import {
   DashboardTaskService
 } from '@aneuhold/core-ts-db-lib';
 import type { UUID } from 'crypto';
-import type { UserSettings } from '$stores/userSettings/userSettings';
+import type { UserSettings } from '$stores/user/userSettings';
 
 /**
  * A service responsible for getting filtered and sorted lists of task IDs.

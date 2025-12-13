@@ -16,7 +16,7 @@
   import { snackbar } from '$components/singletons/SingletonSnackbar.svelte';
   import TaskDeletionSettings from '$components/Tasks/TaskDeletionSettings.svelte';
   import GlobalTagSettings from '$components/Tasks/TaskTags/GlobalTagSettings.svelte';
-  import { userSettings } from '$stores/userSettings/userSettings';
+  import { userSettings } from '$stores/user/userSettings';
   import DashboardAPIService from '$util/api/DashboardAPIService';
   import { settingsPageInfo } from './pageInfo';
 
