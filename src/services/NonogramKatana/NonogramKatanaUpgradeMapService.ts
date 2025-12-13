@@ -10,12 +10,15 @@ import nonogramKatanaItemNameToUpgradesMap from '$routes/entertainment/nonogramk
 import { nonogramKatanaUpgradesDisplayInfo } from '$routes/entertainment/nonogramkatana/upgrades/nonogramKatanaUpgradesDisplayInfo';
 import DashboardAPIService from '$util/api/DashboardAPIService';
 import LocalData from '$util/LocalData/LocalData';
+import { createLogger } from '$util/logging/logger';
 import type {
   DocumentInsertOrUpdateInfo,
   DocumentMapStore,
   DocumentStore
 } from '../DocumentMapStoreService';
 import DocumentMapStoreService from '../DocumentMapStoreService';
+
+const log = createLogger('NonogramKatanaUpgradeMapService.ts');
 
 /**
  * The Nonogram Katana upgrade map service. This is the document service for
@@ -47,9 +50,7 @@ export class NonogramKatanaUpgradeMapService extends DocumentMapStoreService<Non
     const upgradeStore = this.instance.getDocStore(upgradeId);
     const upgradeDoc = this.getMap()[upgradeId];
     if (!upgradeDoc) {
-      console.error(
-        `No upgrade found for ${upgradeId}. Something went wrong, this shouldn't happen.`
-      );
+      log.error(`No upgrade found for ${upgradeId}. Something went wrong, this shouldn't happen.`);
       return upgradeStore;
     }
     this.nameToIdMap[upgradeDoc.upgradeName] = upgradeId;
@@ -142,12 +143,12 @@ export class NonogramKatanaUpgradeMapService extends DocumentMapStoreService<Non
         return upgradeDisplayInfo.requiredUpgrades.every((requiredUpgrade) => {
           const otherUpgradeId = this.nameToIdMap[requiredUpgrade];
           if (!otherUpgradeId) {
-            console.error('No upgrade ID found for', requiredUpgrade);
+            log.error('No upgrade ID found for', requiredUpgrade);
             return false;
           }
           const otherUpgrade = upgradeMap[otherUpgradeId];
           if (!otherUpgrade) {
-            console.error('No upgrade found for', otherUpgradeId);
+            log.error('No upgrade found for', otherUpgradeId);
             return false;
           }
           return otherUpgrade.completed;

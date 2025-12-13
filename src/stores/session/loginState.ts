@@ -3,6 +3,9 @@ import { browser } from '$app/environment';
 import DashboardAPIService from '$util/api/DashboardAPIService';
 import { createLazyModuleGetter } from '$util/createLazyModuleGetter';
 import LocalData from '$util/LocalData/LocalData';
+import { createLogger } from '$util/logging/logger';
+
+const log = createLogger('loginState.ts');
 
 export enum LoginState {
   Initializing = 'Initializing',
@@ -35,7 +38,7 @@ function createLoginStateStore() {
     setLoginState(LoginState.LoggedIn);
     DashboardAPIService.getInitialDataIfNeeded();
   } else {
-    console.log('No API key found, setting login state to LoggedOut');
+    log.info('No API key found, setting login state to LoggedOut');
     setLoginState(LoginState.LoggedOut);
   }
 

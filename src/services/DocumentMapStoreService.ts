@@ -2,6 +2,9 @@ import type { BaseDocument, DocumentMap } from '@aneuhold/core-ts-db-lib';
 import type { UUID } from 'crypto';
 import { type Readable, type Updater, type Writable, writable } from 'svelte/store';
 import { browser } from '$app/environment';
+import { createLogger } from '$util/logging/logger';
+
+const log = createLogger('DocumentMapStoreService.ts');
 
 /**
  * A store that has persistence capabilities and is a child of a
@@ -315,7 +318,7 @@ export default abstract class DocumentMapStoreService<T extends BaseDocument> {
       docIds.forEach((id) => {
         const doc = this.documentMap[id];
         if (!doc) {
-          console.error(`Document with ID ${id} does not exist in the map.`);
+          log.error(`Document with ID ${id} does not exist in the map.`);
           return;
         }
         docsToDelete.push(doc);
@@ -336,7 +339,7 @@ export default abstract class DocumentMapStoreService<T extends BaseDocument> {
       docIdsToDelete.forEach((id) => {
         const doc = this.documentMap[id];
         if (!doc) {
-          console.error(`Document with ID ${id} does not exist in the map.`);
+          log.error(`Document with ID ${id} does not exist in the map.`);
           return;
         }
         allDocsToDelete.push(doc);
@@ -393,7 +396,7 @@ export default abstract class DocumentMapStoreService<T extends BaseDocument> {
         this.previousState = this.persistToLocalData();
         const doc = this.documentMap[childId];
         if (!doc) {
-          console.error(`Document with ID ${childId} does not exist in the map.`);
+          log.error(`Document with ID ${childId} does not exist in the map.`);
         } else {
           this.persistToDb({
             update: [doc]

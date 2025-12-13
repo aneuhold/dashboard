@@ -3,6 +3,9 @@ import { type Updater, writable } from 'svelte/store';
 import { browser } from '$app/environment';
 import DashboardAPIService from '$util/api/DashboardAPIService';
 import LocalData from '$util/LocalData/LocalData';
+import { createLogger } from '$util/logging/logger';
+
+const log = createLogger('userSettings.ts');
 
 export type UserSettings = {
   config: ReturnType<typeof DashboardUserConfigSchema.parse>;
@@ -55,7 +58,7 @@ function createUserSettingsStore() {
           (userCto) => userCto.userName === userName
         )?._id;
         if (!collaboratorId) {
-          console.error(`Could not find collaborator with username ${userName}`);
+          log.error(`Could not find collaborator with username ${userName}`);
           return settings;
         }
         settings.config.collaborators = settings.config.collaborators.filter(

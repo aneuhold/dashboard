@@ -13,8 +13,11 @@ import type { Unsubscriber, Updater } from 'svelte/store';
 import { appIsVisible } from '$stores/session/appIsVisible';
 import { timeMinute } from '$stores/time/timeMinute';
 import DashboardAPIService from '$util/api/DashboardAPIService';
+import { createLogger } from '$util/logging/logger';
 import type { DocumentMapStoreSubscriber, UpsertManyInfo } from '../DocumentMapStoreService';
 import TaskOperationsService from './TaskOperationsService';
+
+const log = createLogger('TaskRecurrenceService.ts');
 
 type TaskRecurrenceSubMap = { [taskId: string]: Unsubscriber | undefined };
 
@@ -120,7 +123,7 @@ export default class TaskRecurrenceService {
     if (!task.recurrenceInfo || task.parentRecurringTaskInfo) {
       return;
     }
-    console.log('Executing recurrence for task', task);
+    log.info('Executing recurrence for task', task);
     upsertMany(this.getRecurrenceUpdateInfo(taskMap, task));
   }
 

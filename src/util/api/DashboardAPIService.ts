@@ -13,6 +13,9 @@ import { apiKey } from '$stores/local/apiKey';
 import { translations } from '$stores/local/translations';
 import { userSettings } from '$stores/user/userSettings';
 import LocalData from '$util/LocalData/LocalData';
+import { createLogger } from '$util/logging/logger';
+
+const log = createLogger('DashboardAPIService.ts');
 
 const SECONDS_TO_WAIT_BEFORE_FETCHING_INITIAL_DATA = 10;
 
@@ -61,7 +64,7 @@ export default class DashboardAPIService {
         this.lastInitialDataFetchTime <
         Date.now() - SECONDS_TO_WAIT_BEFORE_FETCHING_INITIAL_DATA * 1000
       ) {
-        console.info(
+        log.info(
           'Fetching initial data because it has been more than',
           SECONDS_TO_WAIT_BEFORE_FETCHING_INITIAL_DATA,
           'seconds since the last fetch and the user reopened the app.'
@@ -83,7 +86,7 @@ export default class DashboardAPIService {
    * Gets the initial data from the backend and sets the stores accordingly.
    */
   static getInitialData(): void {
-    console.log('Getting initial data...');
+    log.info('Getting initial data...');
     this.processingFirstInitData = !this.lastInitialDataFetchTime;
     this.lastInitialDataFetchTime = Date.now();
 
@@ -99,7 +102,7 @@ export default class DashboardAPIService {
   }
 
   static updateSettings(updatedConfig: DashboardUserConfig) {
-    console.info('Saving user settings...');
+    log.info('Saving user settings...');
     this.queryApi({
       // Get tasks as well because the collaborators might have changed
       get: { userConfig: true, tasks: true },
@@ -127,7 +130,7 @@ export default class DashboardAPIService {
     if (result.success && result.data.userFromUserName) {
       return result.data.userFromUserName;
     } else {
-      console.info('Invalid username', result);
+      log.info('Invalid username', result);
       return null;
     }
   }
@@ -151,7 +154,7 @@ export default class DashboardAPIService {
       const currentRequest = this.shiftApiRequestQueue();
       LocalData.currentApiRequest = currentRequest;
       if (!currentRequest) {
-        console.error('No current API request to process, something went wrong!!');
+        log.error('No current API request to process, something went wrong!!');
         break;
       }
       const result = await this.callDashboardAPI(currentRequest);
@@ -176,16 +179,16 @@ export default class DashboardAPIService {
     input: ProjectDashboardOptions
   ): Promise<ProjectDashboardOutput | null> {
     const apiKeyValue = this.checkOrSetupDashboardAPI();
-    console.log('Processing API request', input);
+    log.info('Processing API request', input);
     const result = await APIService.callDashboardAPI({
       apiKey: apiKeyValue,
       options: input
     });
     if (result.success) {
-      console.info('Successfully processed API request', input);
+      log.info('Successfully processed API request', input);
       return result.data;
     } else {
-      console.error('Error processing API request', input, result);
+      log.error('Error processing API request', input, result);
       return null;
     }
   }
@@ -220,12 +223,12 @@ export default class DashboardAPIService {
     }
     // Trigger some extra info if this is the first sync
     if (this.processingFirstInitData && Object.keys(output).length > 0) {
-      console.info('Successfully got initial data');
+      log.info('Successfully got initial data');
       snackbar.success('Successfully synced 🎉');
     } else if (this.processingFirstInitData) {
       // If there wasn't any data that came back from the initial sync, then
       // something went wrong.
-      console.error('Error getting initial data', output);
+      log.error('Error getting initial data', output);
       snackbar.error('Error syncing');
     }
     this.processingFirstInitData = false;

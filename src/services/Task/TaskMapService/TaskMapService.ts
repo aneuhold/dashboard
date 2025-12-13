@@ -9,6 +9,7 @@ import type { Updater } from 'svelte/store';
 import { userSettings } from '$stores/user/userSettings';
 import DashboardTaskAPIService from '$util/api/DashboardTaskAPIService';
 import LocalData from '$util/LocalData/LocalData';
+import { createLogger } from '$util/logging/logger';
 import type {
   DocumentInsertOrUpdateInfo,
   DocumentMapStore,
@@ -20,6 +21,8 @@ import TaskOperationsService from '../TaskOperationsService';
 import TaskRecurrenceService from '../TaskRecurrenceService';
 import TaskSharingService from '../TaskSharingService';
 import TaskTagsService from '../TaskTagsService';
+
+const log = createLogger('TaskMapService.ts');
 
 /**
  * The main task map service.
@@ -154,7 +157,7 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
     // Check for any tasks that need to be auto-deleted.
     const userConfig = userSettings.get().config;
     if (userConfig.autoTaskDeletionDays < 5 || userConfig.autoTaskDeletionDays > 90) {
-      console.error(
+      log.error(
         `User ${userConfig.userId} has an invalid autoTaskDeletionDays value of ${userConfig.autoTaskDeletionDays}.`
       );
       return;
@@ -175,7 +178,7 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
     }) as DashboardTask[];
     const taskIdsToDelete = tasksToDelete.map((task) => task._id);
     if (taskIdsToDelete.length !== 0) {
-      console.log(`Deleting ${taskIdsToDelete.length} tasks due to auto task deletion.`);
+      log.info(`Deleting ${taskIdsToDelete.length} tasks due to auto task deletion.`);
       this.getStore().deleteMany(taskIdsToDelete);
     }
   }

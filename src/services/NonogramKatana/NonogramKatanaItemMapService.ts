@@ -8,12 +8,15 @@ import type { UUID } from 'crypto';
 import { nonogramKatanaItemsDisplayInfo } from '$routes/entertainment/nonogramkatana/items/nonogramKatanaItemsDisplayInfo';
 import DashboardAPIService from '$util/api/DashboardAPIService';
 import LocalData from '$util/LocalData/LocalData';
+import { createLogger } from '$util/logging/logger';
 import type {
   DocumentInsertOrUpdateInfo,
   DocumentMapStore,
   DocumentStore
 } from '../DocumentMapStoreService';
 import DocumentMapStoreService from '../DocumentMapStoreService';
+
+const log = createLogger('NonogramKatanaItemMapService.ts');
 
 /**
  * The Nonogram Katana item map service.
@@ -34,7 +37,7 @@ export class NonogramKatanaItemMapService extends DocumentMapStoreService<Nonogr
     const itemStore = this.instance.getDocStore(itemId);
     const itemDoc = this.getMap()[itemId];
     if (!itemDoc) {
-      console.error(`No item found for ${itemId}. Something went wrong, this shouldn't happen.`);
+      log.error(`No item found for ${itemId}. Something went wrong, this shouldn't happen.`);
       return itemStore;
     }
     this.nameToIdMap[itemDoc.itemName] = itemId;

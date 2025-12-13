@@ -14,6 +14,9 @@
   import { LoginState, loginState } from '$stores/session/loginState';
   import DashboardAPIService from '$util/api/DashboardAPIService';
   import LocalData from '$util/LocalData/LocalData';
+  import { createLogger } from '$util/logging/logger';
+
+  const log = createLogger('Login.svelte');
 
   let typedUserName = $state(LocalData.username);
   let typedPassword = $state(LocalData.password);
@@ -44,7 +47,7 @@
       const apiKeyValue = validationResponse.data.userInfo.apiKey.key as UUID;
       apiKey.set(apiKeyValue);
       if (!$dashboardConfig?.projectDashboardFunctionUrl) {
-        console.error('No dashboard function URL found in config');
+        log.error('No dashboard function URL found in config');
         return;
       }
       // This will eventually update the login state
@@ -53,7 +56,7 @@
       $loginState = LoginState.LoggedOut;
       invalidCredentials = true;
     } else {
-      console.error('Unexpected response from validateUser', validationResponse);
+      log.error('Unexpected response from validateUser', validationResponse);
     }
   }
 </script>
