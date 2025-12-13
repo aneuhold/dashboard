@@ -21,7 +21,7 @@ const getSentry = createLazyModuleGetter(
   !process.env.VITEST ? import('@sentry/sveltekit') : undefined
 );
 
-WebSocketService.subscribe('events', (data) => {
+WebSocketService.subscribe('updateYoStuff', (data) => {
   log.info('Received test message from WebSocket:', data);
 });
 
