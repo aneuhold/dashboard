@@ -13,7 +13,7 @@ export default class DashboardTaskAPIService {
    * If a set of tasks is already being inserted or updated, this will be added
    * to the queue and executed after the previous set is done.
    *
-   * @param updateInfo
+   * @param updateInfo Information about documents to insert, update or delete.
    */
   static updateTasks(updateInfo: DocumentInsertOrUpdateInfo<DashboardTask>) {
     const request: ProjectDashboardOptions = {};

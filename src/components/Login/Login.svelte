@@ -6,7 +6,6 @@
   } from '@aneuhold/core-ts-api-lib';
   import Button, { Label } from '@smui/button';
   import CircularProgress from '@smui/circular-progress';
-  import type { UUID } from 'crypto';
   import InputBox from '$components/presentational/InputBox/InputBox.svelte';
   import { apiKey } from '$stores/local/apiKey';
   import { dashboardConfig } from '$stores/local/dashboardConfig';
@@ -44,7 +43,7 @@
     ) {
       dashboardConfig.set(validationResponse.data.config.dashboard);
       invalidCredentials = false;
-      const apiKeyValue = validationResponse.data.userInfo.apiKey.key as UUID;
+      const apiKeyValue = validationResponse.data.userInfo.apiKey.key;
       apiKey.set(apiKeyValue);
       if (!$dashboardConfig?.projectDashboardFunctionUrl) {
         log.error('No dashboard function URL found in config');

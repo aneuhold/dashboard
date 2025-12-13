@@ -48,7 +48,8 @@ export class NonogramKatanaItemMapService extends DocumentMapStoreService<Nonogr
     if (!this.nameToIdMap[itemName]) {
       this.createItemNameIdMap(this.getMap());
     }
-    return this.getItemStore(this.nameToIdMap[itemName]);
+    // It is guaranteed that the item exists at this point.
+    return this.getItemStore(this.nameToIdMap[itemName] as UUID);
   }
 
   static getMap(): DocumentMap<NonogramKatanaItem> {
@@ -60,7 +61,7 @@ export class NonogramKatanaItemMapService extends DocumentMapStoreService<Nonogr
    * on the defaults. It was done this way so that the user didn't need to
    * always have this data created on application load.
    *
-   * @param userId
+   * @param userId The ID of the user to create or update items for.
    */
   static createOrUpdateItems(userId: UUID): void {
     const currentMap = this.getMap();

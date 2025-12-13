@@ -47,80 +47,80 @@
 
   function incrementPriority() {
     userConfig.update((settings) => {
-      const currentTagSettings = settings.config.tagSettings[tagName] as
-        | DashboardTagSetting
-        | undefined;
+      const currentTagSettings = settings.config.tagSettings[tagName];
       if (!currentTagSettings) return settings;
       Object.keys(settings.config.tagSettings).forEach((otherTagName) => {
         // Increment all the existing non-zero tags priority by 1 that are
         // lower than the current tag
-        const otherTagPriority = settings.config.tagSettings[otherTagName].priority;
+        const otherTagSettings = settings.config.tagSettings[otherTagName];
+        if (!otherTagSettings) return;
+        const otherTagPriority = otherTagSettings.priority;
         if (otherTagPriority === currentTagSettings.priority + 1) {
-          settings.config.tagSettings[otherTagName].priority -= 1;
+          otherTagSettings.priority -= 1;
         }
       });
-      settings.config.tagSettings[tagName].priority += 1;
+      currentTagSettings.priority += 1;
       return settings;
     });
   }
 
   function decrementPriority() {
     userConfig.update((settings) => {
-      const currentTagSettings = settings.config.tagSettings[tagName] as
-        | DashboardTagSetting
-        | undefined;
+      const currentTagSettings = settings.config.tagSettings[tagName];
       if (!currentTagSettings) return settings;
       Object.keys(settings.config.tagSettings).forEach((otherTagName) => {
         // Decrement all the existing non-zero tags priority by 1 that are
         // higher than the current tag
-        const otherTagPriority = settings.config.tagSettings[otherTagName].priority;
+        const otherTagSettings = settings.config.tagSettings[otherTagName];
+        if (!otherTagSettings) return;
+        const otherTagPriority = otherTagSettings.priority;
         if (otherTagPriority === currentTagSettings.priority - 1) {
-          settings.config.tagSettings[otherTagName].priority += 1;
+          otherTagSettings.priority += 1;
         }
       });
-      settings.config.tagSettings[tagName].priority -= 1;
+      currentTagSettings.priority -= 1;
       return settings;
     });
   }
 
   function addPriorityToTag() {
     userConfig.update((settings) => {
+      const currentTagSettings = settings.config.tagSettings[tagName];
+      if (!currentTagSettings) return settings;
       Object.keys(settings.config.tagSettings).forEach((otherTagName) => {
         // Increment all the existing non-zero tags priority by 1
-        if (otherTagName !== tagName && settings.config.tagSettings[otherTagName].priority !== 0) {
-          settings.config.tagSettings[otherTagName].priority += 1;
+        const otherTagSettings = settings.config.tagSettings[otherTagName];
+        if (otherTagName !== tagName && otherTagSettings && otherTagSettings.priority !== 0) {
+          otherTagSettings.priority += 1;
         }
       });
-      settings.config.tagSettings[tagName].priority = 1;
+      currentTagSettings.priority = 1;
       return settings;
     });
   }
 
   function removePriorityFromTag() {
     userConfig.update((settings) => {
-      const currentTagSettings = settings.config.tagSettings[tagName] as
-        | DashboardTagSetting
-        | undefined;
+      const currentTagSettings = settings.config.tagSettings[tagName];
       if (!currentTagSettings) return settings;
       Object.keys(settings.config.tagSettings).forEach((otherTagName) => {
         // Decrement all the existing non-zero tags priority by 1 that are
         // higher than the current tag
-        const otherTagPriority = settings.config.tagSettings[otherTagName].priority;
+        const otherTagSettings = settings.config.tagSettings[otherTagName];
         if (
           otherTagName !== tagName &&
-          otherTagPriority !== 0 &&
-          otherTagPriority > currentTagSettings.priority
+          otherTagSettings &&
+          otherTagSettings.priority !== 0 &&
+          otherTagSettings.priority > currentTagSettings.priority
         ) {
-          settings.config.tagSettings[otherTagName].priority -= 1;
+          otherTagSettings.priority -= 1;
         }
       });
-      settings.config.tagSettings[tagName].priority = 0;
+      currentTagSettings.priority = 0;
       return settings;
     });
   }
-  let tagSettings = $derived(
-    $userConfig.config.tagSettings[tagName] as DashboardTagSetting | undefined
-  );
+  let tagSettings = $derived($userConfig.config.tagSettings[tagName]);
   let menuItems = $derived(tagSettings ? getMenuItems(tagSettings) : []);
 </script>
 

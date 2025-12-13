@@ -23,7 +23,7 @@ export default class TaskTagsService {
   /**
    * Gets the store of all tags used by the current user on tasks.
    *
-   * @param taskMapStore
+   * @param taskMapStore The document map store for tasks to derive tags from.
    */
   static getStore(taskMapStore: DocumentMapStore<DashboardTask>): Writable<string[]> {
     if (!this.taskMapStore) {
@@ -61,7 +61,7 @@ export default class TaskTagsService {
   /**
    * Deletes a tag from the current user's settings and all tasks.
    *
-   * @param tag
+   * @param tag The tag name to delete.
    */
   static deleteTag(tag: string) {
     // Setup user settings subscribers if needed.
@@ -72,14 +72,15 @@ export default class TaskTagsService {
     // tasks.
     userConfig.update((settings) => {
       if (!settings.config.tagSettings[tag]) return settings;
-      const tagInfo = settings.config.tagSettings[tag];
-      if (tagInfo.priority > 0) {
+      const tagSettings = settings.config.tagSettings[tag];
+      if (tagSettings.priority > 0) {
         Object.keys(settings.config.tagSettings).forEach((otherTagName) => {
           // Decrement all the existing non-zero tags priority by 1 that are
           // higher than the current tag
-          const otherTagPriority = settings.config.tagSettings[otherTagName].priority;
-          if (otherTagPriority > tagInfo.priority) {
-            settings.config.tagSettings[otherTagName].priority -= 1;
+          const otherTagSettings = settings.config.tagSettings[otherTagName];
+          if (!otherTagSettings) return;
+          if (otherTagSettings.priority > tagSettings.priority) {
+            otherTagSettings.priority -= 1;
           }
         });
       }
@@ -91,8 +92,8 @@ export default class TaskTagsService {
   /**
    * Updates a tag from the current user's settings and all tasks.
    *
-   * @param oldTag
-   * @param newTag
+   * @param oldTag The existing tag name to update.
+   * @param newTag The new tag name to replace the existing one.
    */
   static updateTag(oldTag: string, newTag: string) {
     // Setup user settings subscribers if needed.
@@ -190,7 +191,7 @@ export default class TaskTagsService {
    * Removes the provided tag from all tasks for the current user. This should
    * only be triggered from the global tag manager.
    *
-   * @param tag
+   * @param tag The tag name to remove from all tasks for the current user.
    */
   private static removeTagFromAllTasks(tag: string) {
     const userId = this.userId;
@@ -219,8 +220,8 @@ export default class TaskTagsService {
    * Updates the provided tag in all tasks for the current user. This should
    * only be triggered from the global tag manager.
    *
-   * @param oldTag
-   * @param newTag
+   * @param oldTag The original tag name to update in tasks.
+   * @param newTag The new tag name to replace the original in tasks.
    */
   private static updateTagInAllTasks(oldTag: string, newTag: string) {
     const userId = this.userId;

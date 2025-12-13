@@ -36,7 +36,7 @@ export default class DashboardAPIService {
    * If an API request is already being processed, this will be added
    * to the queue and executed after the previous request is done.
    *
-   * @param apiOptions
+   * @param apiOptions The API options that describe the desired operation(s).
    */
   static queryApi(apiOptions: ProjectDashboardOptions) {
     // Add the options to the queue
@@ -115,7 +115,7 @@ export default class DashboardAPIService {
   /**
    * This processes separately from the queue because it is a special case.
    *
-   * @param username
+   * @param username The username to validate.
    */
   static async checkIfUsernameIsValid(username: string): Promise<UserCTO | null> {
     const apiKeyValue = this.checkOrSetupDashboardAPI();

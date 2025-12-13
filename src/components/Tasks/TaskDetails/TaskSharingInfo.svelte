@@ -16,7 +16,7 @@
    * with.
    */
   let sharedWithIds = $derived(
-    $task.sharedWith.map((id) => id).filter((id) => $userConfig.collaborators[id])
+    $task.sharedWith.map((id) => id).filter((id) => id in $userConfig.collaborators)
   );
   let collaborators = $derived($userConfig.collaborators);
   let userIsNotOwner = $derived($task.userId !== $userConfig.config.userId);

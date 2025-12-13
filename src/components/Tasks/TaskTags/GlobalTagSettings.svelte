@@ -10,15 +10,15 @@
   let sortableTagList = $derived(
     Object.keys(tagSettings)
       .filter((tagName) => {
-        return tagSettings[tagName].priority !== 0;
+        return tagSettings[tagName]?.priority !== 0;
       })
       .sort((a, b) => {
-        return tagSettings[b].priority - tagSettings[a].priority;
+        return tagSettings[b]?.priority ?? 0 - (tagSettings[a]?.priority ?? 0);
       })
   );
   let nonSortableTagList = $derived(
     Object.keys(tagSettings).filter((tagName) => {
-      return tagSettings[tagName].priority === 0;
+      return tagSettings[tagName]?.priority === 0;
     })
   );
 
