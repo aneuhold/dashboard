@@ -7,7 +7,7 @@
   import type { UUID } from 'crypto';
   import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
   import { currentUserId } from '$stores/derived/currentUserId';
-  import { userSettings } from '$stores/user/userSettings';
+  import { userSettings } from '$stores/local/userSettings/userSettings';
   import LocalData from '$util/LocalData/LocalData';
 
   let { taskId }: { taskId: UUID } = $props();

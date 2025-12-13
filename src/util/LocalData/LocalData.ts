@@ -11,7 +11,7 @@ import type {
 } from '@aneuhold/core-ts-db-lib';
 import { DateService } from '@aneuhold/core-ts-lib';
 import { browser } from '$app/environment';
-import type { UserSettings } from '$stores/user/userSettings';
+import type { UserSettings } from '$stores/local/userSettings/userSettings';
 
 export default class LocalData {
   /**

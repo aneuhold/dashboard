@@ -5,7 +5,7 @@
   import { taskSharingDialog } from '$components/singletons/dialogs/SingletonTaskSharingDialog/SingletonTaskSharingDialog.svelte';
   import type { DocumentStore } from '$services/DocumentMapStoreService';
   import TaskService from '$services/Task/TaskService';
-  import { userSettings } from '$stores/user/userSettings';
+  import { userSettings } from '$stores/local/userSettings/userSettings';
 
   let {
     task

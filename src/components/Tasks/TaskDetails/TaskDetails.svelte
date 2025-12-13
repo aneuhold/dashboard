@@ -25,7 +25,7 @@
   import TaskListService from '$services/Task/TaskListService';
   import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
   import TaskService from '$services/Task/TaskService';
-  import { userSettings } from '$stores/user/userSettings';
+  import { userSettings } from '$stores/local/userSettings/userSettings';
   import TaskCompletedCheckbox from '../TaskCompletedCheckbox.svelte';
   import TaskDateInfo from '../TaskDate/TaskDateInfo.svelte';
   import TaskList from '../TaskList/TaskList.svelte';

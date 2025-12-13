@@ -12,7 +12,7 @@
   import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
   import TaskTagsService from '$services/Task/TaskTagsService';
   import { currentUserId } from '$stores/derived/currentUserId';
-  import { userSettings } from '$stores/user/userSettings';
+  import { userSettings } from '$stores/local/userSettings/userSettings';
   import TaskListFilterDialog from './TaskListFilterDialog.svelte';
   import TaskListSortingDialog from './TaskListSortingDialog.svelte';
 

@@ -2,7 +2,7 @@ import type { DashboardTagSettings, DashboardTask } from '@aneuhold/core-ts-db-l
 import { ArrayService } from '@aneuhold/core-ts-lib';
 import type { UUID } from 'crypto';
 import { type Unsubscriber, type Writable, writable } from 'svelte/store';
-import { userSettings } from '$stores/user/userSettings';
+import { userSettings } from '$stores/local/userSettings/userSettings';
 import type { DocumentMapStore, DocumentMapStoreSubscriber } from '../DocumentMapStoreService';
 
 /**

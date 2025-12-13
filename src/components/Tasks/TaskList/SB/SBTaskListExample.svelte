@@ -7,7 +7,7 @@
     MockTaskSharedWith,
     MockTaskSubTasks
   } from '$services/Task/TaskMapService/TaskMapService.mock';
-  import { userSettings } from '$stores/user/userSettings';
+  import { userSettings } from '$stores/local/userSettings/userSettings';
   import MockData from '$testUtils/MockData';
   import TaskList from '../TaskList.svelte';
 

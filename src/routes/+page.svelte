@@ -4,8 +4,8 @@
   import LinkList from '$components/LinkList.svelte';
   import type { LinkInfo } from '$components/LinkListItem.svelte';
   import PageTitle from '$components/PageTitle.svelte';
-  import { enabledPages } from '$stores/derived/enabledPages';
-  import { userSettings } from '$stores/user/userSettings';
+  import { userSettings } from '$stores/local/userSettings/userSettings';
+  import { enabledPages } from '$stores/session/enabledPages';
   import type { PageInfo } from '$util/navInfo';
   import { homePageInfo } from './pageInfo';
 

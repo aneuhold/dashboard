@@ -1,40 +1,11 @@
 import { getConsoleFormatForTag } from '$util/logging/colors';
 
-export enum LogLevel {
-  Debug = 'debug',
-  Info = 'info',
-  Warn = 'warn',
-  Error = 'error'
-}
-
-type LogEntry = {
-  level: LogLevel;
-  tag: string;
-  message: string;
-  args: unknown[];
-  timestampMs: number;
-};
-
-export type LogSink = (entry: LogEntry) => void;
-
-let logSink: LogSink | null = null;
-
-/**
- * Register a sink to forward raw log entries to an external service.
- * The sink receives unformatted data (no ANSI/CSS).
- *
- * @param sink Sink function, or null to disable
- */
-export const setLogSink = (sink: LogSink | null): void => {
-  logSink = sink;
-};
-
 /**
  * Create a module-scoped logger.
  *
  * @param tag Logger identifier (typically a filename)
  */
-export const createLogger = (tag: string) => {
+export function createLogger(tag: string) {
   return {
     debug: (message: string, ...args: unknown[]): void => {
       writeLog(LogLevel.Debug, tag, message, args);
@@ -49,7 +20,36 @@ export const createLogger = (tag: string) => {
       writeLog(LogLevel.Error, tag, message, args);
     }
   };
+}
+
+/**
+ * Register a sink to forward raw log entries to an external service.
+ * The sink receives unformatted data (no ANSI/CSS).
+ *
+ * @param sink Sink function, or null to disable
+ */
+export const setLogSink = (sink: LogSink | null): void => {
+  logSink = sink;
 };
+
+enum LogLevel {
+  Debug = 'debug',
+  Info = 'info',
+  Warn = 'warn',
+  Error = 'error'
+}
+
+type LogSink = (entry: LogEntry) => void;
+
+type LogEntry = {
+  level: LogLevel;
+  tag: string;
+  message: string;
+  args: unknown[];
+  timestampMs: number;
+};
+
+let logSink: LogSink | null = null;
 
 const writeLog = (level: LogLevel, tag: string, message: string, args: unknown[]): void => {
   if (!shouldLog(level)) {

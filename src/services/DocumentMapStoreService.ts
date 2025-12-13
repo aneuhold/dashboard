@@ -15,7 +15,7 @@ export interface PersistentChildStore<T> {
    * Sets the value of the store without propogating the change to the parent
    * store. This should only be used by the parent store.
    */
-  setWithoutPropogation: (value: T) => void;
+  setWithoutPropagation: (value: T) => void;
 }
 
 export interface PersistentParentStore<T> {
@@ -252,7 +252,7 @@ export default abstract class DocumentMapStoreService<T extends BaseDocument> {
       update: (updater: Updater<T>) => {
         updateDoc(updater);
       },
-      setWithoutPropogation: (newDoc: T) => {
+      setWithoutPropagation: (newDoc: T) => {
         set(newDoc);
       }
     };
@@ -292,7 +292,7 @@ export default abstract class DocumentMapStoreService<T extends BaseDocument> {
         const childStore = this.childStores[docId];
         if (childStore) {
           // Set the child store without propogating the change to the parent
-          childStore.setWithoutPropogation(updatedDoc);
+          childStore.setWithoutPropagation(updatedDoc);
         }
         // Return the updated doc, which is in the same memory location as the
         // original doc in the map
@@ -382,7 +382,7 @@ export default abstract class DocumentMapStoreService<T extends BaseDocument> {
           if (!doc) {
             delete this.childStores[docId];
           } else if (store) {
-            store.setWithoutPropogation(doc);
+            store.setWithoutPropagation(doc);
           }
         });
         setMap();

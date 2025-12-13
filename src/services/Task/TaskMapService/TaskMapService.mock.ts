@@ -4,7 +4,7 @@ import {
   DashboardTaskSchema
 } from '@aneuhold/core-ts-db-lib';
 import type { UUID } from 'crypto';
-import { userSettings } from '$stores/user/userSettings';
+import { userSettings } from '$stores/local/userSettings/userSettings';
 import TestUsers from '$testUtils/TestUsers';
 import TaskListService from '../TaskListService';
 import TaskTagsService from '../TaskTagsService';

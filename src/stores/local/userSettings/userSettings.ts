@@ -1,4 +1,9 @@
-import { DashboardUserConfigSchema, DocumentService, type UserCTO } from '@aneuhold/core-ts-db-lib';
+import {
+  type DashboardUserConfig,
+  DashboardUserConfigSchema,
+  DocumentService,
+  type UserCTO
+} from '@aneuhold/core-ts-db-lib';
 import { type Updater, writable } from 'svelte/store';
 import { browser } from '$app/environment';
 import DashboardAPIService from '$util/api/DashboardAPIService';
@@ -8,7 +13,7 @@ import { createLogger } from '$util/logging/logger';
 const log = createLogger('userSettings.ts');
 
 export type UserSettings = {
-  config: ReturnType<typeof DashboardUserConfigSchema.parse>;
+  config: DashboardUserConfig;
   collaborators: Record<string, UserCTO>;
 };
 
@@ -73,7 +78,7 @@ function createUserSettingsStore() {
      *
      * @param newSettings New user settings to set locally.
      */
-    setWithoutPropogation: (newSettings: UserSettings) => {
+    setWithoutPropagation: (newSettings: UserSettings) => {
       updateUserSettings(() => newSettings);
     },
     /**

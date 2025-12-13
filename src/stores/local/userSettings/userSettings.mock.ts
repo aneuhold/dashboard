@@ -16,18 +16,18 @@ export default class UserSettingsMock {
       config: DashboardUserConfigSchema.parse({ userId: this.userId }),
       collaborators: {}
     };
-    userSettings.setWithoutPropogation(mockSettings);
+    userSettings.setWithoutPropagation(mockSettings);
   }
 
   enableConfetti(): void {
     const currentUserSettings = userSettings.get();
     currentUserSettings.config.enabledFeatures.useConfettiForTasks = true;
-    userSettings.setWithoutPropogation(currentUserSettings);
+    userSettings.setWithoutPropagation(currentUserSettings);
   }
 
   addCollaborator(collaborator: UserCTO): void {
     const currentUserSettings = userSettings.get();
     currentUserSettings.collaborators[collaborator._id] = collaborator;
-    userSettings.setWithoutPropogation(currentUserSettings);
+    userSettings.setWithoutPropagation(currentUserSettings);
   }
 }

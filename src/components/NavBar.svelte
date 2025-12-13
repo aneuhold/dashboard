@@ -6,7 +6,7 @@
   import GitHubIcon from '$lib/svgs/GitHubIcon.svelte';
   import { apiKey } from '$stores/local/apiKey';
   import { LoginState, loginState } from '$stores/session/loginState';
-  import { navDrawerOpen } from '$stores/ui/navDrawerOpen';
+  import { navDrawerOpen } from '$stores/session/navDrawerOpen';
   import NavDrawer from './NavDrawer.svelte';
 
   let {

@@ -6,7 +6,7 @@ import {
 import { DateService } from '@aneuhold/core-ts-lib';
 import type { UUID } from 'crypto';
 import type { Updater } from 'svelte/store';
-import { userSettings } from '$stores/user/userSettings';
+import { userSettings } from '$stores/local/userSettings/userSettings';
 import DashboardTaskAPIService from '$util/api/DashboardTaskAPIService';
 import LocalData from '$util/LocalData/LocalData';
 import { createLogger } from '$util/logging/logger';

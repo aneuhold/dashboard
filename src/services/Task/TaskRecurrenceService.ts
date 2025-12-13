@@ -11,7 +11,7 @@ import {
 } from '@aneuhold/core-ts-db-lib';
 import type { Unsubscriber, Updater } from 'svelte/store';
 import { appIsVisible } from '$stores/session/appIsVisible';
-import { timeMinute } from '$stores/time/timeMinute';
+import { timeMinute } from '$stores/session/timeMinute';
 import DashboardAPIService from '$util/api/DashboardAPIService';
 import { createLogger } from '$util/logging/logger';
 import type { DocumentMapStoreSubscriber, UpsertManyInfo } from '../DocumentMapStoreService';
@@ -35,10 +35,10 @@ export default class TaskRecurrenceService {
    * Creates an example of what would happen to a task if the recurrence
    * were to occur.
    *
-   * @param startDate
-   * @param dueDate
-   * @param recurrenceInfo
-   * @param parentRecurringTaskInfo
+   * @param recurrenceInfo the recurrence info to use for the example
+   * @param startDate the start date of the task
+   * @param dueDate the due date of the task
+   * @param parentRecurringTaskInfo the parent recurring task info to use for the example
    */
   static createExampleOfRecurrence(
     recurrenceInfo: RecurrenceInfo,
