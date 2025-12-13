@@ -30,6 +30,16 @@ export default class WebSocketService {
     }
   }
 
+  /**
+   * Gets the current socket ID. Helpful to pass along in requests to the server.
+   */
+  static getSocketId() {
+    if (!this.#socket) {
+      return;
+    }
+    return this.#socket.id;
+  }
+
   static subscribe(event: string, callback: (data: unknown) => void) {
     if (!this.#socket) {
       this.connect();
