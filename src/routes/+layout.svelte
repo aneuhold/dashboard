@@ -15,15 +15,11 @@
   import SingletonSnackbar from '$components/singletons/SingletonSnackbar.svelte';
   import { appIsVisible } from '$stores/session/appIsVisible';
   import { LoginState, loginState } from '$stores/session/loginState';
-  import LocalData from '$util/LocalData/LocalData';
   import Login from '../components/Login/Login.svelte';
   import NavBar from '../components/NavBar.svelte';
   let { children }: { children?: Snippet } = $props();
 
   let mounted = $state(false);
-
-  // Top-level initialization of local data. This should only be done here.
-  LocalData.initialize();
 
   // Without this, the layout fluctuates a lot when the page is starting up.
   onMount(() => {

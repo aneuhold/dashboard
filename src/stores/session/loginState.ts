@@ -35,6 +35,7 @@ function createLoginStateStore() {
     setLoginState(LoginState.LoggedIn);
     DashboardAPIService.getInitialDataIfNeeded();
   } else {
+    console.log('No API key found, setting login state to LoggedOut');
     setLoginState(LoginState.LoggedOut);
   }
 

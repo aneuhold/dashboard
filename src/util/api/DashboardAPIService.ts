@@ -11,7 +11,6 @@ import { NonogramKatanaUpgradeMapService } from '$services/NonogramKatana/Nonogr
 import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
 import { apiKey } from '$stores/local/apiKey';
 import { translations } from '$stores/local/translations';
-import { LoginState, loginState } from '$stores/session/loginState';
 import { userSettings } from '$stores/user/userSettings';
 import LocalData from '$util/LocalData/LocalData';
 
@@ -55,7 +54,7 @@ export default class DashboardAPIService {
    * ago or it hasn't been fetched yet.
    */
   static getInitialDataIfNeeded() {
-    if (loginState.get() === LoginState.LoggedIn && LocalData.apiRequestQueue.length === 0) {
+    if (apiKey.get() && LocalData.apiRequestQueue.length === 0) {
       if (!this.lastInitialDataFetchTime) {
         this.getInitialData();
       } else if (
@@ -221,13 +220,11 @@ export default class DashboardAPIService {
     }
     // Trigger some extra info if this is the first sync
     if (this.processingFirstInitData && Object.keys(output).length > 0) {
-      loginState.set(LoginState.LoggedIn);
       console.info('Successfully got initial data');
       snackbar.success('Successfully synced 🎉');
     } else if (this.processingFirstInitData) {
       // If there wasn't any data that came back from the initial sync, then
       // something went wrong.
-      loginState.set(LoginState.LoggedOut);
       console.error('Error getting initial data', output);
       snackbar.error('Error syncing');
     }

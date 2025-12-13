@@ -20,7 +20,7 @@ export default class LocalData {
    */
   private static PREFIX = 'v3-';
 
-  private static localStorageAvailable = false;
+  private static localStorageAvailable = browser;
 
   private static storedKeyNames = {
     password: `${this.PREFIX}password`,
@@ -35,15 +35,6 @@ export default class LocalData {
     nonogramKatanaItemMap: `${this.PREFIX}nonogramKatanaItemMap`,
     nonogramKatanaUpgradeMap: `${this.PREFIX}nonogramKatanaUpgradeMap`
   };
-
-  /**
-   * An initialization function that should be called before any other
-   * functions in this class are called. This is because sometimes the JS
-   * loads before the window somehow.
-   */
-  static initialize() {
-    this.localStorageAvailable = browser;
-  }
 
   private static storeValue(key: string, value: string) {
     if (this.localStorageAvailable) {

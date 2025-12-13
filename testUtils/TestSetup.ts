@@ -1,4 +1,6 @@
 import { APIService } from '@aneuhold/core-ts-api-lib';
+import { DocumentService } from '@aneuhold/core-ts-db-lib';
+import { apiKey } from '$stores/local/apiKey';
 import type { SpyOnFn } from '$testUtils/types';
 import MockData from './MockData';
 import TestUsers from './TestUsers';
@@ -11,14 +13,16 @@ export default class TestSetup {
    */
   static setupGlobalMocks(spyOnFn: SpyOnFn) {
     // Mock API
-    spyOnFn(APIService, 'callDashboardAPI').mockImplementation((input: unknown) => {
-      console.log('mocked', input);
+    spyOnFn(APIService, 'callDashboardAPI').mockImplementation((_) => {
       return Promise.resolve({
         success: true,
         errors: [],
         data: {}
       });
     });
+
+    // Set some stores
+    apiKey.set(DocumentService.generateID());
 
     // Reset stores
     MockData.taskMapServiceMock.reset();
