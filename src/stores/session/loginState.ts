@@ -1,5 +1,6 @@
 import { writable } from 'svelte/store';
 import { browser } from '$app/environment';
+import WebSocketService from '$services/WebSocketService';
 import DashboardAPIService from '$util/api/DashboardAPIService';
 import { createLazyModuleGetter } from '$util/createLazyModuleGetter';
 import LocalData from '$util/LocalData/LocalData';
@@ -19,6 +20,12 @@ export enum LoginState {
 const getSentry = createLazyModuleGetter(
   !process.env.VITEST ? import('@sentry/sveltekit') : undefined
 );
+
+WebSocketService.subscribe('events', (data) => {
+  log.info('Received test message from WebSocket:', data);
+});
+
+WebSocketService.emit('events', { test: 'test' });
 
 function createLoginStateStore() {
   let _loginState = LoginState.Initializing;
