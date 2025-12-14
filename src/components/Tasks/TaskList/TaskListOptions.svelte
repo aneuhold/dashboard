@@ -99,7 +99,7 @@
   let currentFilterSettings = $derived(
     parentTaskFilterSettings ??
       userTaskFilterSettings ??
-      DashboardTaskListFilterSettingsSchema.parse($currentUserId)
+      DashboardTaskListFilterSettingsSchema.parse({ userId: $currentUserId })
   );
   let sortingDimmed = $derived($parentTask ? !parentTaskSortSettings : !userTaskSortSettings);
   let filterDimmed = $derived($parentTask ? !parentTaskFilterSettings : !userTaskFilterSettings);

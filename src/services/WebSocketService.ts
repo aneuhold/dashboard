@@ -1,4 +1,4 @@
-import type { DashboardWebSocketServerToClientEvents } from '@aneuhold/core-ts-api-lib';
+import { APIService, type DashboardWebSocketServerToClientEvents } from '@aneuhold/core-ts-api-lib';
 import { DateService } from '@aneuhold/core-ts-lib';
 import { io, Socket } from 'socket.io-client';
 import { apiKey } from '$stores/local/apiKey';
@@ -18,7 +18,7 @@ export default class WebSocketService {
       return;
     } else {
       // Use the namespace `/dashboard` to ensure that we only connect to the dashboard parts
-      this.#socket = io('https://gcloud-backend-926119935605.us-west1.run.app/dashboard', {
+      this.#socket = io(`${APIService.getCurrentAPIUrl()}dashboard`, {
         auth: {
           apiKey: apiKey.get()
         }

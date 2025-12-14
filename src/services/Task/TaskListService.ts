@@ -20,10 +20,14 @@ export default class TaskListService {
   ): DashboardTaskFilterAndSortResult {
     const taskFilterSettings =
       userConfig.config.taskListFilterSettings[category] ??
-      DashboardTaskListFilterSettingsSchema.parse(userConfig.config.userId);
+      DashboardTaskListFilterSettingsSchema.parse({
+        userId: userConfig.config.userId
+      });
     const taskSortSettings =
       userConfig.config.taskListSortSettings[category] ??
-      DashboardTaskListSortSettingsSchema.parse(userConfig.config.userId);
+      DashboardTaskListSortSettingsSchema.parse({
+        userId: userConfig.config.userId
+      });
     return DashboardTaskService.getFilteredAndSortedTaskIds(
       taskMap,
       category,
@@ -49,11 +53,15 @@ export default class TaskListService {
     const taskFilterSettings =
       task.filterSettings[userId] ??
       userConfig.config.taskListFilterSettings[task.category] ??
-      DashboardTaskListFilterSettingsSchema.parse(userId);
+      DashboardTaskListFilterSettingsSchema.parse({
+        userId
+      });
     const taskSortSettings =
       task.sortSettings[userId] ??
       userConfig.config.taskListSortSettings[task.category] ??
-      DashboardTaskListSortSettingsSchema.parse(userId);
+      DashboardTaskListSortSettingsSchema.parse({
+        userId
+      });
     return DashboardTaskService.getFilteredAndSortedTaskIds(
       taskMap,
       task.category,
