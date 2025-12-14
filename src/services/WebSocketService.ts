@@ -1,3 +1,4 @@
+import type { DashboardWebSocketServerToClientEvents } from '@aneuhold/core-ts-api-lib';
 import { io, Socket } from 'socket.io-client';
 import { apiKey } from '$stores/local/apiKey';
 import { createLogger } from '$util/logging/logger';
@@ -8,13 +9,14 @@ const log = createLogger('WebSocketService.ts');
  * A service for handling WebSocket connections used in the application.
  */
 export default class WebSocketService {
-  static #socket?: Socket;
+  static #socket?: Socket<DashboardWebSocketServerToClientEvents, never>;
 
   static connect() {
     if (this.#socket) {
       return;
     } else {
-      this.#socket = io('http://localhost:8080', {
+      // Use the namespace `/dashboard` to ensure that we only connect to the dashboard parts
+      this.#socket = io('http://localhost:8080/dashboard', {
         auth: {
           apiKey: apiKey.get()
         }
@@ -40,24 +42,21 @@ export default class WebSocketService {
     return this.#socket.id;
   }
 
-  static subscribe(event: string, callback: (data: unknown) => void) {
+  /**
+   * Subscribes to the `rootPostResult` event.
+   *
+   * @param callback the callback function to call when the event is emitted
+   * @returns a function to unsubscribe from the event
+   */
+  static subscribeToRootPostResult(
+    callback: DashboardWebSocketServerToClientEvents['rootPostResult']
+  ) {
     if (!this.#socket) {
       this.connect();
     }
-    this.#socket?.on(event, callback);
-  }
-
-  static unsubscribe(event: string, callback: (data: unknown) => void) {
-    if (!this.#socket) {
-      return;
-    }
-    this.#socket.off(event, callback);
-  }
-
-  static emit(event: string, data: unknown) {
-    if (!this.#socket) {
-      this.connect();
-    }
-    this.#socket?.emit(event, data);
+    this.#socket?.on('rootPostResult', callback);
+    return () => {
+      this.#socket?.off('rootPostResult', callback);
+    };
   }
 }
