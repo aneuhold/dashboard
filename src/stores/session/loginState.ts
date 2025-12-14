@@ -1,5 +1,7 @@
 import { writable } from 'svelte/store';
 import { browser } from '$app/environment';
+import WebSocketService from '$services/WebSocketService';
+import DashboardAPIResponseHandlingService from '$util/api/DashboardAPIResponseHandlingService';
 import DashboardAPIService from '$util/api/DashboardAPIService';
 import { createLazyModuleGetter } from '$util/createLazyModuleGetter';
 import LocalData from '$util/LocalData/LocalData';
@@ -23,6 +25,7 @@ const getSentry = createLazyModuleGetter(
 function createLoginStateStore() {
   let _loginState = LoginState.Initializing;
   const { subscribe, set } = writable<LoginState>(_loginState);
+  const handleLoginStateChangeForWebSocket = createHandleLoginStateChangeForWebSocket();
 
   function setLoginState(newState: LoginState) {
     _loginState = newState;
@@ -30,6 +33,9 @@ function createLoginStateStore() {
     if (newState === LoginState.LoggedIn) {
       getSentry()?.setUser({ username: LocalData.username });
     }
+
+    handleLoginStateChangeForWebSocket(newState);
+
     set(_loginState);
   }
 
@@ -48,6 +54,32 @@ function createLoginStateStore() {
       setLoginState(newState);
     },
     get: () => _loginState
+  };
+}
+
+/**
+ * Creates the function that handles changes to the login state for WebSocket purposes.
+ *
+ * This handles it's own state.
+ */
+function createHandleLoginStateChangeForWebSocket(): (newLoginState: LoginState) => void {
+  let subscribedToWebSocket = false;
+
+  return (newLoginState: LoginState) => {
+    if (newLoginState === LoginState.LoggedIn) {
+      // Subscribe to server push updates if we're not already subscribed.
+      if (!subscribedToWebSocket) {
+        WebSocketService.subscribeToRootPostResult((payload) => {
+          DashboardAPIResponseHandlingService.processDashboardApiOutput(payload, false);
+        });
+        subscribedToWebSocket = true;
+      } else {
+        log.warn('Already subscribed to WebSocket, not subscribing again');
+      }
+    } else if (newLoginState === LoginState.LoggedOut) {
+      WebSocketService.disconnect();
+      subscribedToWebSocket = false;
+    }
   };
 }
 

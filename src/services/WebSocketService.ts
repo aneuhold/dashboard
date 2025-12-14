@@ -10,6 +10,7 @@ const log = createLogger('WebSocketService.ts');
  */
 export default class WebSocketService {
   static #socket?: Socket<DashboardWebSocketServerToClientEvents, never>;
+  static #unsubs: (() => void)[] = [];
 
   static connect() {
     if (this.#socket) {
@@ -55,8 +56,31 @@ export default class WebSocketService {
       this.connect();
     }
     this.#socket?.on('rootPostResult', callback);
-    return () => {
+    const unsub = () => {
       this.#socket?.off('rootPostResult', callback);
     };
+    this.#unsubs.push(unsub);
+    return unsub;
+  }
+
+  /**
+   * Disconnects the current socket and clears it so a future `connect()` will
+   * create a fresh connection (useful after logout or API key changes).
+   *
+   * Also clears all current subscriptions.
+   */
+  static disconnect() {
+    if (!this.#socket) return;
+    try {
+      this.#unsubs.forEach((unsub) => {
+        unsub();
+      });
+      this.#unsubs = [];
+      this.#socket.disconnect();
+    } catch (_err) {
+      // Ignore disconnect errors; we'll clear the socket reference regardless.
+      // Logging is omitted as this is a non-critical cleanup operation.
+    }
+    this.#socket = undefined;
   }
 }
