@@ -5,6 +5,7 @@ import {
 } from '@aneuhold/core-ts-api-lib';
 import type { DashboardUserConfig, UserCTO } from '@aneuhold/core-ts-db-lib';
 import type { UUID } from 'crypto';
+import WebSocketService from '$services/WebSocketService';
 import { apiKey } from '$stores/local/apiKey';
 import LocalData from '$util/LocalData/LocalData';
 import { createLogger } from '$util/logging/logger';
@@ -181,7 +182,8 @@ export default class DashboardAPIService {
     log.info('Processing API request', input);
     const result = await APIService.callDashboardAPI({
       apiKey: apiKeyValue,
-      options: input
+      options: input,
+      socketId: WebSocketService.getSocketId()
     });
     if (result.success) {
       log.info('Successfully processed API request', input);

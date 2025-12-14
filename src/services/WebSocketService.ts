@@ -1,4 +1,5 @@
 import type { DashboardWebSocketServerToClientEvents } from '@aneuhold/core-ts-api-lib';
+import { DateService } from '@aneuhold/core-ts-lib';
 import { io, Socket } from 'socket.io-client';
 import { apiKey } from '$stores/local/apiKey';
 import { createLogger } from '$util/logging/logger';
@@ -55,7 +56,10 @@ export default class WebSocketService {
     if (!this.#socket) {
       this.connect();
     }
-    this.#socket?.on('rootPostResult', callback);
+    this.#socket?.on('rootPostResult', (data) => {
+      this.reviveDates(data);
+      callback(data);
+    });
     const unsub = () => {
       this.#socket?.off('rootPostResult', callback);
     };
@@ -82,5 +86,32 @@ export default class WebSocketService {
       // Logging is omitted as this is a non-critical cleanup operation.
     }
     this.#socket = undefined;
+  }
+
+  /**
+   * This really needs to be refactored into something else. Maybe Zod. It is used and exactly
+   * the same on the server as well.
+   *
+   * @param body the body to revive
+   */
+  private static reviveDates(body: unknown) {
+    if (body === null || typeof body !== 'object') {
+      return;
+    }
+
+    const keys = Object.keys(body);
+    if (keys.length === 0) {
+      return;
+    }
+    const bodyAsRecord = body as Record<string, unknown>;
+    for (const key of Object.keys(bodyAsRecord)) {
+      const value = bodyAsRecord[key];
+      const revivedValue = DateService.dateReviver(key, value);
+      if (revivedValue !== value) {
+        bodyAsRecord[key] = revivedValue;
+      } else if (typeof value === 'object') {
+        this.reviveDates(value);
+      }
+    }
   }
 }

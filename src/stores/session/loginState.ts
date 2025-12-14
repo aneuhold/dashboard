@@ -70,6 +70,7 @@ function createHandleLoginStateChangeForWebSocket(): (newLoginState: LoginState)
       // Subscribe to server push updates if we're not already subscribed.
       if (!subscribedToWebSocket) {
         WebSocketService.subscribeToRootPostResult((payload) => {
+          log.info('Received WebSocket payload:', payload);
           DashboardAPIResponseHandlingService.processDashboardApiOutput(payload, false);
         });
         subscribedToWebSocket = true;
