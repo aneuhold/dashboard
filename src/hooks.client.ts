@@ -1,5 +1,9 @@
 import * as Sentry from '@sentry/sveltekit';
 import { captureConsoleIntegration, handleErrorWithSentry } from '@sentry/sveltekit';
+import localOverride from '$util/localOverride';
+
+// Override API URL for local development before anything else runs
+localOverride();
 
 const debugSentry = false;
 const initalizeSentry =

@@ -7,7 +7,7 @@ import {
   DashboardTaskService
 } from '@aneuhold/core-ts-db-lib';
 import type { UUID } from 'crypto';
-import type { UserSettings } from '$stores/userSettings/userSettings';
+import type { UserConfig } from '$stores/local/userConfig/userConfig';
 
 /**
  * A service responsible for getting filtered and sorted lists of task IDs.
@@ -15,27 +15,27 @@ import type { UserSettings } from '$stores/userSettings/userSettings';
 export default class TaskListService {
   static getTaskIds(
     taskMap: DashboardTaskMap,
-    userSettings: UserSettings,
+    userConfig: UserConfig,
     category: string
   ): DashboardTaskFilterAndSortResult {
     const taskFilterSettings =
-      userSettings.config.taskListFilterSettings[category] ??
-      DashboardTaskListFilterSettingsSchema.parse(userSettings.config.userId);
+      userConfig.config.taskListFilterSettings[category] ??
+      DashboardTaskListFilterSettingsSchema.parse(userConfig.config.userId);
     const taskSortSettings =
-      userSettings.config.taskListSortSettings[category] ??
-      DashboardTaskListSortSettingsSchema.parse(userSettings.config.userId);
+      userConfig.config.taskListSortSettings[category] ??
+      DashboardTaskListSortSettingsSchema.parse(userConfig.config.userId);
     return DashboardTaskService.getFilteredAndSortedTaskIds(
       taskMap,
       category,
       taskFilterSettings,
       taskSortSettings,
-      userSettings.config.tagSettings
+      userConfig.config.tagSettings
     );
   }
 
   static getTaskIdsForTask(
     taskMap: DashboardTaskMap,
-    userSettings: UserSettings,
+    userConfig: UserConfig,
     allChildrenIds: UUID[],
     task?: DashboardTask
   ): DashboardTaskFilterAndSortResult {
@@ -45,21 +45,21 @@ export default class TaskListService {
         removedIds: []
       };
     }
-    const userId = userSettings.config.userId;
+    const userId = userConfig.config.userId;
     const taskFilterSettings =
       task.filterSettings[userId] ??
-      userSettings.config.taskListFilterSettings[task.category] ??
+      userConfig.config.taskListFilterSettings[task.category] ??
       DashboardTaskListFilterSettingsSchema.parse(userId);
     const taskSortSettings =
       task.sortSettings[userId] ??
-      userSettings.config.taskListSortSettings[task.category] ??
+      userConfig.config.taskListSortSettings[task.category] ??
       DashboardTaskListSortSettingsSchema.parse(userId);
     return DashboardTaskService.getFilteredAndSortedTaskIds(
       taskMap,
       task.category,
       taskFilterSettings,
       taskSortSettings,
-      userSettings.config.tagSettings,
+      userConfig.config.tagSettings,
       {
         taskId: task._id,
         allChildrenIds: allChildrenIds

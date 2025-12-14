@@ -10,19 +10,8 @@ import type {
   NonogramKatanaUpgrade
 } from '@aneuhold/core-ts-db-lib';
 import { DateService } from '@aneuhold/core-ts-lib';
-import { writable } from 'svelte/store';
-import type { UserSettings } from '$stores/userSettings/userSettings';
-
-function createLocalDataReadyStore() {
-  const { subscribe, set } = writable<boolean>(false);
-
-  return {
-    subscribe,
-    set
-  };
-}
-
-export const localDataReady = createLocalDataReadyStore();
+import { browser } from '$app/environment';
+import type { UserConfig } from '$stores/local/userConfig/userConfig';
 
 export default class LocalData {
   /**
@@ -31,7 +20,7 @@ export default class LocalData {
    */
   private static PREFIX = 'v3-';
 
-  private static localStorageAvailable = false;
+  private static localStorageAvailable = browser;
 
   private static storedKeyNames = {
     password: `${this.PREFIX}password`,
@@ -39,25 +28,13 @@ export default class LocalData {
     apiKey: `${this.PREFIX}apiKey`,
     dashboardConfig: `${this.PREFIX}dashboardConfig`,
     translations: `${this.PREFIX}translations`,
-    userSettings: `${this.PREFIX}userSettings`,
+    userConfig: `${this.PREFIX}userConfig`,
     taskMap: `${this.PREFIX}taskMap`,
     currentApiRequest: `${this.PREFIX}currentApiRequest`,
     apiRequestQueue: `${this.PREFIX}apiRequestQueue`,
     nonogramKatanaItemMap: `${this.PREFIX}nonogramKatanaItemMap`,
     nonogramKatanaUpgradeMap: `${this.PREFIX}nonogramKatanaUpgradeMap`
   };
-
-  /**
-   * An initialization function that should be called before any other
-   * functions in this class are called. This is because sometimes the JS
-   * loads before the window somehow.
-   */
-  static initialize() {
-    if (typeof window !== 'undefined') {
-      this.localStorageAvailable = true;
-    }
-    localDataReady.set(true);
-  }
 
   private static storeValue(key: string, value: string) {
     if (this.localStorageAvailable) {
@@ -124,12 +101,12 @@ export default class LocalData {
     return this.getStoredObject<Translations>(LocalData.storedKeyNames.translations);
   }
 
-  static set userSettings(newSettings: UserSettings | null) {
-    this.storeValue(LocalData.storedKeyNames.userSettings, JSON.stringify(newSettings));
+  static set userConfig(newSettings: UserConfig | null) {
+    this.storeValue(LocalData.storedKeyNames.userConfig, JSON.stringify(newSettings));
   }
 
-  static get userSettings() {
-    return this.getStoredObject<UserSettings>(LocalData.storedKeyNames.userSettings);
+  static get userConfig() {
+    return this.getStoredObject<UserConfig>(LocalData.storedKeyNames.userConfig);
   }
 
   static set taskMap(newTaskMap: DashboardTaskMap | null) {

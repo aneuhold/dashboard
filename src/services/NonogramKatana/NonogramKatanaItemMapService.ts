@@ -8,6 +8,7 @@ import type { UUID } from 'crypto';
 import { nonogramKatanaItemsDisplayInfo } from '$routes/entertainment/nonogramkatana/items/nonogramKatanaItemsDisplayInfo';
 import DashboardAPIService from '$util/api/DashboardAPIService';
 import LocalData from '$util/LocalData/LocalData';
+import { createLogger } from '$util/logging/logger';
 import type {
   DocumentInsertOrUpdateInfo,
   DocumentMapStore,
@@ -15,12 +16,14 @@ import type {
 } from '../DocumentMapStoreService';
 import DocumentMapStoreService from '../DocumentMapStoreService';
 
+const log = createLogger('NonogramKatanaItemMapService.ts');
+
 /**
  * The Nonogram Katana item map service.
  */
 export class NonogramKatanaItemMapService extends DocumentMapStoreService<NonogramKatanaItem> {
   private static instance = new NonogramKatanaItemMapService();
-  private static nameToIdMap: { [itemName: string]: UUID } = {};
+  private static nameToIdMap: { [itemName: string]: UUID | undefined } = {};
 
   private constructor() {
     super();
@@ -34,7 +37,7 @@ export class NonogramKatanaItemMapService extends DocumentMapStoreService<Nonogr
     const itemStore = this.instance.getDocStore(itemId);
     const itemDoc = this.getMap()[itemId];
     if (!itemDoc) {
-      console.error(`No item found for ${itemId}. Something went wrong, this shouldn't happen.`);
+      log.error(`No item found for ${itemId}. Something went wrong, this shouldn't happen.`);
       return itemStore;
     }
     this.nameToIdMap[itemDoc.itemName] = itemId;
@@ -45,7 +48,8 @@ export class NonogramKatanaItemMapService extends DocumentMapStoreService<Nonogr
     if (!this.nameToIdMap[itemName]) {
       this.createItemNameIdMap(this.getMap());
     }
-    return this.getItemStore(this.nameToIdMap[itemName]);
+    // It is guaranteed that the item exists at this point.
+    return this.getItemStore(this.nameToIdMap[itemName] as UUID);
   }
 
   static getMap(): DocumentMap<NonogramKatanaItem> {
@@ -57,7 +61,7 @@ export class NonogramKatanaItemMapService extends DocumentMapStoreService<Nonogr
    * on the defaults. It was done this way so that the user didn't need to
    * always have this data created on application load.
    *
-   * @param userId
+   * @param userId The ID of the user to create or update items for.
    */
   static createOrUpdateItems(userId: UUID): void {
     const currentMap = this.getMap();

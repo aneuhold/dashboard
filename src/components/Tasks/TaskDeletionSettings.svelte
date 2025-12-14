@@ -1,7 +1,7 @@
 <script lang="ts">
   import InfoIcon from '$components/InfoIcon.svelte';
   import InputBox from '$components/presentational/InputBox/InputBox.svelte';
-  import { userSettings } from '$stores/userSettings/userSettings';
+  import { userConfig } from '$stores/local/userConfig/userConfig';
 </script>
 
 <div class="titleContainer">
@@ -25,8 +25,8 @@
 </div>
 <InputBox
   inputType="number"
-  inputValue={$userSettings.config.autoTaskDeletionDays}
-  bind:onBlurValue={$userSettings.config.autoTaskDeletionDays}
+  inputValue={$userConfig.config.autoTaskDeletionDays}
+  bind:onBlurValue={$userConfig.config.autoTaskDeletionDays}
   min={5}
   max={90}
 />

@@ -23,12 +23,12 @@ import type { Action } from 'svelte/action';
  * {/if}
  * ```
  *
- * @param node
- * @param callbackFunction
+ * @param node The element to watch for outside clicks.
+ * @param callbackFunction The function to call when a click outside the element occurs.
  */
 export const clickOutside: Action<HTMLElement, () => void> = (node, callbackFunction) => {
   const handleClick = (event: MouseEvent) => {
-    if (node && !node.contains(event.target as Node)) {
+    if (!node.contains(event.target as Node)) {
       callbackFunction();
     }
   };

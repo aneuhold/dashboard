@@ -7,26 +7,19 @@
   import '../globalStyles/global.css';
   import CircularProgress from '@smui/circular-progress';
   import { onDestroy, onMount, type Snippet } from 'svelte';
+  import { browser } from '$app/environment';
   import Confetti from '$components/singletons/Confetti/Confetti.svelte';
   import SingletonConfirmationDialog from '$components/singletons/dialogs/SingletonConfirmationDialog.svelte';
   import SingletonTaskAssignmentDialog from '$components/singletons/dialogs/SingletonTaskAssignmentDialog/SingletonTaskAssignmentDialog.svelte';
   import SingletonTaskSharingDialog from '$components/singletons/dialogs/SingletonTaskSharingDialog/SingletonTaskSharingDialog.svelte';
   import SingletonSnackbar from '$components/singletons/SingletonSnackbar.svelte';
-  import LocalData from '$util/LocalData/LocalData';
-  import localOverride from '$util/localOverride';
+  import { appIsVisible } from '$stores/session/appIsVisible';
+  import { LoginState, loginState } from '$stores/session/loginState';
   import Login from '../components/Login/Login.svelte';
   import NavBar from '../components/NavBar.svelte';
-  import { appIsVisible } from '../stores/appIsVisible';
-  import { LoginState, loginState } from '../stores/loginState';
   let { children }: { children?: Snippet } = $props();
 
   let mounted = $state(false);
-
-  // Top-level initialization of local data. This should only be done here.
-  LocalData.initialize();
-
-  // Override if wanted for local development
-  localOverride();
 
   // Without this, the layout fluctuates a lot when the page is starting up.
   onMount(() => {
@@ -38,12 +31,12 @@
   };
 
   // Global app visibility change listener
-  if (typeof document !== 'undefined') {
+  if (browser) {
     document.addEventListener('visibilitychange', handleVisibilityChange);
   }
 
   onDestroy(() => {
-    if (typeof document !== 'undefined') {
+    if (browser) {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     }
   });

@@ -2,23 +2,23 @@
   import Button from '@smui/button';
   import { flip } from 'svelte/animate';
   import InfoIcon from '$components/InfoIcon.svelte';
-  import { userSettings } from '$stores/userSettings/userSettings';
+  import { userConfig } from '$stores/local/userConfig/userConfig';
   import GlobalTagEditor from './GlobalTagEditor.svelte';
   import GlobalTagRow from './GlobalTagRow.svelte';
 
-  let tagSettings = $derived($userSettings.config.tagSettings);
+  let tagSettings = $derived($userConfig.config.tagSettings);
   let sortableTagList = $derived(
     Object.keys(tagSettings)
       .filter((tagName) => {
-        return tagSettings[tagName].priority !== 0;
+        return tagSettings[tagName]?.priority !== 0;
       })
       .sort((a, b) => {
-        return tagSettings[b].priority - tagSettings[a].priority;
+        return tagSettings[b]?.priority ?? 0 - (tagSettings[a]?.priority ?? 0);
       })
   );
   let nonSortableTagList = $derived(
     Object.keys(tagSettings).filter((tagName) => {
-      return tagSettings[tagName].priority === 0;
+      return tagSettings[tagName]?.priority === 0;
     })
   );
 

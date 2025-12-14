@@ -3,17 +3,15 @@ import {
   type ProjectDashboardOptions,
   type ProjectDashboardOutput
 } from '@aneuhold/core-ts-api-lib';
-import type { BaseDocument, DashboardUserConfig, UserCTO } from '@aneuhold/core-ts-db-lib';
+import type { DashboardUserConfig, UserCTO } from '@aneuhold/core-ts-db-lib';
 import type { UUID } from 'crypto';
-import { snackbar } from '$components/singletons/SingletonSnackbar.svelte';
-import { NonogramKatanaItemMapService } from '$services/NonogramKatana/NonogramKatanaItemMapService';
-import { NonogramKatanaUpgradeMapService } from '$services/NonogramKatana/NonogramKatanaUpgradeMapService';
-import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
-import { apiKey } from '$stores/apiKey';
-import { LoginState, loginState } from '$stores/loginState';
-import { translations } from '$stores/translations';
-import { userSettings } from '$stores/userSettings/userSettings';
+import WebSocketService from '$services/WebSocketService';
+import { apiKey } from '$stores/local/apiKey';
 import LocalData from '$util/LocalData/LocalData';
+import { createLogger } from '$util/logging/logger';
+import DashboardAPIResponseHandlingService from './DashboardAPIResponseHandlingService';
+
+const log = createLogger('DashboardAPIService.ts');
 
 const SECONDS_TO_WAIT_BEFORE_FETCHING_INITIAL_DATA = 10;
 
@@ -34,7 +32,7 @@ export default class DashboardAPIService {
    * If an API request is already being processed, this will be added
    * to the queue and executed after the previous request is done.
    *
-   * @param apiOptions
+   * @param apiOptions The API options that describe the desired operation(s).
    */
   static queryApi(apiOptions: ProjectDashboardOptions) {
     // Add the options to the queue
@@ -55,14 +53,14 @@ export default class DashboardAPIService {
    * ago or it hasn't been fetched yet.
    */
   static getInitialDataIfNeeded() {
-    if (loginState.get() === LoginState.LoggedIn && LocalData.apiRequestQueue.length === 0) {
+    if (apiKey.get() && LocalData.apiRequestQueue.length === 0) {
       if (!this.lastInitialDataFetchTime) {
         this.getInitialData();
       } else if (
         this.lastInitialDataFetchTime <
         Date.now() - SECONDS_TO_WAIT_BEFORE_FETCHING_INITIAL_DATA * 1000
       ) {
-        console.info(
+        log.info(
           'Fetching initial data because it has been more than',
           SECONDS_TO_WAIT_BEFORE_FETCHING_INITIAL_DATA,
           'seconds since the last fetch and the user reopened the app.'
@@ -84,7 +82,7 @@ export default class DashboardAPIService {
    * Gets the initial data from the backend and sets the stores accordingly.
    */
   static getInitialData(): void {
-    console.log('Getting initial data...');
+    log.info('Getting initial data...');
     this.processingFirstInitData = !this.lastInitialDataFetchTime;
     this.lastInitialDataFetchTime = Date.now();
 
@@ -100,7 +98,7 @@ export default class DashboardAPIService {
   }
 
   static updateSettings(updatedConfig: DashboardUserConfig) {
-    console.info('Saving user settings...');
+    log.info('Saving user settings...');
     this.queryApi({
       // Get tasks as well because the collaborators might have changed
       get: { userConfig: true, tasks: true },
@@ -113,7 +111,7 @@ export default class DashboardAPIService {
   /**
    * This processes separately from the queue because it is a special case.
    *
-   * @param username
+   * @param username The username to validate.
    */
   static async checkIfUsernameIsValid(username: string): Promise<UserCTO | null> {
     const apiKeyValue = this.checkOrSetupDashboardAPI();
@@ -128,7 +126,7 @@ export default class DashboardAPIService {
     if (result.success && result.data.userFromUserName) {
       return result.data.userFromUserName;
     } else {
-      console.info('Invalid username', result);
+      log.info('Invalid username', result);
       return null;
     }
   }
@@ -152,7 +150,7 @@ export default class DashboardAPIService {
       const currentRequest = this.shiftApiRequestQueue();
       LocalData.currentApiRequest = currentRequest;
       if (!currentRequest) {
-        console.error('No current API request to process, something went wrong!!');
+        log.error('No current API request to process, something went wrong!!');
         break;
       }
       const result = await this.callDashboardAPI(currentRequest);
@@ -163,7 +161,11 @@ export default class DashboardAPIService {
         // Only set the stores if there are no more requests to process. This
         // should help prevent the stores from being set to an old value if
         // the user refreshes the page while the task queue is being processed.
-        this.processDashboardApiOutput(combinedOutput);
+        DashboardAPIResponseHandlingService.processDashboardApiOutput(
+          combinedOutput,
+          this.processingFirstInitData
+        );
+        this.processingFirstInitData = false;
       } else {
         // If there was an error, add the task back to the queue and try again
         // Save this for later to ensure there is no infinite loop
@@ -177,61 +179,19 @@ export default class DashboardAPIService {
     input: ProjectDashboardOptions
   ): Promise<ProjectDashboardOutput | null> {
     const apiKeyValue = this.checkOrSetupDashboardAPI();
-    console.log('Processing API request', input);
+    log.info('Processing API request', input);
     const result = await APIService.callDashboardAPI({
       apiKey: apiKeyValue,
-      options: input
+      options: input,
+      socketId: WebSocketService.getSocketId()
     });
     if (result.success) {
-      console.info('Successfully processed API request', input);
+      log.info('Successfully processed API request', input);
       return result.data;
     } else {
-      console.error('Error processing API request', input, result);
+      log.error('Error processing API request', input, result);
       return null;
     }
-  }
-
-  /**
-   * Processes the final output of a series of API requests.
-   *
-   * @param output The combined output of all API requests
-   */
-  private static processDashboardApiOutput(output: ProjectDashboardOutput) {
-    if (output.translations) {
-      translations.set(output.translations);
-    }
-    if (output.userConfig) {
-      userSettings.setWithoutPropogation({
-        config: output.userConfig,
-        collaborators: this.getCollaboratorsFromResult(output)
-      });
-    }
-    if (output.tasks) {
-      TaskMapService.getStore().set(this.convertDocumentArrayToMap(output.tasks));
-    }
-    if (output.nonogramKatanaItems) {
-      NonogramKatanaItemMapService.getStore().set(
-        this.convertDocumentArrayToMap(output.nonogramKatanaItems)
-      );
-    }
-    if (output.nonogramKatanaUpgrades) {
-      NonogramKatanaUpgradeMapService.getStore().set(
-        this.convertDocumentArrayToMap(output.nonogramKatanaUpgrades)
-      );
-    }
-    // Trigger some extra info if this is the first sync
-    if (this.processingFirstInitData && Object.keys(output).length > 0) {
-      loginState.set(LoginState.LoggedIn);
-      console.info('Successfully got initial data');
-      snackbar.success('Successfully synced 🎉');
-    } else if (this.processingFirstInitData) {
-      // If there wasn't any data that came back from the initial sync, then
-      // something went wrong.
-      loginState.set(LoginState.LoggedOut);
-      console.error('Error getting initial data', output);
-      snackbar.error('Error syncing');
-    }
-    this.processingFirstInitData = false;
   }
 
   private static pushApiRequest(apiInput: ProjectDashboardOptions) {
@@ -245,25 +205,5 @@ export default class DashboardAPIService {
     const result = apiRequestQueue.shift();
     LocalData.apiRequestQueue = apiRequestQueue;
     return result;
-  }
-
-  private static convertDocumentArrayToMap<T extends BaseDocument>(
-    documents: T[]
-  ): Record<string, T> {
-    return documents.reduce<Record<string, T>>((map, document) => {
-      map[document._id] = document;
-      return map;
-    }, {});
-  }
-
-  static getCollaboratorsFromResult(data: ProjectDashboardOutput): Record<string, UserCTO> {
-    if (data.collaborators) {
-      return data.collaborators.reduce<Record<string, UserCTO>>((collaboratorsMap, userCto) => {
-        collaboratorsMap[userCto._id] = userCto;
-        return collaboratorsMap;
-      }, {});
-    } else {
-      return {};
-    }
   }
 }

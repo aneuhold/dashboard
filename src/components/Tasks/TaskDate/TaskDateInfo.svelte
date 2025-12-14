@@ -6,7 +6,10 @@
   import { confirmationDialog } from '$components/singletons/dialogs/SingletonConfirmationDialog.svelte';
   import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
   import TaskRecurrenceService from '$services/Task/TaskRecurrenceService';
+  import { createLogger } from '$util/logging/logger';
   import TaskDateButton from './TaskDateButton.svelte';
+
+  const log = createLogger('TaskDateInfo.svelte');
 
   let { taskId }: { taskId: UUID } = $props();
   let task = $derived(TaskMapService.getTaskStore(taskId));
@@ -65,9 +68,7 @@
           onConfirm: () => {
             task.update((task) => {
               if (!task.recurrenceInfo) {
-                console.error(
-                  'Task had no recurrence info while trying to update recurrence basis!'
-                );
+                log.error('Task had no recurrence info while trying to update recurrence basis!');
                 return task;
               }
               if (currentlyChosenDateType === 'start') {

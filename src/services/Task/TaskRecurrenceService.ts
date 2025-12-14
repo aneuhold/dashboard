@@ -10,11 +10,14 @@ import {
   type RecurrenceInfo
 } from '@aneuhold/core-ts-db-lib';
 import type { Unsubscriber, Updater } from 'svelte/store';
-import { appIsVisible } from '$stores/appIsVisible';
-import { timeMinute } from '$stores/timeMinute';
+import { appIsVisible } from '$stores/session/appIsVisible';
+import { timeMinute } from '$stores/session/timeMinute';
 import DashboardAPIService from '$util/api/DashboardAPIService';
+import { createLogger } from '$util/logging/logger';
 import type { DocumentMapStoreSubscriber, UpsertManyInfo } from '../DocumentMapStoreService';
 import TaskOperationsService from './TaskOperationsService';
+
+const log = createLogger('TaskRecurrenceService.ts');
 
 type TaskRecurrenceSubMap = { [taskId: string]: Unsubscriber | undefined };
 
@@ -32,10 +35,10 @@ export default class TaskRecurrenceService {
    * Creates an example of what would happen to a task if the recurrence
    * were to occur.
    *
-   * @param startDate
-   * @param dueDate
-   * @param recurrenceInfo
-   * @param parentRecurringTaskInfo
+   * @param recurrenceInfo the recurrence info to use for the example
+   * @param startDate the start date of the task
+   * @param dueDate the due date of the task
+   * @param parentRecurringTaskInfo the parent recurring task info to use for the example
    */
   static createExampleOfRecurrence(
     recurrenceInfo: RecurrenceInfo,
@@ -120,7 +123,7 @@ export default class TaskRecurrenceService {
     if (!task.recurrenceInfo || task.parentRecurringTaskInfo) {
       return;
     }
-    console.log('Executing recurrence for task', task);
+    log.info('Executing recurrence for task', task);
     upsertMany(this.getRecurrenceUpdateInfo(taskMap, task));
   }
 

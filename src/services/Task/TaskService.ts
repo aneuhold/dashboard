@@ -16,7 +16,7 @@ export default class TaskService {
   /**
    * Gets the appropriate route for the task category page for the given task.
    *
-   * @param taskId
+   * @param taskId The ID of the task to generate breadcrumb entries for.
    */
   static getTaskCategoryBreadCrumbs(taskId: UUID): BreadCrumbArray {
     const defaultBreadCrumbs = [{ name: 'tasks', link: 'tasks' }];
@@ -60,9 +60,9 @@ export default class TaskService {
   /**
    * A generic method for handling the delete click for a task.
    *
-   * @param allChildrenIdsLength
-   * @param deleteTaskCallback
-   * @param taskTitle
+   * @param allChildrenIdsLength The count of children (nested tasks) for this task.
+   * @param deleteTaskCallback A callback to call to perform the actual deletion.
+   * @param taskTitle The title of the task, used in the confirmation dialog.
    */
   static handleDeleteTaskClick(
     allChildrenIdsLength: number,
@@ -87,7 +87,7 @@ export default class TaskService {
    * Recursively finds the parent ID of the given task that has the same
    * sharedWith array.
    *
-   * @param task
+   * @param task The task to inspect when searching for a parent with the same sharedWith array.
    */
   static findParentIdWithSameSharedWith(task: DashboardTask): UUID {
     if (!task.parentTaskId || task.sharedWith.length === 0) {

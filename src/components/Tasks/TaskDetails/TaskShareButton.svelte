@@ -5,7 +5,7 @@
   import { taskSharingDialog } from '$components/singletons/dialogs/SingletonTaskSharingDialog/SingletonTaskSharingDialog.svelte';
   import type { DocumentStore } from '$services/DocumentMapStoreService';
   import TaskService from '$services/Task/TaskService';
-  import { userSettings } from '$stores/userSettings/userSettings';
+  import { userConfig } from '$stores/local/userConfig/userConfig';
 
   let {
     task
@@ -13,7 +13,7 @@
     task: DocumentStore<DashboardTask>;
   } = $props();
 
-  let sharingDisabled = $derived($task.userId !== $userSettings.config.userId);
+  let sharingDisabled = $derived($task.userId !== $userConfig.config.userId);
   let finalParentId = $derived(TaskService.findParentIdWithSameSharedWith($task));
   let taskId = $derived($task._id);
   let buttonText = $derived(

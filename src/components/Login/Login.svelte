@@ -6,14 +6,16 @@
   } from '@aneuhold/core-ts-api-lib';
   import Button, { Label } from '@smui/button';
   import CircularProgress from '@smui/circular-progress';
-  import type { UUID } from 'crypto';
   import InputBox from '$components/presentational/InputBox/InputBox.svelte';
-  import { apiKey } from '$stores/apiKey';
-  import { dashboardConfig } from '$stores/dashboardConfig';
-  import { LoginState, loginState } from '$stores/loginState';
-  import { password } from '$stores/password';
+  import { apiKey } from '$stores/local/apiKey';
+  import { dashboardConfig } from '$stores/local/dashboardConfig';
+  import { password } from '$stores/local/password';
+  import { LoginState, loginState } from '$stores/session/loginState';
   import DashboardAPIService from '$util/api/DashboardAPIService';
   import LocalData from '$util/LocalData/LocalData';
+  import { createLogger } from '$util/logging/logger';
+
+  const log = createLogger('Login.svelte');
 
   let typedUserName = $state(LocalData.username);
   let typedPassword = $state(LocalData.password);
@@ -41,19 +43,19 @@
     ) {
       dashboardConfig.set(validationResponse.data.config.dashboard);
       invalidCredentials = false;
-      const apiKeyValue = validationResponse.data.userInfo.apiKey.key as UUID;
+      const apiKeyValue = validationResponse.data.userInfo.apiKey.key;
       apiKey.set(apiKeyValue);
       if (!$dashboardConfig?.projectDashboardFunctionUrl) {
-        console.error('No dashboard function URL found in config');
+        log.error('No dashboard function URL found in config');
         return;
       }
-      // This will eventually update the login state
       DashboardAPIService.getInitialDataForLogin();
+      $loginState = LoginState.LoggedIn;
     } else if (!validationResponse.success) {
       $loginState = LoginState.LoggedOut;
       invalidCredentials = true;
     } else {
-      console.error('Unexpected response from validateUser', validationResponse);
+      log.error('Unexpected response from validateUser', validationResponse);
     }
   }
 </script>

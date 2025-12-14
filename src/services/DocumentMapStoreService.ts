@@ -1,7 +1,10 @@
 import type { BaseDocument, DocumentMap } from '@aneuhold/core-ts-db-lib';
 import type { UUID } from 'crypto';
 import { type Readable, type Updater, type Writable, writable } from 'svelte/store';
-import { localDataReady } from '$util/LocalData/LocalData';
+import { browser } from '$app/environment';
+import { createLogger } from '$util/logging/logger';
+
+const log = createLogger('DocumentMapStoreService.ts');
 
 /**
  * A store that has persistence capabilities and is a child of a
@@ -12,7 +15,7 @@ export interface PersistentChildStore<T> {
    * Sets the value of the store without propogating the change to the parent
    * store. This should only be used by the parent store.
    */
-  setWithoutPropogation: (value: T) => void;
+  setWithoutPropagation: (value: T) => void;
 }
 
 export interface PersistentParentStore<T> {
@@ -249,7 +252,7 @@ export default abstract class DocumentMapStoreService<T extends BaseDocument> {
       update: (updater: Updater<T>) => {
         updateDoc(updater);
       },
-      setWithoutPropogation: (newDoc: T) => {
+      setWithoutPropagation: (newDoc: T) => {
         set(newDoc);
       }
     };
@@ -258,13 +261,11 @@ export default abstract class DocumentMapStoreService<T extends BaseDocument> {
   private createMapStore(): DocumentMapStore<T> {
     const { subscribe, set } = writable<DocumentMap<T>>(this.documentMap);
 
-    localDataReady.subscribe((ready) => {
-      const localDataMap = this.getFromLocalData();
-      if (ready && localDataMap) {
-        this.documentMap = localDataMap;
-        set(localDataMap);
-      }
-    });
+    const localDataMap = browser ? this.getFromLocalData() : null;
+    if (localDataMap) {
+      this.documentMap = localDataMap;
+      set(localDataMap);
+    }
 
     const setMap = () => {
       set(this.documentMap);
@@ -291,7 +292,7 @@ export default abstract class DocumentMapStoreService<T extends BaseDocument> {
         const childStore = this.childStores[docId];
         if (childStore) {
           // Set the child store without propogating the change to the parent
-          childStore.setWithoutPropogation(updatedDoc);
+          childStore.setWithoutPropagation(updatedDoc);
         }
         // Return the updated doc, which is in the same memory location as the
         // original doc in the map
@@ -317,7 +318,7 @@ export default abstract class DocumentMapStoreService<T extends BaseDocument> {
       docIds.forEach((id) => {
         const doc = this.documentMap[id];
         if (!doc) {
-          console.error(`Document with ID ${id} does not exist in the map.`);
+          log.error(`Document with ID ${id} does not exist in the map.`);
           return;
         }
         docsToDelete.push(doc);
@@ -338,7 +339,7 @@ export default abstract class DocumentMapStoreService<T extends BaseDocument> {
       docIdsToDelete.forEach((id) => {
         const doc = this.documentMap[id];
         if (!doc) {
-          console.error(`Document with ID ${id} does not exist in the map.`);
+          log.error(`Document with ID ${id} does not exist in the map.`);
           return;
         }
         allDocsToDelete.push(doc);
@@ -381,7 +382,7 @@ export default abstract class DocumentMapStoreService<T extends BaseDocument> {
           if (!doc) {
             delete this.childStores[docId];
           } else if (store) {
-            store.setWithoutPropogation(doc);
+            store.setWithoutPropagation(doc);
           }
         });
         setMap();
@@ -395,7 +396,7 @@ export default abstract class DocumentMapStoreService<T extends BaseDocument> {
         this.previousState = this.persistToLocalData();
         const doc = this.documentMap[childId];
         if (!doc) {
-          console.error(`Document with ID ${childId} does not exist in the map.`);
+          log.error(`Document with ID ${childId} does not exist in the map.`);
         } else {
           this.persistToDb({
             update: [doc]

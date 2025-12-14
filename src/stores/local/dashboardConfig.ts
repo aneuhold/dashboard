@@ -1,18 +1,13 @@
 import type { DashboardConfig } from '@aneuhold/core-ts-api-lib';
 import { writable } from 'svelte/store';
-import LocalData, { localDataReady } from '$util/LocalData/LocalData';
+import { browser } from '$app/environment';
+import LocalData from '$util/LocalData/LocalData';
 
 function createDashboardConfigStore() {
-  const { subscribe, set } = writable<DashboardConfig | null>(null);
+  const initialConfig = browser ? LocalData.dashboardConfig : null;
+  const { subscribe, set } = writable<DashboardConfig | null>(initialConfig);
 
-  let dashboardConfig: DashboardConfig | null = null;
-
-  localDataReady.subscribe((ready) => {
-    if (ready) {
-      set(LocalData.dashboardConfig);
-      dashboardConfig = LocalData.dashboardConfig;
-    }
-  });
+  let dashboardConfig: DashboardConfig | null = initialConfig;
 
   return {
     subscribe,
@@ -27,4 +22,7 @@ function createDashboardConfigStore() {
   };
 }
 
+/**
+ * The store for managing the global dashboard configuration. This isn't tied to a specific user.
+ */
 export const dashboardConfig = createDashboardConfigStore();

@@ -7,7 +7,7 @@
     MockTaskSharedWith,
     MockTaskSubTasks
   } from '$services/Task/TaskMapService/TaskMapService.mock';
-  import { userSettings } from '$stores/userSettings/userSettings';
+  import { userConfig } from '$stores/local/userConfig/userConfig';
   import MockData from '$testUtils/MockData';
   import TaskList from '../TaskList.svelte';
 
@@ -53,9 +53,7 @@
 
   const taskMap = TaskMapService.getStore();
 
-  let sortAndFilterResult = $derived(
-    TaskListService.getTaskIds($taskMap, $userSettings, 'default')
-  );
+  let sortAndFilterResult = $derived(TaskListService.getTaskIds($taskMap, $userConfig, 'default'));
 </script>
 
 <TaskList category="default" {sortAndFilterResult} />

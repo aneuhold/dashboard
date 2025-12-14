@@ -4,7 +4,7 @@
   import InputBox from '$components/presentational/InputBox/InputBox.svelte';
   import SmartDialog from '$components/presentational/SmartDialog.svelte';
   import TaskTagsService from '$services/Task/TaskTagsService';
-  import { userSettings } from '$stores/userSettings/userSettings';
+  import { userConfig } from '$stores/local/userConfig/userConfig';
 
   let {
     open = $bindable(false),
@@ -36,7 +36,7 @@
 
   function validateTagEditorValue(value: string) {
     if (tagEditorValue === '') return false;
-    return tagEditorValue === tagName || !$userSettings.config.tagSettings[value];
+    return tagEditorValue === tagName || !$userConfig.config.tagSettings[value];
   }
   let tagEditorValue = $derived(tagName ?? '');
   let tagValueIsValid = $derived(validateTagEditorValue(tagEditorValue));

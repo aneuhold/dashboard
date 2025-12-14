@@ -8,7 +8,7 @@
   import LinkList from '$components/LinkList.svelte';
   import type { LinkInfo } from '$components/LinkListItem.svelte';
   import PageTitle from '$components/PageTitle.svelte';
-  import { TR, translations } from '$stores/translations';
+  import { TR, translations } from '$stores/local/translations';
   import { financePageInfo } from './pageInfo';
 
   // Reactive translation object that updates when translations change

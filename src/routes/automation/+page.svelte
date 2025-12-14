@@ -8,7 +8,7 @@
   import LinkList from '$components/LinkList.svelte';
   import type { LinkInfo } from '$components/LinkListItem.svelte';
   import PageTitle from '$components/PageTitle.svelte';
-  import { dashboardConfig } from '$stores/dashboardConfig';
+  import { dashboardConfig } from '$stores/local/dashboardConfig';
   import AutomationTrigger from './AutomationTrigger.svelte';
   import { automationPageInfo } from './pageInfo';
 

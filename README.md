@@ -52,7 +52,7 @@ sequenceDiagram
     childStore->>parentStore: updatePersistentStorage<br/>(provide child ID)
   else Multiple stores need update
     childStore->>parentStore: updateMany
-    parentStore->>childStore: setWithoutPropogation
+    parentStore->>childStore: setWithoutPropagation
     childStore->>user: Reflect update to child store
   end
   parentStore->>localData: setAndReturnCopy

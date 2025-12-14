@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store';
 import navInfo, { type PageInfo } from '$util/navInfo';
-import { userSettings } from '../userSettings/userSettings';
+import { userConfig } from '../local/userConfig/userConfig';
 
 function createEnabledPagesStore() {
   const { subscribe, set } = writable<PageInfo[]>(Object.values(navInfo));
@@ -8,7 +8,7 @@ function createEnabledPagesStore() {
   let devModeEnabled: boolean | null = null;
   let previousEnabledFeaturesString = '';
 
-  userSettings.subscribe((settings) => {
+  userConfig.subscribe((settings) => {
     const newEnabledFeaturesString = JSON.stringify(settings.config.enabledFeatures);
     if (
       settings.config.enableDevMode !== devModeEnabled ||

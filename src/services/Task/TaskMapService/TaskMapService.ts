@@ -6,9 +6,10 @@ import {
 import { DateService } from '@aneuhold/core-ts-lib';
 import type { UUID } from 'crypto';
 import type { Updater } from 'svelte/store';
-import { userSettings } from '$stores/userSettings/userSettings';
+import { userConfig } from '$stores/local/userConfig/userConfig';
 import DashboardTaskAPIService from '$util/api/DashboardTaskAPIService';
 import LocalData from '$util/LocalData/LocalData';
+import { createLogger } from '$util/logging/logger';
 import type {
   DocumentInsertOrUpdateInfo,
   DocumentMapStore,
@@ -20,6 +21,8 @@ import TaskOperationsService from '../TaskOperationsService';
 import TaskRecurrenceService from '../TaskRecurrenceService';
 import TaskSharingService from '../TaskSharingService';
 import TaskTagsService from '../TaskTagsService';
+
+const log = createLogger('TaskMapService.ts');
 
 /**
  * The main task map service.
@@ -152,20 +155,20 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
    */
   private static autoDeleteTasksPostSet(map: DocumentMap<DashboardTask>) {
     // Check for any tasks that need to be auto-deleted.
-    const userConfig = userSettings.get().config;
-    if (userConfig.autoTaskDeletionDays < 5 || userConfig.autoTaskDeletionDays > 90) {
-      console.error(
-        `User ${userConfig.userId} has an invalid autoTaskDeletionDays value of ${userConfig.autoTaskDeletionDays}.`
+    const userCfg = userConfig.get().config;
+    if (userCfg.autoTaskDeletionDays < 5 || userCfg.autoTaskDeletionDays > 90) {
+      log.error(
+        `User ${userCfg.userId} has an invalid autoTaskDeletionDays value of ${userCfg.autoTaskDeletionDays}.`
       );
       return;
     }
-    const dateThreshold = DateService.addDays(new Date(), -userConfig.autoTaskDeletionDays);
+    const dateThreshold = DateService.addDays(new Date(), -userCfg.autoTaskDeletionDays);
     // Only tasks that don't have a parent, aren't recurring,
     // are completed, and are older than the threshold
     const tasksToDelete = Object.values(map).filter((task) => {
       return (
         task &&
-        task.userId === userConfig.userId &&
+        task.userId === userCfg.userId &&
         task.completed &&
         !task.parentTaskId &&
         !task.parentRecurringTaskInfo &&
@@ -175,7 +178,7 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
     }) as DashboardTask[];
     const taskIdsToDelete = tasksToDelete.map((task) => task._id);
     if (taskIdsToDelete.length !== 0) {
-      console.log(`Deleting ${taskIdsToDelete.length} tasks due to auto task deletion.`);
+      log.info(`Deleting ${taskIdsToDelete.length} tasks due to auto task deletion.`);
       this.getStore().deleteMany(taskIdsToDelete);
     }
   }
