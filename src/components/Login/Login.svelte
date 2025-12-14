@@ -49,8 +49,8 @@
         log.error('No dashboard function URL found in config');
         return;
       }
-      // This will eventually update the login state
       DashboardAPIService.getInitialDataForLogin();
+      $loginState = LoginState.LoggedIn;
     } else if (!validationResponse.success) {
       $loginState = LoginState.LoggedOut;
       invalidCredentials = true;
