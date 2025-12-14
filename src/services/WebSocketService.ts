@@ -18,7 +18,7 @@ export default class WebSocketService {
       return;
     } else {
       // Use the namespace `/dashboard` to ensure that we only connect to the dashboard parts
-      this.#socket = io('http://localhost:8080/dashboard', {
+      this.#socket = io('https://gcloud-backend-926119935605.us-west1.run.app/dashboard', {
         auth: {
           apiKey: apiKey.get()
         }
