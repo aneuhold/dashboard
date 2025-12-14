@@ -38,7 +38,7 @@
   let currentSortSettings = $derived(
     parentTaskSortSettings ??
       userTaskSortSettings ??
-      DashboardTaskListSortSettingsSchema.parse($currentUserId)
+      DashboardTaskListSortSettingsSchema.parse({ userId: $currentUserId })
   );
   let isSortedByTagsFirst = $derived(
     currentSortSettings.sortList.length !== 0 &&
