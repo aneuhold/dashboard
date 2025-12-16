@@ -72,3 +72,12 @@ This repository is a SvelteKit app (Svelte 5) managed with pnpm.
 
 - Use PascalCase for enum names and values
 - Use TypeScript `enum` (not `const enum` or `type`)
+
+## Tests
+
+- Follow the same TypeScript conventions as in the main codebase, including never using `any`
+- Use Vitest for unit tests
+- Writes tests in a separate file next to the original but with `.test.ts` appended to the file name
+- Prefer using real implementations over mocks unless necessary
+- DRY: Don't Repeat Yourself (avoid duplicate code in tests) Create helper functions for common test scenarios.
+- Always make tests concise and focused on business logic, not implementation details.
