@@ -357,12 +357,12 @@ export default abstract class DocumentMapStoreService<T extends BaseDocument> {
       // Run after deletion hooks
       this.subscribers.forEach((subscriber) => {
         if (subscriber.afterDocDeletion) {
-          subscriber.afterDocDeletion(this.documentMap, docsToDelete);
+          subscriber.afterDocDeletion(this.documentMap, allDocsToDelete);
         }
       });
       // Persist
       this.persistToDb({
-        delete: docsToDelete
+        delete: allDocsToDelete
       });
     };
 

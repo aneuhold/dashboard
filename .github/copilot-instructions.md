@@ -79,7 +79,7 @@ This repository is a SvelteKit app (Svelte 5) managed with pnpm.
 - Follow the same TypeScript conventions as in the main codebase, including never using `any`
 - Use Vitest for unit tests
 - Writes tests in a separate file next to the original but with `.test.ts` appended to the file name
-- Prefer using real implementations over mocks unless necessary
+- Prefer using real implementations over mocks unless necessary. For example, always use the associated Schema.parse to create new example documents in tests.
 - DRY: Don't Repeat Yourself (avoid duplicate code in tests) Create helper functions for common test scenarios.
 - Always make tests concise and focused on business logic, not implementation details.
 - Use utilities in `/test-utils` whenever possible to avoid code duplication.
