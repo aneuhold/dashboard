@@ -333,7 +333,7 @@ export default abstract class DocumentMapStoreService<T extends BaseDocument> {
           });
         }
         return newDocIdsToDelete;
-      }, new Set<UUID>());
+      }, new Set<UUID>(docIds));
       // Run before deletion hooks
       const allDocsToDelete: T[] = [];
       docIdsToDelete.forEach((id) => {

@@ -7,6 +7,7 @@ This repository is a SvelteKit app (Svelte 5) managed with pnpm.
   - Build: `pnpm build` (runs `pnpm theme` then `vite build`)
   - Preview: `pnpm preview`
   - Storybook: `pnpm storybook` (also runs `pnpm theme`)
+  - Check: `pnpm check` (TypeScript)
   - Lint: `pnpm lint` (ESLint)
 
 - Important project files to consult:
@@ -30,7 +31,7 @@ This repository is a SvelteKit app (Svelte 5) managed with pnpm.
 
 - Small contract for an agent working here:
   1. Read `package.json` & `README.md` to learn workflow scripts and store patterns.
-  2. For code changes, run `pnpm test` and `pnpm lint` where applicable.
+  2. For code changes, run `pnpm test`, `pnpm lint`, and `pnpm check` before considering a task complete.
 
 - Examples to reference when making edits:
   - Aliases useful for imports: `$components`, `$stores`, `$services` (defined in `svelte.config.js`).
@@ -81,3 +82,4 @@ This repository is a SvelteKit app (Svelte 5) managed with pnpm.
 - Prefer using real implementations over mocks unless necessary
 - DRY: Don't Repeat Yourself (avoid duplicate code in tests) Create helper functions for common test scenarios.
 - Always make tests concise and focused on business logic, not implementation details.
+- Use utilities in `/test-utils` whenever possible to avoid code duplication.
