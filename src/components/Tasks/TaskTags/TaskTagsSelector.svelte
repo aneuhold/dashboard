@@ -31,11 +31,9 @@
   let selector: Autocomplete | undefined = $state();
 
   function addTagToTask(tag: string) {
-    const newTagsObject = $task.tags;
-    const currentUserTagsArray = newTagsObject[$currentUserId] ?? [];
+    const currentUserTagsArray = [...currentUserTags];
     currentUserTagsArray.push(tag);
-    newTagsObject[$currentUserId] = currentUserTagsArray;
-    $task.tags = newTagsObject;
+    TaskMapService.updateTags(taskId, currentUserTagsArray);
   }
 
   function checkAndAddNewTag(newTag: string) {
@@ -57,15 +55,9 @@
    * @param event - The chip removal event containing chipId.
    */
   function handleRemoval(event: CustomEvent<{ chipId: string }>) {
-    let currentUserTags = $task.tags[$currentUserId];
-    if (!currentUserTags) return;
-    currentUserTags = currentUserTags.filter((tag) => tag !== event.detail.chipId);
-    if (currentUserTags.length === 0) {
-      delete $task.tags[$currentUserId];
-      $task.tags = $task.tags;
-    } else {
-      $task.tags[$currentUserId] = currentUserTags;
-    }
+    let newTags = [...currentUserTags];
+    newTags = newTags.filter((tag) => tag !== event.detail.chipId);
+    TaskMapService.updateTags(taskId, newTags);
   }
 
   function handleNewSelection() {

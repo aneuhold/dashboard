@@ -102,7 +102,6 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
       }
     });
     this.subscribers.push(TaskRecurrenceService.getSubscribersForTaskMap());
-    this.subscribers.push(TaskTagsService.getSubscribersForTaskMap());
     this.subscribers.push(TaskSharingService.getSubscribersForTaskMap());
   }
 
@@ -160,6 +159,29 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
       return task;
     });
     this.instance.store.upsertMany(updateInfo);
+  }
+
+  /**
+   * Updates the tags for a task for the current user.
+   *
+   * @param taskId The ID of the task to update
+   * @param newTags The new tags array
+   */
+  static updateTags(taskId: UUID, newTags: string[]): void {
+    const userId = userConfig.get().config.userId;
+    const taskStore = this.getTaskStore(taskId);
+    taskStore.update((task) => {
+      if (newTags.length === 0) {
+        delete task.tags[userId];
+      } else {
+        task.tags[userId] = newTags;
+        // Add any new tags to the user's global tag list
+        newTags.forEach((tag) => {
+          TaskTagsService.addTagForUserIfNeeded(tag);
+        });
+      }
+      return task;
+    });
   }
 
   /**

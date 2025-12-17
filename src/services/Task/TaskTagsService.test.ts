@@ -3,12 +3,10 @@ import { get, type Updater, type Writable, writable } from 'svelte/store';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { DocumentMapStore } from '$services/DocumentMapStoreService';
 import { type UserConfig, userConfig } from '$stores/local/userConfig/userConfig';
-import { createTestTask, createTestUserConfig } from '../../../testUtils/TaskTestUtils';
-import TestUsers from '../../../testUtils/TestUsers';
+import { createTestUserConfig } from '../../../testUtils/TaskTestUtils';
 import TaskTagsService from './TaskTagsService';
 
 describe('TaskTagsService', () => {
-  const userId = TestUsers.currentUserCto._id;
   let mockUserConfigStore: Writable<UserConfig> & { get: () => UserConfig };
   let mockTaskMapStore: Partial<DocumentMapStore<DashboardTask>>;
 
@@ -89,27 +87,6 @@ describe('TaskTagsService', () => {
 
       const config = mockUserConfigStore.get();
       expect(config.config.tagSettings['tagToDelete']).toBeUndefined();
-    });
-  });
-
-  describe('getSubscribersForTaskMap', () => {
-    it('should add new tags to user config on doc update', () => {
-      const subscribers = TaskTagsService.getSubscribersForTaskMap();
-
-      const oldDoc = createTestTask();
-      const newDoc = createTestTask({
-        tags: { [userId]: ['newTagFromTask'] }
-      });
-
-      // We need to ensure userId is set in the service.
-      TaskTagsService.getStore(mockTaskMapStore as DocumentMapStore<DashboardTask>);
-
-      if (subscribers.beforeDocUpdate) {
-        subscribers.beforeDocUpdate({}, oldDoc, newDoc);
-      }
-
-      const config = mockUserConfigStore.get();
-      expect(config.config.tagSettings['newTagFromTask']).toBeDefined();
     });
   });
 });

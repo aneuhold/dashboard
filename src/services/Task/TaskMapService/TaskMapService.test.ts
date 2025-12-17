@@ -9,6 +9,7 @@ import { get } from 'svelte/store';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { userConfig } from '$stores/local/userConfig/userConfig';
 import DashboardTaskAPIService from '$util/api/DashboardTaskAPIService';
+import TaskTagsService from '../TaskTagsService';
 import { TaskMapService } from './TaskMapService';
 
 // Mock dependencies
@@ -43,12 +44,21 @@ describe('TaskMapService', () => {
     };
   };
 
+  let currentUserConfig = createUserConfig();
+
   beforeEach(() => {
     // Reset mocks
     vi.clearAllMocks();
 
+    currentUserConfig = createUserConfig();
+
     // Spy on userConfig.get
-    vi.spyOn(userConfig, 'get').mockReturnValue(createUserConfig());
+    vi.spyOn(userConfig, 'get').mockImplementation(() => currentUserConfig);
+
+    // Spy on userConfig.update
+    vi.spyOn(userConfig, 'update').mockImplementation((updater) => {
+      currentUserConfig = updater(currentUserConfig);
+    });
 
     // Reset store
     TaskMapService.getStore().set({});
@@ -204,6 +214,62 @@ describe('TaskMapService', () => {
       const map = get(TaskMapService.getStore());
       expect(map[parentTask._id]?.sharedWith).toContain(otherUserId);
       expect(map[childTask._id]?.sharedWith).toContain(otherUserId);
+    });
+  });
+
+  describe('updateTags', () => {
+    it('should update tags and notify individual task store subscribers', () => {
+      // Initialize TaskTagsService to ensure userId is set
+      TaskTagsService.getStore(TaskMapService.getStore());
+
+      const task = createTask();
+      TaskMapService.getStore().set({ [task._id]: task });
+
+      const taskStore = TaskMapService.getTaskStore(task._id);
+      const subscriberSpy = vi.fn();
+      taskStore.subscribe(subscriberSpy);
+
+      // Initial call
+      expect(subscriberSpy).toHaveBeenCalledWith(task);
+      subscriberSpy.mockClear();
+
+      const newTags = ['tag1', 'tag2'];
+      TaskMapService.updateTags(task._id, newTags);
+
+      // Verify subscriber was called with updated task
+      expect(subscriberSpy).toHaveBeenCalledTimes(1);
+      const updatedTask = subscriberSpy.mock.calls[0][0];
+      expect(updatedTask.tags[userId]).toEqual(newTags);
+
+      // Verify map is also updated
+      const map = get(TaskMapService.getStore());
+      expect(map[task._id]?.tags[userId]).toEqual(newTags);
+
+      // Verify user config was updated (via TaskTagsService)
+      const config = userConfig.get();
+      expect(config.config.tagSettings['tag1']).toBeDefined();
+      expect(config.config.tagSettings['tag2']).toBeDefined();
+    });
+
+    it('should remove tags entry if empty and notify subscribers', () => {
+      const task = createTask({
+        tags: { [userId]: ['tag1'] }
+      });
+      TaskMapService.getStore().set({ [task._id]: task });
+
+      const taskStore = TaskMapService.getTaskStore(task._id);
+      const subscriberSpy = vi.fn();
+      taskStore.subscribe(subscriberSpy);
+      subscriberSpy.mockClear();
+
+      TaskMapService.updateTags(task._id, []);
+
+      expect(subscriberSpy).toHaveBeenCalledTimes(1);
+      const updatedTask = subscriberSpy.mock.calls[0][0];
+      expect(updatedTask.tags[userId]).toBeUndefined();
+
+      const map = get(TaskMapService.getStore());
+      expect(map[task._id]?.tags[userId]).toBeUndefined();
     });
   });
 });

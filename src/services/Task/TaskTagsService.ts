@@ -3,7 +3,7 @@ import { ArrayService } from '@aneuhold/core-ts-lib';
 import type { UUID } from 'crypto';
 import { type Unsubscriber, type Writable, writable } from 'svelte/store';
 import { userConfig } from '$stores/local/userConfig/userConfig';
-import type { DocumentMapStore, DocumentMapStoreSubscriber } from '../DocumentMapStoreService';
+import type { DocumentMapStore } from '../DocumentMapStoreService';
 
 /**
  * A service responsible for managing tags for tasks.
@@ -33,29 +33,6 @@ export default class TaskTagsService {
       this.taskTagsStore = this.createStore();
     }
     return this.taskTagsStore;
-  }
-
-  static getSubscribersForTaskMap(): DocumentMapStoreSubscriber<DashboardTask> {
-    return {
-      beforeDocUpdate(map, oldDoc, newDoc) {
-        if (!TaskTagsService.userId) {
-          return newDoc;
-        }
-        const oldUserTags = oldDoc?.tags[TaskTagsService.userId] ?? [];
-        const newUserTags = newDoc.tags[TaskTagsService.userId] ?? [];
-        if (oldUserTags.length !== newUserTags.length) {
-          const tagsToAdd = TaskTagsService.getNewTags(oldUserTags, newUserTags);
-          if (tagsToAdd.length > 0) {
-            // Should only ever be one tag added at a time for now.
-            TaskTagsService.addTagForUserIfNeeded(tagsToAdd[0]);
-          }
-        }
-        return newDoc;
-      }
-      // Purposefully not subscribing to the task deletion event, because
-      // tags should be removed through the global tag manager. This is a
-      // personal preference.
-    };
   }
 
   /**
@@ -120,7 +97,7 @@ export default class TaskTagsService {
     }
   }
 
-  private static addTagForUserIfNeeded(tag: string) {
+  static addTagForUserIfNeeded(tag: string) {
     if (!TaskTagsService.userId) {
       return;
     }
