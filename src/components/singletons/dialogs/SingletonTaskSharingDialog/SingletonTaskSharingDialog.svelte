@@ -57,17 +57,13 @@
 
   function toggleSharedWith(id: UUID) {
     if (!$task) return;
+    let newSharedWith = [...$task.sharedWith];
     if (sharedWithIds.includes(id)) {
-      $task.sharedWith = $task.sharedWith.filter((sharedWithId) => {
-        return sharedWithId !== id;
-      });
-      if ($task.assignedTo === id || $task.sharedWith.length === 0) {
-        $task.assignedTo = null;
-      }
+      newSharedWith = newSharedWith.filter((sharedWithId) => sharedWithId !== id);
     } else {
-      $task.sharedWith.push(id);
-      $task.sharedWith = $task.sharedWith;
+      newSharedWith.push(id);
     }
+    TaskMapService.updateSharedWith($task._id, newSharedWith);
   }
 </script>
 

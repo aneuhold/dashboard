@@ -44,54 +44,5 @@ describe('TaskSharingService', () => {
         }
       });
     });
-
-    describe('validateDocUpdate', () => {
-      it('should propagate sharedWith changes to children', () => {
-        const parentTask = createTestTask({
-          sharedWith: []
-        });
-        const updatedParentTask = createTestTask({
-          ...parentTask,
-          sharedWith: [otherUserId]
-        });
-
-        const childTask = createTestTask({
-          parentTaskId: parentTask._id,
-          sharedWith: []
-        });
-
-        const map: DocumentMap<DashboardTask> = {
-          [parentTask._id]: parentTask,
-          [childTask._id]: childTask
-        };
-
-        if (subscribers.validateDocUpdate) {
-          const result = subscribers.validateDocUpdate(map, parentTask, updatedParentTask);
-
-          expect(result).not.toBeNull();
-          if (result) {
-            // Check filter
-            expect(result.filter(childTask)).toBe(true);
-
-            // Check updater
-            const updatedChild = result.updater(createTestTask({ sharedWith: [] }));
-            expect(updatedChild.sharedWith).toContain(otherUserId);
-          }
-        } else {
-          throw new Error('validateDocUpdate subscriber not defined');
-        }
-      });
-
-      it('should return null if sharedWith has not changed', () => {
-        const task = createTestTask({ sharedWith: [otherUserId] });
-        const updatedTask = createTestTask({ ...task, title: 'New Title' });
-        const map: DocumentMap<DashboardTask> = { [task._id]: task };
-
-        if (subscribers.validateDocUpdate) {
-          const result = subscribers.validateDocUpdate(map, task, updatedTask);
-          expect(result).toBeNull();
-        }
-      });
-    });
   });
 });

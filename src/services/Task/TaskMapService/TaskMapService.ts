@@ -148,6 +148,21 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
   }
 
   /**
+   * Updates the sharedWith array for a task and propagates the change to all
+   * children tasks.
+   *
+   * @param taskId The ID of the task to update
+   * @param newSharedWith The new sharedWith array
+   */
+  static updateSharedWith(taskId: UUID, newSharedWith: UUID[]): void {
+    const updateInfo = this.getUpdateTaskAndAllChildrenInfo(taskId, (task) => {
+      task.sharedWith = newSharedWith;
+      return task;
+    });
+    this.instance.store.upsertMany(updateInfo);
+  }
+
+  /**
    * Auto-deletes tasks that are older than the user's auto task deletion
    * settings.
    *
