@@ -188,4 +188,22 @@ describe('TaskMapService', () => {
       );
     });
   });
+
+  describe('updateSharedWith', () => {
+    it('should update sharedWith and propagate to children', () => {
+      const parentTask = createTask({ sharedWith: [] });
+      const childTask = createTask({ parentTaskId: parentTask._id, sharedWith: [] });
+
+      TaskMapService.getStore().set({
+        [parentTask._id]: parentTask,
+        [childTask._id]: childTask
+      });
+
+      TaskMapService.updateSharedWith(parentTask._id, [otherUserId]);
+
+      const map = get(TaskMapService.getStore());
+      expect(map[parentTask._id]?.sharedWith).toContain(otherUserId);
+      expect(map[childTask._id]?.sharedWith).toContain(otherUserId);
+    });
+  });
 });
