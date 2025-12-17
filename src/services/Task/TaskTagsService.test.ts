@@ -1,6 +1,6 @@
-import { type DashboardTask, type DocumentMap } from '@aneuhold/core-ts-db-lib';
+import { type DashboardTask } from '@aneuhold/core-ts-db-lib';
 import { get, type Updater, type Writable, writable } from 'svelte/store';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { DocumentMapStore } from '$services/DocumentMapStoreService';
 import { type UserConfig, userConfig } from '$stores/local/userConfig/userConfig';
 import { createTestTask, createTestUserConfig } from '../../../testUtils/TaskTestUtils';
@@ -10,7 +10,7 @@ import TaskTagsService from './TaskTagsService';
 describe('TaskTagsService', () => {
   const userId = TestUsers.currentUserCto._id;
   let mockUserConfigStore: Writable<UserConfig> & { get: () => UserConfig };
-  let mockTaskMapStore: DocumentMapStore<DashboardTask>;
+  let mockTaskMapStore: Partial<DocumentMapStore<DashboardTask>>;
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -35,22 +35,12 @@ describe('TaskTagsService', () => {
     // Mock TaskMapStore
     mockTaskMapStore = {
       updateMany: vi.fn()
-    } as unknown as DocumentMapStore<DashboardTask>;
-  });
-
-  afterEach(() => {
-    // Reset static state if possible, or just rely on fresh mocks
-    // TaskTagsService has static state, which is tricky.
-    // We might need to access private static fields to reset them if they persist across tests.
-    // However, since we are re-mocking dependencies, it might be okay.
-    // But `taskTagsStore` is cached in the service.
-    // We can try to reset it by calling getStore again? No, it checks if it exists.
+    };
   });
 
   describe('getStore', () => {
     it('should return a store that updates when userConfig changes', () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-argument
-      const store = TaskTagsService.getStore(mockTaskMapStore as any);
+      const store = TaskTagsService.getStore(mockTaskMapStore as DocumentMapStore<DashboardTask>);
 
       // Initial state
       expect(get(store)).toEqual([]);
@@ -112,11 +102,10 @@ describe('TaskTagsService', () => {
       });
 
       // We need to ensure userId is set in the service.
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-argument
-      TaskTagsService.getStore(mockTaskMapStore as any);
+      TaskTagsService.getStore(mockTaskMapStore as DocumentMapStore<DashboardTask>);
 
       if (subscribers.beforeDocUpdate) {
-        subscribers.beforeDocUpdate({} as DocumentMap<DashboardTask>, oldDoc, newDoc);
+        subscribers.beforeDocUpdate({}, oldDoc, newDoc);
       }
 
       const config = mockUserConfigStore.get();
