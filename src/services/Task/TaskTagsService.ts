@@ -156,10 +156,6 @@ export default class TaskTagsService {
     return taskTagsStore;
   }
 
-  private static getNewTags(oldTags: string[], newTags: string[]): string[] {
-    return newTags.filter((tag) => !oldTags.includes(tag));
-  }
-
   private static getRemovedTags(oldTags: string[], newTags: string[]): string[] {
     return oldTags.filter((tag) => !newTags.includes(tag));
   }
