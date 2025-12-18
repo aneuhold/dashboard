@@ -19,7 +19,7 @@
   import { taskAssignmentDialog } from '$components/singletons/dialogs/SingletonTaskAssignmentDialog/SingletonTaskAssignmentDialog.svelte';
   import { taskSharingDialog } from '$components/singletons/dialogs/SingletonTaskSharingDialog/SingletonTaskSharingDialog.svelte';
   import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
-  import TaskService from '$services/Task/TaskService';
+  import TaskUtilityService from '$services/Task/TaskService';
   import { currentUserId } from '$stores/derived/currentUserId';
   import { userConfig } from '$stores/local/userConfig/userConfig';
   import TaskCompletedCheckbox from '../TaskCompletedCheckbox.svelte';
@@ -52,7 +52,7 @@
   let previousTaskCompletedState = $state($task.completed);
 
   function goToTask() {
-    goto(TaskService.getTaskRoute(taskId));
+    goto(TaskUtilityService.getTaskRoute(taskId));
   }
 
   function handleDuplicateClick() {
@@ -133,7 +133,7 @@
       title: 'Delete',
       iconName: 'delete',
       clickAction: () => {
-        TaskService.handleDeleteTaskClick(
+        TaskUtilityService.handleDeleteTaskClick(
           allChildrenIds.length,
           () => {
             taskMap.deleteDoc(taskId);
@@ -152,7 +152,7 @@
     )
   );
   let hasExtraTaskInfo = $derived(allChildrenIds.length > 0 || $task.assignedTo);
-  let finalSharedParentId = $derived(TaskService.findParentIdWithSameSharedWith($task));
+  let finalSharedParentId = $derived(TaskUtilityService.findParentIdWithSameSharedWith($task));
   let usersTaskTags = $derived($task.tags[$currentUserId]);
   let menuItems = $derived(getMenuItems($task));
   $effect(() => {

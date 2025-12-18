@@ -14,7 +14,7 @@
   import TaskList from '$components/Tasks/TaskList/TaskList.svelte';
   import TaskListService from '$services/Task/TaskListService';
   import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
-  import TaskService from '$services/Task/TaskService';
+  import TaskUtilityService from '$services/Task/TaskService';
   import { userConfig } from '$stores/local/userConfig/userConfig';
   import { tasksPageInfo } from './pageInfo';
 
@@ -27,7 +27,7 @@
   function addTask() {
     const newTask = DashboardTaskSchema.parse({ userId: $userConfig.config.userId });
     taskMap.addDoc(newTask);
-    goto(TaskService.getTaskRoute(newTask._id));
+    goto(TaskUtilityService.getTaskRoute(newTask._id));
   }
 </script>
 

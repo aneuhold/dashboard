@@ -24,7 +24,7 @@
   import InputBox from '$components/presentational/InputBox/InputBox.svelte';
   import TaskListService from '$services/Task/TaskListService';
   import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
-  import TaskService from '$services/Task/TaskService';
+  import TaskUtilityService from '$services/Task/TaskService';
   import { userConfig } from '$stores/local/userConfig/userConfig';
   import TaskCompletedCheckbox from '../TaskCompletedCheckbox.svelte';
   import TaskDateInfo from '../TaskDate/TaskDateInfo.svelte';
@@ -53,10 +53,12 @@
     TaskListService.getTaskIdsForTask($taskMap, $userConfig, allChildrenIds, $task)
   );
   // Explicitly include `task` so that it reactively updates
-  let breadCrumbArray = $derived(TaskService.getBreadCrumbArray($task ? $task._id : taskId));
+  let breadCrumbArray = $derived(TaskUtilityService.getBreadCrumbArray($task ? $task._id : taskId));
   let parentTaskId = $derived($task ? $task.parentTaskId : undefined);
   let parentRoute = $derived(
-    parentTaskId ? TaskService.getTaskRoute(parentTaskId) : TaskService.getTaskCategoryRoute(taskId)
+    parentTaskId
+      ? TaskUtilityService.getTaskRoute(parentTaskId)
+      : TaskUtilityService.getTaskCategoryRoute(taskId)
   );
 
   function addSubTask() {
@@ -76,7 +78,7 @@
         : undefined
     });
     taskMap.addDoc(newTask);
-    goto(TaskService.getTaskRoute(newTask._id));
+    goto(TaskUtilityService.getTaskRoute(newTask._id));
   }
 
   function deleteTask() {
@@ -119,7 +121,11 @@
               variant="outlined"
               class="danger-button"
               onclick={() => {
-                TaskService.handleDeleteTaskClick(allChildrenIds.length, deleteTask, $task?.title);
+                TaskUtilityService.handleDeleteTaskClick(
+                  allChildrenIds.length,
+                  deleteTask,
+                  $task?.title
+                );
               }}
             >
               <Icon class="material-icons">delete</Icon>

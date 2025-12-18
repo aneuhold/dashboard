@@ -8,7 +8,7 @@ import { TaskMapService } from './TaskMapService/TaskMapService';
 /**
  * The main task utility service.
  */
-export default class TaskService {
+export default class TaskUtilityService {
   static getTaskRoute(taskId: UUID, includeFirstSlash = true) {
     return `${includeFirstSlash ? '/' : ''}tasks?taskId=${taskId}`;
   }

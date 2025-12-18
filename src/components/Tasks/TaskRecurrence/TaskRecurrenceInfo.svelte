@@ -22,7 +22,7 @@
   import SmartDialog from '$components/presentational/SmartDialog.svelte';
   import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
   import TaskRecurrenceService from '$services/Task/TaskRecurrenceService';
-  import TaskService from '$services/Task/TaskService';
+  import TaskUtilityService from '$services/Task/TaskService';
   import TaskRecurrenceDetails from './TaskRecurrenceDetails.svelte';
 
   let { taskId, childTaskIds }: { taskId: UUID; childTaskIds: UUID[] } = $props();
@@ -105,7 +105,7 @@
           <div class="headerText">
             <Icon class="material-icons">autorenew</Icon>
             {#if $task.parentRecurringTaskInfo && $taskMap[$task.parentRecurringTaskInfo.taskId]}
-              <a href={TaskService.getTaskRoute($task.parentRecurringTaskInfo.taskId, true)}>
+              <a href={TaskUtilityService.getTaskRoute($task.parentRecurringTaskInfo.taskId, true)}>
                 Parent
               </a>
             {/if}
