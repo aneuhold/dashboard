@@ -14,7 +14,7 @@
   import TaskList from '$components/Tasks/TaskList/TaskList.svelte';
   import TaskListService from '$services/Task/TaskListService';
   import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
-  import TaskUtilityService from '$services/Task/TaskService';
+  import TaskUtilityService from '$services/Task/TaskUtilityService';
   import { userConfig } from '$stores/local/userConfig/userConfig';
   import { tasksPageInfo } from './pageInfo';
 

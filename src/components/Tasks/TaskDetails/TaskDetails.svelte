@@ -24,7 +24,7 @@
   import InputBox from '$components/presentational/InputBox/InputBox.svelte';
   import TaskListService from '$services/Task/TaskListService';
   import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
-  import TaskUtilityService from '$services/Task/TaskService';
+  import TaskUtilityService from '$services/Task/TaskUtilityService';
   import { userConfig } from '$stores/local/userConfig/userConfig';
   import TaskCompletedCheckbox from '../TaskCompletedCheckbox.svelte';
   import TaskDateInfo from '../TaskDate/TaskDateInfo.svelte';
