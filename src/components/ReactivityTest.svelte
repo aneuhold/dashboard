@@ -19,7 +19,9 @@
     },
     stats: {
       visits: 0
-    }
+    },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    dynamic: undefined as any
   });
 
   // --- 2. SvelteMap with Plain Objects ---
@@ -88,6 +90,19 @@
       item.count++;
     }
   }
+
+  function createDynamicObject() {
+    deepObj.dynamic = {
+      created: new Date().toLocaleTimeString(),
+      nested: { count: 0 }
+    };
+  }
+
+  function mutateDynamicObject() {
+    if (deepObj.dynamic) {
+      deepObj.dynamic.nested.count++;
+    }
+  }
 </script>
 
 <div class="reactivity-test">
@@ -121,6 +136,11 @@
           />
           Email Notifications
         </label>
+        <hr />
+        <button onclick={createDynamicObject}> Create/Replace Dynamic Object </button>
+        <button onclick={mutateDynamicObject} disabled={!deepObj.dynamic}>
+          Mutate Dynamic Object (deepObj.dynamic.nested.count++)
+        </button>
       </div>
     </div>
   </section>
