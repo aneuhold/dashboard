@@ -20,7 +20,6 @@ import DocumentMapStoreService from '../../DocumentMapStoreService.svelte';
 import TaskCreationService from '../TaskCreationService';
 import TaskOperationsService from '../TaskOperationsService';
 import TaskRecurrenceService from '../TaskRecurrenceService';
-import TaskSharingService from '../TaskSharingService';
 import TaskTagsService from '../TaskTagsService';
 
 const log = createLogger('TaskMapService.ts');
@@ -29,6 +28,9 @@ const log = createLogger('TaskMapService.ts');
  * The main task map service.
  */
 export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
+  protected setupSubscribers(): void {
+    throw new Error('Method not implemented.');
+  }
   public override addDoc(task: DashboardTask): void {
     this.addManyDocs([TaskCreationService.prepareTaskForAddition(task, this.mapState)]);
   }
@@ -73,6 +75,34 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
     super.deleteManyDocs(docIds);
   }
 
+  public updateSharedWith(taskId: UUID, newSharedWith: UUID[]): void {
+    const updateInfo = TaskOperationsService.getUpdateTaskAndAllChildrenInfo(
+      this.mapState,
+      taskId,
+      (task) => {
+        task.sharedWith = newSharedWith;
+        return task;
+      }
+    );
+    this.upsertManyDocs(updateInfo);
+  }
+
+  public updateTags(taskId: UUID, newTags: string[]): void {
+    const userId = userConfig.get().config.userId;
+    this.updateDoc(taskId, (task) => {
+      if (newTags.length === 0) {
+        delete task.tags[userId];
+      } else {
+        task.tags[userId] = newTags;
+        // Add any new tags to the user's global tag list
+        newTags.forEach((tag) => {
+          TaskTagsService.addTagForUserIfNeeded(tag);
+        });
+      }
+      return task;
+    });
+  }
+
   public duplicateTask(taskId: UUID): void {
     const currentTask = this.mapState[taskId];
     if (!currentTask) {
@@ -84,13 +114,28 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
       taskId,
       (task) => {
         // Conditional to find the original task that is being duplicated
-        if (task.parentTaskId === currentTask.parentTaskId) {
+        if (
+          !task.parentTaskId ||
+          (currentTask.parentTaskId && task.parentTaskId === currentTask.parentTaskId)
+        ) {
           task.title = `${task.title} (Copy)`;
         }
         return task;
       }
     );
     this.upsertManyDocs(updateInfo);
+  }
+
+  public override setMap(newMap: DocumentMap<DashboardTask>): void {
+    super.setMap(newMap);
+    // Check if any tasks need to recur after everything has been set
+    Object.values(newMap).forEach((task) => {
+      if (task) {
+        TaskMapService.executeRecurrenceIfNeeded(task);
+      }
+    });
+    TaskRecurrenceService.buildTaskRecurrenceSubMapFresh(newMap);
+    this.autoDeleteTasksPostSet(newMap);
   }
 
   // --- Legacy Methods / logic below -----
@@ -118,7 +163,11 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
    * @param task The task to add.
    */
   static addTask(task: DashboardTask): void {
-    this.instance.addDoc(task);
+    const preparedTask = TaskCreationService.prepareTaskForAddition(
+      task,
+      this.instance.documentMap
+    );
+    this.instance.store.addDoc(preparedTask);
   }
 
   /**
@@ -154,41 +203,6 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
     });
   }
 
-  protected setupSubscribers(): void {
-    // Basic task things
-    this.subscribers.push({
-      afterMapSet(map) {
-        // Check if any tasks need to recur after everything has been set
-        Object.values(map).forEach((task) => {
-          if (task) {
-            TaskMapService.executeRecurrenceIfNeeded(task);
-          }
-        });
-        TaskRecurrenceService.buildTaskRecurrenceSubMapFresh(map);
-        TaskMapService.autoDeleteTasksPostSet(map);
-      },
-      beforeDocAddition(map, newDoc) {
-        newDoc.description = newDoc.description || '';
-        const parentTask = newDoc.parentTaskId ? map[newDoc.parentTaskId] : undefined;
-        if (parentTask) {
-          newDoc.userId = parentTask.userId;
-        }
-        return newDoc;
-      },
-      validateDocDeletion(map, docToDelete) {
-        const docIdsToDelete: UUID[] = [docToDelete._id];
-        const allTasks = TaskOperationsService.getAllTasks(map);
-        docIdsToDelete.push(...DashboardTaskService.getChildrenIds(allTasks, [docToDelete._id]));
-        return docIdsToDelete;
-      },
-      beforeDocDeletion(map, docToDelete) {
-        TaskRecurrenceService.removeTaskTimeSubscription(docToDelete._id);
-      }
-    });
-    this.subscribers.push(TaskRecurrenceService.getSubscribersForTaskMap());
-    this.subscribers.push(TaskSharingService.getSubscribersForTaskMap());
-  }
-
   protected override persistToLocalData(): DocumentMap<DashboardTask> {
     return LocalData.setAndGetTaskMap(this.documentMap);
   }
@@ -211,7 +225,7 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
     updater: Updater<DashboardTask>
   ): UpsertManyInfo<DashboardTask> {
     return TaskOperationsService.getUpdateTaskAndAllChildrenInfo(
-      this.instance.mapState,
+      this.instance.documentMap,
       taskId,
       updater
     );
@@ -261,7 +275,7 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
    *
    * @param map The task map to check for auto-deletion
    */
-  private static autoDeleteTasksPostSet(map: DocumentMap<DashboardTask>) {
+  private autoDeleteTasksPostSet(map: DocumentMap<DashboardTask>) {
     // Check for any tasks that need to be auto-deleted.
     const userCfg = userConfig.get().config;
     if (userCfg.autoTaskDeletionDays < 5 || userCfg.autoTaskDeletionDays > 90) {
@@ -287,7 +301,7 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
     const taskIdsToDelete = tasksToDelete.map((task) => task._id);
     if (taskIdsToDelete.length !== 0) {
       log.info(`Deleting ${taskIdsToDelete.length} tasks due to auto task deletion.`);
-      this.instance.deleteManyDocs(taskIdsToDelete);
+      this.deleteManyDocs(taskIdsToDelete);
     }
   }
 }
