@@ -2,12 +2,18 @@ import {
   type DashboardTask,
   DashboardTaskSchema,
   DashboardUserConfigSchema,
-  DocumentService
+  DocumentService,
+  RecurrenceBasis,
+  RecurrenceEffect,
+  RecurrenceFrequencyType,
+  RecurrenceInfoSchema
 } from '@aneuhold/core-ts-db-lib';
 import { DateService } from '@aneuhold/core-ts-lib';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { userConfig } from '$stores/local/userConfig/userConfig';
 import DashboardTaskAPIService from '$util/api/DashboardTaskAPIService';
+import type { UpsertManyInfo } from '../../DocumentMapStoreService.svelte';
+import TaskRecurrenceService from '../TaskRecurrenceService';
 import TaskTagsService from '../TaskTagsService';
 import taskMapService, { TaskMapService } from './TaskMapService';
 
@@ -242,6 +248,134 @@ describe('TaskMapService (Instance)', () => {
 
       const map = taskMapService.mapState;
       expect(map[task._id]?.tags[userId]).toBeUndefined();
+    });
+  });
+
+  describe('updateTaskRecurrenceOrDates', () => {
+    it('should update start and due dates', () => {
+      const task = createTask();
+      taskMapService.setMap({ [task._id]: task });
+
+      const newStartDate = new Date('2023-01-01');
+      const newDueDate = new Date('2023-01-02');
+
+      taskMapService.updateTaskRecurrenceOrDates(task._id, {
+        newStartDate,
+        newDueDate
+      });
+
+      const map = taskMapService.mapState;
+      expect(map[task._id]?.startDate).toEqual(newStartDate);
+      expect(map[task._id]?.dueDate).toEqual(newDueDate);
+    });
+
+    it('should update recurrence info and propagate to children', () => {
+      const task = createTask();
+      const childTask = createTask({ parentTaskId: task._id });
+      taskMapService.setMap({
+        [task._id]: task,
+        [childTask._id]: childTask
+      });
+
+      const newRecurrenceInfo = RecurrenceInfoSchema.parse({
+        frequency: {
+          type: RecurrenceFrequencyType.everyXTimeUnit,
+          everyXTimeUnit: { timeUnit: 'day', x: 1 }
+        },
+        recurrenceEffect: RecurrenceEffect.rollOnBasis,
+        recurrenceBasis: RecurrenceBasis.dueDate
+      });
+
+      // Mock taskShouldRecur to false to avoid immediate recurrence
+      vi.spyOn(TaskRecurrenceService, 'taskShouldRecur').mockReturnValue(false);
+
+      taskMapService.updateTaskRecurrenceOrDates(task._id, {
+        newRecurrenceInfo
+      });
+
+      const map = taskMapService.mapState;
+      expect(map[task._id]?.recurrenceInfo).toEqual(newRecurrenceInfo);
+
+      // Check child propagation
+      expect(map[childTask._id]?.parentRecurringTaskInfo).toEqual({
+        taskId: task._id,
+        startDate: map[task._id]?.startDate,
+        dueDate: map[task._id]?.dueDate
+      });
+      expect(map[childTask._id]?.recurrenceInfo).toEqual(newRecurrenceInfo);
+    });
+
+    it('should remove recurrence info and propagate removal to children', () => {
+      const recurrenceInfo = RecurrenceInfoSchema.parse({
+        frequency: {
+          type: RecurrenceFrequencyType.everyXTimeUnit,
+          everyXTimeUnit: { timeUnit: 'day', x: 1 }
+        },
+        recurrenceEffect: RecurrenceEffect.rollOnBasis,
+        recurrenceBasis: RecurrenceBasis.dueDate
+      });
+      const task = createTask({ recurrenceInfo });
+      const childTask = createTask({
+        parentTaskId: task._id,
+        recurrenceInfo,
+        parentRecurringTaskInfo: {
+          taskId: task._id,
+          startDate: task.startDate,
+          dueDate: task.dueDate
+        }
+      });
+
+      taskMapService.setMap({
+        [task._id]: task,
+        [childTask._id]: childTask
+      });
+
+      taskMapService.updateTaskRecurrenceOrDates(task._id, {
+        newRecurrenceInfo: null
+      });
+
+      const map = taskMapService.mapState;
+      expect(map[task._id]?.recurrenceInfo).toBeNull();
+      expect(map[childTask._id]?.recurrenceInfo).toBeNull();
+      expect(map[childTask._id]?.parentRecurringTaskInfo).toBeNull();
+    });
+
+    it('should trigger recurrence update if task should recur immediately', () => {
+      const task = createTask();
+      taskMapService.setMap({ [task._id]: task });
+
+      const newRecurrenceInfo = RecurrenceInfoSchema.parse({
+        frequency: {
+          type: RecurrenceFrequencyType.everyXTimeUnit,
+          everyXTimeUnit: { timeUnit: 'day', x: 1 }
+        },
+        recurrenceEffect: RecurrenceEffect.rollOnBasis,
+        recurrenceBasis: RecurrenceBasis.dueDate
+      });
+
+      vi.spyOn(TaskRecurrenceService, 'taskShouldRecur').mockReturnValue(true);
+
+      const mockUpdateInfo: UpsertManyInfo<DashboardTask> = {
+        filter: () => false,
+        updater: (t) => t,
+        newDocs: []
+      };
+      const getRecurrenceUpdateInfoSpy = vi
+        .spyOn(TaskRecurrenceService, 'getRecurrenceUpdateInfo')
+        .mockReturnValue(mockUpdateInfo);
+
+      // Spy on upsertManyDocs to verify it's called with the result of getRecurrenceUpdateInfo
+      const upsertSpy = vi.spyOn(taskMapService, 'upsertManyDocs');
+
+      taskMapService.updateTaskRecurrenceOrDates(task._id, {
+        newRecurrenceInfo
+      });
+
+      expect(getRecurrenceUpdateInfoSpy).toHaveBeenCalledWith(
+        expect.anything(),
+        expect.objectContaining({ _id: task._id, recurrenceInfo: newRecurrenceInfo })
+      );
+      expect(upsertSpy).toHaveBeenCalledWith(mockUpdateInfo);
     });
   });
 });

@@ -1,4 +1,5 @@
 import type { DashboardTask, DocumentMap } from '@aneuhold/core-ts-db-lib';
+import TaskRecurrenceService from '$services/Task/TaskRecurrenceService';
 
 /**
  * A service responsible for handling the business logic of task creation.
@@ -41,6 +42,8 @@ export default class TaskCreationService {
       // Make sure to inherit sharedWith from parent task
       newTask.sharedWith = [...parentTask.sharedWith];
     }
+
+    TaskRecurrenceService.updateOrRemoveTaskTimeSubscription(newTask);
 
     return newTask;
   }

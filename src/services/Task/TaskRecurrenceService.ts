@@ -179,7 +179,7 @@ export default class TaskRecurrenceService {
    * @param taskMap The current task map
    * @param task The task to get recurrence update info for
    */
-  private static getRecurrenceUpdateInfo(
+  static getRecurrenceUpdateInfo(
     taskMap: DashboardTaskMap,
     task: DashboardTask
   ): UpsertManyInfo<DashboardTask> {

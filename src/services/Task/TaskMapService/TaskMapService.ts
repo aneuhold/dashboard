@@ -1,7 +1,8 @@
 import {
   type DashboardTask,
   DashboardTaskService,
-  type DocumentMap
+  type DocumentMap,
+  type RecurrenceInfo
 } from '@aneuhold/core-ts-db-lib';
 import { DateService } from '@aneuhold/core-ts-lib';
 import type { UUID } from 'crypto';
@@ -29,10 +30,10 @@ const log = createLogger('TaskMapService.ts');
  */
 export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
   protected setupSubscribers(): void {
-    throw new Error('Method not implemented.');
+    // No subscribers needed for now
   }
   public override addDoc(task: DashboardTask): void {
-    this.addManyDocs([TaskCreationService.prepareTaskForAddition(task, this.mapState)]);
+    this.addManyDocs([task]);
   }
 
   public override addManyDocs(tasks: DashboardTask[]): void {
@@ -71,8 +72,11 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
 
   public override deleteManyDocs(docIds: UUID[]): void {
     const allTasks = TaskOperationsService.getAllTasks(this.mapState);
-    docIds.push(...DashboardTaskService.getChildrenIds(allTasks, docIds));
-    super.deleteManyDocs(docIds);
+    const allIdsToDelete = [...docIds, ...DashboardTaskService.getChildrenIds(allTasks, docIds)];
+    allIdsToDelete.forEach((id) => {
+      TaskRecurrenceService.removeTaskTimeSubscription(id);
+    });
+    super.deleteManyDocs(allIdsToDelete);
   }
 
   public updateSharedWith(taskId: UUID, newSharedWith: UUID[]): void {
@@ -101,6 +105,66 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
       }
       return task;
     });
+  }
+
+  public updateTaskRecurrenceOrDates(
+    taskId: UUID,
+    options: {
+      newRecurrenceInfo?: RecurrenceInfo | null;
+      newStartDate?: Date | null;
+      newDueDate?: Date | null;
+    }
+  ): void {
+    const currentTask = this.mapState[taskId];
+    if (!currentTask) {
+      log.error(
+        `Cannot update task recurrence for task with ID ${taskId} because it does not exist.`
+      );
+      return;
+    }
+
+    const { newRecurrenceInfo, newStartDate, newDueDate } = options;
+
+    if (options.newRecurrenceInfo !== undefined) {
+      currentTask.recurrenceInfo = newRecurrenceInfo;
+    }
+    if (options.newStartDate !== undefined) {
+      currentTask.startDate = newStartDate;
+    }
+    if (options.newDueDate !== undefined) {
+      currentTask.dueDate = newDueDate;
+    }
+    const watchRecurrenceInfo = currentTask.recurrenceInfo && !currentTask.parentRecurringTaskInfo;
+
+    if (watchRecurrenceInfo && TaskRecurrenceService.taskShouldRecur(currentTask)) {
+      const updateInfo = TaskRecurrenceService.getRecurrenceUpdateInfo(this.mapState, currentTask);
+      this.upsertManyDocs(updateInfo);
+    } else {
+      TaskRecurrenceService.updateOrRemoveTaskTimeSubscription(currentTask);
+
+      const updateInfo = TaskOperationsService.getUpdateTaskAndAllChildrenInfo(
+        this.mapState,
+        currentTask._id,
+        (task) => {
+          if (task._id === currentTask._id) {
+            return task;
+          }
+          if (currentTask.recurrenceInfo) {
+            task.parentRecurringTaskInfo = {
+              taskId: currentTask._id,
+              startDate: currentTask.startDate,
+              dueDate: currentTask.dueDate
+            };
+            task.recurrenceInfo = currentTask.recurrenceInfo;
+          } else {
+            task.parentRecurringTaskInfo = null;
+            task.recurrenceInfo = null;
+          }
+          return task;
+        }
+      );
+      this.upsertManyDocs(updateInfo);
+    }
   }
 
   public duplicateTask(taskId: UUID): void {
