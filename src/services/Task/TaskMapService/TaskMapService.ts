@@ -19,8 +19,8 @@ import type {
 } from '../../DocumentMapStoreService.svelte';
 import DocumentMapStoreService from '../../DocumentMapStoreService.svelte';
 import TaskCreationService from '../TaskCreationService';
-import TaskOperationsService from '../TaskOperationsService';
-import TaskRecurrenceService from '../TaskRecurrenceService';
+import TaskOperationsService from '../TaskOperationsService.svelte';
+import TaskRecurrenceService from '../TaskRecurrenceService.svelte';
 import TaskTagsService from '../TaskTagsService';
 
 const log = createLogger('TaskMapService.ts');

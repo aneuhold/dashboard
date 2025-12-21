@@ -13,7 +13,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { userConfig } from '$stores/local/userConfig/userConfig';
 import DashboardTaskAPIService from '$util/api/DashboardTaskAPIService';
 import type { UpsertManyInfo } from '../../DocumentMapStoreService.svelte';
-import TaskRecurrenceService from '../TaskRecurrenceService';
+import TaskRecurrenceService from '../TaskRecurrenceService.svelte';
 import TaskTagsService from '../TaskTagsService';
 import taskMapService, { TaskMapService } from './TaskMapService';
 
@@ -376,6 +376,54 @@ describe('TaskMapService (Instance)', () => {
         expect.objectContaining({ _id: task._id, recurrenceInfo: newRecurrenceInfo })
       );
       expect(upsertSpy).toHaveBeenCalledWith(mockUpdateInfo);
+    });
+  });
+
+  describe('duplicateTask', () => {
+    it('should duplicate a single task and append (Copy) to the title', () => {
+      const task = createTask({ title: 'Original Task' });
+      taskMapService.setMap({ [task._id]: task });
+
+      taskMapService.duplicateTask(task._id);
+
+      const map = taskMapService.mapState;
+      const tasks = Object.values(map);
+      expect(tasks).toHaveLength(2);
+
+      const duplicatedTask = tasks.find((t) => t?._id !== task._id);
+      expect(duplicatedTask).toBeDefined();
+      expect(duplicatedTask?.title).toBe('Original Task (Copy)');
+      expect(duplicatedTask?.userId).toBe(userId);
+    });
+
+    it('should duplicate a task and its children', () => {
+      const parentTask = createTask({ title: 'Parent Task' });
+      const childTask = createTask({
+        title: 'Child Task',
+        parentTaskId: parentTask._id
+      });
+
+      taskMapService.setMap({
+        [parentTask._id]: parentTask,
+        [childTask._id]: childTask
+      });
+
+      taskMapService.duplicateTask(parentTask._id);
+
+      const map = taskMapService.mapState;
+      const tasks = Object.values(map).filter((t): t is DashboardTask => !!t);
+      expect(tasks).toHaveLength(4); // 2 original + 2 duplicated
+
+      const duplicatedParent = tasks.find(
+        (t) => t._id !== parentTask._id && t.title === 'Parent Task (Copy)'
+      );
+      const duplicatedChild = tasks.find(
+        (t) => t._id !== childTask._id && t.title === 'Child Task'
+      );
+
+      expect(duplicatedParent).toBeDefined();
+      expect(duplicatedChild).toBeDefined();
+      expect(duplicatedChild?.parentTaskId).toBe(duplicatedParent?._id);
     });
   });
 });

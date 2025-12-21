@@ -6,9 +6,9 @@ import {
 import { DateService } from '@aneuhold/core-ts-lib';
 import { describe, expect, it } from 'vitest';
 import { createTestRecurrenceInfo, createTestTask } from '../../../testUtils/TaskTestUtils';
-import TaskRecurrenceService from './TaskRecurrenceService';
+import TaskRecurrenceService from './TaskRecurrenceService.svelte';
 
-describe('TaskRecurrenceService', () => {
+describe('TaskRecurrenceService.svelte', () => {
   describe('taskShouldRecur', () => {
     it('should return false if task has no recurrence info', () => {
       const task = createTestTask();

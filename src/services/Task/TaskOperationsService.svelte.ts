@@ -5,7 +5,7 @@ import {
   DocumentService
 } from '@aneuhold/core-ts-db-lib';
 import type { UUID } from 'crypto';
-import type { Updater } from 'svelte/store';
+import { type Updater } from 'svelte/store';
 import type { UpsertManyInfo } from '../DocumentMapStoreService.svelte';
 
 /**
@@ -73,7 +73,7 @@ export default class TaskOperationsService {
       if (!doc) {
         throw new Error(`Task with ID ${id} not found while trying to duplicate.`);
       }
-      let newTask = DocumentService.deepCopy(doc);
+      let newTask = DocumentService.deepCopy($state.snapshot(doc));
       newTask._id = DocumentService.generateID();
       oldTaskIdToNewTaskId[id] = newTask._id;
       newTask = newTaskUpdater(newTask);

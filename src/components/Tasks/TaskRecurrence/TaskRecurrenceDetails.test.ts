@@ -15,7 +15,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { confirmationDialog } from '$components/singletons/dialogs/SingletonConfirmationDialog.svelte';
 import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
 import TaskMapServiceMock from '$services/Task/TaskMapService/TaskMapService.mock';
-import TaskRecurrenceService from '$services/Task/TaskRecurrenceService';
+import TaskRecurrenceService from '$services/Task/TaskRecurrenceService.svelte';
 import TestUsers from '$testUtils/TestUsers';
 import TaskRecurrenceDetails from './TaskRecurrenceDetails.svelte';
 

@@ -1,5 +1,5 @@
 import type { DashboardTask, DocumentMap } from '@aneuhold/core-ts-db-lib';
-import TaskRecurrenceService from '$services/Task/TaskRecurrenceService';
+import TaskRecurrenceService from '$services/Task/TaskRecurrenceService.svelte';
 
 /**
  * A service responsible for handling the business logic of task creation.

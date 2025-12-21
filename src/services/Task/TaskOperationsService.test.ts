@@ -1,7 +1,7 @@
 import { type DashboardTask, type DocumentMap, DocumentService } from '@aneuhold/core-ts-db-lib';
 import { describe, expect, it } from 'vitest';
 import { createTestTask } from '../../../testUtils/TaskTestUtils';
-import TaskOperationsService from './TaskOperationsService';
+import TaskOperationsService from './TaskOperationsService.svelte';
 
 describe('TaskOperationsService', () => {
   describe('getUpdateTaskAndAllChildrenInfo', () => {

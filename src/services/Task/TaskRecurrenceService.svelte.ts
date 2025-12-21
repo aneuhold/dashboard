@@ -15,7 +15,7 @@ import { timeMinute } from '$stores/session/timeMinute';
 import DashboardAPIService from '$util/api/DashboardAPIService';
 import { createLogger } from '$util/logging/logger';
 import type { DocumentMapStoreSubscriber, UpsertManyInfo } from '../DocumentMapStoreService.svelte';
-import TaskOperationsService from './TaskOperationsService';
+import TaskOperationsService from './TaskOperationsService.svelte';
 
 const log = createLogger('TaskRecurrenceService.ts');
 
@@ -256,7 +256,7 @@ export default class TaskRecurrenceService {
     originalTask: DashboardTask,
     updater: Updater<DashboardTask>
   ): Date | null {
-    let taskCopy = DocumentService.deepCopy(originalTask);
+    let taskCopy = DocumentService.deepCopy($state.snapshot(originalTask));
     taskCopy = updater(taskCopy);
     return this.getNextRecurrenceDate(taskCopy);
   }

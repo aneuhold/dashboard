@@ -19,7 +19,7 @@
   import { confirmationDialog } from '$components/singletons/dialogs/SingletonConfirmationDialog.svelte';
   import WeekdaySegmentedButton from '$components/WeekdaySegmentedButton.svelte';
   import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
-  import TaskRecurrenceService from '$services/Task/TaskRecurrenceService';
+  import TaskRecurrenceService from '$services/Task/TaskRecurrenceService.svelte';
   import TaskRecurrenceInfoIcon from './TaskRecurrenceInfoIcon.svelte';
   import TaskRecurrenceUpdateExample from './TaskRecurrenceUpdateExample.svelte';
   import TaskRecurrenceWeekdayOfMonth from './TaskRecurrenceWeekdayOfMonth.svelte';

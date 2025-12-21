@@ -21,7 +21,7 @@
   import ClickableDiv from '$components/presentational/ClickableDiv.svelte';
   import SmartDialog from '$components/presentational/SmartDialog.svelte';
   import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
-  import TaskRecurrenceService from '$services/Task/TaskRecurrenceService';
+  import TaskRecurrenceService from '$services/Task/TaskRecurrenceService.svelte';
   import TaskUtilityService from '$services/Task/TaskUtilityService';
   import TaskRecurrenceDetails from './TaskRecurrenceDetails.svelte';
 

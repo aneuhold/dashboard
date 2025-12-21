@@ -5,7 +5,7 @@
   import DatePickerDialog from '$components/presentational/DatePickerDialog/DatePickerDialog.svelte';
   import { confirmationDialog } from '$components/singletons/dialogs/SingletonConfirmationDialog.svelte';
   import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
-  import TaskRecurrenceService from '$services/Task/TaskRecurrenceService';
+  import TaskRecurrenceService from '$services/Task/TaskRecurrenceService.svelte';
   import { createLogger } from '$util/logging/logger';
   import TaskDateButton from './TaskDateButton.svelte';
 
