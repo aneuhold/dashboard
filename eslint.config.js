@@ -10,7 +10,9 @@ export default [
       // that is used in an assertion `as type` at the end of a method
       '@typescript-eslint/no-unnecessary-type-parameters': 'off',
       // Disabling this because we have a bunch of dynamic routes
-      'svelte/no-navigation-without-resolve': 'off'
+      'svelte/no-navigation-without-resolve': 'off',
+      // Disabled due to false positives with Svelte components
+      '@typescript-eslint/no-useless-default-assignment': 'off'
     }
   }
 ];
