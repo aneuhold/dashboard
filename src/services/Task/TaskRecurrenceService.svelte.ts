@@ -14,7 +14,7 @@ import { appIsVisible } from '$stores/session/appIsVisible';
 import { timeMinute } from '$stores/session/timeMinute';
 import DashboardAPIService from '$util/api/DashboardAPIService';
 import { createLogger } from '$util/logging/logger';
-import type { DocumentMapStoreSubscriber, UpsertManyInfo } from '../DocumentMapStoreService.svelte';
+import type { UpsertManyInfo } from '../DocumentMapStoreService.svelte';
 import TaskOperationsService from './TaskOperationsService.svelte';
 
 const log = createLogger('TaskRecurrenceService.ts');
@@ -125,51 +125,6 @@ export default class TaskRecurrenceService {
     }
     log.info('Executing recurrence for task', task);
     upsertMany(this.getRecurrenceUpdateInfo(taskMap, task));
-  }
-
-  static getSubscribersForTaskMap(): DocumentMapStoreSubscriber<DashboardTask> {
-    return {
-      afterDocAddition(map, newDoc) {
-        TaskRecurrenceService.updateOrRemoveTaskTimeSubscription(newDoc);
-      },
-      validateDocUpdate(map, oldDoc, newDoc) {
-        const watchRecurrenceInfo = newDoc.recurrenceInfo && !newDoc.parentRecurringTaskInfo;
-        const datesAreDifferent =
-          newDoc.startDate?.getTime() !== oldDoc?.startDate?.getTime() ||
-          newDoc.dueDate?.getTime() !== oldDoc?.dueDate?.getTime();
-        if (watchRecurrenceInfo && TaskRecurrenceService.taskShouldRecur(newDoc)) {
-          return TaskRecurrenceService.getRecurrenceUpdateInfo(map, newDoc);
-        } else if (watchRecurrenceInfo || oldDoc?.recurrenceInfo || datesAreDifferent) {
-          const recurrenceInfoChanged =
-            JSON.stringify(oldDoc?.recurrenceInfo) !== JSON.stringify(newDoc.recurrenceInfo);
-          if (recurrenceInfoChanged) {
-            TaskRecurrenceService.updateOrRemoveTaskTimeSubscription(newDoc);
-            return TaskOperationsService.getUpdateTaskAndAllChildrenInfo(
-              map,
-              newDoc._id,
-              (task) => {
-                if (task._id === newDoc._id) {
-                  return task;
-                }
-                if (newDoc.recurrenceInfo) {
-                  task.parentRecurringTaskInfo = {
-                    taskId: newDoc._id,
-                    startDate: newDoc.startDate,
-                    dueDate: newDoc.dueDate
-                  };
-                  task.recurrenceInfo = newDoc.recurrenceInfo;
-                } else {
-                  task.parentRecurringTaskInfo = null;
-                  task.recurrenceInfo = null;
-                }
-                return task;
-              }
-            );
-          }
-        }
-        return null;
-      }
-    };
   }
 
   /**
