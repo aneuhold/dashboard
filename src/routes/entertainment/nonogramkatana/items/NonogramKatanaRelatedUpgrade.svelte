@@ -6,7 +6,7 @@
 -->
 <script lang="ts">
   import { NonogramKatanaItemName, type NonogramKatanaUpgrade } from '@aneuhold/core-ts-db-lib';
-  import type { DocumentStore } from '$services/DocumentMapStoreService';
+  import type { DocumentStore } from '$services/DocumentMapStoreService.svelte';
   import { nonogramKatanaUpgradesDisplayInfo } from '../upgrades/nonogramKatanaUpgradesDisplayInfo';
 
   let {

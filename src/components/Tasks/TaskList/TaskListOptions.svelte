@@ -8,7 +8,7 @@
   import type { UUID } from 'crypto';
   import ClickableDiv from '$components/presentational/ClickableDiv.svelte';
   import SquareIconButton from '$components/presentational/SquareIconButton.svelte';
-  import type { DocumentStore } from '$services/DocumentMapStoreService';
+  import type { DocumentStore } from '$services/DocumentMapStoreService.svelte';
   import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
   import TaskTagsService from '$services/Task/TaskTagsService';
   import { currentUserId } from '$stores/derived/currentUserId';

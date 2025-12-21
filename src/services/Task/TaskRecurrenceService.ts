@@ -14,7 +14,7 @@ import { appIsVisible } from '$stores/session/appIsVisible';
 import { timeMinute } from '$stores/session/timeMinute';
 import DashboardAPIService from '$util/api/DashboardAPIService';
 import { createLogger } from '$util/logging/logger';
-import type { DocumentMapStoreSubscriber, UpsertManyInfo } from '../DocumentMapStoreService';
+import type { DocumentMapStoreSubscriber, UpsertManyInfo } from '../DocumentMapStoreService.svelte';
 import TaskOperationsService from './TaskOperationsService';
 
 const log = createLogger('TaskRecurrenceService.ts');
@@ -335,7 +335,7 @@ export default class TaskRecurrenceService {
       return;
     }
     DashboardTaskService.updateDatesForRecurrence(task);
-    // For both roll on basis and roll on copmletion, the tasks should move
+    // For both roll on basis and roll on completion, the tasks should move
     // forward until they are in the future.
     if (task.recurrenceInfo.recurrenceEffect !== RecurrenceEffect.stack) {
       const currentDate = new Date();

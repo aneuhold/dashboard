@@ -1,6 +1,9 @@
 import type { DashboardTask } from '@aneuhold/core-ts-db-lib';
-import type { DocumentMapStoreSubscriber } from '../DocumentMapStoreService';
+import type { DocumentMapStoreSubscriber } from '../DocumentMapStoreService.svelte';
 
+/**
+ * This is handled now?
+ */
 export default class TaskSharingService {
   static getSubscribersForTaskMap(): DocumentMapStoreSubscriber<DashboardTask> {
     return {

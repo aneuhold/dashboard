@@ -3,7 +3,7 @@ import { ArrayService } from '@aneuhold/core-ts-lib';
 import type { UUID } from 'crypto';
 import { type Unsubscriber, type Writable, writable } from 'svelte/store';
 import { userConfig } from '$stores/local/userConfig/userConfig';
-import type { DocumentMapStore } from '../DocumentMapStoreService';
+import type { DocumentMapStore } from '../DocumentMapStoreService.svelte';
 
 /**
  * A service responsible for managing tags for tasks.

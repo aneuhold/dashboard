@@ -5,7 +5,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import DocumentMapStoreService, {
   type DocumentInsertOrUpdateInfo,
   type DocumentMapStoreSubscriber
-} from './DocumentMapStoreService';
+} from './DocumentMapStoreService.svelte';
 
 // Define a concrete implementation for testing
 interface TestDoc extends BaseDocument {

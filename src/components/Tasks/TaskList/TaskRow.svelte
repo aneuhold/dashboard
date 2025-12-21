@@ -56,19 +56,7 @@
   }
 
   function handleDuplicateClick() {
-    const currentTask = $task;
-    taskMap.upsertMany(
-      TaskMapService.getDuplicateTaskUpdateInfo(taskId, (task) => {
-        // Conditional to find the original task that is being duplicated
-        if (
-          !task.parentTaskId ||
-          (currentTask.parentTaskId && task.parentTaskId === currentTask.parentTaskId)
-        ) {
-          task.title = `${task.title} (Copy)`;
-        }
-        return task;
-      })
-    );
+    TaskMapService.duplicateTask(taskId);
   }
 
   function handleSkipClick() {

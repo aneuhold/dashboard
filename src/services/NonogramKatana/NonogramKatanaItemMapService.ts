@@ -13,8 +13,8 @@ import type {
   DocumentInsertOrUpdateInfo,
   DocumentMapStore,
   DocumentStore
-} from '../DocumentMapStoreService';
-import DocumentMapStoreService from '../DocumentMapStoreService';
+} from '../DocumentMapStoreService.svelte';
+import DocumentMapStoreService from '../DocumentMapStoreService.svelte';
 
 const log = createLogger('NonogramKatanaItemMapService.ts');
 

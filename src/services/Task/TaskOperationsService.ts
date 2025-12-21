@@ -6,7 +6,7 @@ import {
 } from '@aneuhold/core-ts-db-lib';
 import type { UUID } from 'crypto';
 import type { Updater } from 'svelte/store';
-import type { UpsertManyInfo } from '../DocumentMapStoreService';
+import type { UpsertManyInfo } from '../DocumentMapStoreService.svelte';
 
 /**
  * A service for pure task operations that don't require store access.
@@ -67,7 +67,7 @@ export default class TaskOperationsService {
     ]);
     allRelatedTaskIds.push(parentTask._id);
     const tasksToInsert: DashboardTask[] = [];
-    const oldTaskIdToNewTaskId: { [oldId: string]: DashboardTask['_id'] } = {};
+    const oldTaskIdToNewTaskId: { [oldId: UUID]: UUID } = {};
     allRelatedTaskIds.forEach((id) => {
       const doc = taskMap[id];
       if (!doc) {

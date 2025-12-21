@@ -15,8 +15,9 @@ import type {
   DocumentMapStore,
   DocumentStore,
   UpsertManyInfo
-} from '../../DocumentMapStoreService';
-import DocumentMapStoreService from '../../DocumentMapStoreService';
+} from '../../DocumentMapStoreService.svelte';
+import DocumentMapStoreService from '../../DocumentMapStoreService.svelte';
+import TaskCreationService from '../TaskCreationService';
 import TaskOperationsService from '../TaskOperationsService';
 import TaskRecurrenceService from '../TaskRecurrenceService';
 import TaskSharingService from '../TaskSharingService';
@@ -28,11 +29,73 @@ const log = createLogger('TaskMapService.ts');
  * The main task map service.
  */
 export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
-  private static instance = new TaskMapService();
-
-  private constructor() {
-    super();
+  public override addDoc(task: DashboardTask): void {
+    this.addManyDocs([TaskCreationService.prepareTaskForAddition(task, this.mapState)]);
   }
+
+  public override addManyDocs(tasks: DashboardTask[]): void {
+    const preparedTasks = tasks.map((task) =>
+      TaskCreationService.prepareTaskForAddition(task, this.mapState)
+    );
+    super.addManyDocs(preparedTasks);
+  }
+
+  public override updateDoc(taskId: UUID, updater: Updater<DashboardTask>): void {
+    this.updateManyDocs([taskId], updater);
+  }
+
+  public override updateManyDocs(
+    filterOrTaskIds: UUID[] | ((currentDoc: DashboardTask) => boolean),
+    updater: Updater<DashboardTask>
+  ): void {
+    super.updateManyDocs(filterOrTaskIds, updater);
+  }
+
+  public override upsertManyDocs(upsertInfo: UpsertManyInfo<DashboardTask>): void {
+    const { filter, updater, newDocs } = upsertInfo;
+    const preparedNewDocs = newDocs.map((task) =>
+      TaskCreationService.prepareTaskForAddition(task, this.mapState)
+    );
+    super.upsertManyDocs({
+      filter,
+      updater: updater,
+      newDocs: preparedNewDocs
+    });
+  }
+
+  public override deleteDoc(docId: UUID): void {
+    this.deleteManyDocs([docId]);
+  }
+
+  public override deleteManyDocs(docIds: UUID[]): void {
+    const allTasks = TaskOperationsService.getAllTasks(this.mapState);
+    docIds.push(...DashboardTaskService.getChildrenIds(allTasks, docIds));
+    super.deleteManyDocs(docIds);
+  }
+
+  public duplicateTask(taskId: UUID): void {
+    const currentTask = this.mapState[taskId];
+    if (!currentTask) {
+      log.error(`Cannot duplicate task with ID ${taskId} because it does not exist.`);
+      return;
+    }
+    const updateInfo = TaskOperationsService.getDuplicateTaskUpdateInfo(
+      this.mapState,
+      taskId,
+      (task) => {
+        // Conditional to find the original task that is being duplicated
+        if (task.parentTaskId === currentTask.parentTaskId) {
+          task.title = `${task.title} (Copy)`;
+        }
+        return task;
+      }
+    );
+    this.upsertManyDocs(updateInfo);
+  }
+
+  // --- Legacy Methods / logic below -----
+
+  private static instance = new TaskMapService();
 
   static getStore(): DocumentMapStore<DashboardTask> {
     return this.instance.store;
@@ -44,6 +107,27 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
 
   static getMap(): DocumentMap<DashboardTask> {
     return this.instance.documentMap;
+  }
+
+  /**
+   * Adds a new task to the store.
+   *
+   * This method uses `TaskCreationService` to prepare the task (applying defaults,
+   * inheritance, etc.) before adding it to the store.
+   *
+   * @param task The task to add.
+   */
+  static addTask(task: DashboardTask): void {
+    this.instance.addDoc(task);
+  }
+
+  /**
+   * Duplicates the task with the given ID.
+   *
+   * @param taskId The ID of the task to duplicate.
+   */
+  static duplicateTask(taskId: UUID): void {
+    this.instance.duplicateTask(taskId);
   }
 
   /**
@@ -105,27 +189,14 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
     this.subscribers.push(TaskSharingService.getSubscribersForTaskMap());
   }
 
-  protected persistToLocalData(): DocumentMap<DashboardTask> {
+  protected override persistToLocalData(): DocumentMap<DashboardTask> {
     return LocalData.setAndGetTaskMap(this.documentMap);
   }
-  protected getFromLocalData(): DocumentMap<DashboardTask> | null {
+  protected override getFromLocalData(): DocumentMap<DashboardTask> | null {
     return LocalData.taskMap;
   }
-  protected persistToDb(updateInfo: DocumentInsertOrUpdateInfo<DashboardTask>): void {
+  protected override persistToDb(updateInfo: DocumentInsertOrUpdateInfo<DashboardTask>): void {
     DashboardTaskAPIService.updateTasks(updateInfo);
-  }
-
-  static getDuplicateTaskUpdateInfo(
-    taskId: UUID,
-    newTaskUpdater: Updater<DashboardTask>,
-    originalTaskUpdater?: Updater<DashboardTask>
-  ): UpsertManyInfo<DashboardTask> {
-    return TaskOperationsService.getDuplicateTaskUpdateInfo(
-      this.instance.documentMap,
-      taskId,
-      newTaskUpdater,
-      originalTaskUpdater
-    );
   }
 
   /**
@@ -140,7 +211,7 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
     updater: Updater<DashboardTask>
   ): UpsertManyInfo<DashboardTask> {
     return TaskOperationsService.getUpdateTaskAndAllChildrenInfo(
-      this.instance.documentMap,
+      this.instance.mapState,
       taskId,
       updater
     );
@@ -158,7 +229,7 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
       task.sharedWith = newSharedWith;
       return task;
     });
-    this.instance.store.upsertMany(updateInfo);
+    this.instance.upsertManyDocs(updateInfo);
   }
 
   /**
@@ -216,7 +287,10 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
     const taskIdsToDelete = tasksToDelete.map((task) => task._id);
     if (taskIdsToDelete.length !== 0) {
       log.info(`Deleting ${taskIdsToDelete.length} tasks due to auto task deletion.`);
-      this.getStore().deleteMany(taskIdsToDelete);
+      this.instance.deleteManyDocs(taskIdsToDelete);
     }
   }
 }
+
+const taskMapService = new TaskMapService();
+export default taskMapService;
