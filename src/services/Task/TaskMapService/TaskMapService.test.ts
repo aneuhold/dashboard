@@ -2,15 +2,20 @@ import {
   type DashboardTask,
   DashboardTaskSchema,
   DashboardUserConfigSchema,
-  DocumentService
+  DocumentService,
+  RecurrenceBasis,
+  RecurrenceEffect,
+  RecurrenceFrequencyType,
+  RecurrenceInfoSchema
 } from '@aneuhold/core-ts-db-lib';
 import { DateService } from '@aneuhold/core-ts-lib';
-import { get } from 'svelte/store';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { userConfig } from '$stores/local/userConfig/userConfig';
 import DashboardTaskAPIService from '$util/api/DashboardTaskAPIService';
+import type { UpsertManyInfo } from '../../DocumentMapStoreService.svelte';
+import TaskRecurrenceService from '../TaskRecurrenceService.svelte';
 import TaskTagsService from '../TaskTagsService';
-import { TaskMapService } from './TaskMapService';
+import taskMapService, { TaskMapService } from './TaskMapService';
 
 // Mock dependencies
 vi.mock('$util/LocalData/LocalData', () => ({
@@ -60,16 +65,16 @@ describe('TaskMapService', () => {
       currentUserConfig = updater(currentUserConfig);
     });
 
-    // Reset store
-    TaskMapService.getStore().set({});
+    // Reset map
+    taskMapService.setMap({});
   });
 
   afterEach(() => {
-    TaskMapService.getStore().set({});
+    taskMapService.setMap({});
   });
 
   it('should initialize with empty map', () => {
-    expect(get(TaskMapService.getStore())).toEqual({});
+    expect(taskMapService.mapState).toEqual({});
   });
 
   describe('Auto Deletion', () => {
@@ -98,20 +103,14 @@ describe('TaskMapService', () => {
         createdDate: oldDate
       });
 
-      // We need to set the map directly to simulate loading from DB/LocalData
-      // calling set() triggers afterMapSet which triggers autoDeleteTasksPostSet
-      TaskMapService.getStore().set({
+      // Use setMap to simulate loading from DB/LocalData
+      taskMapService.setMap({
         [oldTask._id]: oldTask,
         [recentTask._id]: recentTask,
         [incompleteTask._id]: incompleteTask
       });
 
-      // Wait for any async operations or just check if deleteMany was called
-      // deleteMany is synchronous in DocumentMapStoreService, but let's check if it was called
-      // The issue might be that deleteMany calls persistToDb which is mocked.
-      // But deleteMany also updates the map.
-
-      const map = get(TaskMapService.getStore());
+      const map = taskMapService.mapState;
       expect(map[oldTask._id]).toBeUndefined();
       expect(map[recentTask._id]).toBeDefined();
       expect(map[incompleteTask._id]).toBeDefined();
@@ -135,11 +134,11 @@ describe('TaskMapService', () => {
         parentTaskId: parentId
       });
 
-      TaskMapService.getStore().set({
+      taskMapService.setMap({
         [oldChildTask._id]: oldChildTask
       });
 
-      const map = get(TaskMapService.getStore());
+      const map = taskMapService.mapState;
       expect(map[oldChildTask._id]).toBeDefined();
     });
   });
@@ -150,7 +149,7 @@ describe('TaskMapService', () => {
         title: 'Parent Task'
       });
 
-      TaskMapService.getStore().addDoc(parentTask);
+      taskMapService.addDoc(parentTask);
 
       const childTask = createTask({
         // Intentionally wrong or missing userId to test inheritance
@@ -159,9 +158,9 @@ describe('TaskMapService', () => {
         parentTaskId: parentTask._id
       });
 
-      TaskMapService.getStore().addDoc(childTask);
+      taskMapService.addDoc(childTask);
 
-      const map = get(TaskMapService.getStore());
+      const map = taskMapService.mapState;
       expect(map[childTask._id]?.userId).toBe(userId);
     });
   });
@@ -177,14 +176,14 @@ describe('TaskMapService', () => {
         parentTaskId: parentTask._id
       });
 
-      TaskMapService.getStore().set({
+      taskMapService.setMap({
         [parentTask._id]: parentTask,
         [childTask._id]: childTask
       });
 
-      TaskMapService.getStore().deleteDoc(parentTask._id);
+      taskMapService.deleteDoc(parentTask._id);
 
-      const map = get(TaskMapService.getStore());
+      const map = taskMapService.mapState;
       expect(map[parentTask._id]).toBeUndefined();
       expect(map[childTask._id]).toBeUndefined();
 
@@ -204,14 +203,14 @@ describe('TaskMapService', () => {
       const parentTask = createTask({ sharedWith: [] });
       const childTask = createTask({ parentTaskId: parentTask._id, sharedWith: [] });
 
-      TaskMapService.getStore().set({
+      taskMapService.setMap({
         [parentTask._id]: parentTask,
         [childTask._id]: childTask
       });
 
-      TaskMapService.updateSharedWith(parentTask._id, [otherUserId]);
+      taskMapService.updateSharedWith(parentTask._id, [otherUserId]);
 
-      const map = get(TaskMapService.getStore());
+      const map = taskMapService.mapState;
       expect(map[parentTask._id]?.sharedWith).toContain(otherUserId);
       expect(map[childTask._id]?.sharedWith).toContain(otherUserId);
     });
@@ -223,26 +222,14 @@ describe('TaskMapService', () => {
       TaskTagsService.getStore(TaskMapService.getStore());
 
       const task = createTask();
-      TaskMapService.getStore().set({ [task._id]: task });
-
-      const taskStore = TaskMapService.getTaskStore(task._id);
-      const subscriberSpy = vi.fn();
-      taskStore.subscribe(subscriberSpy);
-
-      // Initial call
-      expect(subscriberSpy).toHaveBeenCalledWith(task);
-      subscriberSpy.mockClear();
+      taskMapService.setMap({ [task._id]: task });
 
       const newTags = ['tag1', 'tag2'];
-      TaskMapService.updateTags(task._id, newTags);
 
-      // Verify subscriber was called with updated task
-      expect(subscriberSpy).toHaveBeenCalledTimes(1);
-      const updatedTask = subscriberSpy.mock.calls[0][0];
-      expect(updatedTask.tags[userId]).toEqual(newTags);
+      taskMapService.updateTags(task._id, newTags);
 
-      // Verify map is also updated
-      const map = get(TaskMapService.getStore());
+      // Verify map is updated
+      const map = taskMapService.mapState;
       expect(map[task._id]?.tags[userId]).toEqual(newTags);
 
       // Verify user config was updated (via TaskTagsService)
@@ -251,25 +238,192 @@ describe('TaskMapService', () => {
       expect(config.config.tagSettings['tag2']).toBeDefined();
     });
 
-    it('should remove tags entry if empty and notify subscribers', () => {
+    it('should remove tags entry if empty', () => {
       const task = createTask({
         tags: { [userId]: ['tag1'] }
       });
-      TaskMapService.getStore().set({ [task._id]: task });
+      taskMapService.setMap({ [task._id]: task });
 
-      const taskStore = TaskMapService.getTaskStore(task._id);
-      const subscriberSpy = vi.fn();
-      taskStore.subscribe(subscriberSpy);
-      subscriberSpy.mockClear();
+      taskMapService.updateTags(task._id, []);
 
-      TaskMapService.updateTags(task._id, []);
-
-      expect(subscriberSpy).toHaveBeenCalledTimes(1);
-      const updatedTask = subscriberSpy.mock.calls[0][0];
-      expect(updatedTask.tags[userId]).toBeUndefined();
-
-      const map = get(TaskMapService.getStore());
+      const map = taskMapService.mapState;
       expect(map[task._id]?.tags[userId]).toBeUndefined();
+    });
+  });
+
+  describe('updateTaskRecurrenceOrDates', () => {
+    it('should update start and due dates', () => {
+      const task = createTask();
+      taskMapService.setMap({ [task._id]: task });
+
+      const newStartDate = new Date('2023-01-01');
+      const newDueDate = new Date('2023-01-02');
+
+      taskMapService.updateTaskRecurrenceOrDates(task._id, {
+        newStartDate,
+        newDueDate
+      });
+
+      const map = taskMapService.mapState;
+      expect(map[task._id]?.startDate).toEqual(newStartDate);
+      expect(map[task._id]?.dueDate).toEqual(newDueDate);
+    });
+
+    it('should update recurrence info and propagate to children', () => {
+      const task = createTask();
+      const childTask = createTask({ parentTaskId: task._id });
+      taskMapService.setMap({
+        [task._id]: task,
+        [childTask._id]: childTask
+      });
+
+      const newRecurrenceInfo = RecurrenceInfoSchema.parse({
+        frequency: {
+          type: RecurrenceFrequencyType.everyXTimeUnit,
+          everyXTimeUnit: { timeUnit: 'day', x: 1 }
+        },
+        recurrenceEffect: RecurrenceEffect.rollOnBasis,
+        recurrenceBasis: RecurrenceBasis.dueDate
+      });
+
+      // Mock taskShouldRecur to false to avoid immediate recurrence
+      vi.spyOn(TaskRecurrenceService, 'taskShouldRecur').mockReturnValue(false);
+
+      taskMapService.updateTaskRecurrenceOrDates(task._id, {
+        newRecurrenceInfo
+      });
+
+      const map = taskMapService.mapState;
+      expect(map[task._id]?.recurrenceInfo).toEqual(newRecurrenceInfo);
+
+      // Check child propagation
+      expect(map[childTask._id]?.parentRecurringTaskInfo).toEqual({
+        taskId: task._id,
+        startDate: map[task._id]?.startDate,
+        dueDate: map[task._id]?.dueDate
+      });
+      expect(map[childTask._id]?.recurrenceInfo).toEqual(newRecurrenceInfo);
+    });
+
+    it('should remove recurrence info and propagate removal to children', () => {
+      const recurrenceInfo = RecurrenceInfoSchema.parse({
+        frequency: {
+          type: RecurrenceFrequencyType.everyXTimeUnit,
+          everyXTimeUnit: { timeUnit: 'day', x: 1 }
+        },
+        recurrenceEffect: RecurrenceEffect.rollOnBasis,
+        recurrenceBasis: RecurrenceBasis.dueDate
+      });
+      const task = createTask({ recurrenceInfo });
+      const childTask = createTask({
+        parentTaskId: task._id,
+        recurrenceInfo,
+        parentRecurringTaskInfo: {
+          taskId: task._id,
+          startDate: task.startDate,
+          dueDate: task.dueDate
+        }
+      });
+
+      taskMapService.setMap({
+        [task._id]: task,
+        [childTask._id]: childTask
+      });
+
+      taskMapService.updateTaskRecurrenceOrDates(task._id, {
+        newRecurrenceInfo: null
+      });
+
+      const map = taskMapService.mapState;
+      expect(map[task._id]?.recurrenceInfo).toBeNull();
+      expect(map[childTask._id]?.recurrenceInfo).toBeNull();
+      expect(map[childTask._id]?.parentRecurringTaskInfo).toBeNull();
+    });
+
+    it('should trigger recurrence update if task should recur immediately', () => {
+      const task = createTask();
+      taskMapService.setMap({ [task._id]: task });
+
+      const newRecurrenceInfo = RecurrenceInfoSchema.parse({
+        frequency: {
+          type: RecurrenceFrequencyType.everyXTimeUnit,
+          everyXTimeUnit: { timeUnit: 'day', x: 1 }
+        },
+        recurrenceEffect: RecurrenceEffect.rollOnBasis,
+        recurrenceBasis: RecurrenceBasis.dueDate
+      });
+
+      vi.spyOn(TaskRecurrenceService, 'taskShouldRecur').mockReturnValue(true);
+
+      const mockUpdateInfo: UpsertManyInfo<DashboardTask> = {
+        filter: () => false,
+        updater: (t) => t,
+        newDocs: []
+      };
+      const getRecurrenceUpdateInfoSpy = vi
+        .spyOn(TaskRecurrenceService, 'getRecurrenceUpdateInfo')
+        .mockReturnValue(mockUpdateInfo);
+
+      // Spy on upsertManyDocs to verify it's called with the result of getRecurrenceUpdateInfo
+      const upsertSpy = vi.spyOn(taskMapService, 'upsertManyDocs');
+
+      taskMapService.updateTaskRecurrenceOrDates(task._id, {
+        newRecurrenceInfo
+      });
+
+      expect(getRecurrenceUpdateInfoSpy).toHaveBeenCalledWith(
+        expect.anything(),
+        expect.objectContaining({ _id: task._id, recurrenceInfo: newRecurrenceInfo })
+      );
+      expect(upsertSpy).toHaveBeenCalledWith(mockUpdateInfo);
+    });
+  });
+
+  describe('duplicateTask', () => {
+    it('should duplicate a single task and append (Copy) to the title', () => {
+      const task = createTask({ title: 'Original Task' });
+      taskMapService.setMap({ [task._id]: task });
+
+      taskMapService.duplicateTask(task._id);
+
+      const map = taskMapService.mapState;
+      const tasks = Object.values(map);
+      expect(tasks).toHaveLength(2);
+
+      const duplicatedTask = tasks.find((t) => t?._id !== task._id);
+      expect(duplicatedTask).toBeDefined();
+      expect(duplicatedTask?.title).toBe('Original Task (Copy)');
+      expect(duplicatedTask?.userId).toBe(userId);
+    });
+
+    it('should duplicate a task and its children', () => {
+      const parentTask = createTask({ title: 'Parent Task' });
+      const childTask = createTask({
+        title: 'Child Task',
+        parentTaskId: parentTask._id
+      });
+
+      taskMapService.setMap({
+        [parentTask._id]: parentTask,
+        [childTask._id]: childTask
+      });
+
+      taskMapService.duplicateTask(parentTask._id);
+
+      const map = taskMapService.mapState;
+      const tasks = Object.values(map).filter((t): t is DashboardTask => !!t);
+      expect(tasks).toHaveLength(4); // 2 original + 2 duplicated
+
+      const duplicatedParent = tasks.find(
+        (t) => t._id !== parentTask._id && t.title === 'Parent Task (Copy)'
+      );
+      const duplicatedChild = tasks.find(
+        (t) => t._id !== childTask._id && t.title === 'Child Task'
+      );
+
+      expect(duplicatedParent).toBeDefined();
+      expect(duplicatedChild).toBeDefined();
+      expect(duplicatedChild?.parentTaskId).toBe(duplicatedParent?._id);
     });
   });
 });
