@@ -13,8 +13,6 @@ import LocalData from '$util/LocalData/LocalData';
 import { createLogger } from '$util/logging/logger';
 import type {
   DocumentInsertOrUpdateInfo,
-  DocumentMapStore,
-  DocumentStore,
   UpsertManyInfo
 } from '../../DocumentMapStoreService.svelte';
 import DocumentMapStoreService from '../../DocumentMapStoreService.svelte';
@@ -29,9 +27,6 @@ const log = createLogger('TaskMapService.ts');
  * The main task map service.
  */
 export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
-  protected setupSubscribers(): void {
-    // No subscribers needed for now
-  }
   public override addDoc(task: DashboardTask): void {
     this.addManyDocs([task]);
   }
@@ -195,142 +190,21 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
     // Check if any tasks need to recur after everything has been set
     Object.values(newMap).forEach((task) => {
       if (task) {
-        TaskMapService.executeRecurrenceIfNeeded(task);
+        TaskRecurrenceService.executeRecurrenceIfNeeded(task, this.mapState, (info) => {
+          this.upsertManyDocs(info);
+        });
       }
     });
     TaskRecurrenceService.buildTaskRecurrenceSubMapFresh(newMap);
     this.autoDeleteTasksPostSet(newMap);
   }
 
-  // --- Legacy Methods / logic below -----
-
-  private static instance = new TaskMapService();
-
-  static getStore(): DocumentMapStore<DashboardTask> {
-    return this.instance.store;
-  }
-
-  static getTaskStore(taskId: UUID): DocumentStore<DashboardTask> {
-    return this.instance.getDocStore(taskId);
-  }
-
-  static getMap(): DocumentMap<DashboardTask> {
-    return this.instance.documentMap;
-  }
-
-  /**
-   * Adds a new task to the store.
-   *
-   * This method uses `TaskCreationService` to prepare the task (applying defaults,
-   * inheritance, etc.) before adding it to the store.
-   *
-   * @param task The task to add.
-   */
-  static addTask(task: DashboardTask): void {
-    const preparedTask = TaskCreationService.prepareTaskForAddition(
-      task,
-      this.instance.documentMap
-    );
-    this.instance.store.addDoc(preparedTask);
-  }
-
-  /**
-   * Duplicates the task with the given ID.
-   *
-   * @param taskId The ID of the task to duplicate.
-   */
-  static duplicateTask(taskId: UUID): void {
-    this.instance.duplicateTask(taskId);
-  }
-
-  /**
-   * Executes recurrence for the provided task if needed. This is a facade
-   * method that delegates to TaskRecurrenceService.
-   *
-   * @param task The task to check and execute recurrence for
-   */
-  static executeRecurrenceIfNeeded(task: DashboardTask): void {
-    TaskRecurrenceService.executeRecurrenceIfNeeded(task, this.instance.documentMap, (info) => {
-      this.instance.store.upsertMany(info);
-    });
-  }
-
-  /**
-   * Executes recurrence for the provided task. This is a facade method that
-   * delegates to TaskRecurrenceService.
-   *
-   * @param task The task to execute recurrence for
-   */
-  static executeRecurrenceForTask(task: DashboardTask): void {
-    TaskRecurrenceService.executeRecurrenceForTask(task, this.instance.documentMap, (info) => {
-      this.instance.store.upsertMany(info);
-    });
-  }
-
   protected override persistToLocalData(): DocumentMap<DashboardTask> {
-    return LocalData.setAndGetTaskMap(this.documentMap);
+    return LocalData.setAndGetTaskMap(this.mapState);
   }
-  protected override getFromLocalData(): DocumentMap<DashboardTask> | null {
-    return LocalData.taskMap;
-  }
+
   protected override persistToDb(updateInfo: DocumentInsertOrUpdateInfo<DashboardTask>): void {
     DashboardTaskAPIService.updateTasks(updateInfo);
-  }
-
-  /**
-   * Gets the update info for a task and all of its children based on the
-   * provided updater.
-   *
-   * @param taskId The ID of the parent task
-   * @param updater Function to update each task
-   */
-  static getUpdateTaskAndAllChildrenInfo(
-    taskId: UUID,
-    updater: Updater<DashboardTask>
-  ): UpsertManyInfo<DashboardTask> {
-    return TaskOperationsService.getUpdateTaskAndAllChildrenInfo(
-      this.instance.documentMap,
-      taskId,
-      updater
-    );
-  }
-
-  /**
-   * Updates the sharedWith array for a task and propagates the change to all
-   * children tasks.
-   *
-   * @param taskId The ID of the task to update
-   * @param newSharedWith The new sharedWith array
-   */
-  static updateSharedWith(taskId: UUID, newSharedWith: UUID[]): void {
-    const updateInfo = this.getUpdateTaskAndAllChildrenInfo(taskId, (task) => {
-      task.sharedWith = newSharedWith;
-      return task;
-    });
-    this.instance.upsertManyDocs(updateInfo);
-  }
-
-  /**
-   * Updates the tags for a task for the current user.
-   *
-   * @param taskId The ID of the task to update
-   * @param newTags The new tags array
-   */
-  static updateTags(taskId: UUID, newTags: string[]): void {
-    const userId = userConfig.get().config.userId;
-    const taskStore = this.getTaskStore(taskId);
-    taskStore.update((task) => {
-      if (newTags.length === 0) {
-        delete task.tags[userId];
-      } else {
-        task.tags[userId] = newTags;
-        // Add any new tags to the user's global tag list
-        newTags.forEach((tag) => {
-          TaskTagsService.addTagForUserIfNeeded(tag);
-        });
-      }
-      return task;
-    });
   }
 
   /**

@@ -15,7 +15,7 @@ import DashboardTaskAPIService from '$util/api/DashboardTaskAPIService';
 import type { UpsertManyInfo } from '../../DocumentMapStoreService.svelte';
 import TaskRecurrenceService from '../TaskRecurrenceService.svelte';
 import TaskTagsService from '../TaskTagsService';
-import taskMapService, { TaskMapService } from './TaskMapService';
+import taskMapService from './TaskMapService';
 
 // Mock dependencies
 vi.mock('$util/LocalData/LocalData', () => ({
@@ -219,7 +219,7 @@ describe('TaskMapService', () => {
   describe('updateTags', () => {
     it('should update tags and notify individual task store subscribers', () => {
       // Initialize TaskTagsService to ensure userId is set
-      TaskTagsService.getStore(TaskMapService.getStore());
+      TaskTagsService.getStore();
 
       const task = createTask();
       taskMapService.setMap({ [task._id]: task });

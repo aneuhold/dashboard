@@ -3,7 +3,7 @@ import { ArrayService } from '@aneuhold/core-ts-lib';
 import type { UUID } from 'crypto';
 import type { BreadCrumbArray } from '$components/BreadCrumb.svelte';
 import { confirmationDialog } from '$components/singletons/dialogs/SingletonConfirmationDialog.svelte';
-import { TaskMapService } from './TaskMapService/TaskMapService';
+import taskMapService from './TaskMapService/TaskMapService';
 
 /**
  * The main task utility service.
@@ -20,7 +20,7 @@ export default class TaskUtilityService {
    */
   static getTaskCategoryBreadCrumbs(taskId: UUID): BreadCrumbArray {
     const defaultBreadCrumbs = [{ name: 'tasks', link: 'tasks' }];
-    const task = TaskMapService.getMap()[taskId];
+    const task = taskMapService.mapState[taskId];
     if (!task) {
       return defaultBreadCrumbs;
     }
@@ -33,7 +33,7 @@ export default class TaskUtilityService {
   }
 
   static getBreadCrumbArray(taskId: UUID): BreadCrumbArray {
-    const task = TaskMapService.getMap()[taskId];
+    const task = taskMapService.mapState[taskId];
     const breadCrumbs: BreadCrumbArray = [];
     if (!task)
       return [
@@ -51,7 +51,7 @@ export default class TaskUtilityService {
       if (!currentTask.parentTaskId) {
         break;
       }
-      currentTask = TaskMapService.getMap()[currentTask.parentTaskId];
+      currentTask = taskMapService.mapState[currentTask.parentTaskId];
     }
     breadCrumbs.push(...parentTaskChain);
     return breadCrumbs;
@@ -93,7 +93,7 @@ export default class TaskUtilityService {
     if (!task.parentTaskId || task.sharedWith.length === 0) {
       return task._id;
     }
-    const parentTask = TaskMapService.getMap()[task.parentTaskId];
+    const parentTask = taskMapService.mapState[task.parentTaskId];
     if (!parentTask) {
       return task._id;
     }
@@ -110,7 +110,7 @@ export default class TaskUtilityService {
 
   static getTaskCategoryRoute(taskId: UUID, includeFirstSlash = true) {
     const defaultRoute = `${includeFirstSlash ? '/' : ''}tasks`;
-    const task = TaskMapService.getMap()[taskId];
+    const task = taskMapService.mapState[taskId];
     if (!task) {
       return defaultRoute;
     }
