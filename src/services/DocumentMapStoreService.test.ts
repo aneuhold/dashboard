@@ -11,23 +11,6 @@ interface TestDoc extends BaseDocument {
 }
 
 class TestDocumentMapStoreService extends DocumentMapStoreService<TestDoc> {
-  private static instance?: TestDocumentMapStoreService;
-
-  private constructor() {
-    super();
-  }
-
-  public static getInstance(): TestDocumentMapStoreService {
-    if (!TestDocumentMapStoreService.instance) {
-      TestDocumentMapStoreService.instance = new TestDocumentMapStoreService();
-    }
-    return TestDocumentMapStoreService.instance;
-  }
-
-  public static resetInstance() {
-    TestDocumentMapStoreService.instance = new TestDocumentMapStoreService();
-  }
-
   // Mocks for abstract methods
   public static persistToLocalDataMock = vi.fn<() => DocumentMap<TestDoc>>().mockReturnValue({});
   public static getFromLocalDataMock = vi
@@ -62,8 +45,7 @@ describe('DocumentMapStoreService', () => {
     TestDocumentMapStoreService.persistToLocalDataMock.mockClear();
     TestDocumentMapStoreService.getFromLocalDataMock.mockClear();
     TestDocumentMapStoreService.persistToDbMock.mockClear();
-    TestDocumentMapStoreService.resetInstance();
-    service = TestDocumentMapStoreService.getInstance();
+    service = new TestDocumentMapStoreService();
 
     doc1 = {
       _id: DocumentService.generateID(),
