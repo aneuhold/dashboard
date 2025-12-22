@@ -20,7 +20,7 @@
   import type { UUID } from 'crypto';
   import ClickableDiv from '$components/presentational/ClickableDiv.svelte';
   import SmartDialog from '$components/presentational/SmartDialog.svelte';
-  import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
+  import taskMapService from '$services/Task/TaskMapService/TaskMapService';
   import TaskRecurrenceService from '$services/Task/TaskRecurrenceService.svelte';
   import TaskUtilityService from '$services/Task/TaskUtilityService';
   import TaskRecurrenceDetails from './TaskRecurrenceDetails.svelte';
@@ -28,12 +28,11 @@
   let { taskId, childTaskIds }: { taskId: UUID; childTaskIds: UUID[] } = $props();
 
   let recurringInfoOpen = $state(false);
-  const taskMap = TaskMapService.getStore();
   let previousTaskId: UUID = $state(taskId);
   let errorInfoDialogOpen = $state(false);
   let errorInfoDialogTitle = $state('');
   let errorInfoDialogContent = $state('');
-  let task = $derived(TaskMapService.getTaskStore(taskId));
+  let task = $derived(taskMapService.mapState[taskId]);
   let defaultRecurrenceInfo: RecurrenceInfo = $derived({
     frequency: {
       type: RecurrenceFrequencyType.everyXTimeUnit,
@@ -42,13 +41,13 @@
         x: 1
       }
     },
-    recurrenceBasis: $task.dueDate ? RecurrenceBasis.dueDate : RecurrenceBasis.startDate,
+    recurrenceBasis: task?.dueDate ? RecurrenceBasis.dueDate : RecurrenceBasis.startDate,
     recurrenceEffect: RecurrenceEffect.rollOnCompletion
   });
-  let isRecurring = $derived(!!$task.recurrenceInfo);
-  let hasParentRecurringTask = $derived(!!$task.parentRecurringTaskInfo);
+  let isRecurring = $derived(!!task?.recurrenceInfo);
+  let hasParentRecurringTask = $derived(!!task?.parentRecurringTaskInfo);
   let hasChildRecurringTask = $derived(
-    childTaskIds.some((childTaskId) => !!$taskMap[childTaskId]?.recurrenceInfo)
+    childTaskIds.some((childTaskId) => !!taskMapService.mapState[childTaskId]?.recurrenceInfo)
   );
 
   // Auto-close the accordion when switching tasks
@@ -60,10 +59,11 @@
   });
 
   function handleRecurringClick() {
+    if (!task) return;
     if (isRecurring) {
-      $task.recurrenceInfo = null;
+      taskMapService.updateTaskRecurrenceOrDates(taskId, { newRecurrenceInfo: null });
       recurringInfoOpen = false;
-    } else if (!$task.startDate && !$task.dueDate) {
+    } else if (!task.startDate && !task.dueDate) {
       errorInfoDialogTitle = 'Task is missing start date or due date';
       errorInfoDialogContent = 'Tasks must have a start date or due date to be set to recurring.';
       errorInfoDialogOpen = true;
@@ -75,7 +75,9 @@
       const defaultRecurrenceInfoClone = JSON.parse(
         JSON.stringify(defaultRecurrenceInfo)
       ) as RecurrenceInfo;
-      $task.recurrenceInfo = defaultRecurrenceInfoClone;
+      taskMapService.updateTaskRecurrenceOrDates(taskId, {
+        newRecurrenceInfo: defaultRecurrenceInfoClone
+      });
       recurringInfoOpen = true;
     }
   }
@@ -92,30 +94,30 @@
 <div class="container">
   <Accordion>
     <Panel variant="outlined" color="secondary" bind:open={recurringInfoOpen}>
-      <div class={`headerContainer${$task.recurrenceInfo ? '' : ' dimmed-color'}`}>
+      <div class={`headerContainer${task?.recurrenceInfo ? '' : ' dimmed-color'}`}>
         <div class="header">
           {#if !hasParentRecurringTask && (isRecurring || !hasChildRecurringTask)}
             <ClickableDiv clickAction={handleRecurringClick}>
               <Checkbox
-                disabled={(!$task.startDate && !$task.dueDate) || hasParentRecurringTask}
-                checked={!!$task.recurrenceInfo}
+                disabled={(!task?.startDate && !task?.dueDate) || hasParentRecurringTask}
+                checked={!!task?.recurrenceInfo}
               />
             </ClickableDiv>
           {/if}
           <div class="headerText">
             <Icon class="material-icons">autorenew</Icon>
-            {#if $task.parentRecurringTaskInfo && $taskMap[$task.parentRecurringTaskInfo.taskId]}
-              <a href={TaskUtilityService.getTaskRoute($task.parentRecurringTaskInfo.taskId, true)}>
+            {#if task?.parentRecurringTaskInfo && taskMapService.mapState[task.parentRecurringTaskInfo.taskId]}
+              <a href={TaskUtilityService.getTaskRoute(task.parentRecurringTaskInfo.taskId, true)}>
                 Parent
               </a>
             {/if}
-            {#if hasChildRecurringTask && !$task.recurrenceInfo}
+            {#if hasChildRecurringTask && !task?.recurrenceInfo}
               <span>Recurring disabled (child task is recurring)</span>
-            {:else if $task.recurrenceInfo && $task.recurrenceInfo.recurrenceEffect === RecurrenceEffect.rollOnCompletion}
+            {:else if task?.recurrenceInfo && task.recurrenceInfo.recurrenceEffect === RecurrenceEffect.rollOnCompletion}
               <span>Recurs: On Completion</span>
-            {:else if $task.recurrenceInfo}
+            {:else if task?.recurrenceInfo}
               <span>
-                Recurs: {getNextRecurrenceDate($task)}
+                Recurs: {getNextRecurrenceDate(task)}
               </span>
             {:else}
               <span>Recurring</span>

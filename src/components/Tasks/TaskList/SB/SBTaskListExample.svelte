@@ -1,6 +1,6 @@
 <script lang="ts">
   import TaskListService from '$services/Task/TaskListService';
-  import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
+  import taskMapService from '$services/Task/TaskMapService/TaskMapService';
   import {
     MockTaskAssignment,
     MockTaskDescription,
@@ -51,9 +51,9 @@
     });
   });
 
-  const taskMap = TaskMapService.getStore();
-
-  let sortAndFilterResult = $derived(TaskListService.getTaskIds($taskMap, $userConfig, 'default'));
+  let sortAndFilterResult = $derived(
+    TaskListService.getTaskIds(taskMapService.mapState, $userConfig, 'default')
+  );
 </script>
 
 <TaskList category="default" {sortAndFilterResult} />

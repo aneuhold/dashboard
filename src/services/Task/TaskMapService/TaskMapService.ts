@@ -185,6 +185,12 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
     this.upsertManyDocs(updateInfo);
   }
 
+  public executeRecurrenceForTask(task: DashboardTask): void {
+    TaskRecurrenceService.executeRecurrenceForTask(task, this.mapState, (info) => {
+      this.upsertManyDocs(info);
+    });
+  }
+
   public override setMap(newMap: DocumentMap<DashboardTask>): void {
     super.setMap(newMap);
     // Check if any tasks need to recur after everything has been set

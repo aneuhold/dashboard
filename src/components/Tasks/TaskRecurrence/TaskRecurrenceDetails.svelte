@@ -109,7 +109,8 @@
   }
 
   function updateWouldTriggerRecurrence(newRInfo: RecurrenceInfo): boolean {
-    const simulatedDate = TaskRecurrenceService.getSimulatedRecurrenceDate($task, (task) => {
+    if (!task) return false;
+    const simulatedDate = TaskRecurrenceService.getSimulatedRecurrenceDate(task, (task) => {
       task.recurrenceInfo = newRInfo;
       return task;
     });

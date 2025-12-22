@@ -6,15 +6,14 @@
   import PageTitle from '$components/PageTitle.svelte';
   import InputBox from '$components/presentational/InputBox/InputBox.svelte';
   import SingletonNonogramKatanaItemDialog from '$components/singletons/dialogs/SingletonNonogramKatanaItemDialog.svelte';
-  import { NonogramKatanaItemMapService } from '$services/NonogramKatana/NonogramKatanaItemMapService';
+  import nonogramKatanaItemMapService from '$services/NonogramKatana/NonogramKatanaItemMapService';
   import { userConfig } from '$stores/local/userConfig/userConfig';
   import NonogramKatanaItemRow from './NonogramKatanaItemRow.svelte';
   import { nonogramKatanaItemsPageInfo } from './pageInfo';
 
-  const itemMap = NonogramKatanaItemMapService.getStore();
   let searchInput = $state('');
   let items = $derived(
-    Object.values($itemMap)
+    Object.values(nonogramKatanaItemMapService.mapState)
       .filter(
         (item) =>
           item !== undefined &&
@@ -23,14 +22,16 @@
       .sort((a, b) => {
         if (!a) {
           return 1;
-        } else if (!b) {
+        }
+        if (!b) {
           return -1;
         }
         return b.priority - a.priority;
       }) as NonogramKatanaItem[]
   );
   let itemsMissing = $derived(
-    Object.values($itemMap).length < Object.values(NonogramKatanaItemName).length
+    Object.values(nonogramKatanaItemMapService.mapState).length <
+      Object.values(NonogramKatanaItemName).length
   );
 </script>
 
@@ -49,7 +50,7 @@
       {#if itemsMissing}
         <Button
           onclick={() => {
-            NonogramKatanaItemMapService.createOrUpdateItems($userConfig.config.userId);
+            nonogramKatanaItemMapService.createOrUpdateItems($userConfig.config.userId);
           }}
         >
           Add / Update Items with defaults

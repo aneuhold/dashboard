@@ -1,6 +1,5 @@
 import '@testing-library/jest-dom/vitest';
 import {
-  type DashboardTask,
   RecurrenceBasis,
   RecurrenceEffect,
   RecurrenceFrequencyType,
@@ -9,11 +8,9 @@ import {
 import { DocumentService } from '@aneuhold/core-ts-db-lib';
 import { fireEvent, render, screen } from '@testing-library/svelte';
 import type { UUID } from 'crypto';
-import { get } from 'svelte/store';
-import { type Writable } from 'svelte/store';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { confirmationDialog } from '$components/singletons/dialogs/SingletonConfirmationDialog.svelte';
-import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
+import taskMapService from '$services/Task/TaskMapService/TaskMapService';
 import TaskMapServiceMock from '$services/Task/TaskMapService/TaskMapService.mock';
 import TaskRecurrenceService from '$services/Task/TaskRecurrenceService.svelte';
 import TestUsers from '$testUtils/TestUsers';
@@ -32,7 +29,6 @@ describe('TaskRecurrenceDetails', () => {
     recurrenceEffect: RecurrenceEffect.rollOnBasis
   };
 
-  let taskStore: Writable<DashboardTask>;
   let taskId: UUID;
 
   beforeEach(() => {
@@ -44,11 +40,8 @@ describe('TaskRecurrenceDetails', () => {
     });
     taskId = task._id;
 
-    // Get the real store for the task
-    taskStore = TaskMapService.getTaskStore(taskId);
-
     // Update the task with recurrence info
-    taskStore.update((t) => {
+    taskMapService.updateDoc(taskId, (t) => {
       t.recurrenceInfo = { ...defaultRecurrenceInfo };
       return t;
     });
@@ -62,9 +55,9 @@ describe('TaskRecurrenceDetails', () => {
       dueDate: new Date()
     });
 
-    const freshStore = TaskMapService.getTaskStore(freshTask._id);
+    const freshTaskState = taskMapService.mapState[freshTask._id];
     // ensure store has no recurrence before render
-    expect(get(freshStore).recurrenceInfo).toBeUndefined();
+    expect(freshTaskState?.recurrenceInfo).toBeUndefined();
 
     render(TaskRecurrenceDetails, {
       taskId: freshTask._id,
@@ -73,7 +66,7 @@ describe('TaskRecurrenceDetails', () => {
 
     // After rendering the details component for a task that had no recurrence
     // info, we should still have no recurrenceInfo set.
-    expect(get(freshStore).recurrenceInfo).toBeUndefined();
+    expect(freshTaskState?.recurrenceInfo).toBeUndefined();
   });
 
   it('renders correctly with initial recurrence info', () => {
@@ -86,7 +79,7 @@ describe('TaskRecurrenceDetails', () => {
   });
 
   it('disables controls when task has parentRecurringTaskInfo', () => {
-    taskStore.update((t) => {
+    taskMapService.updateDoc(taskId, (t) => {
       t.parentRecurringTaskInfo = {
         taskId: DocumentService.generateID(),
         startDate: new Date(),
