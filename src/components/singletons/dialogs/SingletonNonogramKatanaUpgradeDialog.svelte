@@ -92,7 +92,7 @@
       <span>Priority: </span>
       <InputBox
         inputValue={upgrade.priority}
-        onChange={(val) => {
+        onBlur={(val) => {
           nonogramKatanaUpgradeMapService.updateDoc(upgrade._id, (doc) => {
             doc.priority = Number(val);
             return doc;
