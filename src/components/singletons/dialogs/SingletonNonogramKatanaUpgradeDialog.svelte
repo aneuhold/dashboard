@@ -77,7 +77,7 @@
             </span>
             <InputBox
               inputValue={upgrade.currentItemAmounts[requiredItem.itemName]}
-              onChange={(val) => {
+              onBlur={(val) => {
                 updateItemToAmount(requiredItem.itemName, Number(val));
               }}
               inputType="number"

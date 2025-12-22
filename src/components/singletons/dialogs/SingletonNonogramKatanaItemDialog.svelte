@@ -67,7 +67,7 @@
         {#if minDesiredPresent}
           <InputBox
             inputValue={item.minDesired}
-            onChange={(val) => {
+            onBlur={(val) => {
               nonogramKatanaItemMapService.updateDoc(item._id, (doc) => {
                 doc.minDesired = Number(val);
                 return doc;
@@ -97,7 +97,7 @@
         {#if maxDesiredPresent}
           <InputBox
             inputValue={item.maxDesired}
-            onChange={(val) => {
+            onBlur={(val) => {
               nonogramKatanaItemMapService.updateDoc(item._id, (doc) => {
                 doc.maxDesired = Number(val);
                 return doc;
@@ -127,7 +127,7 @@
         {#if storageCapPresent}
           <InputBox
             inputValue={item.storageCap}
-            onChange={(val) => {
+            onBlur={(val) => {
               nonogramKatanaItemMapService.updateDoc(item._id, (doc) => {
                 doc.storageCap = Number(val);
                 return doc;
@@ -144,7 +144,7 @@
       <span>Priority: </span>
       <InputBox
         inputValue={item.priority}
-        onChange={(val) => {
+        onBlur={(val) => {
           nonogramKatanaItemMapService.updateDoc(item._id, (doc) => {
             doc.priority = Number(val);
             return doc;

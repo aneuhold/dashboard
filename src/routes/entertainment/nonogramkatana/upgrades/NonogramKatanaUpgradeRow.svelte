@@ -5,13 +5,13 @@
   import { Icon } from '@smui/common';
   import IconButton from '@smui/icon-button';
   import { nonogramKatanaUpgradeDialog } from '$components/singletons/dialogs/SingletonNonogramKatanaUpgradeDialog.svelte';
-  import { NonogramKatanaUpgradeMapService } from '$services/NonogramKatana/NonogramKatanaUpgradeMapService';
+  import nonogramKatanaUpgradeMapService from '$services/NonogramKatana/NonogramKatanaUpgradeMapService';
   import NonogramKatanaRequiredItem from './NonogramKatanaRequiredItem.svelte';
   import NonogramKatanaRequiredUpgrade from './NonogramKatanaRequiredUpgrade.svelte';
   import { nonogramKatanaUpgradesDisplayInfo } from './nonogramKatanaUpgradesDisplayInfo';
 
   let { upgradeName }: { upgradeName: NonogramKatanaUpgradeName } = $props();
-  let upgrade = $derived(NonogramKatanaUpgradeMapService.getUpgradeStoreByName(upgradeName));
+  let upgrade = $derived(nonogramKatanaUpgradeMapService.getUpgradeByName(upgradeName));
   let displayInfo = $derived(nonogramKatanaUpgradesDisplayInfo[upgradeName]);
 </script>
 
@@ -20,7 +20,18 @@
     <CardContent>
       <div class="card-content">
         <div class="left-side">
-          <Checkbox bind:checked={$upgrade.completed} touch />
+          <Checkbox
+            checked={upgrade?.completed ?? false}
+            onclick={() => {
+              if (upgrade) {
+                nonogramKatanaUpgradeMapService.updateDoc(upgrade._id, (doc) => {
+                  doc.completed = !doc.completed;
+                  return doc;
+                });
+              }
+            }}
+            touch
+          />
           {#if displayInfo.icon}
             <Icon class="material-icons">
               <displayInfo.icon size={30} />
@@ -36,7 +47,7 @@
                 {#each displayInfo.requiredItems as requiredItem (requiredItem.itemName)}
                   <NonogramKatanaRequiredItem
                     requiredAmount={requiredItem.requiredAmount}
-                    currentAmount={$upgrade.currentItemAmounts[requiredItem.itemName] ?? 0}
+                    currentAmount={upgrade?.currentItemAmounts[requiredItem.itemName] ?? 0}
                     itemName={requiredItem.itemName}
                   />
                 {/each}
@@ -54,7 +65,11 @@
             {/if}
           </div>
         </div>
-        <IconButton onclick={() => nonogramKatanaUpgradeDialog.open($upgrade._id)}>
+        <IconButton
+          onclick={() => {
+            if (upgrade) nonogramKatanaUpgradeDialog.open(upgrade._id);
+          }}
+        >
           <Icon class="material-icons dimmed-color">edit</Icon>
         </IconButton>
       </div>
