@@ -1,23 +1,23 @@
 <script lang="ts">
   import { DateService } from '@aneuhold/core-ts-lib';
   import type { UUID } from 'crypto';
-  import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
+  import taskMapService from '$services/Task/TaskMapService/TaskMapService';
 
   let { taskId }: { taskId: UUID } = $props();
-  let task = $derived(TaskMapService.getTaskStore(taskId));
-  let pastDue = $derived($task.dueDate && $task.dueDate < new Date());
+  let task = $derived(taskMapService.mapState[taskId]);
+  let pastDue = $derived(task?.dueDate && task.dueDate < new Date());
 </script>
 
 <div class="container no-before mdc-typography--caption mdc-theme--text-hint-on-background">
-  {#if $task.startDate}
-    <span class="date">Starts: {DateService.getDateString($task.startDate)}</span>
+  {#if task?.startDate}
+    <span class="date">Starts: {DateService.getDateString(task.startDate)}</span>
   {:else}
     <!--Empty div to ensure the due date is always on the right-->
     <div></div>
   {/if}
-  {#if $task.dueDate}
+  {#if task?.dueDate}
     <span class={`date${pastDue ? ' pastDue' : ''}`}>
-      Due: {DateService.getDateString($task.dueDate)}
+      Due: {DateService.getDateString(task.dueDate)}
     </span>
   {/if}
 </div>
