@@ -13,20 +13,20 @@
   import TaskDetails from '$components/Tasks/TaskDetails/TaskDetails.svelte';
   import TaskList from '$components/Tasks/TaskList/TaskList.svelte';
   import TaskListService from '$services/Task/TaskListService';
-  import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
+  import taskMapService from '$services/Task/TaskMapService/TaskMapService';
   import TaskUtilityService from '$services/Task/TaskUtilityService';
   import { userConfig } from '$stores/local/userConfig/userConfig';
   import { tasksPageInfo } from './pageInfo';
 
-  const taskMap = TaskMapService.getStore();
-
-  let sortAndFilterResult = $derived(TaskListService.getTaskIds($taskMap, $userConfig, 'default'));
+  let sortAndFilterResult = $derived(
+    TaskListService.getTaskIds(taskMapService.mapState, $userConfig, 'default')
+  );
   let taskId = $derived($page.url.searchParams.get('taskId') as UUID | undefined);
-  let task = $derived(taskId && $taskMap[taskId] ? $taskMap[taskId] : undefined);
+  let task = $derived(taskId ? taskMapService.mapState[taskId] : undefined);
 
   function addTask() {
     const newTask = DashboardTaskSchema.parse({ userId: $userConfig.config.userId });
-    taskMap.addDoc(newTask);
+    taskMapService.addDoc(newTask);
     goto(TaskUtilityService.getTaskRoute(newTask._id));
   }
 </script>

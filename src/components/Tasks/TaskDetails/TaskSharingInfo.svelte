@@ -5,29 +5,29 @@
 -->
 <script lang="ts">
   import type { UUID } from 'crypto';
-  import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
+  import taskMapService from '$services/Task/TaskMapService/TaskMapService';
   import { userConfig } from '$stores/local/userConfig/userConfig';
 
   let { taskId }: { taskId: UUID } = $props();
 
-  let task = $derived(TaskMapService.getTaskStore(taskId));
+  let task = $derived(taskMapService.mapState[taskId]);
   /**
-   * Only inlcudes the ids of the users that the current user is a collaborator
+   * Only includes the ids of the users that the current user is a collaborator
    * with.
    */
   let sharedWithIds = $derived(
-    $task.sharedWith.map((id) => id).filter((id) => id in $userConfig.collaborators)
+    task?.sharedWith.map((id) => id).filter((id) => id in $userConfig.collaborators) ?? []
   );
   let collaborators = $derived($userConfig.collaborators);
-  let userIsNotOwner = $derived($task.userId !== $userConfig.config.userId);
+  let userIsNotOwner = $derived(task?.userId !== $userConfig.config.userId);
 </script>
 
 <div class="container">
-  {#if userIsNotOwner}
+  {#if userIsNotOwner && task}
     <div class="taskOwnerTitle">
       <span>Task Owner</span>
       <span class="dimmed-color">
-        {collaborators[$task.userId].userName}
+        {collaborators[task.userId].userName}
       </span>
     </div>
   {:else if Object.values(collaborators).length > 0}

@@ -63,7 +63,7 @@
 {#if task}
   <ClickableDiv clickAction={handleCheckboxClick}>
     <Checkbox
-      checked={task.completed ?? false}
+      checked={task.completed}
       touch
       onclick={(event) => {
         if (preventDefault) {

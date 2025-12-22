@@ -3,19 +3,18 @@
   import Button, { Icon } from '@smui/button';
   import { goto } from '$app/navigation';
   import { taskSharingDialog } from '$components/singletons/dialogs/SingletonTaskSharingDialog/SingletonTaskSharingDialog.svelte';
-  import type { DocumentStore } from '$services/DocumentMapStoreService.svelte';
   import TaskUtilityService from '$services/Task/TaskUtilityService';
   import { userConfig } from '$stores/local/userConfig/userConfig';
 
   let {
     task
   }: {
-    task: DocumentStore<DashboardTask>;
+    task: DashboardTask;
   } = $props();
 
-  let sharingDisabled = $derived($task.userId !== $userConfig.config.userId);
-  let finalParentId = $derived(TaskUtilityService.findParentIdWithSameSharedWith($task));
-  let taskId = $derived($task._id);
+  let sharingDisabled = $derived(task.userId !== $userConfig.config.userId);
+  let finalParentId = $derived(TaskUtilityService.findParentIdWithSameSharedWith(task));
+  let taskId = $derived(task._id);
   let buttonText = $derived(
     finalParentId === taskId || sharingDisabled ? 'Share' : 'Configure Sharing'
   );

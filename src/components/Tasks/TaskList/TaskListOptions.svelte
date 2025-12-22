@@ -8,8 +8,7 @@
   import type { UUID } from 'crypto';
   import ClickableDiv from '$components/presentational/ClickableDiv.svelte';
   import SquareIconButton from '$components/presentational/SquareIconButton.svelte';
-  import type { DocumentStore } from '$services/DocumentMapStoreService.svelte';
-  import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
+  import taskMapService from '$services/Task/TaskMapService/TaskMapService';
   import TaskTagsService from '$services/Task/TaskTagsService';
   import { currentUserId } from '$stores/derived/currentUserId';
   import { userConfig } from '$stores/local/userConfig/userConfig';
@@ -25,15 +24,14 @@
     removedTaskIds
   }: {
     category: string;
-    parentTask?: DocumentStore<DashboardTask>;
+    parentTask?: DashboardTask;
     parentTaskSortSettings?: DashboardTaskListSortSettings;
     userTaskSortSettings?: DashboardTaskListSortSettings;
     currentSortSettings: DashboardTaskListSortSettings;
     removedTaskIds: UUID[];
   } = $props();
 
-  const taskMap = TaskMapService.getStore();
-  const globalTags = TaskTagsService.getStore(taskMap);
+  const globalTags = TaskTagsService.getStore();
 
   let sortingDialogOpen = $state(false);
   let filterDialogOpen = $state(false);
@@ -57,17 +55,17 @@
   }
 
   function handleUpdateSortSettings(newSortSettings: DashboardTaskListSortSettings) {
-    if ($parentTask) {
-      $parentTask.sortSettings[$currentUserId] = newSortSettings;
+    if (parentTask) {
+      parentTask.sortSettings[$currentUserId] = newSortSettings;
     } else {
       $userConfig.config.taskListSortSettings[category] = newSortSettings;
     }
   }
   function handleResetSortSettings() {
-    if ($parentTask) {
-      const sortSettings = $parentTask.sortSettings;
+    if (parentTask) {
+      const sortSettings = parentTask.sortSettings;
       delete sortSettings[$currentUserId];
-      $parentTask.sortSettings = sortSettings;
+      parentTask.sortSettings = sortSettings;
     } else {
       const sortSettings = $userConfig.config.taskListSortSettings;
       delete sortSettings[category];
@@ -75,17 +73,17 @@
     }
   }
   function handleUpdateFilterSettings(newFilterSettings: DashboardTaskListFilterSettings) {
-    if ($parentTask) {
-      $parentTask.filterSettings[$currentUserId] = newFilterSettings;
+    if (parentTask) {
+      parentTask.filterSettings[$currentUserId] = newFilterSettings;
     } else {
       $userConfig.config.taskListFilterSettings[category] = newFilterSettings;
     }
   }
   function handleResetFilterSettings() {
-    if ($parentTask) {
-      const filterSettings = $parentTask.filterSettings;
+    if (parentTask) {
+      const filterSettings = parentTask.filterSettings;
       delete filterSettings[$currentUserId];
-      $parentTask.filterSettings = filterSettings;
+      parentTask.filterSettings = filterSettings;
     } else {
       const filterSettings = $userConfig.config.taskListFilterSettings;
       delete filterSettings[category];
@@ -93,7 +91,7 @@
     }
   }
   let parentTaskFilterSettings = $derived(
-    $parentTask ? $parentTask.filterSettings[$currentUserId] : undefined
+    parentTask ? parentTask.filterSettings[$currentUserId] : undefined
   );
   let userTaskFilterSettings = $derived($userConfig.config.taskListFilterSettings[category]);
   let currentFilterSettings = $derived(
@@ -101,18 +99,18 @@
       userTaskFilterSettings ??
       DashboardTaskListFilterSettingsSchema.parse({ userId: $currentUserId })
   );
-  let sortingDimmed = $derived($parentTask ? !parentTaskSortSettings : !userTaskSortSettings);
-  let filterDimmed = $derived($parentTask ? !parentTaskFilterSettings : !userTaskFilterSettings);
+  let sortingDimmed = $derived(parentTask ? !parentTaskSortSettings : !userTaskSortSettings);
+  let filterDimmed = $derived(parentTask ? !parentTaskFilterSettings : !userTaskFilterSettings);
   let taskSpecificText = $derived(
     getTaskSpecificText({
-      parentTask: $parentTask,
+      parentTask: parentTask,
       parentTaskSortSettings,
       parentTaskFilterSettings
     })
   );
   let tagsWithRemovedIds = $derived(
     removedTaskIds.reduce((tagSet, id) => {
-      const task = $taskMap[id];
+      const task = taskMapService.mapState[id];
       const currentUserTags = task?.tags[$currentUserId];
       if (task && currentUserTags) {
         currentUserTags.forEach((tag) => tagSet.add(tag));
@@ -142,9 +140,9 @@
   >
     <SquareIconButton iconName="sort" variant="outlined" disabled={sortingDimmed} />
   </ClickableDiv>
-  {#if $parentTask || hiddenTags.length > 0}
+  {#if parentTask || hiddenTags.length > 0}
     <div class="centerText dimmed-color">
-      {#if $parentTask}
+      {#if parentTask}
         <i>{taskSpecificText}</i>
       {/if}
       {#if hiddenTags.length > 0}

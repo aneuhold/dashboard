@@ -14,7 +14,7 @@
   import SmartDialog from '$components/presentational/SmartDialog.svelte';
   import { nonogramKatanaItemsDisplayInfo } from '$routes/entertainment/nonogramkatana/items/nonogramKatanaItemsDisplayInfo';
   import { nonogramKatanaUpgradesDisplayInfo } from '$routes/entertainment/nonogramkatana/upgrades/nonogramKatanaUpgradesDisplayInfo';
-  import { NonogramKatanaUpgradeMapService } from '$services/NonogramKatana/NonogramKatanaUpgradeMapService';
+  import nonogramKatanaUpgradeMapService from '$services/NonogramKatana/NonogramKatanaUpgradeMapService';
 
   /**
    * A Nonogram Katana upgrade dialog which can be used anywhere in the app.
@@ -34,25 +34,28 @@
   import { NonogramKatanaItemName } from '@aneuhold/core-ts-db-lib';
 
   let upgrade = $derived(
-    $currentUpgradeId ? NonogramKatanaUpgradeMapService.getUpgradeStore($currentUpgradeId) : null
+    $currentUpgradeId ? nonogramKatanaUpgradeMapService.mapState[$currentUpgradeId] : null
   );
   let displayInfo = $derived(
-    $upgrade ? nonogramKatanaUpgradesDisplayInfo[$upgrade.upgradeName] : null
+    upgrade ? nonogramKatanaUpgradesDisplayInfo[upgrade.upgradeName] : null
   );
 
   function getItemAmount(itemName: NonogramKatanaItemName) {
-    return $upgrade ? ($upgrade.currentItemAmounts[itemName] ?? 0) : 0;
+    return upgrade ? (upgrade.currentItemAmounts[itemName] ?? 0) : 0;
   }
 
   function updateItemToAmount(itemName: NonogramKatanaItemName, amount: number) {
-    if ($upgrade) {
-      $upgrade.currentItemAmounts[itemName] = amount;
+    if (upgrade) {
+      nonogramKatanaUpgradeMapService.updateDoc(upgrade._id, (doc) => {
+        doc.currentItemAmounts[itemName] = amount;
+        return doc;
+      });
     }
   }
 </script>
 
 <SmartDialog bind:open={$open}>
-  {#if $upgrade && displayInfo}
+  {#if upgrade && displayInfo}
     <Title>Update "{displayInfo.displayName}"</Title>
     <Content>
       <div class="content">
@@ -73,7 +76,10 @@
               {nonogramKatanaItemsDisplayInfo[requiredItem.itemName].displayName}
             </span>
             <InputBox
-              bind:onBlurValue={$upgrade.currentItemAmounts[requiredItem.itemName]}
+              inputValue={upgrade.currentItemAmounts[requiredItem.itemName]}
+              onChange={(val) => {
+                updateItemToAmount(requiredItem.itemName, Number(val));
+              }}
               inputType="number"
               min={0}
               max={requiredItem.requiredAmount}
@@ -85,7 +91,13 @@
       </div>
       <span>Priority: </span>
       <InputBox
-        bind:onBlurValue={$upgrade.priority}
+        inputValue={upgrade.priority}
+        onChange={(val) => {
+          nonogramKatanaUpgradeMapService.updateDoc(upgrade._id, (doc) => {
+            doc.priority = Number(val);
+            return doc;
+          });
+        }}
         inputType="number"
         max={100}
         label="Priority"

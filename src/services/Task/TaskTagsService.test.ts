@@ -1,14 +1,11 @@
-import { type DashboardTask } from '@aneuhold/core-ts-db-lib';
 import { get, type Updater, type Writable, writable } from 'svelte/store';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import type { DocumentMapStore } from '$services/DocumentMapStoreService.svelte';
 import { type UserConfig, userConfig } from '$stores/local/userConfig/userConfig';
 import { createTestUserConfig } from '../../../testUtils/TaskTestUtils';
 import TaskTagsService from './TaskTagsService';
 
 describe('TaskTagsService', () => {
   let mockUserConfigStore: Writable<UserConfig> & { get: () => UserConfig };
-  let mockTaskMapStore: Partial<DocumentMapStore<DashboardTask>>;
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -29,16 +26,11 @@ describe('TaskTagsService', () => {
     vi.spyOn(userConfig, 'subscribe').mockImplementation(mockUserConfigStore.subscribe);
     vi.spyOn(userConfig, 'update').mockImplementation(mockUserConfigStore.update);
     vi.spyOn(userConfig, 'get').mockImplementation(mockUserConfigStore.get);
-
-    // Mock TaskMapStore
-    mockTaskMapStore = {
-      updateMany: vi.fn()
-    };
   });
 
   describe('getStore', () => {
     it('should return a store that updates when userConfig changes', () => {
-      const store = TaskTagsService.getStore(mockTaskMapStore as DocumentMapStore<DashboardTask>);
+      const store = TaskTagsService.getStore();
 
       // Initial state
       expect(get(store)).toEqual([]);

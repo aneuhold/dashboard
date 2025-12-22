@@ -3,7 +3,6 @@
   import Button, { Label } from '@smui/button';
   import { Actions, Content, Title } from '@smui/dialog';
   import SmartDialog from '$components/presentational/SmartDialog.svelte';
-  import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
   import TaskTagsService from '$services/Task/TaskTagsService';
   import TaskFilterSetting from './TaskFilterSetting.svelte';
 
@@ -19,7 +18,7 @@
     onReset?: () => void;
   } = $props();
 
-  const userTags = TaskTagsService.getStore(TaskMapService.getStore());
+  const userTags = TaskTagsService.getStore();
 
   let currentSettings = $state(
     JSON.parse(JSON.stringify(initialSettings)) as DashboardTaskListFilterSettings

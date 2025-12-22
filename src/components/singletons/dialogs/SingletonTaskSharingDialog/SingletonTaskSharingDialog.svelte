@@ -12,7 +12,7 @@
   import type { UUID } from 'crypto';
   import { writable } from 'svelte/store';
   import SmartDialog from '$components/presentational/SmartDialog.svelte';
-  import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
+  import taskMapService from '$services/Task/TaskMapService/TaskMapService';
   import { currentUserId } from '$stores/derived/currentUserId';
   import { userConfig } from '$stores/local/userConfig/userConfig';
 
@@ -49,26 +49,26 @@
 </script>
 
 <script lang="ts">
-  let task = $derived($currentTaskId ? TaskMapService.getTaskStore($currentTaskId) : null);
-  let sharedWithIds = $derived($task ? $task.sharedWith.map((id) => id) : []);
+  let task = $derived($currentTaskId ? taskMapService.mapState[$currentTaskId] : null);
+  let sharedWithIds = $derived(task ? task.sharedWith.map((id) => id) : []);
   let collaborators = $derived($userConfig.collaborators);
-  let currentUserIsOwner = $derived($task ? $task.userId === $currentUserId : false);
-  let title = $derived($task ? `Share "${$task.title}"` : 'There was an error, please tell Tony');
+  let currentUserIsOwner = $derived(task ? task.userId === $currentUserId : false);
+  let title = $derived(task ? `Share "${task.title}"` : 'There was an error, please tell Tony');
 
   function toggleSharedWith(id: UUID) {
-    if (!$task) return;
-    let newSharedWith = [...$task.sharedWith];
+    if (!task) return;
+    let newSharedWith = [...task.sharedWith];
     if (sharedWithIds.includes(id)) {
       newSharedWith = newSharedWith.filter((sharedWithId) => sharedWithId !== id);
     } else {
       newSharedWith.push(id);
     }
-    TaskMapService.updateSharedWith($task._id, newSharedWith);
+    taskMapService.updateSharedWith(task._id, newSharedWith);
   }
 </script>
 
 <SmartDialog bind:open={$open}>
-  {#if $task}
+  {#if task}
     <Title>{title}</Title>
     <Content>
       <div class="content">

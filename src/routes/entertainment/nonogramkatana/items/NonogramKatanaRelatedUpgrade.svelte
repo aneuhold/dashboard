@@ -6,7 +6,6 @@
 -->
 <script lang="ts">
   import { NonogramKatanaItemName, type NonogramKatanaUpgrade } from '@aneuhold/core-ts-db-lib';
-  import type { DocumentStore } from '$services/DocumentMapStoreService.svelte';
   import { nonogramKatanaUpgradesDisplayInfo } from '../upgrades/nonogramKatanaUpgradesDisplayInfo';
 
   let {
@@ -14,10 +13,10 @@
     relatedUpgrade
   }: {
     itemName: NonogramKatanaItemName;
-    relatedUpgrade: DocumentStore<NonogramKatanaUpgrade>;
+    relatedUpgrade: NonogramKatanaUpgrade;
   } = $props();
 
-  let upgradeDisplayInfo = $derived(nonogramKatanaUpgradesDisplayInfo[$relatedUpgrade.upgradeName]);
+  let upgradeDisplayInfo = $derived(nonogramKatanaUpgradesDisplayInfo[relatedUpgrade.upgradeName]);
   let requiredItemAmount = $derived(
     upgradeDisplayInfo.requiredItems.find((requiredItem) => requiredItem.itemName === itemName)
       ?.requiredAmount
@@ -26,8 +25,8 @@
 
 {#if requiredItemAmount}
   <li>
-    {upgradeDisplayInfo.displayName} (total needed: {requiredItemAmount}, amount spent: {$relatedUpgrade
+    {upgradeDisplayInfo.displayName} (total needed: {requiredItemAmount}, amount spent: {relatedUpgrade
       .currentItemAmounts[itemName] ?? 0}
-    {requiredItemAmount === ($relatedUpgrade.currentItemAmounts[itemName] ?? 0) ? '✅' : ''})
+    {requiredItemAmount === (relatedUpgrade.currentItemAmounts[itemName] ?? 0) ? '✅' : ''})
   </li>
 {/if}
