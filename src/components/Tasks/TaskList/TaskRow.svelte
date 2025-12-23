@@ -11,7 +11,6 @@
   } from '@aneuhold/core-ts-db-lib';
   import Card, { Content as CardContent } from '@smui/card';
   import { Icon } from '@smui/icon-button';
-  import type { UUID } from 'crypto';
   import { goto } from '$app/navigation';
   import ClickableDiv from '$components/presentational/ClickableDiv.svelte';
   import MenuButton, { type MenuButtonItem } from '$components/presentational/MenuButton.svelte';
@@ -28,40 +27,36 @@
   import TaskRowSubtaskInfo from './TaskRowSubtaskInfo.svelte';
 
   let {
-    taskId,
+    task,
     /**
      * If set, it will display the tag as a header above the task.
      */
     tagHeaderName
   }: {
-    taskId: UUID;
+    task: DashboardTask;
     /**
      * If set, it will display the tag as a header above the task.
      */
     tagHeaderName?: string;
   } = $props();
 
-  let task = $derived(taskMapService.mapState[taskId]);
-
   /**
    * Used so that the animation doesn't play every time the task shows up,
    * only when completed is clicked.
    */
   let completeAnimationShouldShow = $state(false);
-  // svelte-ignore state_referenced_locally
-  let previousTaskCompletedState = $state(task?.completed);
+  let previousTaskCompletedState = $state(task.completed);
 
   function goToTask() {
-    goto(TaskUtilityService.getTaskRoute(taskId));
+    goto(TaskUtilityService.getTaskRoute(task._id));
   }
 
   function handleDuplicateClick() {
-    taskMapService.duplicateTask(taskId);
+    taskMapService.duplicateTask(task._id);
   }
 
   function handleSkipClick() {
     const currentTask = task;
-    if (!currentTask) return;
     confirmationDialog.open({
       title: 'Skip to next Task Recurrence',
       message:
@@ -96,12 +91,12 @@
         clickAction: handleSkipClick
       });
     }
-    if (task.userId === $currentUserId && finalSharedParentId === taskId) {
+    if (task.userId === $currentUserId && finalSharedParentId === task._id) {
       menuItems.push({
         title: 'Share',
         iconName: 'share',
         clickAction: () => {
-          taskSharingDialog.open(taskId);
+          taskSharingDialog.open(task._id);
         }
       });
     }
@@ -110,7 +105,7 @@
         title: 'Assign',
         iconName: 'assignment_ind',
         clickAction: () => {
-          taskAssignmentDialog.open(taskId);
+          taskAssignmentDialog.open(task._id);
         }
       });
     }
@@ -126,7 +121,7 @@
         TaskUtilityService.handleDeleteTaskClick(
           allChildrenIds.length,
           () => {
-            taskMapService.deleteDoc(taskId);
+            taskMapService.deleteDoc(task._id);
           },
           task.title
         );
@@ -136,47 +131,43 @@
   }
 
   let allChildrenIds = $derived(
-    task
-      ? DashboardTaskService.getChildrenIds(
-          Object.values(taskMapService.mapState).filter(
-            (task): task is DashboardTask => task !== undefined
-          ),
-          [task._id]
-        )
-      : []
+    DashboardTaskService.getChildrenIds(
+      Object.values(taskMapService.mapState).filter(
+        (task): task is DashboardTask => task !== undefined
+      ),
+      [task._id]
+    )
   );
-  let hasExtraTaskInfo = $derived(allChildrenIds.length > 0 || task?.assignedTo);
-  let finalSharedParentId = $derived(
-    task ? TaskUtilityService.findParentIdWithSameSharedWith(task) : undefined
-  );
-  let usersTaskTags = $derived(task?.tags[$currentUserId]);
-  let menuItems = $derived(task ? getMenuItems(task) : []);
+  let hasExtraTaskInfo = $derived(allChildrenIds.length > 0 || task.assignedTo);
+  let finalSharedParentId = $derived(TaskUtilityService.findParentIdWithSameSharedWith(task));
+  let usersTaskTags = $derived(task.tags[$currentUserId]);
+  let menuItems = $derived(getMenuItems(task));
   $effect(() => {
-    if (task && task.completed !== previousTaskCompletedState) {
+    if (task.completed !== previousTaskCompletedState) {
       completeAnimationShouldShow = true;
       previousTaskCompletedState = task.completed;
     }
   });
   let currentStrikeClass = $derived(
-    completeAnimationShouldShow && task?.completed
+    completeAnimationShouldShow && task.completed
       ? ' strikeAnimate'
-      : task?.completed
+      : task.completed
         ? ' strike'
         : ''
   );
   let currentDimClass = $derived(
-    completeAnimationShouldShow && task?.completed ? ' dimAnimate' : task?.completed ? ' dim' : ''
+    completeAnimationShouldShow && task.completed ? ' dimAnimate' : task.completed ? ' dim' : ''
   );
   let trimmedTaskDescription = $derived(
-    task?.description
+    task.description
       ? task.description.length > 100
         ? `${task.description.substring(0, 100)}...`
         : task.description
       : ''
   );
-  let assignedToMe = $derived(task?.assignedTo ? task.assignedTo === $currentUserId : false);
+  let assignedToMe = $derived(task.assignedTo ? task.assignedTo === $currentUserId : false);
   let assignedToName = $derived(
-    task?.assignedTo
+    task.assignedTo
       ? assignedToMe
         ? 'Me'
         : $userConfig.collaborators[task.assignedTo].userName
@@ -191,19 +182,19 @@
   <Card>
     <CardContent class="taskRowCard">
       <div class="card-content">
-        <TaskCompletedCheckbox {taskId} />
+        <TaskCompletedCheckbox {task} />
         <ClickableDiv clickAction={goToTask}>
           <div class={`taskInfoContent` + currentDimClass}>
             <h4 class={`mdc-typography--body1 no-before title${currentStrikeClass}`}>
-              {#if task?.title !== ''}
-                <span>{task?.title}</span>
+              {#if task.title !== ''}
+                <span>{task.title}</span>
               {:else}
                 <i class="dimmed-color">Untitled</i>
               {/if}
-              {#if task?.sharedWith && task.sharedWith.length > 0}
+              {#if task.sharedWith.length > 0}
                 <Icon class="material-icons dimmed-color small-icon">group</Icon>
               {/if}
-              {#if task?.recurrenceInfo}
+              {#if task.recurrenceInfo}
                 <Icon class="material-icons dimmed-color small-icon">autorenew</Icon>
               {/if}
               {#if usersTaskTags && usersTaskTags.length > 0}
@@ -217,8 +208,8 @@
                 </div>
               {/if}
             </h4>
-            <TaskRowDateInfo {taskId} />
-            {#if task?.description && task.description !== ''}
+            <TaskRowDateInfo {task} />
+            {#if task.description && task.description !== ''}
               <span class="description mdc-deprecated-list-item__secondary-text no-before">
                 {trimmedTaskDescription}
               </span>
@@ -227,7 +218,7 @@
               <div
                 class="mdc-typography--caption mdc-theme--text-hint-on-background no-before extraTaskInfo"
               >
-                {#if task?.assignedTo}
+                {#if task.assignedTo}
                   <span>
                     Assigned To:
                     <span class={assignedToMe ? `assignedToMe` : ''}>{assignedToName}</span>

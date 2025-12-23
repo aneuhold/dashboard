@@ -68,10 +68,12 @@
   />
   {#each sortAndFilterResult.filteredAndSortedIds as taskId (taskId)}
     <div transition:slide animate:flip={{ duration: 200 }}>
-      <TaskRow
-        tagHeaderName={tagHeaderMap && tagHeaderMap[taskId] ? tagHeaderMap[taskId] : undefined}
-        {taskId}
-      />
+      {#if taskMapService.mapState[taskId]}
+        <TaskRow
+          tagHeaderName={tagHeaderMap && tagHeaderMap[taskId] ? tagHeaderMap[taskId] : undefined}
+          task={taskMapService.mapState[taskId]}
+        />
+      {/if}
     </div>
   {/each}
   {#if sortAndFilterResult.removedIds.length > 0}

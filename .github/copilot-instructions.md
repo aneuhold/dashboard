@@ -21,8 +21,8 @@ This repository is a SvelteKit app (Svelte 5) managed with pnpm.
 
 - Architecture & conventions (concrete):
   - Singleton UI components: files named `Singleton*` are single-instance widgets (snackbar, confetti, dialogs). They export imperative functions to update/show state rather than being instantiated multiple times.
-  - Stores pattern: there are parent stores containing variable-length collections and child stores for individual items. When modifying a child, the code often updates child store, then parent store persists to LocalData/back-end. Check `src/stores/*` and the `README.md` sequence diagram for the expected flow.
   - Routes: prefer copying an existing route folder and adapting. `pageInfo.ts` files are kept outside module context because they must be importable before Svelte module load.
+  - State management: Use modern Svelte 5 typically such as the `$state()` syntax. For more complex state, use stores and services in `src/stores` and `src/services`.
 
 - Integrations & environment notes:
   - Sentry: configured both in `vite.config.ts` (upload source maps) and `hooks.client.ts`. `SENTRY_AUTH_TOKEN` must be set to enable uploads. Vite logs an error if the token is missing.

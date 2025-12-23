@@ -103,7 +103,7 @@
       <Content>
         <div class="content paperContent">
           <div class="titleContainer">
-            <TaskCompletedCheckbox {taskId} />
+            <TaskCompletedCheckbox {task} />
             <InputBox
               variant="outlined"
               label="Title"
@@ -127,13 +127,13 @@
               });
             }}
           />
-          <TaskDateInfo {taskId} />
-          <TaskRecurrenceInfo {taskId} childTaskIds={allChildrenIds} />
+          <TaskDateInfo {task} />
+          <TaskRecurrenceInfo {task} childTaskIds={allChildrenIds} />
           <div class="extraTaskInfo">
-            <TaskTagsSelector {taskId} />
+            <TaskTagsSelector {task} />
             <div>
-              <TaskSharingInfo {taskId} />
-              <TaskAssignmentInfo {taskId} />
+              <TaskSharingInfo {task} />
+              <TaskAssignmentInfo {task} />
             </div>
           </div>
 

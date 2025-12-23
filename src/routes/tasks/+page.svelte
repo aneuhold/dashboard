@@ -22,7 +22,6 @@
     TaskListService.getTaskIds(taskMapService.mapState, $userConfig, 'default')
   );
   let taskId = $derived($page.url.searchParams.get('taskId') as UUID | undefined);
-  let task = $derived(taskId ? taskMapService.mapState[taskId] : undefined);
 
   function addTask() {
     const newTask = DashboardTaskSchema.parse({ userId: $userConfig.config.userId });
@@ -32,7 +31,11 @@
 </script>
 
 <svelte:head>
-  <title>{task ? task.title : tasksPageInfo.shortTitle}</title>
+  <title
+    >{taskId && taskMapService.mapState[taskId]
+      ? taskMapService.mapState[taskId].title
+      : tasksPageInfo.shortTitle}</title
+  >
   <meta name="description" content={tasksPageInfo.description} />
 </svelte:head>
 

@@ -59,18 +59,28 @@ describe('TaskRecurrenceDetails', () => {
     // ensure store has no recurrence before render
     expect(freshTaskState?.recurrenceInfo).toBeUndefined();
 
+    if (!freshTaskState) {
+      throw new Error('freshTaskState is undefined');
+    }
     render(TaskRecurrenceDetails, {
-      taskId: freshTask._id,
+      task: freshTaskState,
       defaultRecurrenceInfo
     });
 
     // After rendering the details component for a task that had no recurrence
     // info, we should still have no recurrenceInfo set.
-    expect(freshTaskState?.recurrenceInfo).toBeUndefined();
+    expect(freshTaskState.recurrenceInfo).toBeUndefined();
   });
 
   it('renders correctly with initial recurrence info', () => {
-    render(TaskRecurrenceDetails, { taskId: taskId, defaultRecurrenceInfo });
+    const task = taskMapService.mapState[taskId];
+    if (!task) {
+      throw new Error('task is undefined');
+    }
+    render(TaskRecurrenceDetails, {
+      task,
+      defaultRecurrenceInfo
+    });
 
     expect(screen.getAllByText('Frequency')[0]).toBeInTheDocument();
     expect(screen.getAllByText('Basis')[0]).toBeInTheDocument();
@@ -88,8 +98,12 @@ describe('TaskRecurrenceDetails', () => {
       return t;
     });
 
+    const task = taskMapService.mapState[taskId];
+    if (!task) {
+      throw new Error('task is undefined');
+    }
     const { container } = render(TaskRecurrenceDetails, {
-      taskId: taskId,
+      task,
       defaultRecurrenceInfo
     });
 
@@ -103,8 +117,12 @@ describe('TaskRecurrenceDetails', () => {
       .spyOn(TaskRecurrenceService, 'getSimulatedRecurrenceDate')
       .mockReturnValue(new Date(Date.now() - 10000));
 
+    const task = taskMapService.mapState[taskId];
+    if (!task) {
+      throw new Error('task is undefined');
+    }
     const { container } = render(TaskRecurrenceDetails, {
-      taskId: taskId,
+      task,
       defaultRecurrenceInfo
     });
 

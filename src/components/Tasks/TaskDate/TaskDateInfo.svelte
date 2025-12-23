@@ -1,7 +1,6 @@
 <script lang="ts">
-  import { RecurrenceBasis } from '@aneuhold/core-ts-db-lib';
+  import { type DashboardTask, RecurrenceBasis } from '@aneuhold/core-ts-db-lib';
   import { DateService } from '@aneuhold/core-ts-lib';
-  import type { UUID } from 'crypto';
   import DatePickerDialog from '$components/presentational/DatePickerDialog/DatePickerDialog.svelte';
   import { confirmationDialog } from '$components/singletons/dialogs/SingletonConfirmationDialog.svelte';
   import taskMapService from '$services/Task/TaskMapService/TaskMapService';
@@ -11,23 +10,20 @@
 
   const log = createLogger('TaskDateInfo.svelte');
 
-  let { taskId }: { taskId: UUID } = $props();
-  let task = $derived(taskMapService.mapState[taskId]);
+  let { task }: { task: DashboardTask } = $props();
 
   let currentlyChosenDateType: 'start' | 'due' = $state('start');
   let datePickerOpen = $state(false);
   let dateName = $derived(currentlyChosenDateType === 'start' ? 'Start Date' : 'Due Date');
   let currentlyChosenDate = $derived(
-    currentlyChosenDateType === 'start' ? task?.startDate : task?.dueDate
+    currentlyChosenDateType === 'start' ? task.startDate : task.dueDate
   );
-  let oppositeDate = $derived(
-    currentlyChosenDateType === 'start' ? task?.dueDate : task?.startDate
-  );
+  let oppositeDate = $derived(currentlyChosenDateType === 'start' ? task.dueDate : task.startDate);
   let oppositeDateName = $derived(currentlyChosenDateType === 'start' ? 'Due Date' : 'Start Date');
   let basisIsSameAsChosenDate = $derived(
     currentlyChosenDateType === 'start'
-      ? task?.recurrenceInfo?.recurrenceBasis === RecurrenceBasis.startDate
-      : task?.recurrenceInfo?.recurrenceBasis === RecurrenceBasis.dueDate
+      ? task.recurrenceInfo?.recurrenceBasis === RecurrenceBasis.startDate
+      : task.recurrenceInfo?.recurrenceBasis === RecurrenceBasis.dueDate
   );
 
   function handleStartDateClick() {
@@ -56,7 +52,6 @@
    * existed.
    */
   function handleDateDeletion() {
-    if (!task) return;
     if (!task.parentRecurringTaskInfo && basisIsSameAsChosenDate) {
       // If the opposite date is defined
       if (oppositeDate) {
@@ -82,7 +77,7 @@
               newDueDate = null;
               newRecurrenceInfo.recurrenceBasis = RecurrenceBasis.startDate;
             }
-            taskMapService.updateTaskRecurrenceOrDates(taskId, {
+            taskMapService.updateTaskRecurrenceOrDates(task._id, {
               newRecurrenceInfo,
               newStartDate,
               newDueDate
@@ -105,7 +100,7 @@
             } else {
               newDueDate = null;
             }
-            taskMapService.updateTaskRecurrenceOrDates(taskId, {
+            taskMapService.updateTaskRecurrenceOrDates(task._id, {
               newRecurrenceInfo: null,
               newStartDate,
               newDueDate
@@ -120,7 +115,6 @@
   }
 
   function handleDateUpdate(newDate: Date) {
-    if (!task) return;
     if (!task.parentRecurringTaskInfo && basisIsSameAsChosenDate) {
       // Simulate moving the date
       const simulatedRecurrenceDate = TaskRecurrenceService.getSimulatedRecurrenceDate(
@@ -162,7 +156,7 @@
    * @param newDate The new date to set
    */
   function updateDate(newDate: Date | undefined) {
-    taskMapService.updateTaskRecurrenceOrDates(taskId, {
+    taskMapService.updateTaskRecurrenceOrDates(task._id, {
       newStartDate: currentlyChosenDateType === 'start' ? (newDate ?? null) : undefined,
       newDueDate: currentlyChosenDateType === 'due' ? (newDate ?? null) : undefined
     });
@@ -170,15 +164,15 @@
 </script>
 
 <div class="container">
-  <TaskDateButton dateType="start" onclick={handleStartDateClick} date={task?.startDate} />
-  <TaskDateButton dateType="due" onclick={handleDueDateClick} date={task?.dueDate} />
+  <TaskDateButton dateType="start" onclick={handleStartDateClick} date={task.startDate} />
+  <TaskDateButton dateType="due" onclick={handleDueDateClick} date={task.dueDate} />
 </div>
 
 <DatePickerDialog
   bind:open={datePickerOpen}
   title={dateName}
-  startDate={currentlyChosenDateType === 'due' ? task?.startDate : undefined}
-  endDate={currentlyChosenDateType === 'start' ? task?.dueDate : undefined}
+  startDate={currentlyChosenDateType === 'due' ? task.startDate : undefined}
+  endDate={currentlyChosenDateType === 'start' ? task.dueDate : undefined}
   dateIsEndDate={currentlyChosenDateType === 'due'}
   onSelected={handleSelectedDate}
   initialDate={currentlyChosenDate}

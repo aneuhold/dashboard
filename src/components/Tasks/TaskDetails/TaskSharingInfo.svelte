@@ -4,26 +4,24 @@
   Sharing information for use in the Task Details component.
 -->
 <script lang="ts">
-  import type { UUID } from 'crypto';
-  import taskMapService from '$services/Task/TaskMapService/TaskMapService';
+  import { type DashboardTask } from '@aneuhold/core-ts-db-lib';
   import { userConfig } from '$stores/local/userConfig/userConfig';
 
-  let { taskId }: { taskId: UUID } = $props();
+  let { task }: { task: DashboardTask } = $props();
 
-  let task = $derived(taskMapService.mapState[taskId]);
   /**
    * Only includes the ids of the users that the current user is a collaborator
    * with.
    */
   let sharedWithIds = $derived(
-    task?.sharedWith.map((id) => id).filter((id) => id in $userConfig.collaborators) ?? []
+    task.sharedWith.map((id) => id).filter((id) => id in $userConfig.collaborators)
   );
   let collaborators = $derived($userConfig.collaborators);
-  let userIsNotOwner = $derived(task?.userId !== $userConfig.config.userId);
+  let userIsNotOwner = $derived(task.userId !== $userConfig.config.userId);
 </script>
 
 <div class="container">
-  {#if userIsNotOwner && task}
+  {#if userIsNotOwner}
     <div class="taskOwnerTitle">
       <span>Task Owner</span>
       <span class="dimmed-color">

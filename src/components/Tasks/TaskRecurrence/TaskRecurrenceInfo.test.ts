@@ -35,11 +35,18 @@ describe('TaskRecurrenceInfo', () => {
   });
 
   it('shouldnt set recurrenceInfo just by rendering', () => {
-    render(TaskRecurrenceInfo, { taskId: taskId, childTaskIds: [] });
+    const task = taskMapService.mapState[taskId];
+    if (!task) {
+      throw new Error('task is undefined');
+    }
+    render(TaskRecurrenceInfo, {
+      task,
+      childTaskIds: []
+    });
 
     // Just rendering doesn't cause the recurrence info to be set
-    const task = taskMapService.mapState[taskId];
-    expect(task?.recurrenceInfo).toBeUndefined();
+    const taskAfterRender = taskMapService.mapState[taskId];
+    expect(taskAfterRender?.recurrenceInfo).toBeUndefined();
   });
 
   it('checkbox is checked when task has recurrence info', () => {
@@ -56,7 +63,14 @@ describe('TaskRecurrenceInfo', () => {
       return t;
     });
 
-    render(TaskRecurrenceInfo, { taskId: taskId, childTaskIds: [] });
+    const task = taskMapService.mapState[taskId];
+    if (!task) {
+      throw new Error('task is undefined');
+    }
+    render(TaskRecurrenceInfo, {
+      task,
+      childTaskIds: []
+    });
 
     const checkbox = screen.getByRole('checkbox');
     expect(checkbox).toBeChecked();
@@ -64,7 +78,14 @@ describe('TaskRecurrenceInfo', () => {
 
   it('can check and then uncheck the recurrence checkbox', async () => {
     const user = userEvent.setup();
-    render(TaskRecurrenceInfo, { taskId: taskId, childTaskIds: [] });
+    const task = taskMapService.mapState[taskId];
+    if (!task) {
+      throw new Error('task is undefined');
+    }
+    render(TaskRecurrenceInfo, {
+      task,
+      childTaskIds: []
+    });
 
     const checkbox = screen.getByRole('checkbox');
 
@@ -89,7 +110,14 @@ describe('TaskRecurrenceInfo', () => {
 
   it('clicking the checkbox wrapper also properly toggles recurrence', async () => {
     const user = userEvent.setup();
-    render(TaskRecurrenceInfo, { taskId: taskId, childTaskIds: [] });
+    const task = taskMapService.mapState[taskId];
+    if (!task) {
+      throw new Error('task is undefined');
+    }
+    render(TaskRecurrenceInfo, {
+      task,
+      childTaskIds: []
+    });
 
     const checkbox = screen.getByRole('checkbox');
     // The wrapper div is the parent of the checkbox

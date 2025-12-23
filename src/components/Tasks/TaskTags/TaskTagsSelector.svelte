@@ -4,28 +4,27 @@
   A tags selector for a specific task.
 -->
 <script lang="ts">
+  import { type DashboardTask } from '@aneuhold/core-ts-db-lib';
   import Chip, { Set, Text, TrailingAction } from '@smui/chips';
   import Autocomplete from '@smui-extra/autocomplete';
-  import type { UUID } from 'crypto';
   import taskMapService from '$services/Task/TaskMapService/TaskMapService';
   import TaskTagsService from '$services/Task/TaskTagsService';
   import { currentUserId } from '$stores/derived/currentUserId';
 
   let {
-    taskId
+    task
   }: {
-    taskId: UUID;
+    task: DashboardTask;
   } = $props();
 
   const globalTags = TaskTagsService.getStore();
 
-  let task = $derived(taskMapService.mapState[taskId]);
   let unselectedTags = $derived(
-    $globalTags.filter((tag) => !task?.tags[$currentUserId]?.includes(tag))
+    $globalTags.filter((tag) => !task.tags[$currentUserId]?.includes(tag))
   );
   // This needs to be redirected like this so that the Set component doesn't
   // make a small write on startup.
-  let currentUserTags = $derived(task?.tags[$currentUserId] ?? []);
+  let currentUserTags = $derived(task.tags[$currentUserId] ?? []);
 
   let currentAutoCompleteValue = $state('');
   let selector: Autocomplete | undefined = $state();
@@ -33,7 +32,7 @@
   function addTagToTask(tag: string) {
     const currentUserTagsArray = [...currentUserTags];
     currentUserTagsArray.push(tag);
-    taskMapService.updateTags(taskId, currentUserTagsArray);
+    taskMapService.updateTags(task._id, currentUserTagsArray);
   }
 
   function checkAndAddNewTag(newTag: string) {
@@ -57,7 +56,7 @@
   function handleRemoval(event: CustomEvent<{ chipId: string }>) {
     let newTags = [...currentUserTags];
     newTags = newTags.filter((tag) => tag !== event.detail.chipId);
-    taskMapService.updateTags(taskId, newTags);
+    taskMapService.updateTags(task._id, newTags);
   }
 
   function handleNewSelection() {
