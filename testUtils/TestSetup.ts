@@ -1,5 +1,6 @@
 import { APIService } from '@aneuhold/core-ts-api-lib';
 import { DocumentService } from '@aneuhold/core-ts-db-lib';
+import WebSocketService from '$services/WebSocketService';
 import { apiKey } from '$stores/local/apiKey';
 import type { SpyOnFn } from '$testUtils/types';
 import MockData from './MockData';
@@ -19,6 +20,10 @@ export default class TestSetup {
         errors: [],
         data: {}
       });
+    });
+
+    spyOnFn(WebSocketService, 'connect').mockImplementation(() => {
+      console.log('Mocked WebSocketService.connect called');
     });
 
     // Set some stores
