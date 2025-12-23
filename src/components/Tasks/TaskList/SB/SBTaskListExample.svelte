@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { untrack } from 'svelte';
   import TaskListService from '$services/Task/TaskListService';
   import taskMapService from '$services/Task/TaskMapService/TaskMapService';
   import {
@@ -36,8 +37,8 @@
   } = $props();
 
   $effect(() => {
-    MockData.taskMapServiceMock.reset();
-    MockData.taskMapServiceMock.addTasks({
+    // Track all props
+    const options = {
       numTasks,
       includeStartDates,
       includeStartDatesInFuture,
@@ -48,7 +49,18 @@
       tags,
       descriptions,
       subtasks
+    };
+
+    untrack(() => {
+      MockData.taskMapServiceMock.reset();
+      MockData.taskMapServiceMock.addTasks(options);
     });
+
+    return () => {
+      untrack(() => {
+        MockData.taskMapServiceMock.reset();
+      });
+    };
   });
 
   let sortAndFilterResult = $derived(
