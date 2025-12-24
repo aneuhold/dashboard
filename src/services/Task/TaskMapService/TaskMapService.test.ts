@@ -357,7 +357,7 @@ describe('TaskMapService', () => {
 
       const mockUpdateInfo: UpsertManyInfo<DashboardTask> = {
         filter: () => false,
-        updater: (t) => t,
+        mutator: (t) => t,
         newDocs: []
       };
       const getRecurrenceUpdateInfoSpy = vi

@@ -13,7 +13,7 @@ export type DocumentInsertOrUpdateInfo<T extends BaseDocument> = {
 
 export type UpsertManyInfo<T> = {
   filter: (currentChild: T) => boolean;
-  updater: Updater<T>;
+  mutator: Updater<T>;
   newDocs: T[];
 };
 
@@ -31,13 +31,6 @@ export default abstract class DocumentMapStoreService<T extends BaseDocument> {
     this.addManyDocs([doc]);
   }
 
-  private addManyDocsWithoutPersist(docs: T[]): T[] {
-    docs.forEach((doc) => {
-      this.mapState[doc._id] = doc;
-    });
-    return docs;
-  }
-
   public addManyDocs(docs: T[]): void {
     this.addManyDocsWithoutPersist(docs);
 
@@ -48,13 +41,33 @@ export default abstract class DocumentMapStoreService<T extends BaseDocument> {
     });
   }
 
-  public updateDoc(docId: UUID, updater: Updater<T>): void {
-    this.updateManyDocs([docId], updater);
+  private addManyDocsWithoutPersist(docs: T[]): T[] {
+    docs.forEach((doc) => {
+      this.mapState[doc._id] = doc;
+    });
+    return docs;
+  }
+
+  public updateDoc(docId: UUID, mutator: Updater<T>): void {
+    this.updateManyDocs([docId], mutator);
+  }
+
+  public updateManyDocs(
+    filterOrDocIds: ((currentDoc: T) => boolean) | UUID[],
+    mutator: Updater<T>
+  ): void {
+    const docsToUpdate = this.updateManyDocsWithoutPersist(filterOrDocIds, mutator);
+
+    // Persist
+    this.persistToLocalData();
+    this.persistToDb({
+      update: docsToUpdate
+    });
   }
 
   private updateManyDocsWithoutPersist(
     filterOrDocIds: ((currentDoc: T) => boolean) | UUID[],
-    updater: Updater<T>
+    mutator: Updater<T>
   ): T[] {
     let docsToUpdate: T[] = [];
     if (Array.isArray(filterOrDocIds)) {
@@ -66,7 +79,7 @@ export default abstract class DocumentMapStoreService<T extends BaseDocument> {
           log.error(`Document with ID ${docId} does not exist in the map.`);
           return;
         }
-        docsToUpdate.push(updater(currentDoc));
+        docsToUpdate.push(mutator(currentDoc));
       });
     } else {
       // It's a filter function
@@ -74,22 +87,9 @@ export default abstract class DocumentMapStoreService<T extends BaseDocument> {
       docsToUpdate = Object.values(this.mapState).filter(
         (doc): doc is T => doc !== undefined && filter(doc)
       );
-      docsToUpdate.forEach(updater);
+      docsToUpdate.forEach(mutator);
     }
     return docsToUpdate;
-  }
-
-  public updateManyDocs(
-    filterOrDocIds: ((currentDoc: T) => boolean) | UUID[],
-    updater: Updater<T>
-  ): void {
-    const docsToUpdate = this.updateManyDocsWithoutPersist(filterOrDocIds, updater);
-
-    // Persist
-    this.persistToLocalData();
-    this.persistToDb({
-      update: docsToUpdate
-    });
   }
 
   public deleteDoc(docId: UUID): void {
@@ -116,10 +116,10 @@ export default abstract class DocumentMapStoreService<T extends BaseDocument> {
   }
 
   public upsertManyDocs(upsertInfo: UpsertManyInfo<T>): void {
-    const { filter, updater, newDocs } = upsertInfo;
+    const { filter, mutator, newDocs } = upsertInfo;
 
     const addedDocs = this.addManyDocsWithoutPersist(newDocs);
-    const docsToUpdate = this.updateManyDocsWithoutPersist(filter, updater);
+    const docsToUpdate = this.updateManyDocsWithoutPersist(filter, mutator);
 
     // Persist
     this.persistToLocalData();

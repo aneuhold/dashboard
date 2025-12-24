@@ -56,7 +56,7 @@ export class NonogramKatanaItemMapService extends DocumentMapStoreService<Nonogr
       this.upsertManyDocs({
         filter: (doc) => newItemIds.has(doc._id),
         newDocs: itemsToAdd,
-        updater: (doc) => doc
+        mutator: (doc) => doc
       });
     }
   }

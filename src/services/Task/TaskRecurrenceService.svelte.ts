@@ -205,14 +205,14 @@ export default class TaskRecurrenceService {
    * on completion, this will return null.
    *
    * @param originalTask The original task
-   * @param updater The updater to apply to the task before getting the next recurrence date
+   * @param mutator The mutator to apply to the task before getting the next recurrence date
    */
   static getSimulatedRecurrenceDate(
     originalTask: DashboardTask,
-    updater: Updater<DashboardTask>
+    mutator: Updater<DashboardTask>
   ): Date | null {
     let taskCopy = DocumentService.deepCopy($state.snapshot(originalTask));
-    taskCopy = updater(taskCopy);
+    taskCopy = mutator(taskCopy);
     return this.getNextRecurrenceDate(taskCopy);
   }
 

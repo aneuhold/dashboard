@@ -38,25 +38,25 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
     super.addManyDocs(preparedTasks);
   }
 
-  public override updateDoc(taskId: UUID, updater: Updater<DashboardTask>): void {
-    this.updateManyDocs([taskId], updater);
+  public override updateDoc(taskId: UUID, mutator: Updater<DashboardTask>): void {
+    this.updateManyDocs([taskId], mutator);
   }
 
   public override updateManyDocs(
     filterOrTaskIds: UUID[] | ((currentDoc: DashboardTask) => boolean),
-    updater: Updater<DashboardTask>
+    mutator: Updater<DashboardTask>
   ): void {
-    super.updateManyDocs(filterOrTaskIds, updater);
+    super.updateManyDocs(filterOrTaskIds, mutator);
   }
 
   public override upsertManyDocs(upsertInfo: UpsertManyInfo<DashboardTask>): void {
-    const { filter, updater, newDocs } = upsertInfo;
+    const { filter, mutator, newDocs } = upsertInfo;
     const preparedNewDocs = newDocs.map((task) =>
       TaskCreationService.prepareTaskForAddition(task, this.mapState)
     );
     super.upsertManyDocs({
       filter,
-      updater: updater,
+      mutator: mutator,
       newDocs: preparedNewDocs
     });
   }

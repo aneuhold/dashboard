@@ -142,7 +142,7 @@ describe('DocumentMapStoreService', () => {
 
     service.upsertManyDocs({
       filter: (doc) => doc._id === doc1._id,
-      updater: (doc) => {
+      mutator: (doc) => {
         doc.value = 99;
         return doc;
       },

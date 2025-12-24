@@ -2,7 +2,7 @@ import { APIService } from '@aneuhold/core-ts-api-lib';
 import { DocumentService } from '@aneuhold/core-ts-db-lib';
 import WebSocketService from '$services/WebSocketService';
 import { apiKey } from '$stores/local/apiKey';
-import type { SpyOnFn } from '$testUtils/types';
+import type { SpyOnFn } from '$testUtils/testUtilTypes';
 import MockData from './MockData';
 import TestUsers from './TestUsers';
 

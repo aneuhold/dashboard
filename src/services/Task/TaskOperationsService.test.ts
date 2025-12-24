@@ -29,7 +29,7 @@ describe('TaskOperationsService', () => {
         [unrelatedTask._id]: unrelatedTask
       };
 
-      const updater = (task: DashboardTask) => {
+      const mutator = (task: DashboardTask) => {
         task.completed = true;
         return task;
       };
@@ -37,7 +37,7 @@ describe('TaskOperationsService', () => {
       const result = TaskOperationsService.getUpdateTaskAndAllChildrenInfo(
         taskMap,
         parentTask._id,
-        updater
+        mutator
       );
 
       expect(result.newDocs).toEqual([]);
@@ -49,8 +49,8 @@ describe('TaskOperationsService', () => {
       expect(result.filter(grandChildTask)).toBe(true);
       expect(result.filter(unrelatedTask)).toBe(false);
 
-      // Check updater
-      const updatedTask = result.updater(createTestTask());
+      // Check mutator
+      const updatedTask = result.mutator(createTestTask());
       expect(updatedTask.completed).toBe(true);
     });
   });
@@ -76,7 +76,7 @@ describe('TaskOperationsService', () => {
         [grandChildTask._id]: grandChildTask
       };
 
-      const newTaskUpdater = (task: DashboardTask) => {
+      const newTaskMutator = (task: DashboardTask) => {
         task.title = `Copy of ${task.title}`;
         return task;
       };
@@ -84,7 +84,7 @@ describe('TaskOperationsService', () => {
       const result = TaskOperationsService.getDuplicateTaskUpdateInfo(
         taskMap,
         parentTask._id,
-        newTaskUpdater
+        newTaskMutator
       );
 
       expect(result.newDocs).toHaveLength(3);
@@ -107,14 +107,14 @@ describe('TaskOperationsService', () => {
       }
     });
 
-    it('should apply originalTaskUpdater if provided', () => {
+    it('should apply originalTaskMutator if provided', () => {
       const parentTask = createTestTask({ title: 'Parent' });
       const taskMap: DocumentMap<DashboardTask> = {
         [parentTask._id]: parentTask
       };
 
-      const newTaskUpdater = (t: DashboardTask) => t;
-      const originalTaskUpdater = (t: DashboardTask) => {
+      const newTaskMutator = (t: DashboardTask) => t;
+      const originalTaskMutator = (t: DashboardTask) => {
         t.completed = true;
         return t;
       };
@@ -122,12 +122,12 @@ describe('TaskOperationsService', () => {
       const result = TaskOperationsService.getDuplicateTaskUpdateInfo(
         taskMap,
         parentTask._id,
-        newTaskUpdater,
-        originalTaskUpdater
+        newTaskMutator,
+        originalTaskMutator
       );
 
       expect(result.filter(parentTask)).toBe(true);
-      const updatedOriginal = result.updater(createTestTask());
+      const updatedOriginal = result.mutator(createTestTask());
       expect(updatedOriginal.completed).toBe(true);
     });
   });

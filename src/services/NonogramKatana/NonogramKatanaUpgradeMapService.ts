@@ -173,7 +173,7 @@ export class NonogramKatanaUpgradeMapService extends DocumentMapStoreService<Non
       this.upsertManyDocs({
         filter: (doc) => newUpgradeIds.has(doc._id),
         newDocs: upgradesToAdd,
-        updater: (doc) => doc
+        mutator: (doc) => doc
       });
     }
   }
