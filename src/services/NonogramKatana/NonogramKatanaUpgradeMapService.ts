@@ -28,6 +28,14 @@ export class NonogramKatanaUpgradeMapService extends DocumentMapStoreService<Non
    */
   private nameToIdMap: { [key in NonogramKatanaUpgradeName]?: UUID } = {};
 
+  public constructor() {
+    super();
+  }
+
+  protected override getFromLocalData(): DocumentMap<NonogramKatanaUpgrade> | null {
+    return LocalData.nonogramKatanaUpgradeMap;
+  }
+
   public getUpgradeByName(
     upgradeName: NonogramKatanaUpgradeName
   ): NonogramKatanaUpgrade | undefined {

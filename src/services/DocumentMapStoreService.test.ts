@@ -11,6 +11,10 @@ interface TestDoc extends BaseDocument {
 }
 
 class TestDocumentMapStoreService extends DocumentMapStoreService<TestDoc> {
+  public constructor() {
+    super();
+  }
+
   // Mocks for abstract methods
   public static persistToLocalDataMock = vi.fn<() => DocumentMap<TestDoc>>().mockReturnValue({});
   public static getFromLocalDataMock = vi
@@ -18,10 +22,6 @@ class TestDocumentMapStoreService extends DocumentMapStoreService<TestDoc> {
     .mockReturnValue(null);
   public static persistToDbMock =
     vi.fn<(updateInfo: DocumentInsertOrUpdateInfo<TestDoc>) => void>();
-
-  protected setupSubscribers(): void {
-    // No default subscribers for base test
-  }
 
   protected persistToLocalData(): DocumentMap<TestDoc> {
     return TestDocumentMapStoreService.persistToLocalDataMock();

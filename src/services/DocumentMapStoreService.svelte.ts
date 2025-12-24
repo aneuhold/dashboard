@@ -1,6 +1,7 @@
 import type { BaseDocument, DocumentMap } from '@aneuhold/core-ts-db-lib';
 import type { UUID } from 'crypto';
 import type { Updater } from 'svelte/store';
+import { browser } from '$app/environment';
 import { createLogger } from '$util/logging/logger';
 
 const log = createLogger('DocumentMapStoreService.ts');
@@ -26,6 +27,17 @@ export type UpsertManyInfo<T> = {
  */
 export default abstract class DocumentMapStoreService<T extends BaseDocument> {
   public mapState: DocumentMap<T> = $state({});
+
+  protected constructor() {
+    if (!browser) {
+      return;
+    }
+
+    const localMap = this.getFromLocalData();
+    if (localMap) {
+      this.setMap(localMap);
+    }
+  }
 
   public addDoc(doc: T): void {
     this.addManyDocs([doc]);
@@ -145,6 +157,11 @@ export default abstract class DocumentMapStoreService<T extends BaseDocument> {
    * of the map that is to be persisted.
    */
   protected abstract persistToLocalData(): DocumentMap<T>;
+
+  /**
+   * Gets the map from local storage. Returning null means no local data exists.
+   */
+  protected abstract getFromLocalData(): DocumentMap<T> | null;
 
   protected abstract persistToDb(updateInfo: DocumentInsertOrUpdateInfo<T>): void;
 }

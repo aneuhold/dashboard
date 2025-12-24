@@ -56,16 +56,20 @@
 
   function handleUpdateSortSettings(newSortSettings: DashboardTaskListSortSettings) {
     if (parentTask) {
-      parentTask.sortSettings[$currentUserId] = newSortSettings;
+      taskMapService.updateDoc(parentTask._id, (task: DashboardTask) => {
+        task.sortSettings[$currentUserId] = newSortSettings;
+        return task;
+      });
     } else {
       $userConfig.config.taskListSortSettings[category] = newSortSettings;
     }
   }
   function handleResetSortSettings() {
     if (parentTask) {
-      const sortSettings = parentTask.sortSettings;
-      delete sortSettings[$currentUserId];
-      parentTask.sortSettings = sortSettings;
+      taskMapService.updateDoc(parentTask._id, (task: DashboardTask) => {
+        delete task.sortSettings[$currentUserId];
+        return task;
+      });
     } else {
       const sortSettings = $userConfig.config.taskListSortSettings;
       delete sortSettings[category];
@@ -74,16 +78,20 @@
   }
   function handleUpdateFilterSettings(newFilterSettings: DashboardTaskListFilterSettings) {
     if (parentTask) {
-      parentTask.filterSettings[$currentUserId] = newFilterSettings;
+      taskMapService.updateDoc(parentTask._id, (task: DashboardTask) => {
+        task.filterSettings[$currentUserId] = newFilterSettings;
+        return task;
+      });
     } else {
       $userConfig.config.taskListFilterSettings[category] = newFilterSettings;
     }
   }
   function handleResetFilterSettings() {
     if (parentTask) {
-      const filterSettings = parentTask.filterSettings;
-      delete filterSettings[$currentUserId];
-      parentTask.filterSettings = filterSettings;
+      taskMapService.updateDoc(parentTask._id, (task: DashboardTask) => {
+        delete task.filterSettings[$currentUserId];
+        return task;
+      });
     } else {
       const filterSettings = $userConfig.config.taskListFilterSettings;
       delete filterSettings[category];
@@ -113,7 +121,7 @@
       const task = taskMapService.mapState[id];
       const currentUserTags = task?.tags[$currentUserId];
       if (task && currentUserTags) {
-        currentUserTags.forEach((tag) => tagSet.add(tag));
+        currentUserTags.forEach((tag: string) => tagSet.add(tag));
       }
       return tagSet;
     }, new Set<string>())

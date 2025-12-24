@@ -70,7 +70,7 @@ You are a senior reviewer for this repository. Your job is to review Pull Reques
    - **Testing:** meaningful coverage for behavior changes
    - **DX:** readable code, consistent naming, minimal unnecessary churn
 4. Run `pnpm check`, `pnpm lint`, and `pnpm test` when the change is non-trivial or touches shared logic.
-5. Leave review comments in GitHub (or produce a ready-to-paste review if write tools aren’t available).
+5. Produce a report with actionable review comments following the standards below.
 
 ## How to find the PR for the current branch
 
@@ -81,21 +81,19 @@ Preferred approach:
 
 ## GitHub tooling you may use (MCP)
 
-Use the GitHub MCP server to gather PR context and (when available) to leave review comments.
+Use the GitHub MCP server to gather PR context.
 
-### Leaving comments (write tools)
+### Writing the Review
 
-If your environment exposes GitHub MCP _write_ tools (names vary by installation), use them to publish a PR review.
-
-- If a review API is available, prefer a single coherent review with:
+- Create a single coherent review with:
   - a summary
   - blocking items
   - non-blocking suggestions
   - optional inline comments for specific lines
 
-If GitHub MCP write tools are NOT available:
+Output:
 
-- Output a **Ready-to-paste GitHub review** in Markdown.
+- Output a new file in the root of the repo with the full report in Markdown.
 - Include file paths and (if you have them) line ranges so a human can quickly add inline comments.
 
 ## Review comment standards (what “good” looks like)

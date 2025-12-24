@@ -27,6 +27,10 @@ const log = createLogger('TaskMapService.ts');
  * The main task map service.
  */
 export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
+  public constructor() {
+    super();
+  }
+
   public override addDoc(task: DashboardTask): void {
     this.addManyDocs([task]);
   }
@@ -80,6 +84,18 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
       taskId,
       (task) => {
         task.sharedWith = newSharedWith;
+
+        // If a task is unshared, or if the currently
+        // assigned user is removed from sharing (and isn't the owner), clear assignment.
+        if (
+          newSharedWith.length === 0 ||
+          (task.assignedTo &&
+            task.assignedTo !== task.userId &&
+            !newSharedWith.includes(task.assignedTo))
+        ) {
+          task.assignedTo = null;
+        }
+
         return task;
       }
     );
@@ -207,6 +223,10 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
 
   protected override persistToLocalData(): DocumentMap<DashboardTask> {
     return LocalData.setAndGetTaskMap(this.mapState);
+  }
+
+  protected override getFromLocalData(): DocumentMap<DashboardTask> | null {
+    return LocalData.taskMap;
   }
 
   protected override persistToDb(updateInfo: DocumentInsertOrUpdateInfo<DashboardTask>): void {
