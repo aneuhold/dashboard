@@ -49,10 +49,7 @@
     if (!task.completed) {
       triggerConfetti(clickX, clickY);
     }
-    taskMapService.updateDoc(task._id, (t) => {
-      t.completed = !t.completed;
-      return t;
-    });
+    taskMapService.toggleTaskCompleted(task);
   }
 </script>
 
