@@ -28,10 +28,6 @@ const log = createLogger('TaskMapService.ts');
  * The main task map service.
  */
 export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
-  public constructor() {
-    super();
-  }
-
   public override addDoc(task: DashboardTask): void {
     this.addManyDocs([task]);
   }
@@ -293,9 +289,5 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
 }
 
 const taskMapService = new TaskMapService();
-
-if (LocalData.taskMap) {
-  taskMapService.setMap(LocalData.taskMap);
-}
 
 export default taskMapService;

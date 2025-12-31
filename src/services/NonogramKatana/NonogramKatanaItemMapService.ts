@@ -17,10 +17,6 @@ import DocumentMapStoreService from '../DocumentMapStoreService.svelte';
 export class NonogramKatanaItemMapService extends DocumentMapStoreService<NonogramKatanaItem> {
   private nameToIdMap: { [itemName: string]: UUID | undefined } = {};
 
-  public constructor() {
-    super();
-  }
-
   protected override getFromLocalData(): DocumentMap<NonogramKatanaItem> | null {
     return LocalData.nonogramKatanaItemMap;
   }
@@ -99,4 +95,5 @@ export class NonogramKatanaItemMapService extends DocumentMapStoreService<Nonogr
 }
 
 const nonogramKatanaItemMapService = new NonogramKatanaItemMapService();
+
 export default nonogramKatanaItemMapService;
