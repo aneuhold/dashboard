@@ -2,6 +2,7 @@ import {
   type DashboardTask,
   DashboardTaskService,
   type DocumentMap,
+  RecurrenceEffect,
   type RecurrenceInfo
 } from '@aneuhold/core-ts-db-lib';
 import { DateService } from '@aneuhold/core-ts-lib';
@@ -76,6 +77,27 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
       TaskRecurrenceService.removeTaskTimeSubscription(id);
     });
     super.deleteManyDocs(allIdsToDelete);
+  }
+
+  /**
+   * Toggles completion for the task with the given ID.
+   *
+   * @param task The task to toggle completion for.
+   */
+  public toggleTaskCompleted(task: DashboardTask): void {
+    const shouldExecuteRecurrenceAfterCompletion =
+      !task.parentRecurringTaskInfo &&
+      !task.completed &&
+      task.recurrenceInfo?.recurrenceEffect === RecurrenceEffect.rollOnCompletion;
+
+    this.updateDoc(task._id, (task) => {
+      task.completed = !task.completed;
+      return task;
+    });
+
+    if (shouldExecuteRecurrenceAfterCompletion) {
+      this.executeRecurrenceForTask(task);
+    }
   }
 
   public updateSharedWith(taskId: UUID, newSharedWith: UUID[]): void {
@@ -271,4 +293,9 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
 }
 
 const taskMapService = new TaskMapService();
+
+if (LocalData.taskMap) {
+  taskMapService.setMap(LocalData.taskMap);
+}
+
 export default taskMapService;
