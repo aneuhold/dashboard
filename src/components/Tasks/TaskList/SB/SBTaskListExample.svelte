@@ -1,5 +1,6 @@
 <script lang="ts">
   import { untrack } from 'svelte';
+  import SingletonConfirmationDialog from '$components/singletons/dialogs/SingletonConfirmationDialog.svelte';
   import TaskListService from '$services/Task/TaskListService';
   import taskMapService from '$services/Task/TaskMapService/TaskMapService';
   import {
@@ -69,3 +70,4 @@
 </script>
 
 <TaskList category="default" {sortAndFilterResult} />
+<SingletonConfirmationDialog />
