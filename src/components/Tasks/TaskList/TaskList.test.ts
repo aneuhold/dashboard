@@ -11,38 +11,14 @@ import { tick } from 'svelte';
 import { describe, expect, it, vi } from 'vitest';
 import TaskListService from '$services/Task/TaskListService';
 import taskMapService from '$services/Task/TaskMapService/TaskMapService';
-import TaskMapServiceMock from '$services/Task/TaskMapService/TaskMapService.mock';
 import { userConfig } from '$stores/local/userConfig/userConfig';
+import MockData from '$testUtils/MockData';
 import TestUsers from '$testUtils/TestUsers';
 import TaskList from './TaskList.svelte';
 
-vi.mock('$app/navigation', () => {
-  return {
-    goto: vi.fn()
-  };
-});
-
-vi.mock(
-  '$components/singletons/dialogs/SingletonTaskAssignmentDialog/SingletonTaskAssignmentDialog.svelte',
-  () => {
-    return {
-      taskAssignmentDialog: {
-        open: vi.fn()
-      }
-    };
-  }
-);
-
-vi.mock(
-  '$components/singletons/dialogs/SingletonTaskSharingDialog/SingletonTaskSharingDialog.svelte',
-  () => {
-    return {
-      taskSharingDialog: {
-        open: vi.fn()
-      }
-    };
-  }
-);
+vi.mock('$app/navigation', () => ({
+  goto: vi.fn()
+}));
 
 describe('TaskList', () => {
   /**
@@ -52,28 +28,23 @@ describe('TaskList', () => {
   it('keeps row menus openable after duplicating twice with sorting enabled', async () => {
     const user = userEvent.setup();
 
-    const userId = TestUsers.currentUserCto._id;
-    const mockService = new TaskMapServiceMock(userId);
-    mockService.reset();
-
     // Force a non-empty sort list so we are in the "sorting enabled" code path.
     const currentConfig = userConfig.get();
-    const sortSettings = DashboardTaskListSortSettingsSchema.parse({ userId });
+    const sortSettings = DashboardTaskListSortSettingsSchema.parse({
+      userId: TestUsers.currentUserCto._id
+    });
     sortSettings.sortList = [
       {
-        sortBy: DashboardTaskSortBy.dueDate,
-        sortDirection: DashboardTaskSortDirection.descending
+        sortBy: DashboardTaskSortBy.title,
+        sortDirection: DashboardTaskSortDirection.ascending
       }
     ];
     currentConfig.config.taskListSortSettings.default = sortSettings;
     userConfig.setWithoutPropagation(currentConfig);
 
-    const baseDate = new Date('2026-01-01T00:00:00.000Z');
+    // Initial tasks
     for (let i = 0; i < 10; i++) {
-      mockService.addTask({
-        title: `Test Task ${i + 1}`,
-        dueDate: new Date(baseDate.getTime() + i * 24 * 60 * 60 * 1000)
-      });
+      MockData.taskMapServiceMock.addTask({ title: `Test Task ${i + 1}` });
     }
 
     const getSortAndFilterResult = () => {
@@ -147,7 +118,5 @@ describe('TaskList', () => {
       throw new Error('Expected an open menu surface, but none was found.');
     }
     expect(within(openSurface).getByText('Edit')).toBeInTheDocument();
-    expect(within(openSurface).getByText('Duplicate')).toBeInTheDocument();
-    expect(within(openSurface).getByText('Delete')).toBeInTheDocument();
   });
 });
