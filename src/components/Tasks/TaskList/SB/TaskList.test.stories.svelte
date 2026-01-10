@@ -6,6 +6,7 @@
   } from '@aneuhold/core-ts-db-lib';
   import { defineMeta } from '@storybook/addon-svelte-csf';
   import { expect, userEvent, waitFor, within } from 'storybook/test';
+  import { tick } from 'svelte';
   import sbTaskListMetaBase from '$components/Tasks/TaskList/SB/TaskList.stories.base';
   import { MockTaskDescription } from '$services/Task/TaskMapService/TaskMapService.mock';
   import { userConfig } from '$stores/local/userConfig/userConfig';
@@ -61,6 +62,7 @@
 
       const duplicateBtn = await within(openMenuSurface).findByText('Duplicate');
       await userEvent.click(duplicateBtn);
+      await tick();
     };
 
     // 1) Duplicate a row via its menu.
