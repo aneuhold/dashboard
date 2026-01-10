@@ -49,7 +49,7 @@
   >
     menu
   </IconButton>
-  <MenuSurface bind:this={menu} anchorCorner="BOTTOM_RIGHT">
+  <MenuSurface bind:this={menu} anchorCorner="BOTTOM_RIGHT" data-testid="menu-button-menu">
     <List>
       {#each menuItems as item (item.title)}
         <Item

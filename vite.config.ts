@@ -1,14 +1,8 @@
-import { fileURLToPath } from 'node:url';
 import { sentrySvelteKit } from '@sentry/sveltekit';
-import { storybookTest } from '@storybook/addon-vitest/vitest-plugin';
 import { sveltekit } from '@sveltejs/kit/vite';
-import { playwright } from '@vitest/browser-playwright';
-import path from 'path';
 import { loadEnv, type UserConfig } from 'vite';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import { defineConfig, mergeConfig } from 'vitest/config';
-
-const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Setup the Sentry Auth Token
 let sentryAuthToken = '';
@@ -91,38 +85,7 @@ const vitestConfig = defineConfig({
   test: {
     include: ['src/**/*.{test,spec}.{js,ts}'],
     environment: 'jsdom',
-    setupFiles: ['./testUtils/vitest-setup.ts'],
-    projects: [
-      {
-        extends: true,
-        plugins: [
-          storybookTest({
-            // The location of your Storybook config, main.js|ts
-            configDir: path.join(dirname, '.storybook'),
-            // This should match your package.json script to run Storybook
-            // The --no-open flag will skip the automatic opening of a browser
-            storybookScript: 'yarn storybook --no-open',
-            // This is how storybook recommends filtering tests
-            tags: {
-              include: ['test']
-            }
-          })
-        ],
-        test: {
-          name: 'storybook',
-          // Includes for Storybook goes in the plugin option for tags above.
-          // Enable browser mode
-          browser: {
-            enabled: true,
-            // Make sure to install Playwright
-            provider: playwright({}),
-            headless: true,
-            instances: [{ browser: 'chromium' }]
-          },
-          setupFiles: ['./.storybook/vitest.setup.ts']
-        }
-      }
-    ]
+    setupFiles: ['./testUtils/vitest-setup.ts']
   }
 });
 
