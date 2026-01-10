@@ -20,6 +20,7 @@
 
   const userTags = TaskTagsService.getStore();
 
+  // svelte-ignore state_referenced_locally
   let currentSettings = $state(
     JSON.parse(JSON.stringify(initialSettings)) as DashboardTaskListFilterSettings
   );

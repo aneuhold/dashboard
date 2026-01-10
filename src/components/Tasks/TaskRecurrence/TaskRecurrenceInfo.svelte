@@ -28,7 +28,6 @@
   let { task, childTaskIds }: { task: DashboardTask; childTaskIds: UUID[] } = $props();
 
   let recurringInfoOpen = $state(false);
-  let previousTaskId: UUID = $state(task._id);
   let errorInfoDialogOpen = $state(false);
   let errorInfoDialogTitle = $state('');
   let errorInfoDialogContent = $state('');
@@ -49,9 +48,15 @@
     childTaskIds.some((childTaskId) => !!taskMapService.mapState[childTaskId]?.recurrenceInfo)
   );
 
+  // We need to track the previous task ID to know when it changes. There isn't a way as of 1/10/2025
+  // to do this and tell svelte that we are doing it on purpose without ignoring the warning. See
+  // https://github.com/sveltejs/svelte/issues/12877
+  // svelte-ignore state_referenced_locally
+  let previousTaskId: UUID = task._id;
+
   // Auto-close the accordion when switching tasks
   $effect(() => {
-    if (previousTaskId !== task._id) {
+    if (task._id !== previousTaskId) {
       previousTaskId = task._id;
       recurringInfoOpen = false;
     }

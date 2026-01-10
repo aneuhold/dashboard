@@ -22,9 +22,11 @@
     children?: Snippet;
   } = $props();
 
-  const className = `grouping ${direction} ${borderTop ? 'border-top' : ''} ${
-    borderLeft ? 'border-left' : ''
-  } ${borderRight ? 'border-right' : ''} ${borderBottom ? 'border-bottom' : ''}`;
+  const className = $derived(() => {
+    return `grouping ${direction} ${borderTop ? 'border-top' : ''} ${
+      borderLeft ? 'border-left' : ''
+    } ${borderRight ? 'border-right' : ''} ${borderBottom ? 'border-bottom' : ''}`;
+  });
 </script>
 
 <div class={className}>

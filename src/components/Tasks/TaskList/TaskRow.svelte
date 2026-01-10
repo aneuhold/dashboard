@@ -45,6 +45,7 @@
    * only when completed is clicked.
    */
   let completeAnimationShouldShow = $state(false);
+  // svelte-ignore state_referenced_locally
   let previousTaskCompletedState = $state(task.completed);
 
   function goToTask() {
