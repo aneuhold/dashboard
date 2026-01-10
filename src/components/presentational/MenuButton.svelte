@@ -33,15 +33,13 @@
   }
 
   let menu: MenuSurface | undefined = $state();
-  let anchor: HTMLDivElement | undefined = $state();
 </script>
 
 <!--The extra div is required to keep the bounds of the menu contained -->
 <div class={alignCenterVertically ? 'alignCenter' : ''}>
   <IconButton
     class="material-icons dimmed-color"
-    onclick={(clickEvent) => {
-      console.log('opening menu with anchor', anchor, menu?.isOpen(), clickEvent);
+    onclick={() => {
       // The goal would be to set this to the inverse of its current state, but because clicking
       // off of the menu closes it, the inverse of it's current state is always true 😂
       menu?.setOpen(!menu.isOpen());
