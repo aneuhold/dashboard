@@ -9,7 +9,7 @@
   import { onDestroy, onMount, type Snippet } from 'svelte';
   import { browser } from '$app/environment';
   import Confetti from '$components/singletons/Confetti/Confetti.svelte';
-  import SingletonConfirmationDialog from '$components/singletons/dialogs/SingletonConfirmationDialog.svelte';
+  import SingletonConfirmationDialog from '$components/singletons/dialogs/SingletonConfirmationDialog/SingletonConfirmationDialog.svelte';
   import SingletonTaskAssignmentDialog from '$components/singletons/dialogs/SingletonTaskAssignmentDialog/SingletonTaskAssignmentDialog.svelte';
   import SingletonTaskSharingDialog from '$components/singletons/dialogs/SingletonTaskSharingDialog/SingletonTaskSharingDialog.svelte';
   import SingletonSnackbar from '$components/singletons/SingletonSnackbar.svelte';

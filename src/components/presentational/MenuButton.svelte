@@ -28,10 +28,8 @@
   function handleItemClick(clickAction: () => void) {
     if (menu) {
       menu.setOpen(false);
+      clickAction();
     }
-    // Wait for the ripple to stop, this also prevents an error for events
-    // from SMUI if the component was deleted during the clickAction.
-    setTimeout(clickAction, 50);
   }
 
   let menu: MenuSurface | undefined = $state();
@@ -40,25 +38,31 @@
 
 <!--The extra div is required to keep the bounds of the menu contained -->
 <div class={alignCenterVertically ? 'alignCenter' : ''}>
-  <div bind:this={anchor}>
-    <IconButton class="material-icons dimmed-color" onclick={() => menu?.setOpen(true)}>
-      menu
-    </IconButton>
-    <MenuSurface bind:this={menu} anchorElement={anchor} anchorCorner="BOTTOM_RIGHT">
-      <List>
-        {#each menuItems as item (item.title)}
-          <Item
-            onclick={() => {
-              handleItemClick(item.clickAction);
-            }}
-          >
-            <Graphic class="material-icons">{item.iconName}</Graphic>
-            <Text>{item.title}</Text>
-          </Item>
-        {/each}
-      </List>
-    </MenuSurface>
-  </div>
+  <IconButton
+    class="material-icons dimmed-color"
+    onclick={(clickEvent) => {
+      console.log('opening menu with anchor', anchor, menu?.isOpen(), clickEvent);
+      // The goal would be to set this to the inverse of its current state, but because clicking
+      // off of the menu closes it, the inverse of it's current state is always true 😂
+      menu?.setOpen(!menu.isOpen());
+    }}
+  >
+    menu
+  </IconButton>
+  <MenuSurface bind:this={menu} anchorCorner="BOTTOM_RIGHT">
+    <List>
+      {#each menuItems as item (item.title)}
+        <Item
+          onclick={() => {
+            handleItemClick(item.clickAction);
+          }}
+        >
+          <Graphic class="material-icons">{item.iconName}</Graphic>
+          <Text>{item.title}</Text>
+        </Item>
+      {/each}
+    </List>
+  </MenuSurface>
 </div>
 
 <style>

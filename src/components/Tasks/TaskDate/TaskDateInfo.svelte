@@ -2,7 +2,7 @@
   import { type DashboardTask, RecurrenceBasis } from '@aneuhold/core-ts-db-lib';
   import { DateService } from '@aneuhold/core-ts-lib';
   import DatePickerDialog from '$components/presentational/DatePickerDialog/DatePickerDialog.svelte';
-  import { confirmationDialog } from '$components/singletons/dialogs/SingletonConfirmationDialog.svelte';
+  import { confirmationDialog } from '$components/singletons/dialogs/SingletonConfirmationDialog/SingletonConfirmationDialog.svelte';
   import taskMapService from '$services/Task/TaskMapService/TaskMapService';
   import TaskRecurrenceService from '$services/Task/TaskRecurrenceService.svelte';
   import { createLogger } from '$util/logging/logger';

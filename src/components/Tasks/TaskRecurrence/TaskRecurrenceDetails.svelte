@@ -16,7 +16,7 @@
   import Select, { Option } from '@smui/select';
   import { type Updater, writable } from 'svelte/store';
   import InputBox from '$components/presentational/InputBox/InputBox.svelte';
-  import { confirmationDialog } from '$components/singletons/dialogs/SingletonConfirmationDialog.svelte';
+  import { confirmationDialog } from '$components/singletons/dialogs/SingletonConfirmationDialog/SingletonConfirmationDialog.svelte';
   import WeekdaySegmentedButton from '$components/WeekdaySegmentedButton.svelte';
   import taskMapService from '$services/Task/TaskMapService/TaskMapService';
   import TaskRecurrenceService from '$services/Task/TaskRecurrenceService.svelte';

@@ -2,7 +2,7 @@ import type { DashboardTask } from '@aneuhold/core-ts-db-lib';
 import { ArrayService } from '@aneuhold/core-ts-lib';
 import type { UUID } from 'crypto';
 import type { BreadCrumbArray } from '$components/BreadCrumb.svelte';
-import { confirmationDialog } from '$components/singletons/dialogs/SingletonConfirmationDialog.svelte';
+import { confirmationDialog } from '$components/singletons/dialogs/SingletonConfirmationDialog/SingletonConfirmationDialog.svelte';
 import taskMapService from './TaskMapService/TaskMapService';
 
 /**

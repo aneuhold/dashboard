@@ -9,7 +9,7 @@ import { DocumentService } from '@aneuhold/core-ts-db-lib';
 import { fireEvent, render, screen } from '@testing-library/svelte';
 import type { UUID } from 'crypto';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { confirmationDialog } from '$components/singletons/dialogs/SingletonConfirmationDialog.svelte';
+import { confirmationDialog } from '$components/singletons/dialogs/SingletonConfirmationDialog/SingletonConfirmationDialog.svelte';
 import taskMapService from '$services/Task/TaskMapService/TaskMapService';
 import TaskMapServiceMock from '$services/Task/TaskMapService/TaskMapService.mock';
 import TaskRecurrenceService from '$services/Task/TaskRecurrenceService.svelte';

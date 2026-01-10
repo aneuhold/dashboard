@@ -3,8 +3,11 @@ import { DocumentService } from '@aneuhold/core-ts-db-lib';
 import WebSocketService from '$services/WebSocketService';
 import { apiKey } from '$stores/local/apiKey';
 import type { SpyOnFn } from '$testUtils/testUtilTypes';
+import { createLogger } from '$util/logging/logger';
 import MockData from './MockData';
 import TestUsers from './TestUsers';
+
+const logger = createLogger('TestSetup');
 
 export default class TestSetup {
   /**
@@ -23,7 +26,7 @@ export default class TestSetup {
     });
 
     spyOnFn(WebSocketService, 'connect').mockImplementation(() => {
-      console.log('Mocked WebSocketService.connect called');
+      logger.debug('Mocked WebSocketService.connect called');
     });
 
     // Set some stores

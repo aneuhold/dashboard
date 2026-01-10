@@ -1,6 +1,6 @@
 import { defineMeta } from '@storybook/addon-svelte-csf';
 import SbConfettiDecorator from '$components/singletons/Confetti/SBConfettiDecorator.svelte';
-import SbSingletonConfirmationDialogDecorator from '$components/singletons/dialogs/SBSingletonConfirmationDialogDecorator.svelte';
+import SbSingletonConfirmationDialogDecorator from '$components/singletons/dialogs/SingletonConfirmationDialog/SBSingletonConfirmationDialogDecorator.svelte';
 import SbSingletonTaskAssignmentDialogDecorator from '$components/singletons/dialogs/SingletonTaskAssignmentDialog/SBSingletonTaskAssignmentDialogDecorator.svelte';
 import SbSingletonTaskSharingDialogDecorator from '$components/singletons/dialogs/SingletonTaskSharingDialog/SBSingletonTaskSharingDialogDecorator.svelte';
 import {
