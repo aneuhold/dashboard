@@ -1,7 +1,9 @@
 import {
   type DashboardTask,
   DashboardTaskService,
-  type DocumentMap
+  type DocumentMap,
+  RecurrenceEffect,
+  type RecurrenceInfo
 } from '@aneuhold/core-ts-db-lib';
 import { DateService } from '@aneuhold/core-ts-lib';
 import type { UUID } from 'crypto';
@@ -12,14 +14,12 @@ import LocalData from '$util/LocalData/LocalData';
 import { createLogger } from '$util/logging/logger';
 import type {
   DocumentInsertOrUpdateInfo,
-  DocumentMapStore,
-  DocumentStore,
   UpsertManyInfo
-} from '../../DocumentMapStoreService';
-import DocumentMapStoreService from '../../DocumentMapStoreService';
-import TaskOperationsService from '../TaskOperationsService';
-import TaskRecurrenceService from '../TaskRecurrenceService';
-import TaskSharingService from '../TaskSharingService';
+} from '../../DocumentMapStoreService.svelte';
+import DocumentMapStoreService from '../../DocumentMapStoreService.svelte';
+import TaskCreationService from '../TaskCreationService';
+import TaskOperationsService from '../TaskOperationsService.svelte';
+import TaskRecurrenceService from '../TaskRecurrenceService.svelte';
 import TaskTagsService from '../TaskTagsService';
 
 const log = createLogger('TaskMapService.ts');
@@ -28,123 +28,227 @@ const log = createLogger('TaskMapService.ts');
  * The main task map service.
  */
 export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
-  private static instance = new TaskMapService();
-
-  private constructor() {
-    super();
+  public override addDoc(task: DashboardTask): void {
+    this.addManyDocs([task]);
   }
 
-  static getStore(): DocumentMapStore<DashboardTask> {
-    return this.instance.store;
+  public override addManyDocs(tasks: DashboardTask[]): void {
+    const preparedTasks = tasks.map((task) =>
+      TaskCreationService.prepareTaskForAddition(task, this.mapState)
+    );
+    super.addManyDocs(preparedTasks);
   }
 
-  static getTaskStore(taskId: UUID): DocumentStore<DashboardTask> {
-    return this.instance.getDocStore(taskId);
+  public override updateDoc(taskId: UUID, mutator: Updater<DashboardTask>): void {
+    this.updateManyDocs([taskId], mutator);
   }
 
-  static getMap(): DocumentMap<DashboardTask> {
-    return this.instance.documentMap;
+  public override updateManyDocs(
+    filterOrTaskIds: UUID[] | ((currentDoc: DashboardTask) => boolean),
+    mutator: Updater<DashboardTask>
+  ): void {
+    super.updateManyDocs(filterOrTaskIds, mutator);
   }
 
-  /**
-   * Executes recurrence for the provided task if needed. This is a facade
-   * method that delegates to TaskRecurrenceService.
-   *
-   * @param task The task to check and execute recurrence for
-   */
-  static executeRecurrenceIfNeeded(task: DashboardTask): void {
-    TaskRecurrenceService.executeRecurrenceIfNeeded(task, this.instance.documentMap, (info) => {
-      this.instance.store.upsertMany(info);
+  public override upsertManyDocs(upsertInfo: UpsertManyInfo<DashboardTask>): void {
+    const { filter, mutator, newDocs } = upsertInfo;
+    const preparedNewDocs = newDocs.map((task) =>
+      TaskCreationService.prepareTaskForAddition(task, this.mapState)
+    );
+    super.upsertManyDocs({
+      filter,
+      mutator: mutator,
+      newDocs: preparedNewDocs
     });
   }
 
-  /**
-   * Executes recurrence for the provided task. This is a facade method that
-   * delegates to TaskRecurrenceService.
-   *
-   * @param task The task to execute recurrence for
-   */
-  static executeRecurrenceForTask(task: DashboardTask): void {
-    TaskRecurrenceService.executeRecurrenceForTask(task, this.instance.documentMap, (info) => {
-      this.instance.store.upsertMany(info);
-    });
+  public override deleteDoc(docId: UUID): void {
+    this.deleteManyDocs([docId]);
   }
 
-  protected setupSubscribers(): void {
-    // Basic task things
-    this.subscribers.push({
-      afterMapSet(map) {
-        // Check if any tasks need to recur after everything has been set
-        Object.values(map).forEach((task) => {
-          if (task) {
-            TaskMapService.executeRecurrenceIfNeeded(task);
-          }
-        });
-        TaskRecurrenceService.buildTaskRecurrenceSubMapFresh(map);
-        TaskMapService.autoDeleteTasksPostSet(map);
-      },
-      beforeDocAddition(map, newDoc) {
-        newDoc.description = newDoc.description || '';
-        const parentTask = newDoc.parentTaskId ? map[newDoc.parentTaskId] : undefined;
-        if (parentTask) {
-          newDoc.userId = parentTask.userId;
+  public override deleteManyDocs(docIds: UUID[]): void {
+    const allTasks = TaskOperationsService.getAllTasks(this.mapState);
+    const allIdsToDelete = [...docIds, ...DashboardTaskService.getChildrenIds(allTasks, docIds)];
+    allIdsToDelete.forEach((id) => {
+      TaskRecurrenceService.removeTaskTimeSubscription(id);
+    });
+    super.deleteManyDocs(allIdsToDelete);
+  }
+
+  /**
+   * Toggles completion for the task with the given ID.
+   *
+   * @param task The task to toggle completion for.
+   */
+  public toggleTaskCompleted(task: DashboardTask): void {
+    const shouldExecuteRecurrenceAfterCompletion =
+      !task.parentRecurringTaskInfo &&
+      !task.completed &&
+      task.recurrenceInfo?.recurrenceEffect === RecurrenceEffect.rollOnCompletion;
+
+    this.updateDoc(task._id, (task) => {
+      task.completed = !task.completed;
+      return task;
+    });
+
+    if (shouldExecuteRecurrenceAfterCompletion) {
+      this.executeRecurrenceForTask(task);
+    }
+  }
+
+  public updateSharedWith(taskId: UUID, newSharedWith: UUID[]): void {
+    const updateInfo = TaskOperationsService.getUpdateTaskAndAllChildrenInfo(
+      this.mapState,
+      taskId,
+      (task) => {
+        task.sharedWith = newSharedWith;
+
+        // If a task is unshared, or if the currently
+        // assigned user is removed from sharing (and isn't the owner), clear assignment.
+        if (
+          newSharedWith.length === 0 ||
+          (task.assignedTo &&
+            task.assignedTo !== task.userId &&
+            !newSharedWith.includes(task.assignedTo))
+        ) {
+          task.assignedTo = null;
         }
-        return newDoc;
-      },
-      validateDocDeletion(map, docToDelete) {
-        const docIdsToDelete: UUID[] = [docToDelete._id];
-        const allTasks = TaskOperationsService.getAllTasks(map);
-        docIdsToDelete.push(...DashboardTaskService.getChildrenIds(allTasks, [docToDelete._id]));
-        return docIdsToDelete;
-      },
-      beforeDocDeletion(map, docToDelete) {
-        TaskRecurrenceService.removeTaskTimeSubscription(docToDelete._id);
+
+        return task;
+      }
+    );
+    this.upsertManyDocs(updateInfo);
+  }
+
+  public updateTags(taskId: UUID, newTags: string[]): void {
+    const userId = userConfig.get().config.userId;
+    this.updateDoc(taskId, (task) => {
+      if (newTags.length === 0) {
+        delete task.tags[userId];
+      } else {
+        task.tags[userId] = newTags;
+        // Add any new tags to the user's global tag list
+        newTags.forEach((tag) => {
+          TaskTagsService.addTagForUserIfNeeded(tag);
+        });
+      }
+      return task;
+    });
+  }
+
+  public updateTaskRecurrenceOrDates(
+    taskId: UUID,
+    options: {
+      newRecurrenceInfo?: RecurrenceInfo | null;
+      newStartDate?: Date | null;
+      newDueDate?: Date | null;
+    }
+  ): void {
+    const currentTask = this.mapState[taskId];
+    if (!currentTask) {
+      log.error(
+        `Cannot update task recurrence for task with ID ${taskId} because it does not exist.`
+      );
+      return;
+    }
+
+    const { newRecurrenceInfo, newStartDate, newDueDate } = options;
+
+    if (options.newRecurrenceInfo !== undefined) {
+      currentTask.recurrenceInfo = newRecurrenceInfo;
+    }
+    if (options.newStartDate !== undefined) {
+      currentTask.startDate = newStartDate;
+    }
+    if (options.newDueDate !== undefined) {
+      currentTask.dueDate = newDueDate;
+    }
+    const watchRecurrenceInfo = currentTask.recurrenceInfo && !currentTask.parentRecurringTaskInfo;
+
+    if (watchRecurrenceInfo && TaskRecurrenceService.taskShouldRecur(currentTask)) {
+      const updateInfo = TaskRecurrenceService.getRecurrenceUpdateInfo(this.mapState, currentTask);
+      this.upsertManyDocs(updateInfo);
+    } else {
+      TaskRecurrenceService.updateOrRemoveTaskTimeSubscription(currentTask);
+
+      const updateInfo = TaskOperationsService.getUpdateTaskAndAllChildrenInfo(
+        this.mapState,
+        currentTask._id,
+        (task) => {
+          if (task._id === currentTask._id) {
+            return task;
+          }
+          if (currentTask.recurrenceInfo) {
+            task.parentRecurringTaskInfo = {
+              taskId: currentTask._id,
+              startDate: currentTask.startDate,
+              dueDate: currentTask.dueDate
+            };
+            task.recurrenceInfo = currentTask.recurrenceInfo;
+          } else {
+            task.parentRecurringTaskInfo = null;
+            task.recurrenceInfo = null;
+          }
+          return task;
+        }
+      );
+      this.upsertManyDocs(updateInfo);
+    }
+  }
+
+  public duplicateTask(taskId: UUID): void {
+    const currentTask = this.mapState[taskId];
+    if (!currentTask) {
+      log.error(`Cannot duplicate task with ID ${taskId} because it does not exist.`);
+      return;
+    }
+    const updateInfo = TaskOperationsService.getDuplicateTaskUpdateInfo(
+      this.mapState,
+      taskId,
+      (task) => {
+        // Conditional to find the original task that is being duplicated
+        if (
+          !task.parentTaskId ||
+          (currentTask.parentTaskId && task.parentTaskId === currentTask.parentTaskId)
+        ) {
+          task.title = `${task.title} (Copy)`;
+        }
+        return task;
+      }
+    );
+    this.upsertManyDocs(updateInfo);
+  }
+
+  public executeRecurrenceForTask(task: DashboardTask): void {
+    TaskRecurrenceService.executeRecurrenceForTask(task, this.mapState, (info) => {
+      this.upsertManyDocs(info);
+    });
+  }
+
+  public override setMap(newMap: DocumentMap<DashboardTask>): void {
+    super.setMap(newMap);
+    // Check if any tasks need to recur after everything has been set
+    Object.values(newMap).forEach((task) => {
+      if (task) {
+        TaskRecurrenceService.executeRecurrenceIfNeeded(task, this.mapState, (info) => {
+          this.upsertManyDocs(info);
+        });
       }
     });
-    this.subscribers.push(TaskRecurrenceService.getSubscribersForTaskMap());
-    this.subscribers.push(TaskTagsService.getSubscribersForTaskMap());
-    this.subscribers.push(TaskSharingService.getSubscribersForTaskMap());
+    TaskRecurrenceService.buildTaskRecurrenceSubMapFresh(newMap);
+    this.autoDeleteTasksPostSet(newMap);
   }
 
-  protected persistToLocalData(): DocumentMap<DashboardTask> {
-    return LocalData.setAndGetTaskMap(this.documentMap);
+  protected override persistToLocalData(): DocumentMap<DashboardTask> {
+    return LocalData.setAndGetTaskMap(this.mapState);
   }
-  protected getFromLocalData(): DocumentMap<DashboardTask> | null {
+
+  protected override getFromLocalData(): DocumentMap<DashboardTask> | null {
     return LocalData.taskMap;
   }
-  protected persistToDb(updateInfo: DocumentInsertOrUpdateInfo<DashboardTask>): void {
+
+  protected override persistToDb(updateInfo: DocumentInsertOrUpdateInfo<DashboardTask>): void {
     DashboardTaskAPIService.updateTasks(updateInfo);
-  }
-
-  static getDuplicateTaskUpdateInfo(
-    taskId: UUID,
-    newTaskUpdater: Updater<DashboardTask>,
-    originalTaskUpdater?: Updater<DashboardTask>
-  ): UpsertManyInfo<DashboardTask> {
-    return TaskOperationsService.getDuplicateTaskUpdateInfo(
-      this.instance.documentMap,
-      taskId,
-      newTaskUpdater,
-      originalTaskUpdater
-    );
-  }
-
-  /**
-   * Gets the update info for a task and all of its children based on the
-   * provided updater.
-   *
-   * @param taskId The ID of the parent task
-   * @param updater Function to update each task
-   */
-  static getUpdateTaskAndAllChildrenInfo(
-    taskId: UUID,
-    updater: Updater<DashboardTask>
-  ): UpsertManyInfo<DashboardTask> {
-    return TaskOperationsService.getUpdateTaskAndAllChildrenInfo(
-      this.instance.documentMap,
-      taskId,
-      updater
-    );
   }
 
   /**
@@ -153,7 +257,7 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
    *
    * @param map The task map to check for auto-deletion
    */
-  private static autoDeleteTasksPostSet(map: DocumentMap<DashboardTask>) {
+  private autoDeleteTasksPostSet(map: DocumentMap<DashboardTask>) {
     // Check for any tasks that need to be auto-deleted.
     const userCfg = userConfig.get().config;
     if (userCfg.autoTaskDeletionDays < 5 || userCfg.autoTaskDeletionDays > 90) {
@@ -179,7 +283,11 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
     const taskIdsToDelete = tasksToDelete.map((task) => task._id);
     if (taskIdsToDelete.length !== 0) {
       log.info(`Deleting ${taskIdsToDelete.length} tasks due to auto task deletion.`);
-      this.getStore().deleteMany(taskIdsToDelete);
+      this.deleteManyDocs(taskIdsToDelete);
     }
   }
 }
+
+const taskMapService = new TaskMapService();
+
+export default taskMapService;

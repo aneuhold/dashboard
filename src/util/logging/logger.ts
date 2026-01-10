@@ -90,7 +90,7 @@ const shouldLog = (level: LogLevel): boolean => {
 const getMinLevel = (): LogLevel => {
   // Requirement: only pay attention to the CI flag Vitest uses for now.
   // In Vitest, `process.env.VITEST` is set.
-  const isVitest = Boolean(getEnvVar('VITEST'));
+  const isVitest = Boolean(getEnvVar('VITEST')) || Boolean(getEnvVar('STORYBOOK_VITEST'));
   return isVitest ? LogLevel.Warn : LogLevel.Debug;
 };
 

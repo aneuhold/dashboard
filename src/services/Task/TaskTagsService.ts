@@ -1,16 +1,15 @@
-import type { DashboardTagSettings, DashboardTask } from '@aneuhold/core-ts-db-lib';
+import type { DashboardTagSettings } from '@aneuhold/core-ts-db-lib';
 import { ArrayService } from '@aneuhold/core-ts-lib';
 import type { UUID } from 'crypto';
 import { type Unsubscriber, type Writable, writable } from 'svelte/store';
+import taskMapService from '$services/Task/TaskMapService/TaskMapService';
 import { userConfig } from '$stores/local/userConfig/userConfig';
-import type { DocumentMapStore, DocumentMapStoreSubscriber } from '../DocumentMapStoreService';
 
 /**
  * A service responsible for managing tags for tasks.
  */
 export default class TaskTagsService {
   private static taskTagsStore: Writable<string[]> | undefined;
-  private static taskMapStore: DocumentMapStore<DashboardTask> | undefined;
   private static currentTagSettings: DashboardTagSettings = {};
   private static userId: UUID | undefined;
   private static userConfigUnsub: undefined | Unsubscriber = undefined;
@@ -22,40 +21,12 @@ export default class TaskTagsService {
 
   /**
    * Gets the store of all tags used by the current user on tasks.
-   *
-   * @param taskMapStore The document map store for tasks to derive tags from.
    */
-  static getStore(taskMapStore: DocumentMapStore<DashboardTask>): Writable<string[]> {
-    if (!this.taskMapStore) {
-      this.taskMapStore = taskMapStore;
-    }
+  static getStore(): Writable<string[]> {
     if (!this.taskTagsStore) {
       this.taskTagsStore = this.createStore();
     }
     return this.taskTagsStore;
-  }
-
-  static getSubscribersForTaskMap(): DocumentMapStoreSubscriber<DashboardTask> {
-    return {
-      beforeDocUpdate(map, oldDoc, newDoc) {
-        if (!TaskTagsService.userId) {
-          return newDoc;
-        }
-        const oldUserTags = oldDoc?.tags[TaskTagsService.userId] ?? [];
-        const newUserTags = newDoc.tags[TaskTagsService.userId] ?? [];
-        if (oldUserTags.length !== newUserTags.length) {
-          const tagsToAdd = TaskTagsService.getNewTags(oldUserTags, newUserTags);
-          if (tagsToAdd.length > 0) {
-            // Should only ever be one tag added at a time for now.
-            TaskTagsService.addTagForUserIfNeeded(tagsToAdd[0]);
-          }
-        }
-        return newDoc;
-      }
-      // Purposefully not subscribing to the task deletion event, because
-      // tags should be removed through the global tag manager. This is a
-      // personal preference.
-    };
   }
 
   /**
@@ -120,7 +91,7 @@ export default class TaskTagsService {
     }
   }
 
-  private static addTagForUserIfNeeded(tag: string) {
+  static addTagForUserIfNeeded(tag: string) {
     if (!TaskTagsService.userId) {
       return;
     }
@@ -179,10 +150,6 @@ export default class TaskTagsService {
     return taskTagsStore;
   }
 
-  private static getNewTags(oldTags: string[], newTags: string[]): string[] {
-    return newTags.filter((tag) => !oldTags.includes(tag));
-  }
-
   private static getRemovedTags(oldTags: string[], newTags: string[]): string[] {
     return oldTags.filter((tag) => !newTags.includes(tag));
   }
@@ -195,10 +162,10 @@ export default class TaskTagsService {
    */
   private static removeTagFromAllTasks(tag: string) {
     const userId = this.userId;
-    if (!userId || !this.taskMapStore) {
+    if (!userId) {
       return;
     }
-    this.taskMapStore.updateMany(
+    taskMapService.updateManyDocs(
       (task) => {
         const userTags = task.tags[userId];
         if (userTags && userTags.includes(tag)) {
@@ -225,10 +192,10 @@ export default class TaskTagsService {
    */
   private static updateTagInAllTasks(oldTag: string, newTag: string) {
     const userId = this.userId;
-    if (!userId || !this.taskMapStore) {
+    if (!userId) {
       return;
     }
-    this.taskMapStore.updateMany(
+    taskMapService.updateManyDocs(
       (task) => {
         const userTags = task.tags[userId];
         if (userTags && userTags.includes(oldTag)) {

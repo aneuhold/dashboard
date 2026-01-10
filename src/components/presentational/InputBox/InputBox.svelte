@@ -35,7 +35,8 @@
     spellCheck = true,
     isSmall = false,
     isValid = true,
-    onSubmit
+    onSubmit,
+    onBlur
   }: {
     disable?: boolean;
     /**
@@ -105,6 +106,10 @@
      * Callback fired when the user presses Enter (for non-textarea inputs).
      */
     onSubmit?: () => void;
+    /**
+     * Callback fired when the value is committed (on blur or enter).
+     */
+    onBlur?: (value: string | number | null) => void;
   } = $props();
 
   let previousOnBlurValue = $state(onBlurValue);
@@ -132,12 +137,14 @@
     if (event.key === 'Enter' && !isTextArea) {
       onBlurValue = inputValue;
       onSubmit?.();
+      onBlur?.(inputValue);
     }
   }
 
   function handleBlur() {
     if (!invalid) {
       onBlurValue = inputValue;
+      onBlur?.(inputValue);
     }
   }
 

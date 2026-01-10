@@ -2,12 +2,11 @@
   import { type DashboardTask } from '@aneuhold/core-ts-db-lib';
   import Button, { Icon } from '@smui/button';
   import { taskAssignmentDialog } from '$components/singletons/dialogs/SingletonTaskAssignmentDialog/SingletonTaskAssignmentDialog.svelte';
-  import type { DocumentStore } from '$services/DocumentMapStoreService';
 
-  let { task }: { task: DocumentStore<DashboardTask> } = $props();
+  let { task }: { task: DashboardTask } = $props();
 
   function handleClick() {
-    taskAssignmentDialog.open($task._id);
+    taskAssignmentDialog.open(task._id);
   }
 </script>
 

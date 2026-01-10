@@ -23,8 +23,8 @@
   import FabButton from '$components/presentational/FabButton/FabButton.svelte';
   import InputBox from '$components/presentational/InputBox/InputBox.svelte';
   import TaskListService from '$services/Task/TaskListService';
-  import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
-  import TaskService from '$services/Task/TaskService';
+  import taskMapService from '$services/Task/TaskMapService/TaskMapService';
+  import TaskUtilityService from '$services/Task/TaskUtilityService';
   import { userConfig } from '$stores/local/userConfig/userConfig';
   import TaskCompletedCheckbox from '../TaskCompletedCheckbox.svelte';
   import TaskDateInfo from '../TaskDate/TaskDateInfo.svelte';
@@ -42,74 +42,98 @@
     taskId: UUID;
   } = $props();
 
-  const taskMap = TaskMapService.getStore();
-  let task = $derived($taskMap[taskId] ? TaskMapService.getTaskStore(taskId) : undefined);
+  let task = $derived(taskMapService.mapState[taskId]);
   let allChildrenIds = $derived(
-    $task
-      ? DashboardTaskService.getChildrenIds(Object.values($taskMap) as DashboardTask[], [$task._id])
+    task
+      ? DashboardTaskService.getChildrenIds(
+          Object.values(taskMapService.mapState) as DashboardTask[],
+          [task._id]
+        )
       : []
   );
   let sortAndFilterResult = $derived(
-    TaskListService.getTaskIdsForTask($taskMap, $userConfig, allChildrenIds, $task)
+    TaskListService.getTaskIdsForTask(taskMapService.mapState, $userConfig, allChildrenIds, task)
   );
   // Explicitly include `task` so that it reactively updates
-  let breadCrumbArray = $derived(TaskService.getBreadCrumbArray($task ? $task._id : taskId));
-  let parentTaskId = $derived($task ? $task.parentTaskId : undefined);
+  let breadCrumbArray = $derived(TaskUtilityService.getBreadCrumbArray(task ? task._id : taskId));
+  let parentTaskId = $derived(task ? task.parentTaskId : undefined);
   let parentRoute = $derived(
-    parentTaskId ? TaskService.getTaskRoute(parentTaskId) : TaskService.getTaskCategoryRoute(taskId)
+    parentTaskId
+      ? TaskUtilityService.getTaskRoute(parentTaskId)
+      : TaskUtilityService.getTaskCategoryRoute(taskId)
   );
 
   function addSubTask() {
-    if (!$task) return;
+    if (!task) return;
     const newTask = DashboardTaskSchema.parse({
-      userId: $task.userId,
+      userId: task.userId,
       title: 'New Task',
-      parentTaskId: $task._id,
-      sharedWith: $task.sharedWith,
-      recurrenceInfo: $task.recurrenceInfo,
-      parentRecurringTaskInfo: $task.recurrenceInfo
+      parentTaskId: task._id,
+      sharedWith: task.sharedWith,
+      recurrenceInfo: task.recurrenceInfo,
+      parentRecurringTaskInfo: task.recurrenceInfo
         ? {
-            taskId: $task._id,
-            startDate: $task.startDate,
-            dueDate: $task.dueDate
+            taskId: task._id,
+            startDate: task.startDate,
+            dueDate: task.dueDate
           }
         : undefined
     });
-    taskMap.addDoc(newTask);
-    goto(TaskService.getTaskRoute(newTask._id));
+    taskMapService.addDoc(newTask);
+    goto(TaskUtilityService.getTaskRoute(newTask._id));
   }
 
   function deleteTask() {
-    if (!$task) return;
+    if (!task) return;
     // Purposefully set the task ID, and don't use the one from the component
     // otherwise the parent will be deleted.
-    const taskIdToDelete = $task._id;
+    const taskIdToDelete = task._id;
     goto(parentRoute).then(() => {
-      taskMap.deleteDoc(taskIdToDelete);
+      taskMapService.deleteDoc(taskIdToDelete);
     });
   }
 </script>
 
 <div class="content">
   <BreadCrumb {breadCrumbArray} />
-  {#if !task || !$task}
+  {#if !task}
     <PageTitle includeBreadcrumb={false} title="Task not found 🥺" />
   {:else}
     <Paper>
       <Content>
         <div class="content paperContent">
           <div class="titleContainer">
-            <TaskCompletedCheckbox {taskId} />
-            <InputBox variant="outlined" label="Title" bind:onBlurValue={$task.title} />
+            <TaskCompletedCheckbox {task} />
+            <InputBox
+              variant="outlined"
+              label="Title"
+              inputValue={task.title}
+              onBlur={(val) => {
+                taskMapService.updateDoc(taskId, (t) => {
+                  t.title = val as string;
+                  return t;
+                });
+              }}
+            />
           </div>
-          <InputBox label="Description" isTextArea={true} bind:onBlurValue={$task.description} />
-          <TaskDateInfo {taskId} />
-          <TaskRecurrenceInfo {taskId} childTaskIds={allChildrenIds} />
+          <InputBox
+            label="Description"
+            isTextArea={true}
+            inputValue={task.description}
+            onBlur={(val) => {
+              taskMapService.updateDoc(taskId, (t) => {
+                t.description = val as string;
+                return t;
+              });
+            }}
+          />
+          <TaskDateInfo {task} />
+          <TaskRecurrenceInfo {task} childTaskIds={allChildrenIds} />
           <div class="extraTaskInfo">
-            <TaskTagsSelector {taskId} />
+            <TaskTagsSelector {task} />
             <div>
-              <TaskSharingInfo {taskId} />
-              <TaskAssignmentInfo {taskId} />
+              <TaskSharingInfo {task} />
+              <TaskAssignmentInfo {task} />
             </div>
           </div>
 
@@ -119,7 +143,11 @@
               variant="outlined"
               class="danger-button"
               onclick={() => {
-                TaskService.handleDeleteTaskClick(allChildrenIds.length, deleteTask, $task?.title);
+                TaskUtilityService.handleDeleteTaskClick(
+                  allChildrenIds.length,
+                  deleteTask,
+                  task?.title
+                );
               }}
             >
               <Icon class="material-icons">delete</Icon>
@@ -127,7 +155,7 @@
             </Button>
           </div>
 
-          {#if $task.sharedWith.length > 0}
+          {#if task.sharedWith.length > 0}
             <div class="assignButton">
               <TaskAssignmentButton {task} />
             </div>
@@ -155,7 +183,7 @@
           </i>
         {/if}
       </div>
-      <TaskList category={$task.category} parentTaskId={taskId} {sortAndFilterResult} />
+      <TaskList category={task.category} parentTaskId={taskId} {sortAndFilterResult} />
     {:else}
       <div class="mdc-typography--body1 subTasksTitle dimmed-color"><i>No sub tasks</i></div>
     {/if}

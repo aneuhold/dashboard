@@ -4,38 +4,35 @@
   A tags selector for a specific task.
 -->
 <script lang="ts">
+  import { type DashboardTask } from '@aneuhold/core-ts-db-lib';
   import Chip, { Set, Text, TrailingAction } from '@smui/chips';
   import Autocomplete from '@smui-extra/autocomplete';
-  import type { UUID } from 'crypto';
-  import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
+  import taskMapService from '$services/Task/TaskMapService/TaskMapService';
   import TaskTagsService from '$services/Task/TaskTagsService';
   import { currentUserId } from '$stores/derived/currentUserId';
 
   let {
-    taskId
+    task
   }: {
-    taskId: UUID;
+    task: DashboardTask;
   } = $props();
 
-  const globalTags = TaskTagsService.getStore(TaskMapService.getStore());
+  const globalTags = TaskTagsService.getStore();
 
-  let task = $derived(TaskMapService.getTaskStore(taskId));
   let unselectedTags = $derived(
-    $globalTags.filter((tag) => !$task.tags[$currentUserId]?.includes(tag))
+    $globalTags.filter((tag) => !task.tags[$currentUserId]?.includes(tag))
   );
   // This needs to be redirected like this so that the Set component doesn't
   // make a small write on startup.
-  let currentUserTags = $derived($task.tags[$currentUserId] ?? []);
+  let currentUserTags = $derived(task.tags[$currentUserId] ?? []);
 
   let currentAutoCompleteValue = $state('');
   let selector: Autocomplete | undefined = $state();
 
   function addTagToTask(tag: string) {
-    const newTagsObject = $task.tags;
-    const currentUserTagsArray = newTagsObject[$currentUserId] ?? [];
+    const currentUserTagsArray = [...currentUserTags];
     currentUserTagsArray.push(tag);
-    newTagsObject[$currentUserId] = currentUserTagsArray;
-    $task.tags = newTagsObject;
+    taskMapService.updateTags(task._id, currentUserTagsArray);
   }
 
   function checkAndAddNewTag(newTag: string) {
@@ -57,15 +54,9 @@
    * @param event - The chip removal event containing chipId.
    */
   function handleRemoval(event: CustomEvent<{ chipId: string }>) {
-    let currentUserTags = $task.tags[$currentUserId];
-    if (!currentUserTags) return;
-    currentUserTags = currentUserTags.filter((tag) => tag !== event.detail.chipId);
-    if (currentUserTags.length === 0) {
-      delete $task.tags[$currentUserId];
-      $task.tags = $task.tags;
-    } else {
-      $task.tags[$currentUserId] = currentUserTags;
-    }
+    let newTags = [...currentUserTags];
+    newTags = newTags.filter((tag) => tag !== event.detail.chipId);
+    taskMapService.updateTags(task._id, newTags);
   }
 
   function handleNewSelection() {
@@ -86,7 +77,7 @@
       <i class="mdc-typography--body2 subTasksTitle dimmed-color">No tags</i>
     {:else}
       <span>Tags</span>
-      <Set bind:chips={currentUserTags} onSMUIChipRemoval={handleRemoval}>
+      <Set chips={currentUserTags} onSMUIChipRemoval={handleRemoval}>
         {#snippet chip(chip)}
           <Chip {chip}>
             <Text>{chip}</Text>

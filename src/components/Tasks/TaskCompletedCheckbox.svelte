@@ -1,29 +1,27 @@
 <script lang="ts">
-  import { RecurrenceEffect } from '@aneuhold/core-ts-db-lib';
+  import { type DashboardTask, RecurrenceEffect } from '@aneuhold/core-ts-db-lib';
   import Checkbox from '@smui/checkbox';
-  import type { UUID } from 'crypto';
   import { triggerConfetti } from '$components/singletons/Confetti/Confetti.svelte';
-  import { confirmationDialog } from '$components/singletons/dialogs/SingletonConfirmationDialog.svelte';
+  import { confirmationDialog } from '$components/singletons/dialogs/SingletonConfirmationDialog/SingletonConfirmationDialog.svelte';
   import { snackbar } from '$components/singletons/SingletonSnackbar.svelte';
-  import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
+  import taskMapService from '$services/Task/TaskMapService/TaskMapService';
   import ClickableDiv from '../presentational/ClickableDiv.svelte';
 
   let {
-    taskId
+    task
   }: {
-    taskId: UUID;
+    task: DashboardTask;
   } = $props();
 
   // X and Y of the most recent click event for use in confetti
   let clickX = 0;
   let clickY = 0;
 
-  let task = $derived(TaskMapService.getTaskStore(taskId));
   let preventDefault = $derived(
-    !$task.parentRecurringTaskInfo &&
-      !$task.completed &&
-      $task.recurrenceInfo &&
-      $task.recurrenceInfo.recurrenceEffect === RecurrenceEffect.rollOnCompletion
+    !task.parentRecurringTaskInfo &&
+      !task.completed &&
+      task.recurrenceInfo &&
+      task.recurrenceInfo.recurrenceEffect === RecurrenceEffect.rollOnCompletion
   );
 
   function handleCheckboxClick(event?: MouseEvent) {
@@ -48,16 +46,16 @@
   }
 
   function handleToggle() {
-    if (!$task.completed) {
+    if (!task.completed) {
       triggerConfetti(clickX, clickY);
     }
-    $task.completed = !$task.completed;
+    taskMapService.toggleTaskCompleted(task);
   }
 </script>
 
 <ClickableDiv clickAction={handleCheckboxClick}>
   <Checkbox
-    checked={$task.completed}
+    checked={task.completed}
     touch
     onclick={(event) => {
       if (preventDefault) {

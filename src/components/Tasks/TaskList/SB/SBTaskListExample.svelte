@@ -1,6 +1,7 @@
 <script lang="ts">
+  import { untrack } from 'svelte';
   import TaskListService from '$services/Task/TaskListService';
-  import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
+  import taskMapService from '$services/Task/TaskMapService/TaskMapService';
   import {
     MockTaskAssignment,
     MockTaskDescription,
@@ -36,8 +37,8 @@
   } = $props();
 
   $effect(() => {
-    MockData.taskMapServiceMock.reset();
-    MockData.taskMapServiceMock.addTasks({
+    // Track all props
+    const options = {
       numTasks,
       includeStartDates,
       includeStartDatesInFuture,
@@ -48,12 +49,23 @@
       tags,
       descriptions,
       subtasks
+    };
+
+    untrack(() => {
+      MockData.taskMapServiceMock.reset();
+      MockData.taskMapServiceMock.addTasks(options);
     });
+
+    return () => {
+      untrack(() => {
+        MockData.taskMapServiceMock.reset();
+      });
+    };
   });
 
-  const taskMap = TaskMapService.getStore();
-
-  let sortAndFilterResult = $derived(TaskListService.getTaskIds($taskMap, $userConfig, 'default'));
+  let sortAndFilterResult = $derived(
+    TaskListService.getTaskIds(taskMapService.mapState, $userConfig, 'default')
+  );
 </script>
 
 <TaskList category="default" {sortAndFilterResult} />

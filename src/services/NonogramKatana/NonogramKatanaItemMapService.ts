@@ -8,52 +8,26 @@ import type { UUID } from 'crypto';
 import { nonogramKatanaItemsDisplayInfo } from '$routes/entertainment/nonogramkatana/items/nonogramKatanaItemsDisplayInfo';
 import DashboardAPIService from '$util/api/DashboardAPIService';
 import LocalData from '$util/LocalData/LocalData';
-import { createLogger } from '$util/logging/logger';
-import type {
-  DocumentInsertOrUpdateInfo,
-  DocumentMapStore,
-  DocumentStore
-} from '../DocumentMapStoreService';
-import DocumentMapStoreService from '../DocumentMapStoreService';
-
-const log = createLogger('NonogramKatanaItemMapService.ts');
+import type { DocumentInsertOrUpdateInfo } from '../DocumentMapStoreService.svelte';
+import DocumentMapStoreService from '../DocumentMapStoreService.svelte';
 
 /**
  * The Nonogram Katana item map service.
  */
 export class NonogramKatanaItemMapService extends DocumentMapStoreService<NonogramKatanaItem> {
-  private static instance = new NonogramKatanaItemMapService();
-  private static nameToIdMap: { [itemName: string]: UUID | undefined } = {};
+  private nameToIdMap: { [itemName: string]: UUID | undefined } = {};
 
-  private constructor() {
-    super();
+  protected override getFromLocalData(): DocumentMap<NonogramKatanaItem> | null {
+    return LocalData.nonogramKatanaItemMap;
   }
 
-  static getStore(): DocumentMapStore<NonogramKatanaItem> {
-    return this.instance.store;
-  }
-
-  static getItemStore(itemId: UUID): DocumentStore<NonogramKatanaItem> {
-    const itemStore = this.instance.getDocStore(itemId);
-    const itemDoc = this.getMap()[itemId];
-    if (!itemDoc) {
-      log.error(`No item found for ${itemId}. Something went wrong, this shouldn't happen.`);
-      return itemStore;
-    }
-    this.nameToIdMap[itemDoc.itemName] = itemId;
-    return itemStore;
-  }
-
-  static getItemStoreByName(itemName: NonogramKatanaItemName): DocumentStore<NonogramKatanaItem> {
+  public getItemByName(itemName: NonogramKatanaItemName): NonogramKatanaItem | undefined {
     if (!this.nameToIdMap[itemName]) {
-      this.createItemNameIdMap(this.getMap());
+      this.createItemNameIdMap(this.mapState);
     }
-    // It is guaranteed that the item exists at this point.
-    return this.getItemStore(this.nameToIdMap[itemName] as UUID);
-  }
-
-  static getMap(): DocumentMap<NonogramKatanaItem> {
-    return this.instance.documentMap;
+    const id = this.nameToIdMap[itemName];
+    if (!id) return undefined;
+    return this.mapState[id];
   }
 
   /**
@@ -63,8 +37,8 @@ export class NonogramKatanaItemMapService extends DocumentMapStoreService<Nonogr
    *
    * @param userId The ID of the user to create or update items for.
    */
-  static createOrUpdateItems(userId: UUID): void {
-    const currentMap = this.getMap();
+  public createOrUpdateItems(userId: UUID): void {
+    const currentMap = this.mapState;
     const existingItems = Object.values(currentMap).filter((item) => item !== undefined);
     const existingItemNames = new Set(existingItems.map((item) => item.itemName));
     const itemsToAdd: NonogramKatanaItem[] = [];
@@ -83,29 +57,33 @@ export class NonogramKatanaItemMapService extends DocumentMapStoreService<Nonogr
       }
     });
     if (itemsToAdd.length > 0) {
-      this.getStore().upsertMany({
+      this.upsertManyDocs({
         filter: (doc) => newItemIds.has(doc._id),
         newDocs: itemsToAdd,
-        updater: (doc) => doc
+        mutator: (doc) => doc
       });
     }
   }
 
-  protected setupSubscribers(): void {
-    this.subscribers.push({
-      afterMapSet: (map) => {
-        NonogramKatanaItemMapService.createItemNameIdMap(map);
+  public override setMap(newMap: DocumentMap<NonogramKatanaItem>): void {
+    super.setMap(newMap);
+    this.createItemNameIdMap(newMap);
+  }
+
+  private createItemNameIdMap(map: DocumentMap<NonogramKatanaItem>): void {
+    this.nameToIdMap = {};
+    Object.values(map).forEach((item) => {
+      if (item) {
+        this.nameToIdMap[item.itemName] = item._id;
       }
     });
   }
 
-  protected persistToLocalData(): DocumentMap<NonogramKatanaItem> {
-    return LocalData.setAndGetNonogramKatanaItemMap(this.documentMap);
+  protected override persistToLocalData(): DocumentMap<NonogramKatanaItem> {
+    return LocalData.setAndGetNonogramKatanaItemMap(this.mapState);
   }
-  protected getFromLocalData(): DocumentMap<NonogramKatanaItem> | null {
-    return LocalData.nonogramKatanaItemMap;
-  }
-  protected persistToDb(updateInfo: DocumentInsertOrUpdateInfo<NonogramKatanaItem>): void {
+
+  protected override persistToDb(updateInfo: DocumentInsertOrUpdateInfo<NonogramKatanaItem>): void {
     DashboardAPIService.queryApi({
       update: updateInfo.update ? { nonogramKatanaItems: updateInfo.update } : undefined,
       insert: updateInfo.insert ? { nonogramKatanaItems: updateInfo.insert } : undefined,
@@ -114,14 +92,8 @@ export class NonogramKatanaItemMapService extends DocumentMapStoreService<Nonogr
       }
     });
   }
-
-  private static createItemNameIdMap(map: DocumentMap<NonogramKatanaItem>) {
-    this.nameToIdMap = {};
-    Object.values(map).forEach((item) => {
-      if (!item) {
-        return;
-      }
-      this.nameToIdMap[item.itemName] = item._id;
-    });
-  }
 }
+
+const nonogramKatanaItemMapService = new NonogramKatanaItemMapService();
+
+export default nonogramKatanaItemMapService;

@@ -11,15 +11,14 @@
   } from '@aneuhold/core-ts-db-lib';
   import Card, { Content as CardContent } from '@smui/card';
   import { Icon } from '@smui/icon-button';
-  import type { UUID } from 'crypto';
   import { goto } from '$app/navigation';
   import ClickableDiv from '$components/presentational/ClickableDiv.svelte';
   import MenuButton, { type MenuButtonItem } from '$components/presentational/MenuButton.svelte';
-  import { confirmationDialog } from '$components/singletons/dialogs/SingletonConfirmationDialog.svelte';
+  import { confirmationDialog } from '$components/singletons/dialogs/SingletonConfirmationDialog/SingletonConfirmationDialog.svelte';
   import { taskAssignmentDialog } from '$components/singletons/dialogs/SingletonTaskAssignmentDialog/SingletonTaskAssignmentDialog.svelte';
   import { taskSharingDialog } from '$components/singletons/dialogs/SingletonTaskSharingDialog/SingletonTaskSharingDialog.svelte';
-  import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
-  import TaskService from '$services/Task/TaskService';
+  import taskMapService from '$services/Task/TaskMapService/TaskMapService';
+  import TaskUtilityService from '$services/Task/TaskUtilityService';
   import { currentUserId } from '$stores/derived/currentUserId';
   import { userConfig } from '$stores/local/userConfig/userConfig';
   import TaskCompletedCheckbox from '../TaskCompletedCheckbox.svelte';
@@ -28,60 +27,47 @@
   import TaskRowSubtaskInfo from './TaskRowSubtaskInfo.svelte';
 
   let {
-    taskId,
+    task,
     /**
      * If set, it will display the tag as a header above the task.
      */
     tagHeaderName
   }: {
-    taskId: UUID;
+    task: DashboardTask;
     /**
      * If set, it will display the tag as a header above the task.
      */
     tagHeaderName?: string;
   } = $props();
 
-  const taskMap = TaskMapService.getStore();
-  let task = $derived(TaskMapService.getTaskStore(taskId));
-
   /**
    * Used so that the animation doesn't play every time the task shows up,
    * only when completed is clicked.
    */
   let completeAnimationShouldShow = $state(false);
-  let previousTaskCompletedState = $state($task.completed);
+  // svelte-ignore state_referenced_locally
+  let previousTaskCompletedState = $state(task.completed);
 
   function goToTask() {
-    goto(TaskService.getTaskRoute(taskId));
+    goto(TaskUtilityService.getTaskRoute(task._id));
   }
 
   function handleDuplicateClick() {
-    const currentTask = $task;
-    taskMap.upsertMany(
-      TaskMapService.getDuplicateTaskUpdateInfo(taskId, (task) => {
-        // Conditional to find the original task that is being duplicated
-        if (
-          !task.parentTaskId ||
-          (currentTask.parentTaskId && task.parentTaskId === currentTask.parentTaskId)
-        ) {
-          task.title = `${task.title} (Copy)`;
-        }
-        return task;
-      })
-    );
+    taskMapService.duplicateTask(task._id);
   }
 
   function handleSkipClick() {
+    const currentTask = task;
     confirmationDialog.open({
       title: 'Skip to next Task Recurrence',
       message:
         `Are you sure you want to skip ${
-          $task.title === '' ? 'this task' : `"${$task.title}"`
+          currentTask.title === '' ? 'this task' : `"${currentTask.title}"`
         }? This will move the task forward as if it has recurred. ` +
         `This is nice if you want to skip a task instead of completing it ` +
         `because it wasn't actually done. Save that dopamine! ❤️`,
       onConfirm: () => {
-        TaskMapService.executeRecurrenceForTask($task);
+        taskMapService.executeRecurrenceForTask(currentTask);
       }
     });
   }
@@ -106,12 +92,12 @@
         clickAction: handleSkipClick
       });
     }
-    if (task.userId === $currentUserId && finalSharedParentId === taskId) {
+    if (task.userId === $currentUserId && finalSharedParentId === task._id) {
       menuItems.push({
         title: 'Share',
         iconName: 'share',
         clickAction: () => {
-          taskSharingDialog.open(taskId);
+          taskSharingDialog.open(task._id);
         }
       });
     }
@@ -120,7 +106,7 @@
         title: 'Assign',
         iconName: 'assignment_ind',
         clickAction: () => {
-          taskAssignmentDialog.open(taskId);
+          taskAssignmentDialog.open(task._id);
         }
       });
     }
@@ -133,10 +119,10 @@
       title: 'Delete',
       iconName: 'delete',
       clickAction: () => {
-        TaskService.handleDeleteTaskClick(
+        TaskUtilityService.handleDeleteTaskClick(
           allChildrenIds.length,
           () => {
-            taskMap.deleteDoc(taskId);
+            taskMapService.deleteDoc(task._id);
           },
           task.title
         );
@@ -147,43 +133,45 @@
 
   let allChildrenIds = $derived(
     DashboardTaskService.getChildrenIds(
-      Object.values($taskMap).filter((task) => task !== undefined),
-      [$task._id]
+      Object.values(taskMapService.mapState).filter(
+        (task): task is DashboardTask => task !== undefined
+      ),
+      [task._id]
     )
   );
-  let hasExtraTaskInfo = $derived(allChildrenIds.length > 0 || $task.assignedTo);
-  let finalSharedParentId = $derived(TaskService.findParentIdWithSameSharedWith($task));
-  let usersTaskTags = $derived($task.tags[$currentUserId]);
-  let menuItems = $derived(getMenuItems($task));
+  let hasExtraTaskInfo = $derived(allChildrenIds.length > 0 || task.assignedTo);
+  let finalSharedParentId = $derived(TaskUtilityService.findParentIdWithSameSharedWith(task));
+  let usersTaskTags = $derived(task.tags[$currentUserId]);
+  let menuItems = $derived(getMenuItems(task));
   $effect(() => {
-    if ($task.completed !== previousTaskCompletedState) {
+    if (task.completed !== previousTaskCompletedState) {
       completeAnimationShouldShow = true;
-      previousTaskCompletedState = $task.completed;
+      previousTaskCompletedState = task.completed;
     }
   });
   let currentStrikeClass = $derived(
-    completeAnimationShouldShow && $task.completed
+    completeAnimationShouldShow && task.completed
       ? ' strikeAnimate'
-      : $task.completed
+      : task.completed
         ? ' strike'
         : ''
   );
   let currentDimClass = $derived(
-    completeAnimationShouldShow && $task.completed ? ' dimAnimate' : $task.completed ? ' dim' : ''
+    completeAnimationShouldShow && task.completed ? ' dimAnimate' : task.completed ? ' dim' : ''
   );
   let trimmedTaskDescription = $derived(
-    $task.description
-      ? $task.description.length > 100
-        ? `${$task.description.substring(0, 100)}...`
-        : $task.description
+    task.description
+      ? task.description.length > 100
+        ? `${task.description.substring(0, 100)}...`
+        : task.description
       : ''
   );
-  let assignedToMe = $derived($task.assignedTo ? $task.assignedTo === $currentUserId : false);
+  let assignedToMe = $derived(task.assignedTo ? task.assignedTo === $currentUserId : false);
   let assignedToName = $derived(
-    $task.assignedTo
+    task.assignedTo
       ? assignedToMe
         ? 'Me'
-        : $userConfig.collaborators[$task.assignedTo].userName
+        : $userConfig.collaborators[task.assignedTo].userName
       : ''
   );
 </script>
@@ -195,19 +183,19 @@
   <Card>
     <CardContent class="taskRowCard">
       <div class="card-content">
-        <TaskCompletedCheckbox {taskId} />
+        <TaskCompletedCheckbox {task} />
         <ClickableDiv clickAction={goToTask}>
           <div class={`taskInfoContent` + currentDimClass}>
             <h4 class={`mdc-typography--body1 no-before title${currentStrikeClass}`}>
-              {#if $task.title !== ''}
-                <span>{$task.title}</span>
+              {#if task.title !== ''}
+                <span>{task.title}</span>
               {:else}
                 <i class="dimmed-color">Untitled</i>
               {/if}
-              {#if $task.sharedWith.length > 0}
+              {#if task.sharedWith.length > 0}
                 <Icon class="material-icons dimmed-color small-icon">group</Icon>
               {/if}
-              {#if $task.recurrenceInfo}
+              {#if task.recurrenceInfo}
                 <Icon class="material-icons dimmed-color small-icon">autorenew</Icon>
               {/if}
               {#if usersTaskTags && usersTaskTags.length > 0}
@@ -221,8 +209,8 @@
                 </div>
               {/if}
             </h4>
-            <TaskRowDateInfo {taskId} />
-            {#if $task.description && $task.description !== ''}
+            <TaskRowDateInfo {task} />
+            {#if task.description && task.description !== ''}
               <span class="description mdc-deprecated-list-item__secondary-text no-before">
                 {trimmedTaskDescription}
               </span>
@@ -231,7 +219,7 @@
               <div
                 class="mdc-typography--caption mdc-theme--text-hint-on-background no-before extraTaskInfo"
               >
-                {#if $task.assignedTo}
+                {#if task.assignedTo}
                   <span>
                     Assigned To:
                     <span class={assignedToMe ? `assignedToMe` : ''}>{assignedToName}</span>

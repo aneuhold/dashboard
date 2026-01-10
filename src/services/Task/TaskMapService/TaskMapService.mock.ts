@@ -1,14 +1,10 @@
-import {
-  type DashboardTask,
-  type DashboardTaskFilterAndSortResult,
-  DashboardTaskSchema
-} from '@aneuhold/core-ts-db-lib';
+import { type DashboardTask, DashboardTaskSchema } from '@aneuhold/core-ts-db-lib';
 import type { UUID } from 'crypto';
 import { userConfig } from '$stores/local/userConfig/userConfig';
 import TestUsers from '$testUtils/TestUsers';
 import TaskListService from '../TaskListService';
 import TaskTagsService from '../TaskTagsService';
-import { TaskMapService } from './TaskMapService';
+import taskMapService from './TaskMapService';
 
 type AddTaskInfo = {
   title: string;
@@ -78,7 +74,7 @@ export default class TaskMapServiceMock {
   constructor(private userId: UUID) {}
 
   reset(): void {
-    TaskMapService.getStore().set({});
+    taskMapService.setMap({});
   }
 
   /**
@@ -86,30 +82,18 @@ export default class TaskMapServiceMock {
    * at the top level.
    */
   get sortAndFilterResult() {
-    return TaskListService.getTaskIds(TaskMapService.getMap(), userConfig.get(), 'default');
-  }
-
-  subscribeToSortAndFilterResult(
-    callback: (sortAndFilterResult: DashboardTaskFilterAndSortResult) => void
-  ) {
-    return TaskMapService.getStore().subscribe(() => {
-      callback(this.sortAndFilterResult);
-    });
+    return TaskListService.getTaskIds(taskMapService.mapState, userConfig.get(), 'default');
   }
 
   addTask(options: AddTaskInfo): DashboardTask {
     const task = this.createTask(options);
-    TaskMapService.getStore().addDoc(task);
+    taskMapService.addDoc(task);
     return task;
   }
 
   addTasks(options: AddTasksInfo): void {
     const tasks = this.createTasks(options);
-    TaskMapService.getStore().upsertMany({
-      filter: () => true,
-      updater: (doc) => doc,
-      newDocs: tasks
-    });
+    taskMapService.addManyDocs(tasks);
   }
 
   private createTasks(options: AddTasksInfo): DashboardTask[] {
@@ -327,7 +311,7 @@ export default class TaskMapServiceMock {
       options.subtasks.forEach((subtaskOptions) => {
         const subtask = this.createTask(subtaskOptions);
         subtask.parentTaskId = task._id;
-        TaskMapService.getStore().addDoc(subtask);
+        taskMapService.addDoc(subtask);
       });
     }
 

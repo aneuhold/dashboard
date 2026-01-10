@@ -9,8 +9,8 @@
     initialValue?: string | number;
   } & Omit<ComponentProps<typeof InputBox>, 'inputValue' | 'onBlurValue'> = $props();
 
-  let onBlurValue = $state<string | number>(initialValue);
-  let inputValue = $state<string | number>(initialValue);
+  let onBlurValue = $derived<string | number>(initialValue);
+  let inputValue = $derived<string | number>(initialValue);
 </script>
 
 <div>

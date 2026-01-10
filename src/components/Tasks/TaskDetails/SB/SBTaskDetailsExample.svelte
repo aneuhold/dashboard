@@ -1,6 +1,7 @@
 <script lang="ts">
   import { type DashboardTask } from '@aneuhold/core-ts-db-lib';
   import type { UUID } from 'crypto';
+  import { untrack } from 'svelte';
   import {
     MockTaskAssignment,
     MockTaskSharedWith
@@ -22,14 +23,29 @@
   let taskId = $derived(mainTask ? mainTask._id : ('non-existent-id' as UUID));
 
   $effect(() => {
-    MockData.taskMapServiceMock.reset();
-    if (mainTaskExists) {
-      mainTask = MockData.taskMapServiceMock.addTask({
-        title: 'TestTask',
-        sharedWith: sharedWith,
-        assignedTo: assignedTo
+    // Track props to re-run the effect when they change
+    const exists = mainTaskExists;
+    const sw = sharedWith;
+    const at = assignedTo;
+
+    untrack(() => {
+      MockData.taskMapServiceMock.reset();
+      if (exists) {
+        mainTask = MockData.taskMapServiceMock.addTask({
+          title: 'TestTask',
+          sharedWith: sw,
+          assignedTo: at
+        });
+      } else {
+        mainTask = undefined;
+      }
+    });
+
+    return () => {
+      untrack(() => {
+        MockData.taskMapServiceMock.reset();
       });
-    }
+    };
   });
 </script>
 

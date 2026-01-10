@@ -1,6 +1,6 @@
 <script lang="ts">
   import { NonogramKatanaItemName } from '@aneuhold/core-ts-db-lib';
-  import { NonogramKatanaItemMapService } from '$services/NonogramKatana/NonogramKatanaItemMapService';
+  import nonogramKatanaItemMapService from '$services/NonogramKatana/NonogramKatanaItemMapService';
   import { nonogramKatanaItemsDisplayInfo } from '../items/nonogramKatanaItemsDisplayInfo';
 
   let {
@@ -13,11 +13,11 @@
     currentAmount: number;
   } = $props();
 
-  let item = $derived(NonogramKatanaItemMapService.getItemStoreByName(itemName));
+  let item = $derived(nonogramKatanaItemMapService.getItemByName(itemName));
   let itemDisplayInfo = $derived(nonogramKatanaItemsDisplayInfo[itemName]);
   let amountThatCanBeSpent = $derived(
     Math.min(
-      Math.max(0, $item.currentAmount - ($item.minDesired ?? 0)),
+      Math.max(0, (item?.currentAmount ?? 0) - (item?.minDesired ?? 0)),
       requiredAmount - currentAmount
     )
   );

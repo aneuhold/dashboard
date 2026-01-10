@@ -14,7 +14,7 @@
   import { flip } from 'svelte/animate';
   import { slide } from 'svelte/transition';
   import TaskRow from '$components/Tasks/TaskList/TaskRow.svelte';
-  import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
+  import taskMapService from '$services/Task/TaskMapService/TaskMapService';
   import { currentUserId } from '$stores/derived/currentUserId';
   import { userConfig } from '$stores/local/userConfig/userConfig';
   import TaskListOptions from './TaskListOptions.svelte';
@@ -29,10 +29,9 @@
     parentTaskId?: UUID;
   } = $props();
 
-  const taskMap = TaskMapService.getStore();
-  let parentTask = $derived(parentTaskId ? TaskMapService.getTaskStore(parentTaskId) : undefined);
+  let parentTask = $derived(parentTaskId ? taskMapService.mapState[parentTaskId] : undefined);
   let parentTaskSortSettings = $derived(
-    $parentTask ? $parentTask.sortSettings[$currentUserId] : undefined
+    parentTask ? parentTask.sortSettings[$currentUserId] : undefined
   );
   let userTaskSortSettings = $derived($userConfig.config.taskListSortSettings[category]);
   let currentSortSettings = $derived(
@@ -47,7 +46,7 @@
   let tagHeaderMap = $derived(
     isSortedByTagsFirst
       ? DashboardTaskService.getTagHeaderMap(
-          $taskMap,
+          taskMapService.mapState,
           sortAndFilterResult.filteredAndSortedIds,
           $currentUserId,
           $userConfig.config.tagSettings,
@@ -69,10 +68,12 @@
   />
   {#each sortAndFilterResult.filteredAndSortedIds as taskId (taskId)}
     <div transition:slide animate:flip={{ duration: 200 }}>
-      <TaskRow
-        tagHeaderName={tagHeaderMap && tagHeaderMap[taskId] ? tagHeaderMap[taskId] : undefined}
-        {taskId}
-      />
+      {#if taskMapService.mapState[taskId]}
+        <TaskRow
+          tagHeaderName={tagHeaderMap && tagHeaderMap[taskId] ? tagHeaderMap[taskId] : undefined}
+          task={taskMapService.mapState[taskId]}
+        />
+      {/if}
     </div>
   {/each}
   {#if sortAndFilterResult.removedIds.length > 0}

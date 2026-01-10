@@ -64,10 +64,12 @@
   } = $props();
 
   // Track mode state separately - initialize based on initialDate
+  // svelte-ignore state_referenced_locally
   let modeState = $state<'date' | 'datetime'>(
     initialDate ? (DateService.dateHasTime(initialDate) ? 'datetime' : 'date') : 'date'
   );
 
+  // svelte-ignore state_referenced_locally
   let currentlySelectedDate = $state(initialDate);
 
   /**

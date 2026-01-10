@@ -5,8 +5,8 @@ import {
   DocumentService
 } from '@aneuhold/core-ts-db-lib';
 import type { UUID } from 'crypto';
-import type { Updater } from 'svelte/store';
-import type { UpsertManyInfo } from '../DocumentMapStoreService';
+import { type Updater } from 'svelte/store';
+import type { UpsertManyInfo } from '../DocumentMapStoreService.svelte';
 
 /**
  * A service for pure task operations that don't require store access.
@@ -17,16 +17,16 @@ import type { UpsertManyInfo } from '../DocumentMapStoreService';
 export default class TaskOperationsService {
   /**
    * Gets the update info for a task and all of its children based on the
-   * provided updater.
+   * provided mutator.
    *
    * @param taskMap The current task map
    * @param taskId The ID of the parent task
-   * @param updater Function to update each task
+   * @param mutator Function to update each task
    */
   static getUpdateTaskAndAllChildrenInfo(
     taskMap: DocumentMap<DashboardTask>,
     taskId: UUID,
-    updater: Updater<DashboardTask>
+    mutator: Updater<DashboardTask>
   ): UpsertManyInfo<DashboardTask> {
     const parentTask = taskMap[taskId];
     if (!parentTask) {
@@ -39,7 +39,7 @@ export default class TaskOperationsService {
     const allRelatedTaskIdStrings = allRelatedTaskIds;
     return {
       filter: (currentDoc) => allRelatedTaskIdStrings.includes(currentDoc._id),
-      updater,
+      mutator,
       newDocs: []
     };
   }
@@ -49,14 +49,14 @@ export default class TaskOperationsService {
    *
    * @param taskMap The current task map
    * @param taskId The ID of the task to duplicate
-   * @param newTaskUpdater Function to update the new duplicated tasks
-   * @param originalTaskUpdater Optional function to update the original tasks
+   * @param newTaskMutator Function to update the new duplicated tasks
+   * @param originalTaskMutator Optional function to update the original tasks
    */
   static getDuplicateTaskUpdateInfo(
     taskMap: DocumentMap<DashboardTask>,
     taskId: UUID,
-    newTaskUpdater: Updater<DashboardTask>,
-    originalTaskUpdater?: Updater<DashboardTask>
+    newTaskMutator: Updater<DashboardTask>,
+    originalTaskMutator?: Updater<DashboardTask>
   ): UpsertManyInfo<DashboardTask> {
     const parentTask = taskMap[taskId];
     if (!parentTask) {
@@ -67,16 +67,16 @@ export default class TaskOperationsService {
     ]);
     allRelatedTaskIds.push(parentTask._id);
     const tasksToInsert: DashboardTask[] = [];
-    const oldTaskIdToNewTaskId: { [oldId: string]: DashboardTask['_id'] } = {};
+    const oldTaskIdToNewTaskId: { [oldId: UUID]: UUID } = {};
     allRelatedTaskIds.forEach((id) => {
       const doc = taskMap[id];
       if (!doc) {
         throw new Error(`Task with ID ${id} not found while trying to duplicate.`);
       }
-      let newTask = DocumentService.deepCopy(doc);
+      let newTask = DocumentService.deepCopy($state.snapshot(doc));
       newTask._id = DocumentService.generateID();
       oldTaskIdToNewTaskId[id] = newTask._id;
-      newTask = newTaskUpdater(newTask);
+      newTask = newTaskMutator(newTask);
       tasksToInsert.push(newTask);
     });
     // Map back through and update parent task IDs. Don't update the
@@ -88,18 +88,18 @@ export default class TaskOperationsService {
     });
     // The below could be made into something more performant
     const allRelatedTaskIdStrings = allRelatedTaskIds;
-    if (originalTaskUpdater) {
+    if (originalTaskMutator) {
       const filter = (task: DashboardTask) => allRelatedTaskIdStrings.includes(task._id);
-      const updater = originalTaskUpdater;
+      const mutator = originalTaskMutator;
       return {
         filter: filter,
-        updater: updater,
+        mutator: mutator,
         newDocs: tasksToInsert
       };
     }
     return {
       filter: () => false,
-      updater: (task) => task,
+      mutator: (task) => task,
       newDocs: tasksToInsert
     };
   }

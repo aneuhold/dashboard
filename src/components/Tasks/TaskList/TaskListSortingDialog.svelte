@@ -29,6 +29,7 @@
   /**
    * Initialize with the initial settings, but it will be reset with each open.
    */
+  // svelte-ignore state_referenced_locally
   let currentSettings: DashboardTaskListSortSettings = $state(initialSettings);
   let currentSortList = $derived(currentSettings.sortList);
   let disabledSortSettings = $derived(getDisabledSortSettings(currentSettings));

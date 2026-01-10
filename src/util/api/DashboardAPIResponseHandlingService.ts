@@ -1,9 +1,9 @@
 import { type ProjectDashboardOutput } from '@aneuhold/core-ts-api-lib';
 import type { BaseDocument, UserCTO } from '@aneuhold/core-ts-db-lib';
 import { snackbar } from '$components/singletons/SingletonSnackbar.svelte';
-import { NonogramKatanaItemMapService } from '$services/NonogramKatana/NonogramKatanaItemMapService';
-import { NonogramKatanaUpgradeMapService } from '$services/NonogramKatana/NonogramKatanaUpgradeMapService';
-import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
+import nonogramKatanaItemMapService from '$services/NonogramKatana/NonogramKatanaItemMapService';
+import nonogramKatanaUpgradeMapService from '$services/NonogramKatana/NonogramKatanaUpgradeMapService';
+import taskMapService from '$services/Task/TaskMapService/TaskMapService';
 import { translations } from '$stores/local/translations';
 import { userConfig } from '$stores/local/userConfig/userConfig';
 import { createLogger } from '$util/logging/logger';
@@ -28,15 +28,15 @@ export default class DashboardAPIResponseHandlingService {
       });
     }
     if (output.tasks) {
-      TaskMapService.getStore().set(this.convertDocumentArrayToMap(output.tasks));
+      taskMapService.setMap(this.convertDocumentArrayToMap(output.tasks));
     }
     if (output.nonogramKatanaItems) {
-      NonogramKatanaItemMapService.getStore().set(
+      nonogramKatanaItemMapService.setMap(
         this.convertDocumentArrayToMap(output.nonogramKatanaItems)
       );
     }
     if (output.nonogramKatanaUpgrades) {
-      NonogramKatanaUpgradeMapService.getStore().set(
+      nonogramKatanaUpgradeMapService.setMap(
         this.convertDocumentArrayToMap(output.nonogramKatanaUpgrades)
       );
     }

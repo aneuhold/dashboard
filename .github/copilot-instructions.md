@@ -7,6 +7,7 @@ This repository is a SvelteKit app (Svelte 5) managed with pnpm.
   - Build: `pnpm build` (runs `pnpm theme` then `vite build`)
   - Preview: `pnpm preview`
   - Storybook: `pnpm storybook` (also runs `pnpm theme`)
+  - Check: `pnpm check` (TypeScript)
   - Lint: `pnpm lint` (ESLint)
 
 - Important project files to consult:
@@ -20,8 +21,8 @@ This repository is a SvelteKit app (Svelte 5) managed with pnpm.
 
 - Architecture & conventions (concrete):
   - Singleton UI components: files named `Singleton*` are single-instance widgets (snackbar, confetti, dialogs). They export imperative functions to update/show state rather than being instantiated multiple times.
-  - Stores pattern: there are parent stores containing variable-length collections and child stores for individual items. When modifying a child, the code often updates child store, then parent store persists to LocalData/back-end. Check `src/stores/*` and the `README.md` sequence diagram for the expected flow.
   - Routes: prefer copying an existing route folder and adapting. `pageInfo.ts` files are kept outside module context because they must be importable before Svelte module load.
+  - State management: Use modern Svelte 5 typically such as the `$state()` syntax. For more complex state, use stores and services in `src/stores` and `src/services`.
 
 - Integrations & environment notes:
   - Sentry: configured both in `vite.config.ts` (upload source maps) and `hooks.client.ts`. `SENTRY_AUTH_TOKEN` must be set to enable uploads. Vite logs an error if the token is missing.
@@ -30,7 +31,7 @@ This repository is a SvelteKit app (Svelte 5) managed with pnpm.
 
 - Small contract for an agent working here:
   1. Read `package.json` & `README.md` to learn workflow scripts and store patterns.
-  2. For code changes, run `pnpm test` and `pnpm lint` where applicable.
+  2. For code changes, run `pnpm test`, `pnpm lint`, and `pnpm check` before considering a task complete.
 
 - Examples to reference when making edits:
   - Aliases useful for imports: `$components`, `$stores`, `$services` (defined in `svelte.config.js`).
@@ -72,3 +73,13 @@ This repository is a SvelteKit app (Svelte 5) managed with pnpm.
 
 - Use PascalCase for enum names and values
 - Use TypeScript `enum` (not `const enum` or `type`)
+
+## Tests
+
+- Follow the same TypeScript conventions as in the main codebase, including never using `any`
+- Use Vitest for unit tests
+- Writes tests in a separate file next to the original but with `.test.ts` appended to the file name
+- Prefer using real implementations over mocks unless necessary. For example, always use the associated Schema.parse to create new example documents in tests.
+- DRY: Don't Repeat Yourself (avoid duplicate code in tests) Create helper functions for common test scenarios.
+- Always make tests concise and focused on business logic, not implementation details.
+- Use utilities in `/test-utils` whenever possible to avoid code duplication.

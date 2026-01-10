@@ -6,7 +6,7 @@ Info about subtasks within a task row.
 <script lang="ts">
   import { type DashboardTask } from '@aneuhold/core-ts-db-lib';
   import type { UUID } from 'crypto';
-  import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
+  import taskMapService from '$services/Task/TaskMapService/TaskMapService';
   import { currentUserId } from '$stores/derived/currentUserId';
 
   let {
@@ -16,7 +16,7 @@ Info about subtasks within a task row.
   } = $props();
 
   let allChildTasks = $derived(
-    allChildrenIds.map((id) => TaskMapService.getMap()[id]) as DashboardTask[]
+    allChildrenIds.map((id) => taskMapService.mapState[id]) as DashboardTask[]
   );
   let allCompletedTasks = $derived(allChildTasks.filter((task) => task.completed));
   let allIncompleteTasks = $derived(allChildTasks.filter((task) => !task.completed));

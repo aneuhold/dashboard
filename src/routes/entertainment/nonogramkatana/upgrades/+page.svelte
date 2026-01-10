@@ -7,7 +7,7 @@
   import PageTitle from '$components/PageTitle.svelte';
   import InputBox from '$components/presentational/InputBox/InputBox.svelte';
   import SingletonNonogramKatanaUpgradeDialog from '$components/singletons/dialogs/SingletonNonogramKatanaUpgradeDialog.svelte';
-  import { NonogramKatanaUpgradeMapService } from '$services/NonogramKatana/NonogramKatanaUpgradeMapService';
+  import nonogramKatanaUpgradeMapService from '$services/NonogramKatana/NonogramKatanaUpgradeMapService';
   import { userConfig } from '$stores/local/userConfig/userConfig';
   import NonogramKatanaUpgradeRow from './NonogramKatanaUpgradeRow.svelte';
   import { nonogramKatanaUpgradesPageInfo } from './pageInfo';
@@ -24,18 +24,17 @@
     return b.priority - a.priority;
   };
 
-  const upgradeMap = NonogramKatanaUpgradeMapService.getStore();
   let showAll = $state(false);
   let searchInput = $state('');
   let allUpgrades = $derived(
-    Object.values($upgradeMap)
+    Object.values(nonogramKatanaUpgradeMapService.mapState)
       .filter((upgrade) => upgrade !== undefined)
       .sort(sortFunction)
   );
   let workableUpgrades = $derived(
-    Object.values(NonogramKatanaUpgradeMapService.getWorkableUpgrades($upgradeMap)).sort(
-      sortFunction
-    )
+    Object.values(
+      nonogramKatanaUpgradeMapService.getWorkableUpgrades(nonogramKatanaUpgradeMapService.mapState)
+    ).sort(sortFunction)
   );
   let currentlyShownUpgrades = $derived(
     (showAll ? allUpgrades : workableUpgrades).filter((upgrade) =>
@@ -43,7 +42,8 @@
     )
   );
   let upgradesMissing = $derived(
-    Object.values($upgradeMap).length < Object.values(NonogramKatanaUpgradeName).length
+    Object.values(nonogramKatanaUpgradeMapService.mapState).length <
+      Object.values(NonogramKatanaUpgradeName).length
   );
 </script>
 
@@ -63,7 +63,7 @@
         {#if upgradesMissing}
           <Button
             onclick={() => {
-              NonogramKatanaUpgradeMapService.createOrUpdateUpgrades($userConfig.config.userId);
+              nonogramKatanaUpgradeMapService.createOrUpdateUpgrades($userConfig.config.userId);
             }}
           >
             Add / Update Upgrades

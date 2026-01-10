@@ -6,6 +6,7 @@
 -->
 <script lang="ts">
   import {
+    type DashboardTask,
     RecurrenceBasis,
     RecurrenceEffect,
     RecurrenceFrequencyType,
@@ -13,36 +14,34 @@
   } from '@aneuhold/core-ts-db-lib';
   import { DateService } from '@aneuhold/core-ts-lib';
   import Select, { Option } from '@smui/select';
-  import type { UUID } from 'crypto';
   import { type Updater, writable } from 'svelte/store';
   import InputBox from '$components/presentational/InputBox/InputBox.svelte';
-  import { confirmationDialog } from '$components/singletons/dialogs/SingletonConfirmationDialog.svelte';
+  import { confirmationDialog } from '$components/singletons/dialogs/SingletonConfirmationDialog/SingletonConfirmationDialog.svelte';
   import WeekdaySegmentedButton from '$components/WeekdaySegmentedButton.svelte';
-  import { TaskMapService } from '$services/Task/TaskMapService/TaskMapService';
-  import TaskRecurrenceService from '$services/Task/TaskRecurrenceService';
+  import taskMapService from '$services/Task/TaskMapService/TaskMapService';
+  import TaskRecurrenceService from '$services/Task/TaskRecurrenceService.svelte';
   import TaskRecurrenceInfoIcon from './TaskRecurrenceInfoIcon.svelte';
   import TaskRecurrenceUpdateExample from './TaskRecurrenceUpdateExample.svelte';
   import TaskRecurrenceWeekdayOfMonth from './TaskRecurrenceWeekdayOfMonth.svelte';
 
   let {
-    taskId,
+    task,
     defaultRecurrenceInfo
   }: {
-    taskId: UUID;
+    task: DashboardTask;
     /**
      * The default recurrence info to use if the task has none.
      */
     defaultRecurrenceInfo: RecurrenceInfo;
   } = $props();
 
-  let task = $derived(TaskMapService.getTaskStore(taskId));
-  let parentRecurringTaskInfo = $derived($task.parentRecurringTaskInfo);
-  let disabled = $derived(!$task.recurrenceInfo || !!parentRecurringTaskInfo);
-  let startDate = $derived($task.startDate);
-  let dueDate = $derived($task.dueDate);
+  let parentRecurringTaskInfo = $derived(task.parentRecurringTaskInfo);
+  let disabled = $derived(!task.recurrenceInfo || !!parentRecurringTaskInfo);
+  let startDate = $derived(task.startDate);
+  let dueDate = $derived(task.dueDate);
   let exampleOfRecurrence = $derived(
     TaskRecurrenceService.createExampleOfRecurrence(
-      $task.recurrenceInfo ?? defaultRecurrenceInfo,
+      task.recurrenceInfo ?? defaultRecurrenceInfo,
       startDate,
       dueDate,
       parentRecurringTaskInfo
@@ -57,7 +56,7 @@
    * viewed changes, or the recurrence info is changed externally or the task is disabled / enabled
    * (which means the recurrence info was added / deleted all together).
    */
-  let rInfo = $derived(createRInfoStore($task.recurrenceInfo ?? defaultRecurrenceInfo));
+  let rInfo = $derived(createRInfoStore(task.recurrenceInfo ?? defaultRecurrenceInfo));
 
   /**
    * This is purposefully re-ran on every render.
@@ -89,8 +88,8 @@
 
       // Only set it when the task has recurrence info. Initially adding recurrence info is
       // handled elsewhere.
-      if ($task.recurrenceInfo) {
-        $task.recurrenceInfo = newRInfo;
+      if (task.recurrenceInfo) {
+        taskMapService.updateTaskRecurrenceOrDates(task._id, { newRecurrenceInfo: newRInfo });
       }
     }
     return {
@@ -109,7 +108,7 @@
   }
 
   function updateWouldTriggerRecurrence(newRInfo: RecurrenceInfo): boolean {
-    const simulatedDate = TaskRecurrenceService.getSimulatedRecurrenceDate($task, (task) => {
+    const simulatedDate = TaskRecurrenceService.getSimulatedRecurrenceDate(task, (task) => {
       task.recurrenceInfo = newRInfo;
       return task;
     });
@@ -234,7 +233,7 @@
     </Select>
     <div>
       <span>Updates on next task recurrence:</span>
-      {#if $rInfo.recurrenceEffect === RecurrenceEffect.stack && !$task.completed}
+      {#if $rInfo.recurrenceEffect === RecurrenceEffect.stack && !task.completed}
         <ul>
           <li>This task</li>
           <ul>
@@ -256,7 +255,7 @@
             newStartDate={exampleOfRecurrence.startDate}
             originalDueDate={dueDate}
             newDueDate={exampleOfRecurrence.dueDate}
-            completedRemoved={$task.completed}
+            completedRemoved={task.completed}
           />
         </ul>
       {/if}

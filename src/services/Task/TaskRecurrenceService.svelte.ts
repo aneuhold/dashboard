@@ -14,8 +14,8 @@ import { appIsVisible } from '$stores/session/appIsVisible';
 import { timeMinute } from '$stores/session/timeMinute';
 import DashboardAPIService from '$util/api/DashboardAPIService';
 import { createLogger } from '$util/logging/logger';
-import type { DocumentMapStoreSubscriber, UpsertManyInfo } from '../DocumentMapStoreService';
-import TaskOperationsService from './TaskOperationsService';
+import type { UpsertManyInfo } from '../DocumentMapStoreService.svelte';
+import TaskOperationsService from './TaskOperationsService.svelte';
 
 const log = createLogger('TaskRecurrenceService.ts');
 
@@ -127,51 +127,6 @@ export default class TaskRecurrenceService {
     upsertMany(this.getRecurrenceUpdateInfo(taskMap, task));
   }
 
-  static getSubscribersForTaskMap(): DocumentMapStoreSubscriber<DashboardTask> {
-    return {
-      afterDocAddition(map, newDoc) {
-        TaskRecurrenceService.updateOrRemoveTaskTimeSubscription(newDoc);
-      },
-      validateDocUpdate(map, oldDoc, newDoc) {
-        const watchRecurrenceInfo = newDoc.recurrenceInfo && !newDoc.parentRecurringTaskInfo;
-        const datesAreDifferent =
-          newDoc.startDate?.getTime() !== oldDoc?.startDate?.getTime() ||
-          newDoc.dueDate?.getTime() !== oldDoc?.dueDate?.getTime();
-        if (watchRecurrenceInfo && TaskRecurrenceService.taskShouldRecur(newDoc)) {
-          return TaskRecurrenceService.getRecurrenceUpdateInfo(map, newDoc);
-        } else if (watchRecurrenceInfo || oldDoc?.recurrenceInfo || datesAreDifferent) {
-          const recurrenceInfoChanged =
-            JSON.stringify(oldDoc?.recurrenceInfo) !== JSON.stringify(newDoc.recurrenceInfo);
-          if (recurrenceInfoChanged) {
-            TaskRecurrenceService.updateOrRemoveTaskTimeSubscription(newDoc);
-            return TaskOperationsService.getUpdateTaskAndAllChildrenInfo(
-              map,
-              newDoc._id,
-              (task) => {
-                if (task._id === newDoc._id) {
-                  return task;
-                }
-                if (newDoc.recurrenceInfo) {
-                  task.parentRecurringTaskInfo = {
-                    taskId: newDoc._id,
-                    startDate: newDoc.startDate,
-                    dueDate: newDoc.dueDate
-                  };
-                  task.recurrenceInfo = newDoc.recurrenceInfo;
-                } else {
-                  task.parentRecurringTaskInfo = null;
-                  task.recurrenceInfo = null;
-                }
-                return task;
-              }
-            );
-          }
-        }
-        return null;
-      }
-    };
-  }
-
   /**
    * Gets the recurrence update info for the provided task. This includes
    * information about which tasks to update and how to update them.
@@ -179,7 +134,7 @@ export default class TaskRecurrenceService {
    * @param taskMap The current task map
    * @param task The task to get recurrence update info for
    */
-  private static getRecurrenceUpdateInfo(
+  static getRecurrenceUpdateInfo(
     taskMap: DashboardTaskMap,
     task: DashboardTask
   ): UpsertManyInfo<DashboardTask> {
@@ -250,14 +205,14 @@ export default class TaskRecurrenceService {
    * on completion, this will return null.
    *
    * @param originalTask The original task
-   * @param updater The updater to apply to the task before getting the next recurrence date
+   * @param mutator The mutator to apply to the task before getting the next recurrence date
    */
   static getSimulatedRecurrenceDate(
     originalTask: DashboardTask,
-    updater: Updater<DashboardTask>
+    mutator: Updater<DashboardTask>
   ): Date | null {
-    let taskCopy = DocumentService.deepCopy(originalTask);
-    taskCopy = updater(taskCopy);
+    let taskCopy = DocumentService.deepCopy($state.snapshot(originalTask));
+    taskCopy = mutator(taskCopy);
     return this.getNextRecurrenceDate(taskCopy);
   }
 
@@ -335,7 +290,7 @@ export default class TaskRecurrenceService {
       return;
     }
     DashboardTaskService.updateDatesForRecurrence(task);
-    // For both roll on basis and roll on copmletion, the tasks should move
+    // For both roll on basis and roll on completion, the tasks should move
     // forward until they are in the future.
     if (task.recurrenceInfo.recurrenceEffect !== RecurrenceEffect.stack) {
       const currentDate = new Date();
