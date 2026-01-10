@@ -117,6 +117,8 @@ describe('TaskRecurrenceDetails', () => {
       .spyOn(TaskRecurrenceService, 'getSimulatedRecurrenceDate')
       .mockReturnValue(new Date(Date.now() - 10000));
 
+    const confirmationDialogSpy = vi.spyOn(confirmationDialog, 'open');
+
     const task = taskMapService.mapState[taskId];
     if (!task) {
       throw new Error('task is undefined');
@@ -142,7 +144,9 @@ describe('TaskRecurrenceDetails', () => {
     // Wait for any effects
     // The component calls rInfo.set -> setRInfo -> updateWouldTriggerRecurrence
 
-    expect(confirmationDialog.open).toHaveBeenCalled();
+    expect(confirmationDialogSpy).toHaveBeenCalled();
+
+    confirmationDialogSpy.mockRestore();
     spy.mockRestore();
   });
 });
