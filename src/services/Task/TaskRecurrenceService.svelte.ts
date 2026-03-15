@@ -296,11 +296,19 @@ export default class TaskRecurrenceService {
       const currentDate = new Date();
       if (task.recurrenceInfo.recurrenceBasis === RecurrenceBasis.startDate) {
         while (task.startDate && task.startDate < currentDate) {
+          const previousTime = task.startDate.getTime();
           DashboardTaskService.updateDatesForRecurrence(task);
+          if (task.startDate.getTime() === previousTime) {
+            break;
+          }
         }
       } else {
         while (task.dueDate && task.dueDate < currentDate) {
+          const previousTime = task.dueDate.getTime();
           DashboardTaskService.updateDatesForRecurrence(task);
+          if (task.dueDate.getTime() === previousTime) {
+            break;
+          }
         }
       }
     }

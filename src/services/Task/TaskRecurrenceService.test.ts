@@ -1,5 +1,6 @@
 import {
   DocumentService,
+  RecurrenceBasis,
   RecurrenceEffect,
   RecurrenceFrequencyType
 } from '@aneuhold/core-ts-db-lib';
@@ -115,6 +116,25 @@ describe('TaskRecurrenceService.svelte', () => {
   });
 
   describe('updateDatesForRecurrence', () => {
+    it('should not infinite loop when weekDaySet is empty', () => {
+      const pastDate = DateService.addDays(new Date(), -3);
+      const task = createTestTask({
+        recurrenceInfo: createTestRecurrenceInfo({
+          frequency: {
+            type: RecurrenceFrequencyType.weekDaySet,
+            weekDaySet: []
+          },
+          recurrenceBasis: RecurrenceBasis.dueDate,
+          recurrenceEffect: RecurrenceEffect.rollOnCompletion
+        }),
+        startDate: DateService.addDays(pastDate, -4),
+        dueDate: pastDate
+      });
+
+      // This should complete without hanging
+      TaskRecurrenceService.updateDatesForRecurrence(task);
+    });
+
     it('should update start and due dates based on recurrence', () => {
       const today = new Date();
       const task = createTestTask({
