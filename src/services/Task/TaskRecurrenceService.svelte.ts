@@ -9,6 +9,7 @@ import {
   RecurrenceEffect,
   type RecurrenceInfo
 } from '@aneuhold/core-ts-db-lib';
+import { SvelteDate } from 'svelte/reactivity';
 import type { Unsubscriber, Updater } from 'svelte/store';
 import { appIsVisible } from '$stores/session/appIsVisible';
 import { timeMinute } from '$stores/session/timeMinute';
@@ -90,7 +91,7 @@ export default class TaskRecurrenceService {
       if (!nextRecurrenceDate) {
         return false;
       }
-      const currentDate = new Date();
+      const currentDate = new SvelteDate();
       if (nextRecurrenceDate < currentDate) {
         return true;
       }
@@ -293,7 +294,7 @@ export default class TaskRecurrenceService {
     // For both roll on basis and roll on completion, the tasks should move
     // forward until they are in the future.
     if (task.recurrenceInfo.recurrenceEffect !== RecurrenceEffect.stack) {
-      const currentDate = new Date();
+      const currentDate = new SvelteDate();
       if (task.recurrenceInfo.recurrenceBasis === RecurrenceBasis.startDate) {
         while (task.startDate && task.startDate < currentDate) {
           const previousTime = task.startDate.getTime();
