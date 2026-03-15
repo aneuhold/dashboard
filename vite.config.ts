@@ -5,13 +5,10 @@ import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import { defineConfig, mergeConfig } from 'vitest/config';
 
 // Setup the Sentry Auth Token
-let sentryAuthToken = '';
-if (process.env.SENTRY_AUTH_TOKEN && process.env.SENTRY_AUTH_TOKEN !== '') {
-  sentryAuthToken = process.env.SENTRY_AUTH_TOKEN;
-} else {
-  const env = loadEnv('', process.cwd(), 'SENTRY_AUTH_TOKEN');
-  sentryAuthToken = env.SENTRY_AUTH_TOKEN;
-}
+const sentryAuthToken =
+  process.env.SENTRY_AUTH_TOKEN && process.env.SENTRY_AUTH_TOKEN !== ''
+    ? process.env.SENTRY_AUTH_TOKEN
+    : loadEnv('', process.cwd(), 'SENTRY_AUTH_TOKEN').SENTRY_AUTH_TOKEN;
 if (!sentryAuthToken && !process.env.VITEST) {
   console.error('No Sentry Auth Token found in the environment variables.');
 }
