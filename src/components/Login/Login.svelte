@@ -4,6 +4,7 @@
     APIService,
     type AuthValidateUserOutput
   } from '@aneuhold/core-ts-api-lib';
+  import { ProjectName } from '@aneuhold/core-ts-db-lib';
   import Button, { Label } from '@smui/button';
   import CircularProgress from '@smui/circular-progress';
   import { onMount } from 'svelte';
@@ -36,7 +37,8 @@
   async function handleGoogleCallback(response: google.accounts.id.CredentialResponse) {
     $loginState = LoginState.ProcessingCredentials;
     const result = await APIService.validateUser({
-      googleCredentialToken: response.credential
+      googleCredentialToken: response.credential,
+      project: ProjectName.Dashboard
     });
     handleLoginResult(result);
   }
@@ -50,7 +52,8 @@
     password.set(typedPassword);
     APIService.validateUser({
       userName: typedUserName,
-      password: typedPassword
+      password: typedPassword,
+      project: ProjectName.Dashboard
     }).then(handleLoginResult);
   }
 
