@@ -6,7 +6,9 @@
   } from '@aneuhold/core-ts-api-lib';
   import Button, { Label } from '@smui/button';
   import CircularProgress from '@smui/circular-progress';
+  import { onMount } from 'svelte';
   import InputBox from '$components/presentational/InputBox/InputBox.svelte';
+  import googleGISService from '$services/GoogleGISService';
   import { apiKey } from '$stores/local/apiKey';
   import { dashboardConfig } from '$stores/local/dashboardConfig';
   import { password } from '$stores/local/password';
@@ -21,6 +23,23 @@
   let typedPassword = $state(LocalData.password);
   let processingCredentials = $derived($loginState === LoginState.ProcessingCredentials);
   let invalidCredentials = $state(false);
+  let googleButtonRef: HTMLDivElement | undefined = $state();
+
+  onMount(async () => {
+    if (googleButtonRef) {
+      await googleGISService.renderButton(googleButtonRef, (response) => {
+        void handleGoogleCallback(response);
+      });
+    }
+  });
+
+  async function handleGoogleCallback(response: google.accounts.id.CredentialResponse) {
+    $loginState = LoginState.ProcessingCredentials;
+    const result = await APIService.validateUser({
+      googleCredentialToken: response.credential
+    });
+    handleLoginResult(result);
+  }
 
   function handleSubmit(event: MouseEvent) {
     // Prevent the page from refreshing
@@ -44,6 +63,18 @@
       dashboardConfig.set(validationResponse.data.config.dashboard);
       invalidCredentials = false;
       const apiKeyValue = validationResponse.data.userInfo.apiKey.key;
+      const { accessToken, refreshTokenString } = validationResponse.data;
+
+      // Store tokens for the auto-refresh mechanism
+      if (accessToken) {
+        APIService.setAccessToken(accessToken);
+        LocalData.accessToken = accessToken;
+      }
+      if (refreshTokenString) {
+        APIService.setRefreshTokenString(refreshTokenString);
+        LocalData.refreshTokenString = refreshTokenString;
+      }
+
       apiKey.set(apiKeyValue);
       if (!$dashboardConfig?.projectDashboardFunctionUrl) {
         log.error('No dashboard function URL found in config');
@@ -96,6 +127,14 @@
       {/if}
     </div>
   </form>
+  <div class="separatorArea">
+    <hr class="separator" />
+    <span class="separatorText">or</span>
+    <hr class="separator" />
+  </div>
+  <div class="googleButtonArea">
+    <div bind:this={googleButtonRef}></div>
+  </div>
 </div>
 
 <style>
@@ -116,5 +155,27 @@
   }
   .errorMessage {
     color: var(--mdc-theme-error);
+  }
+  .separatorArea {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    max-width: 250px;
+    margin-top: 16px;
+  }
+  .separator {
+    flex: 1;
+    border: none;
+    border-top: 1px solid var(--mdc-theme-text-hint-on-background, rgba(0, 0, 0, 0.38));
+  }
+  .separatorText {
+    color: var(--mdc-theme-text-hint-on-background, rgba(0, 0, 0, 0.38));
+    font-size: 0.875rem;
+  }
+  .googleButtonArea {
+    display: flex;
+    justify-content: center;
+    margin-top: 16px;
   }
 </style>
