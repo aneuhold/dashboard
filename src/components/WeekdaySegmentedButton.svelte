@@ -102,7 +102,6 @@
       {segment}
       selected={segment.selected}
       onclick={() => {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         handleClick(segment);
       }}
     >

@@ -26,6 +26,8 @@ export default class LocalData {
     password: `${this.PREFIX}password`,
     username: `${this.PREFIX}username`,
     apiKey: `${this.PREFIX}apiKey`,
+    accessToken: `${this.PREFIX}accessToken`,
+    refreshTokenString: `${this.PREFIX}refreshTokenString`,
     dashboardConfig: `${this.PREFIX}dashboardConfig`,
     translations: `${this.PREFIX}translations`,
     userConfig: `${this.PREFIX}userConfig`,
@@ -79,6 +81,30 @@ export default class LocalData {
 
   static get apiKey(): string {
     const currentlyStoredValue = this.getValue(LocalData.storedKeyNames.apiKey);
+    if (currentlyStoredValue && currentlyStoredValue !== '') {
+      return currentlyStoredValue;
+    }
+    return '';
+  }
+
+  static set accessToken(newAccessToken: string) {
+    this.storeValue(LocalData.storedKeyNames.accessToken, newAccessToken);
+  }
+
+  static get accessToken(): string {
+    const currentlyStoredValue = this.getValue(LocalData.storedKeyNames.accessToken);
+    if (currentlyStoredValue && currentlyStoredValue !== '') {
+      return currentlyStoredValue;
+    }
+    return '';
+  }
+
+  static set refreshTokenString(newRefreshTokenString: string) {
+    this.storeValue(LocalData.storedKeyNames.refreshTokenString, newRefreshTokenString);
+  }
+
+  static get refreshTokenString(): string {
+    const currentlyStoredValue = this.getValue(LocalData.storedKeyNames.refreshTokenString);
     if (currentlyStoredValue && currentlyStoredValue !== '') {
       return currentlyStoredValue;
     }

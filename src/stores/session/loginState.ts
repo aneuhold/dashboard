@@ -1,3 +1,4 @@
+import { APIService } from '@aneuhold/core-ts-api-lib';
 import { writable } from 'svelte/store';
 import { browser } from '$app/environment';
 import WebSocketService from '$services/WebSocketService';
@@ -39,12 +40,24 @@ function createLoginStateStore() {
     set(_loginState);
   }
 
-  // Determine initial login state based on persisted API key.
-  if (browser && LocalData.apiKey && LocalData.apiKey !== '') {
+  // Persist new tokens when GCloudAPIService auto-refreshes on 401.
+  APIService.setOnTokensRefreshed((accessToken, refreshTokenString) => {
+    LocalData.accessToken = accessToken;
+    LocalData.refreshTokenString = refreshTokenString;
+  });
+
+  // Determine initial login state based on persisted tokens or API key.
+  if (browser && (LocalData.accessToken || (LocalData.apiKey && LocalData.apiKey !== ''))) {
+    if (LocalData.accessToken) {
+      APIService.setAccessToken(LocalData.accessToken);
+    }
+    if (LocalData.refreshTokenString) {
+      APIService.setRefreshTokenString(LocalData.refreshTokenString);
+    }
     setLoginState(LoginState.LoggedIn);
     DashboardAPIService.getInitialDataIfNeeded();
   } else {
-    log.info('No API key found, setting login state to LoggedOut');
+    log.info('No access token or API key found, setting login state to LoggedOut');
     setLoginState(LoginState.LoggedOut);
   }
 

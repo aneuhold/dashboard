@@ -1,12 +1,15 @@
 <script lang="ts">
+  import { APIService } from '@aneuhold/core-ts-api-lib';
   import IconButton, { Icon } from '@smui/icon-button';
   import TopAppBar, { AutoAdjust, Row, Section, Title } from '@smui/top-app-bar';
   import type { Snippet } from 'svelte';
   import { goto } from '$app/navigation';
   import GitHubIcon from '$lib/svgs/GitHubIcon.svelte';
+  import googleGISService from '$services/GoogleGISService';
   import { apiKey } from '$stores/local/apiKey';
   import { LoginState, loginState } from '$stores/session/loginState';
   import { navDrawerOpen } from '$stores/session/navDrawerOpen';
+  import LocalData from '$util/LocalData/LocalData';
   import NavDrawer from './NavDrawer.svelte';
 
   let {
@@ -17,9 +20,18 @@
 
   let topAppBar: TopAppBar | null = $state(null);
 
-  function handleLogOut() {
+  async function handleLogOut() {
+    // Delete refresh token server-side
+    await APIService.logout();
+
+    // Clear local state
     apiKey.set(null);
+    LocalData.accessToken = '';
+    LocalData.refreshTokenString = '';
     loginState.set(LoginState.LoggedOut);
+
+    // Prevent Google auto-sign-in on next visit
+    googleGISService.disableAutoSelect();
   }
 </script>
 
