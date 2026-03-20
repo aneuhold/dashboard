@@ -1,8 +1,7 @@
 import { APIService } from '@aneuhold/core-ts-api-lib';
-import { DocumentService } from '@aneuhold/core-ts-db-lib';
 import WebSocketService from '$services/WebSocketService';
-import { apiKey } from '$stores/local/apiKey';
 import type { SpyOnFn } from '$testUtils/testUtilTypes';
+import LocalData from '$util/LocalData/LocalData';
 import { createLogger } from '$util/logging/logger';
 import MockData from './MockData';
 import TestUsers from './TestUsers';
@@ -29,8 +28,8 @@ export default class TestSetup {
       logger.debug('Mocked WebSocketService.connect called');
     });
 
-    // Set some stores
-    apiKey.set(DocumentService.generateID());
+    // Set a mock access token so the app thinks we're logged in
+    LocalData.accessToken = 'mock-access-token';
 
     // Reset stores
     MockData.taskMapServiceMock.reset();

@@ -25,7 +25,6 @@ export default class LocalData {
   private static storedKeyNames = {
     password: `${this.PREFIX}password`,
     username: `${this.PREFIX}username`,
-    apiKey: `${this.PREFIX}apiKey`,
     accessToken: `${this.PREFIX}accessToken`,
     refreshTokenString: `${this.PREFIX}refreshTokenString`,
     dashboardConfig: `${this.PREFIX}dashboardConfig`,
@@ -69,18 +68,6 @@ export default class LocalData {
 
   static get username(): string {
     const currentlyStoredValue = this.getValue(LocalData.storedKeyNames.username);
-    if (currentlyStoredValue && currentlyStoredValue !== '') {
-      return currentlyStoredValue;
-    }
-    return '';
-  }
-
-  static set apiKey(newApiKey: string) {
-    this.storeValue(LocalData.storedKeyNames.apiKey, newApiKey);
-  }
-
-  static get apiKey(): string {
-    const currentlyStoredValue = this.getValue(LocalData.storedKeyNames.apiKey);
     if (currentlyStoredValue && currentlyStoredValue !== '') {
       return currentlyStoredValue;
     }

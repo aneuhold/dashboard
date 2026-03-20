@@ -1,7 +1,6 @@
 import { APIService, type DashboardWebSocketServerToClientEvents } from '@aneuhold/core-ts-api-lib';
 import { DateService } from '@aneuhold/core-ts-lib';
 import { io, Socket } from 'socket.io-client';
-import { apiKey } from '$stores/local/apiKey';
 import LocalData from '$util/LocalData/LocalData';
 import { createLogger } from '$util/logging/logger';
 
@@ -21,8 +20,7 @@ export default class WebSocketService {
       // Use the namespace `/dashboard` to ensure that we only connect to the dashboard parts
       this.#socket = io(`${APIService.getCurrentAPIUrl()}dashboard`, {
         auth: {
-          accessToken: LocalData.accessToken || undefined,
-          apiKey: apiKey.get() ?? undefined
+          accessToken: LocalData.accessToken || undefined
         }
       });
 
@@ -71,7 +69,7 @@ export default class WebSocketService {
 
   /**
    * Disconnects the current socket and clears it so a future `connect()` will
-   * create a fresh connection (useful after logout or API key changes).
+   * create a fresh connection (useful after logout).
    *
    * Also clears all current subscriptions.
    */
