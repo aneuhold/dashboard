@@ -6,7 +6,6 @@
   import { goto } from '$app/navigation';
   import GitHubIcon from '$lib/svgs/GitHubIcon.svelte';
   import googleGISService from '$services/GoogleGISService';
-  import { apiKey } from '$stores/local/apiKey';
   import { LoginState, loginState } from '$stores/session/loginState';
   import { navDrawerOpen } from '$stores/session/navDrawerOpen';
   import LocalData from '$util/LocalData/LocalData';
@@ -25,7 +24,6 @@
     await APIService.logout();
 
     // Clear local state
-    apiKey.set(null);
     LocalData.accessToken = '';
     LocalData.refreshTokenString = '';
     loginState.set(LoginState.LoggedOut);

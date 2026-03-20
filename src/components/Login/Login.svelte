@@ -10,7 +10,6 @@
   import { onMount } from 'svelte';
   import InputBox from '$components/presentational/InputBox/InputBox.svelte';
   import googleGISService from '$services/GoogleGISService';
-  import { apiKey } from '$stores/local/apiKey';
   import { dashboardConfig } from '$stores/local/dashboardConfig';
   import { password } from '$stores/local/password';
   import { LoginState, loginState } from '$stores/session/loginState';
@@ -60,12 +59,11 @@
   function handleLoginResult(validationResponse: APIResponse<AuthValidateUserOutput>) {
     if (
       validationResponse.success &&
-      validationResponse.data.userInfo?.apiKey &&
+      validationResponse.data.userInfo?.user &&
       validationResponse.data.config?.dashboard
     ) {
       dashboardConfig.set(validationResponse.data.config.dashboard);
       invalidCredentials = false;
-      const apiKeyValue = validationResponse.data.userInfo.apiKey.key;
       const { accessToken, refreshTokenString } = validationResponse.data;
 
       // Store tokens for the auto-refresh mechanism
@@ -78,7 +76,6 @@
         LocalData.refreshTokenString = refreshTokenString;
       }
 
-      apiKey.set(apiKeyValue);
       if (!$dashboardConfig?.projectDashboardFunctionUrl) {
         log.error('No dashboard function URL found in config');
         return;

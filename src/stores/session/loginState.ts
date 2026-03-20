@@ -46,8 +46,8 @@ function createLoginStateStore() {
     LocalData.refreshTokenString = refreshTokenString;
   });
 
-  // Determine initial login state based on persisted tokens or API key.
-  if (browser && (LocalData.accessToken || (LocalData.apiKey && LocalData.apiKey !== ''))) {
+  // Determine initial login state based on persisted access token.
+  if (browser && LocalData.accessToken) {
     if (LocalData.accessToken) {
       APIService.setAccessToken(LocalData.accessToken);
     }
@@ -57,7 +57,7 @@ function createLoginStateStore() {
     setLoginState(LoginState.LoggedIn);
     DashboardAPIService.getInitialDataIfNeeded();
   } else {
-    log.info('No access token or API key found, setting login state to LoggedOut');
+    log.info('No access token found, setting login state to LoggedOut');
     setLoginState(LoginState.LoggedOut);
   }
 

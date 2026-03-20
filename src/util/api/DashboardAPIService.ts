@@ -4,9 +4,7 @@ import {
   type ProjectDashboardOutput
 } from '@aneuhold/core-ts-api-lib';
 import type { DashboardUserConfig, UserCTO } from '@aneuhold/core-ts-db-lib';
-import type { UUID } from 'crypto';
 import WebSocketService from '$services/WebSocketService';
-import { apiKey } from '$stores/local/apiKey';
 import LocalData from '$util/LocalData/LocalData';
 import { createLogger } from '$util/logging/logger';
 import DashboardAPIResponseHandlingService from './DashboardAPIResponseHandlingService';
@@ -53,7 +51,7 @@ export default class DashboardAPIService {
    * ago or it hasn't been fetched yet.
    */
   static getInitialDataIfNeeded() {
-    if (apiKey.get() && LocalData.apiRequestQueue.length === 0) {
+    if (LocalData.accessToken && LocalData.apiRequestQueue.length === 0) {
       if (!this.lastInitialDataFetchTime) {
         this.getInitialData();
       } else if (
@@ -114,9 +112,7 @@ export default class DashboardAPIService {
    * @param username The username to validate.
    */
   static async checkIfUsernameIsValid(username: string): Promise<UserCTO | null> {
-    const apiKeyValue = this.checkOrSetupDashboardAPI();
     const result = await APIService.callDashboardAPI({
-      apiKey: apiKeyValue,
       options: {
         get: {
           userNameIsValid: username
@@ -129,14 +125,6 @@ export default class DashboardAPIService {
       log.info('Invalid username', result);
       return null;
     }
-  }
-
-  static checkOrSetupDashboardAPI(): UUID {
-    const apiKeyValue = apiKey.get();
-    if (!apiKeyValue) {
-      throw new Error('API Key not set!');
-    }
-    return apiKeyValue;
   }
 
   /**
@@ -178,10 +166,8 @@ export default class DashboardAPIService {
   private static async callDashboardAPI(
     input: ProjectDashboardOptions
   ): Promise<ProjectDashboardOutput | null> {
-    const apiKeyValue = this.checkOrSetupDashboardAPI();
     log.info('Processing API request', input);
     const result = await APIService.callDashboardAPI({
-      apiKey: apiKeyValue,
       options: input,
       socketId: WebSocketService.getSocketId()
     });
