@@ -9,13 +9,12 @@ import { DateService } from '@aneuhold/core-ts-lib';
 import type { UUID } from 'crypto';
 import type { Updater } from 'svelte/store';
 import { userConfig } from '$stores/local/userConfig/userConfig';
-import DashboardTaskAPIService from '$util/api/DashboardTaskAPIService';
+import createDashboardPersistToDb, {
+  createDashboardPrepareForSave
+} from '$util/api/dashboardPersistenceUtils';
 import LocalData from '$util/LocalData/LocalData';
 import { createLogger } from '$util/logging/logger';
-import type {
-  DocumentInsertOrUpdateInfo,
-  UpsertManyInfo
-} from '../../DocumentMapStoreService.svelte';
+import type { UpsertManyInfo } from '../../DocumentMapStoreService.svelte';
 import DocumentMapStoreService from '../../DocumentMapStoreService.svelte';
 import TaskCreationService from '../TaskCreationService';
 import TaskOperationsService from '../TaskOperationsService.svelte';
@@ -28,6 +27,14 @@ const log = createLogger('TaskMapService.ts');
  * The main task map service.
  */
 export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
+  constructor() {
+    super({
+      persistToLocalData: (map) => LocalData.setAndGetTaskMap(map),
+      persistToDb: createDashboardPersistToDb('tasks'),
+      prepareForSave: createDashboardPrepareForSave('tasks')
+    });
+  }
+
   public override addDoc(task: DashboardTask): void {
     this.addManyDocs([task]);
   }
@@ -237,18 +244,6 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
     });
     TaskRecurrenceService.buildTaskRecurrenceSubMapFresh(newMap);
     this.autoDeleteTasksPostSet(newMap);
-  }
-
-  protected override persistToLocalData(): DocumentMap<DashboardTask> {
-    return LocalData.setAndGetTaskMap(this.mapState);
-  }
-
-  protected override getFromLocalData(): DocumentMap<DashboardTask> | null {
-    return LocalData.taskMap;
-  }
-
-  protected override persistToDb(updateInfo: DocumentInsertOrUpdateInfo<DashboardTask>): void {
-    DashboardTaskAPIService.updateTasks(updateInfo);
   }
 
   /**

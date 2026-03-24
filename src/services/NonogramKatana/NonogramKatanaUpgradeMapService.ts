@@ -8,10 +8,11 @@ import {
 import type { UUID } from 'crypto';
 import nonogramKatanaItemNameToUpgradesMap from '$routes/entertainment/nonogramkatana/upgrades/nonogramKatanaItemNameToUpgradesMap';
 import { nonogramKatanaUpgradesDisplayInfo } from '$routes/entertainment/nonogramkatana/upgrades/nonogramKatanaUpgradesDisplayInfo';
-import DashboardAPIService from '$util/api/DashboardAPIService';
+import createDashboardPersistToDb, {
+  createDashboardPrepareForSave
+} from '$util/api/dashboardPersistenceUtils';
 import LocalData from '$util/LocalData/LocalData';
 import { createLogger } from '$util/logging/logger';
-import type { DocumentInsertOrUpdateInfo } from '../DocumentMapStoreService.svelte';
 import DocumentMapStoreService from '../DocumentMapStoreService.svelte';
 
 const log = createLogger('NonogramKatanaUpgradeMapService.ts');
@@ -28,8 +29,12 @@ export class NonogramKatanaUpgradeMapService extends DocumentMapStoreService<Non
    */
   private nameToIdMap: { [key in NonogramKatanaUpgradeName]?: UUID } = {};
 
-  protected override getFromLocalData(): DocumentMap<NonogramKatanaUpgrade> | null {
-    return LocalData.nonogramKatanaUpgradeMap;
+  constructor() {
+    super({
+      persistToLocalData: (map) => LocalData.setAndGetNonogramKatanaUpgradeMap(map),
+      persistToDb: createDashboardPersistToDb('nonogramKatanaUpgrades'),
+      prepareForSave: createDashboardPrepareForSave('nonogramKatanaUpgrades')
+    });
   }
 
   public getUpgradeByName(
@@ -192,22 +197,6 @@ export class NonogramKatanaUpgradeMapService extends DocumentMapStoreService<Non
     Object.values(map).forEach((upgrade) => {
       if (upgrade) {
         this.nameToIdMap[upgrade.upgradeName] = upgrade._id;
-      }
-    });
-  }
-
-  protected override persistToLocalData(): DocumentMap<NonogramKatanaUpgrade> {
-    return LocalData.setAndGetNonogramKatanaUpgradeMap(this.mapState);
-  }
-
-  protected override persistToDb(
-    updateInfo: DocumentInsertOrUpdateInfo<NonogramKatanaUpgrade>
-  ): void {
-    DashboardAPIService.queryApi({
-      update: updateInfo.update ? { nonogramKatanaUpgrades: updateInfo.update } : undefined,
-      insert: updateInfo.insert ? { nonogramKatanaUpgrades: updateInfo.insert } : undefined,
-      get: {
-        nonogramKatanaUpgrades: true
       }
     });
   }

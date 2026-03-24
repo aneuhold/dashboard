@@ -6,9 +6,10 @@ import {
 } from '@aneuhold/core-ts-db-lib';
 import type { UUID } from 'crypto';
 import { nonogramKatanaItemsDisplayInfo } from '$routes/entertainment/nonogramkatana/items/nonogramKatanaItemsDisplayInfo';
-import DashboardAPIService from '$util/api/DashboardAPIService';
+import createDashboardPersistToDb, {
+  createDashboardPrepareForSave
+} from '$util/api/dashboardPersistenceUtils';
 import LocalData from '$util/LocalData/LocalData';
-import type { DocumentInsertOrUpdateInfo } from '../DocumentMapStoreService.svelte';
 import DocumentMapStoreService from '../DocumentMapStoreService.svelte';
 
 /**
@@ -17,8 +18,12 @@ import DocumentMapStoreService from '../DocumentMapStoreService.svelte';
 export class NonogramKatanaItemMapService extends DocumentMapStoreService<NonogramKatanaItem> {
   private nameToIdMap: { [itemName: string]: UUID | undefined } = {};
 
-  protected override getFromLocalData(): DocumentMap<NonogramKatanaItem> | null {
-    return LocalData.nonogramKatanaItemMap;
+  constructor() {
+    super({
+      persistToLocalData: (map) => LocalData.setAndGetNonogramKatanaItemMap(map),
+      persistToDb: createDashboardPersistToDb('nonogramKatanaItems'),
+      prepareForSave: createDashboardPrepareForSave('nonogramKatanaItems')
+    });
   }
 
   public getItemByName(itemName: NonogramKatanaItemName): NonogramKatanaItem | undefined {
@@ -75,20 +80,6 @@ export class NonogramKatanaItemMapService extends DocumentMapStoreService<Nonogr
     Object.values(map).forEach((item) => {
       if (item) {
         this.nameToIdMap[item.itemName] = item._id;
-      }
-    });
-  }
-
-  protected override persistToLocalData(): DocumentMap<NonogramKatanaItem> {
-    return LocalData.setAndGetNonogramKatanaItemMap(this.mapState);
-  }
-
-  protected override persistToDb(updateInfo: DocumentInsertOrUpdateInfo<NonogramKatanaItem>): void {
-    DashboardAPIService.queryApi({
-      update: updateInfo.update ? { nonogramKatanaItems: updateInfo.update } : undefined,
-      insert: updateInfo.insert ? { nonogramKatanaItems: updateInfo.insert } : undefined,
-      get: {
-        nonogramKatanaItems: true
       }
     });
   }
