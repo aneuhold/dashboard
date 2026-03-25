@@ -54,7 +54,10 @@
       </div>
     </Section>
     <Section align="end" toolbar>
-      <SyncIndicator />
+      <div class="sync-icon">
+        <SyncIndicator />
+      </div>
+
       <IconButton
         class="material-icons"
         aria-label="GitHub"
@@ -79,5 +82,11 @@
 <style>
   .dashboard-title {
     cursor: pointer;
+  }
+
+  .sync-icon {
+    display: flex;
+    align-items: center;
+    padding-inline: 0.8rem;
   }
 </style>

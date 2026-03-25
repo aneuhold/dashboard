@@ -1,4 +1,6 @@
 <!--
+  @component  
+  
   An info icon that opens a dialog with the given title and content when clicked. 
 
   The content is passed as the default slot.

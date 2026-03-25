@@ -42,6 +42,11 @@ The dashboard app depends on `@aneuhold/core-ts-db-lib`, a schema-first data mod
 - **Svelte 5 syntax**: Use modern runes (`$state()`, `$derived()`, `$effect()`, `$props()`)
 - **Singleton components**: Files named `Singleton*` are single-instance widgets (snackbar, confetti, dialogs) that export imperative functions
 - **Component docs**: Use JSDoc `@component` tag at top of `.svelte` files
+- **SMUI components over raw HTML**: Always use SMUI components (e.g. `Icon` from `@smui/icon-button`) instead of raw HTML equivalents (e.g. `<span class="material-icons">`) for consistency with the design system
+- **No inline styles**: Never use the `style` attribute on elements. Always use CSS classes — for SMUI components that don't accept a `class` prop directly, use `:global()` selectors scoped under a parent class
+- **Theme colors**: Use CSS custom properties from the theme (`var(--mdc-theme-primary)`, `var(--mdc-theme-on-primary)`, `var(--success)`, `var(--error)`, etc.) defined in `src/globalStyles/_smui-theme.scss`. Never hardcode color values
+- **Customizing SMUI component colors**: Override colors on MDC components using SASS mixins in `_smui-theme.scss`, not CSS overrides. Import the component's mixins (e.g. `@use '@material/circular-progress/mixins' as circular-progress`), then create a class scoped under the MDC base class (e.g. `.mdc-circular-progress.on-primary { @include circular-progress.color(theme.$on-primary); }`). Apply the class via the SMUI component's `class` prop. See the existing snackbar and button overrides in `_smui-theme.scss` for examples. The dev server must be restarted after theme changes
+- **Transitions and animations**: Prefer smooth, eased transitions (0.5s+) over abrupt snaps. Elements appearing/disappearing should fade or slide rather than pop in/out
 
 ### Storybook Stories
 
