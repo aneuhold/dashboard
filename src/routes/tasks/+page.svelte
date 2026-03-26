@@ -50,10 +50,3 @@
     <FabButton clickHandler={addTask} iconName="add" />
   {/if}
 </div>
-
-<style>
-  .content {
-    /* Some extra margin to allow scrolling */
-    margin-bottom: 80px;
-  }
-</style>

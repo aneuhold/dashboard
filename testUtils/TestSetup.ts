@@ -24,6 +24,14 @@ export default class TestSetup {
       });
     });
 
+    spyOnFn(APIService, 'callAdminAPI').mockImplementation((_) => {
+      return Promise.resolve({
+        success: true,
+        errors: [],
+        data: MockData.adminAPIServiceMock.createUsersResponse()
+      });
+    });
+
     spyOnFn(WebSocketService, 'connect').mockImplementation(() => {
       logger.debug('Mocked WebSocketService.connect called');
     });
@@ -33,6 +41,7 @@ export default class TestSetup {
 
     // Reset stores
     MockData.taskMapServiceMock.reset();
+    MockData.adminAPIServiceMock.reset();
     MockData.userSettingsMock.reset();
     MockData.userSettingsMock.enableConfetti();
     MockData.userSettingsMock.addCollaborator(TestUsers.collaborator1);
