@@ -11,6 +11,7 @@
   import Paper, { Content } from '@smui/paper';
   import Textfield from '@smui/textfield';
   import type { UUID } from 'crypto';
+  import { onMount } from 'svelte';
   import { goto } from '$app/navigation';
   import PageTitle from '$components/PageTitle.svelte';
   import AdminAPIService from '$util/api/AdminAPIService';
@@ -28,6 +29,7 @@
 
   let users = $state<User[]>([]);
   let loading = $state(false);
+  let loadError = $state(false);
   let searchQuery = $state('');
   let showCreateForm = $state(false);
 
@@ -43,11 +45,19 @@
 
   async function loadUsers() {
     loading = true;
-    const result = await AdminAPIService.query({ get: { users: true } });
-    if (result?.users) {
-      users = result.users;
+    loadError = false;
+    try {
+      const result = await AdminAPIService.query({ get: { users: true } });
+      if (result?.users) {
+        users = result.users;
+      } else {
+        loadError = true;
+      }
+    } catch {
+      loadError = true;
+    } finally {
+      loading = false;
     }
-    loading = false;
   }
 
   function goToUser(id: UUID) {
@@ -59,7 +69,7 @@
     loadUsers();
   }
 
-  $effect(() => {
+  onMount(() => {
     loadUsers();
   });
 </script>
@@ -68,7 +78,12 @@
 
 <div class="list-container">
   <div class="list-actions">
-    <Textfield variant="outlined" bind:value={searchQuery} label="Search users" style="flex: 1;" />
+    <Textfield
+      variant="outlined"
+      bind:value={searchQuery}
+      label="Search users"
+      class="search-field"
+    />
     <IconButton
       class="material-icons"
       onclick={() => (showCreateForm = !showCreateForm)}
@@ -86,6 +101,8 @@
     <div class="loading">
       <CircularProgress indeterminate />
     </div>
+  {:else if loadError}
+    <div class="error-state">Failed to load users. Please try again later.</div>
   {:else}
     <Paper>
       <Content>
@@ -129,5 +146,13 @@
     text-align: center;
     padding: 16px;
     color: var(--mdc-theme-text-hint-on-background);
+  }
+  .error-state {
+    text-align: center;
+    padding: 32px;
+    color: var(--error);
+  }
+  :global(.search-field) {
+    flex: 1;
   }
 </style>

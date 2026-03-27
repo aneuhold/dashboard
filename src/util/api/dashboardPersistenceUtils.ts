@@ -3,7 +3,7 @@ import type { BaseDocument } from '@aneuhold/core-ts-db-lib';
 import type { DocumentInsertOrUpdateInfo } from '$services/DocumentMapStoreService.svelte';
 import DashboardAPIService from './DashboardAPIService';
 
-type DashboardApiKey = keyof NonNullable<ProjectDashboardOptions['insert']>;
+type ProjectDashboardOptionsKey = keyof NonNullable<ProjectDashboardOptions['insert']>;
 
 /**
  * Creates a `prepareForSave` function for a dashboard document type that
@@ -12,7 +12,9 @@ type DashboardApiKey = keyof NonNullable<ProjectDashboardOptions['insert']>;
  *
  * @param key The API key name for this document type (e.g. 'tasks')
  */
-export function createDashboardPrepareForSave<T extends BaseDocument>(key: DashboardApiKey) {
+export function createDashboardPrepareForSave<T extends BaseDocument>(
+  key: ProjectDashboardOptionsKey
+) {
   return (options: ProjectDashboardOptions, info: DocumentInsertOrUpdateInfo<T>) => {
     if (info.insert) {
       options.insert = { ...options.insert, [key]: info.insert };
@@ -35,7 +37,9 @@ export function createDashboardPrepareForSave<T extends BaseDocument>(key: Dashb
  *
  * @param key The API key name for this document type (e.g. 'tasks')
  */
-export default function createDashboardPersistToDb<T extends BaseDocument>(key: DashboardApiKey) {
+export default function createDashboardPersistToDb<T extends BaseDocument>(
+  key: ProjectDashboardOptionsKey
+) {
   const prepareForSave = createDashboardPrepareForSave<T>(key);
   return (info: DocumentInsertOrUpdateInfo<T>) => {
     const options: ProjectDashboardOptions = {};

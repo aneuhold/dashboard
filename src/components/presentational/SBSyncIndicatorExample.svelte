@@ -65,13 +65,14 @@
 
   button {
     padding: 6px 12px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--mdc-theme-text-hint-on-background);
     border-radius: 4px;
     cursor: pointer;
-    background: #f5f5f5;
+    background: var(--bg-color-on-surface);
+    color: var(--mdc-theme-on-surface);
   }
 
   button:hover {
-    background: #e0e0e0;
+    background: var(--mdc-theme-text-hint-on-background);
   }
 </style>

@@ -13,6 +13,7 @@
   import FormField from '@smui/form-field';
   import Paper, { Content, Title } from '@smui/paper';
   import type { UUID } from 'crypto';
+  import { onMount } from 'svelte';
   import { goto } from '$app/navigation';
   import PageTitle from '$components/PageTitle.svelte';
   import InputBox from '$components/presentational/InputBox/InputBox.svelte';
@@ -32,6 +33,7 @@
   let userDetail = $state<AdminOutputUserDetail | undefined>(undefined);
   let loading = $state(false);
   let saving = $state(false);
+  let loadError = $state(false);
 
   // Editable fields
   let editUserName = $state('');
@@ -67,43 +69,58 @@
 
   async function loadDetail() {
     loading = true;
-    const result = await AdminAPIService.query({ get: { userDetail: userId } });
-    if (result?.userDetail) {
-      userDetail = result.userDetail;
-      populateEditFields(result.userDetail.user);
+    loadError = false;
+    try {
+      const result = await AdminAPIService.query({ get: { userDetail: userId } });
+      if (result?.userDetail) {
+        userDetail = result.userDetail;
+        populateEditFields(result.userDetail.user);
+      } else {
+        loadError = true;
+      }
+    } catch {
+      loadError = true;
+    } finally {
+      loading = false;
     }
-    loading = false;
   }
 
   async function saveUser() {
     if (!userDetail) return;
     saving = true;
-    const result = await AdminAPIService.query({
-      update: {
-        users: [
-          {
-            ...userDetail.user,
-            userName: editUserName,
-            email: editEmail || undefined,
-            projectAccess: {
-              dashboard: editDashboardAccess,
-              workout: editWorkoutAccess
-            },
-            auth: {
-              ...userDetail.user.auth,
-              isSuperAdmin: editIsSuperAdmin || undefined
+    try {
+      const result = await AdminAPIService.query({
+        update: {
+          users: [
+            {
+              ...userDetail.user,
+              userName: editUserName,
+              email: editEmail || undefined,
+              projectAccess: {
+                dashboard: editDashboardAccess,
+                workout: editWorkoutAccess
+              },
+              auth: {
+                ...userDetail.user.auth,
+                isSuperAdmin: editIsSuperAdmin
+              }
             }
-          }
-        ]
-      },
-      get: { userDetail: userDetail.user._id }
-    });
-    if (result?.userDetail) {
-      userDetail = result.userDetail;
-      populateEditFields(result.userDetail.user);
-      snackbar.success('User saved');
+          ]
+        },
+        get: { userDetail: userDetail.user._id }
+      });
+      if (result?.userDetail) {
+        userDetail = result.userDetail;
+        populateEditFields(result.userDetail.user);
+        snackbar.success('User saved');
+      } else {
+        snackbar.error('Failed to save user');
+      }
+    } catch {
+      snackbar.error('Failed to save user');
+    } finally {
+      saving = false;
     }
-    saving = false;
   }
 
   function deleteUser() {
@@ -126,7 +143,7 @@
     });
   }
 
-  $effect(() => {
+  onMount(() => {
     loadDetail();
   });
 </script>
@@ -135,6 +152,8 @@
   <div class="loading">
     <CircularProgress indeterminate />
   </div>
+{:else if loadError}
+  <div class="error-state">Failed to load user details. Please try again later.</div>
 {:else if userDetail}
   <PageTitle title={userDetail.user.userName} subtitle="User Details" />
 
@@ -206,5 +225,10 @@
     display: flex;
     justify-content: center;
     padding: 32px;
+  }
+  .error-state {
+    text-align: center;
+    padding: 32px;
+    color: var(--error);
   }
 </style>
