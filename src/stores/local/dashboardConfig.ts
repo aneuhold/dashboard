@@ -5,7 +5,7 @@ import LocalData from '$util/LocalData/LocalData';
 
 function createDashboardConfigStore() {
   const initialConfig = browser ? LocalData.dashboardConfig : null;
-  const { subscribe, set } = writable(initialConfig);
+  const { subscribe, set } = writable<DashboardConfig | null>(initialConfig);
 
   let dashboardConfig: DashboardConfig | null = initialConfig;
 

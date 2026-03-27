@@ -25,7 +25,7 @@ const getSentry = createLazyModuleGetter(
 
 function createLoginStateStore() {
   let _loginState = LoginState.Initializing;
-  const { subscribe, set } = writable(_loginState);
+  const { subscribe, set } = writable<LoginState>(_loginState);
   const handleLoginStateChangeForWebSocket = createHandleLoginStateChangeForWebSocket();
 
   function setLoginState(newState: LoginState) {

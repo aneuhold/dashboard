@@ -3,7 +3,7 @@ import { browser } from '$app/environment';
 import LocalData from '$util/LocalData/LocalData';
 
 function createPasswordStore() {
-  const { subscribe, set, update } = writable(browser ? LocalData.password : '');
+  const { subscribe, set, update } = writable<string>(browser ? LocalData.password : '');
 
   return {
     subscribe,
