@@ -14,7 +14,10 @@ export default [
       // Disabled due to false positives with Svelte components
       '@typescript-eslint/no-useless-default-assignment': 'off',
       '@typescript-eslint/no-confusing-void-expression': 'off',
-      '@typescript-eslint/prefer-literal-enum-member': 'off'
+      '@typescript-eslint/prefer-literal-enum-member': 'off',
+      // This seems to get confused with the interaction between Svelte and TypeScript, and gets
+      // in an infinite loop.
+      '@typescript-eslint/no-unnecessary-type-arguments': 'off'
     }
   }
 ];
