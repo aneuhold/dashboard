@@ -16,7 +16,12 @@ if (!sentryAuthToken && !process.env.VITEST) {
 // Vitest specific logic to run
 if (process.env.VITEST) {
   // Define the list of messages to suppress
-  const messagesToSuppress = [/^Sourcemap for .* points to missing source files/];
+  const messagesToSuppress = [
+    /^Sourcemap for .* points to missing source files/,
+    // vite-plugin-node-polyfills 0.25 still uses the `esbuild` option which Vite 8 deprecated
+    // in favor of `oxc`. Suppress the warning until the plugin adds Vite 8 support.
+    /.*The following esbuild options were set.*/
+  ];
 
   // It needs to be suppressed in this way instead of using customLogger from vite or onConsoleLog
   // from vitest because it seems that Vite or Rollup logs these warnings directly to stderr and not
@@ -80,7 +85,7 @@ const viteConfig: UserConfig = {
 
 const vitestConfig = defineConfig({
   test: {
-    include: ['src/**/*.{test,spec}.{js,ts}'],
+    include: ['src/**/*.{test,spec}.{js,ts,svelte.ts}'],
     environment: 'jsdom',
     setupFiles: ['./testUtils/vitest-setup.ts']
   }

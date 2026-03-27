@@ -85,6 +85,7 @@
 <style>
   .content {
     padding: 1rem;
+    margin-bottom: 80px;
   }
   .loading {
     display: flex;

@@ -1,4 +1,6 @@
 import type { LinkInfo } from '$components/LinkListItem.svelte';
+import { adminPageInfo } from '$routes/admin/pageInfo';
+import { adminUsersPageInfo } from '$routes/admin/users/pageInfo';
 import { automationPageInfo } from '$routes/automation/pageInfo';
 import { archPageInfo } from '$routes/dev/arch/pageInfo';
 import { devPageInfo } from '$routes/dev/pageInfo';
@@ -47,7 +49,9 @@ const navInfo = {
   tasks: tasksPageInfo,
   entertainment: entertainmentPageInfo,
   nonogramKatana: nonogramKatanaPageInfo,
-  settings: settingsPageInfo
+  settings: settingsPageInfo,
+  admin: adminPageInfo,
+  adminUsers: adminUsersPageInfo
 } satisfies Record<string, PageInfo>;
 
 export default navInfo;

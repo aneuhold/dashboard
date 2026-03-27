@@ -81,6 +81,19 @@
             </span>
           {/snippet}
         </FormField>
+        {#if $userConfig.config.enabledFeatures.adminPage}
+          <FormField>
+            <Checkbox bind:checked={$userConfig.config.enableAdminPage} touch />
+            {#snippet label()}
+              <span>
+                Enable admin page
+                <span class="mdc-theme--text-hint-on-background checkBoxText">
+                  Shows the admin page in the menu (requires super admin)
+                </span>
+              </span>
+            {/snippet}
+          </FormField>
+        {/if}
         <FormField>
           <Checkbox bind:checked={$userConfig.config.enabledFeatures.catImageOnHomePage} touch />
           {#snippet label()}
@@ -186,7 +199,6 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
-    margin-bottom: 80px;
   }
   .checkBoxText {
     margin-left: 8px;

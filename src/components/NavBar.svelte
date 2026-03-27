@@ -4,6 +4,7 @@
   import TopAppBar, { AutoAdjust, Row, Section, Title } from '@smui/top-app-bar';
   import type { Snippet } from 'svelte';
   import { goto } from '$app/navigation';
+  import SyncIndicator from '$components/presentational/SyncIndicator.svelte';
   import GitHubIcon from '$lib/svgs/GitHubIcon.svelte';
   import googleGISService from '$services/GoogleGISService';
   import { LoginState, loginState } from '$stores/session/loginState';
@@ -53,6 +54,10 @@
       </div>
     </Section>
     <Section align="end" toolbar>
+      <div class="sync-icon">
+        <SyncIndicator />
+      </div>
+
       <IconButton
         class="material-icons"
         aria-label="GitHub"
@@ -77,5 +82,11 @@
 <style>
   .dashboard-title {
     cursor: pointer;
+  }
+
+  .sync-icon {
+    display: flex;
+    align-items: center;
+    padding-inline: 0.8rem;
   }
 </style>

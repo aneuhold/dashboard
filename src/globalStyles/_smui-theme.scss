@@ -51,6 +51,7 @@ $error-color: color-palette.$red-500;
 @use '@material/snackbar/mixins' as snackbar;
 @use '@material/button/mixins' as button;
 @use '@material/icon-button/mixins' as icon-button;
+@use '@material/circular-progress/mixins' as circular-progress;
 
 // Import the colors last. Order matters in this file. This allows usage
 // of vars from MDC
@@ -70,11 +71,15 @@ $error-color: color-palette.$red-500;
   @include snackbar.fill-color($error-color);
   @include snackbar.label-ink-color(theme-color.accessible-ink-color($error-color));
 }
+.mdc-circular-progress.on-primary {
+  @include circular-progress.color(theme.$on-primary);
+}
 .primary-button {
   &.mdc-button--outlined {
     @include button.outline-color($primary-color);
   }
 }
+
 .danger-button {
   &.mdc-button {
     @include button.ink-color($error-color);

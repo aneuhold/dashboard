@@ -11,7 +11,7 @@ import {
 import { DateService } from '@aneuhold/core-ts-lib';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { userConfig } from '$stores/local/userConfig/userConfig';
-import DashboardTaskAPIService from '$util/api/DashboardTaskAPIService';
+import DashboardAPIService from '$util/api/DashboardAPIService';
 import type { UpsertManyInfo } from '../../DocumentMapStoreService.svelte';
 import TaskRecurrenceService from '../TaskRecurrenceService.svelte';
 import TaskTagsService from '../TaskTagsService';
@@ -28,7 +28,7 @@ vi.mock('$util/LocalData/LocalData', () => ({
 describe('TaskMapService', () => {
   const userId = '019b24cc-e129-70e0-8e9e-ff72c0cbe78d';
   const otherUserId = '019b24cc-e129-70e0-8e9e-ff72c0cbe78e';
-  const updateTasksSpy = vi.spyOn(DashboardTaskAPIService, 'updateTasks');
+  const queryApiSpy = vi.spyOn(DashboardAPIService, 'queryApi');
 
   const createTask = (overrides: Partial<DashboardTask> = {}): DashboardTask => {
     return DashboardTaskSchema.parse({
@@ -115,9 +115,11 @@ describe('TaskMapService', () => {
       expect(map[recentTask._id]).toBeDefined();
       expect(map[incompleteTask._id]).toBeDefined();
 
-      expect(updateTasksSpy).toHaveBeenCalledWith(
+      expect(queryApiSpy).toHaveBeenCalledWith(
         expect.objectContaining({
-          delete: expect.arrayContaining([expect.objectContaining({ _id: oldTask._id })])
+          delete: expect.objectContaining({
+            tasks: expect.arrayContaining([oldTask._id])
+          })
         })
       );
     });
@@ -187,12 +189,11 @@ describe('TaskMapService', () => {
       expect(map[parentTask._id]).toBeUndefined();
       expect(map[childTask._id]).toBeUndefined();
 
-      expect(updateTasksSpy).toHaveBeenCalledWith(
+      expect(queryApiSpy).toHaveBeenCalledWith(
         expect.objectContaining({
-          delete: expect.arrayContaining([
-            expect.objectContaining({ _id: parentTask._id }),
-            expect.objectContaining({ _id: childTask._id })
-          ])
+          delete: expect.objectContaining({
+            tasks: expect.arrayContaining([parentTask._id, childTask._id])
+          })
         })
       );
     });

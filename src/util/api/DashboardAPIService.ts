@@ -4,6 +4,9 @@ import {
   type ProjectDashboardOutput
 } from '@aneuhold/core-ts-api-lib';
 import type { DashboardUserConfig, UserCTO } from '@aneuhold/core-ts-db-lib';
+import apiActivityService, {
+  ApiActivityState
+} from '$services/ApiActivityService/ApiActivityService.svelte';
 import WebSocketService from '$services/WebSocketService';
 import LocalData from '$util/LocalData/LocalData';
 import { createLogger } from '$util/logging/logger';
@@ -133,6 +136,7 @@ export default class DashboardAPIService {
    */
   private static async processApiRequests() {
     this.processingRequestQueue = true;
+    apiActivityService.setSyncing();
     let combinedOutput: ProjectDashboardOutput = {};
     while (LocalData.apiRequestQueue.length > 0) {
       const currentRequest = this.shiftApiRequestQueue();
@@ -154,11 +158,12 @@ export default class DashboardAPIService {
           this.processingFirstInitData
         );
         this.processingFirstInitData = false;
-      } else {
-        // If there was an error, add the task back to the queue and try again
-        // Save this for later to ensure there is no infinite loop
-        // this.unshiftTaskQueueItem(LocalData.currentTaskQueueItem!);
+      } else if (!result) {
+        apiActivityService.setError();
       }
+    }
+    if (apiActivityService.state !== ApiActivityState.Error) {
+      apiActivityService.setSuccess();
     }
     this.processingRequestQueue = false;
   }
