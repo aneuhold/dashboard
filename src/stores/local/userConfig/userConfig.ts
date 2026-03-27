@@ -23,7 +23,7 @@ function createUserConfigStore() {
     config: DashboardUserConfigSchema.parse({ userId: DocumentService.generateID() }),
     collaborators: {}
   };
-  const { subscribe, set } = writable<UserConfig>(currentConfig);
+  const { subscribe, set } = writable(currentConfig);
 
   const localDataUserConfig = browser ? LocalData.userConfig : null;
   if (localDataUserConfig) {

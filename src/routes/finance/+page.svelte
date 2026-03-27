@@ -15,7 +15,7 @@
   let tr = $derived(new TR($translations));
 
   // Make links derived so they update with translations
-  let bankingAndFinanceStorageLinks = $derived<Array<LinkInfo>>([
+  let bankingAndFinanceStorageLinks = $derived([
     {
       title: tr.key('finance.banking-links.onpoint.title'),
       description: tr.key('finance.banking-links.onpoint.description'),
@@ -50,7 +50,7 @@
     }
   ]);
 
-  let debtAndLoansLinks = $derived<Array<LinkInfo>>([
+  let debtAndLoansLinks = $derived([
     {
       title: tr.key('finance.debt-links.student-loan.title'),
       description: tr.key('finance.debt-links.student-loan.description'),

@@ -35,7 +35,7 @@
   let iconComponent = $derived(archComponent.icon);
   let dependencyNames = $derived(archComponent.dependencies?.map((component) => component.title));
 
-  let menuItems = $derived<MenuButtonItem[]>(
+  let menuItems = $derived(
     (() => {
       const items: MenuButtonItem[] = [];
       if (archComponent.configurationUrl) {

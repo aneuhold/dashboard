@@ -1,7 +1,7 @@
 import { writable } from 'svelte/store';
 
 function createNavDrawerOpenStore() {
-  const { subscribe, set, update } = writable<boolean>(false);
+  const { subscribe, set, update } = writable(false);
 
   return {
     subscribe,

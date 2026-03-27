@@ -3,7 +3,7 @@ import DashboardAPIService from '$util/api/DashboardAPIService';
 
 function createAppIsVisibleStore() {
   let _appIsVisible = true;
-  const { subscribe, set } = writable<boolean>(_appIsVisible);
+  const { subscribe, set } = writable(_appIsVisible);
 
   return {
     subscribe,

@@ -5,7 +5,7 @@ import LocalData from '$util/LocalData/LocalData';
 
 function createTranslationsStore() {
   const initialTranslations = (browser ? LocalData.translations : null) ?? {};
-  const { subscribe, set } = writable<Translations>(initialTranslations);
+  const { subscribe, set } = writable(initialTranslations);
 
   return {
     subscribe,
