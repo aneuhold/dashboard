@@ -3,7 +3,7 @@
   import Button, { Label } from '@smui/button';
   import { Actions, Content, Title } from '@smui/dialog';
   import SmartDialog from '$components/presentational/SmartDialog.svelte';
-  import TaskTagsService from '$services/Task/TaskTagsService';
+  import TaskTagsService from '$services/Task/TaskTags.service';
   import TaskFilterSetting from './TaskFilterSetting.svelte';
 
   let {

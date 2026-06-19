@@ -5,8 +5,8 @@
   import type { UUID } from 'crypto';
   import InputBox from '$components/presentational/InputBox/InputBox.svelte';
   import { nonogramKatanaItemDialog } from '$components/singletons/dialogs/SingletonNonogramKatanaItemDialog.svelte';
-  import nonogramKatanaItemMapService from '$services/NonogramKatana/NonogramKatanaItemMapService';
-  import nonogramKatanaUpgradeMapService from '$services/NonogramKatana/NonogramKatanaUpgradeMapService';
+  import nonogramKatanaItemMapService from '$services/NonogramKatana/NonogramKatanaItemMap.service';
+  import nonogramKatanaUpgradeMapService from '$services/NonogramKatana/NonogramKatanaUpgradeMap.service';
   import { nonogramKatanaItemsDisplayInfo } from './nonogramKatanaItemsDisplayInfo';
   import NonogramKatanaRelatedUpgrade from './NonogramKatanaRelatedUpgrade.svelte';
 

@@ -10,7 +10,7 @@
   import type { UUID } from 'crypto';
   import { writable } from 'svelte/store';
   import SmartDialog from '$components/presentational/SmartDialog.svelte';
-  import nonogramKatanaItemMapService from '$services/NonogramKatana/NonogramKatanaItemMapService';
+  import nonogramKatanaItemMapService from '$services/NonogramKatana/NonogramKatanaItemMap.service';
 
   /**
    * A Nonogram Katana item dialog which can be used anywhere in the app.

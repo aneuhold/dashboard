@@ -13,12 +13,10 @@ import { SvelteDate } from 'svelte/reactivity';
 import type { Unsubscriber, Updater } from 'svelte/store';
 import { appIsVisible } from '$stores/session/appIsVisible';
 import { timeMinute } from '$stores/session/timeMinute';
-import DashboardAPIService from '$util/api/DashboardAPIService';
+import DashboardAPIService from '$util/api/DashboardAPI.service';
 import { createLogger } from '$util/logging/logger';
-import type { UpsertManyInfo } from '../DocumentMapStoreService.svelte';
-import TaskOperationsService from './TaskOperationsService.svelte';
-
-const log = createLogger('TaskRecurrenceService.ts');
+import type { UpsertManyInfo } from '../DocumentMapStore.service.svelte';
+import TaskOperationsService from './TaskOperations.service.svelte';
 
 type TaskRecurrenceSubMap = { [taskId: string]: Unsubscriber | undefined };
 
@@ -26,11 +24,13 @@ type TaskRecurrenceSubMap = { [taskId: string]: Unsubscriber | undefined };
  * A service for handling logic related to recurrence on tasks.
  */
 export default class TaskRecurrenceService {
+  static readonly #log = createLogger('TaskRecurrence.service.svelte.ts');
+
   /**
    * The map of task IDs to the their associated unsubscriber. The unsubscriber
    * comes from subscribing to the {@link timeMinute} store.
    */
-  private static taskRecurrenceSubMap: TaskRecurrenceSubMap = {};
+  static #taskRecurrenceSubMap: TaskRecurrenceSubMap = {};
 
   /**
    * Creates an example of what would happen to a task if the recurrence
@@ -124,7 +124,7 @@ export default class TaskRecurrenceService {
     if (!task.recurrenceInfo || task.parentRecurringTaskInfo) {
       return;
     }
-    log.info('Executing recurrence for task', task);
+    this.#log.info('Executing recurrence for task', task);
     upsertMany(this.getRecurrenceUpdateInfo(taskMap, task));
   }
 
@@ -224,10 +224,10 @@ export default class TaskRecurrenceService {
    */
   static buildTaskRecurrenceSubMapFresh(taskMap: DashboardTaskMap): void {
     // Clear the current map
-    Object.values(this.taskRecurrenceSubMap).forEach((unsub) => {
+    Object.values(this.#taskRecurrenceSubMap).forEach((unsub) => {
       if (unsub) unsub();
     });
-    this.taskRecurrenceSubMap = {};
+    this.#taskRecurrenceSubMap = {};
     // Build the new map
     Object.values(taskMap).forEach((task) => {
       if (task) {
@@ -257,7 +257,7 @@ export default class TaskRecurrenceService {
     ) {
       const nextRecurrenceDate = this.getNextRecurrenceDate(task);
       if (nextRecurrenceDate) {
-        this.taskRecurrenceSubMap[task._id] = timeMinute.subscribe((newDate) => {
+        this.#taskRecurrenceSubMap[task._id] = timeMinute.subscribe((newDate) => {
           if (newDate > nextRecurrenceDate) {
             // Only run if the app is visible, otherwise, wait until it is
             // visible.
@@ -274,10 +274,10 @@ export default class TaskRecurrenceService {
   }
 
   static removeTaskTimeSubscription(taskId: string) {
-    const unsub = this.taskRecurrenceSubMap[taskId];
+    const unsub = this.#taskRecurrenceSubMap[taskId];
     if (unsub) {
       unsub();
-      delete this.taskRecurrenceSubMap[taskId];
+      delete this.#taskRecurrenceSubMap[taskId];
     }
   }
 

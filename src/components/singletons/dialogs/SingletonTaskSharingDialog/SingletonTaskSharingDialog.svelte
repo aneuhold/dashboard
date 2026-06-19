@@ -12,7 +12,7 @@
   import type { UUID } from 'crypto';
   import { writable } from 'svelte/store';
   import SmartDialog from '$components/presentational/SmartDialog.svelte';
-  import taskMapService from '$services/Task/TaskMapService/TaskMapService';
+  import taskMapService from '$services/Task/TaskMap/TaskMap.service';
   import { currentUserId } from '$stores/derived/currentUserId';
   import { userConfig } from '$stores/local/userConfig/userConfig';
 

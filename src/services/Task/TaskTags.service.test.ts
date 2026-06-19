@@ -2,7 +2,7 @@ import { get, type Updater, type Writable, writable } from 'svelte/store';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { type UserConfig, userConfig } from '$stores/local/userConfig/userConfig';
 import { createTestUserConfig } from '../../../testUtils/TaskTestUtils';
-import TaskTagsService from './TaskTagsService';
+import TaskTagsService from './TaskTags.service';
 
 describe('TaskTagsService', () => {
   let mockUserConfigStore: Writable<UserConfig> & { get: () => UserConfig };

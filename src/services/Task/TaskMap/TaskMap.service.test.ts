@@ -11,11 +11,11 @@ import {
 import { DateService } from '@aneuhold/core-ts-lib';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { userConfig } from '$stores/local/userConfig/userConfig';
-import DashboardAPIService from '$util/api/DashboardAPIService';
-import type { UpsertManyInfo } from '../../DocumentMapStoreService.svelte';
-import TaskRecurrenceService from '../TaskRecurrenceService.svelte';
-import TaskTagsService from '../TaskTagsService';
-import taskMapService from './TaskMapService';
+import DashboardAPIService from '$util/api/DashboardAPI.service';
+import type { UpsertManyInfo } from '../../DocumentMapStore.service.svelte';
+import TaskRecurrenceService from '../TaskRecurrence.service.svelte';
+import TaskTagsService from '../TaskTags.service';
+import taskMapService from './TaskMap.service';
 
 // Mock dependencies
 vi.mock('$util/LocalData/LocalData', () => ({

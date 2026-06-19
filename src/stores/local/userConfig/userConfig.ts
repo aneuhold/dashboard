@@ -6,7 +6,7 @@ import {
 } from '@aneuhold/core-ts-db-lib';
 import { type Updater, writable } from 'svelte/store';
 import { browser } from '$app/environment';
-import DashboardAPIService from '$util/api/DashboardAPIService';
+import DashboardAPIService from '$util/api/DashboardAPI.service';
 import LocalData from '$util/LocalData/LocalData';
 import { createLogger } from '$util/logging/logger';
 

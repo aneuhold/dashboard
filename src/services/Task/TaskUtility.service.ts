@@ -3,7 +3,7 @@ import { ArrayService } from '@aneuhold/core-ts-lib';
 import type { UUID } from 'crypto';
 import type { BreadCrumbArray } from '$components/BreadCrumb.svelte';
 import { confirmationDialog } from '$components/singletons/dialogs/SingletonConfirmationDialog/SingletonConfirmationDialog.svelte';
-import taskMapService from './TaskMapService/TaskMapService';
+import taskMapService from './TaskMap/TaskMap.service';
 
 /**
  * The main task utility service.

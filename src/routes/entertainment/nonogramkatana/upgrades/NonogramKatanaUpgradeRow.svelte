@@ -5,7 +5,7 @@
   import { Icon } from '@smui/common';
   import IconButton from '@smui/icon-button';
   import { nonogramKatanaUpgradeDialog } from '$components/singletons/dialogs/SingletonNonogramKatanaUpgradeDialog.svelte';
-  import nonogramKatanaUpgradeMapService from '$services/NonogramKatana/NonogramKatanaUpgradeMapService';
+  import nonogramKatanaUpgradeMapService from '$services/NonogramKatana/NonogramKatanaUpgradeMap.service';
   import NonogramKatanaRequiredItem from './NonogramKatanaRequiredItem.svelte';
   import NonogramKatanaRequiredUpgrade from './NonogramKatanaRequiredUpgrade.svelte';
   import { nonogramKatanaUpgradesDisplayInfo } from './nonogramKatanaUpgradesDisplayInfo';

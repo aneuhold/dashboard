@@ -6,7 +6,7 @@ import {
 } from '@aneuhold/core-ts-db-lib';
 import type { UUID } from 'crypto';
 import { type Updater } from 'svelte/store';
-import type { UpsertManyInfo } from '../DocumentMapStoreService.svelte';
+import type { UpsertManyInfo } from '../DocumentMapStore.service.svelte';
 
 /**
  * A service for pure task operations that don't require store access.

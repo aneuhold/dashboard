@@ -3,7 +3,7 @@
   import {
     MockTaskAssignment,
     MockTaskSharedWith
-  } from '$services/Task/TaskMapService/TaskMapService.mock';
+  } from '$services/Task/TaskMap/TaskMap.service.mock';
   import sbTaskDetailsMeta from './TaskDetails.stories.base';
 
   const { Story } = defineMeta({

@@ -20,9 +20,9 @@
   import type { UUID } from 'crypto';
   import ClickableDiv from '$components/presentational/ClickableDiv.svelte';
   import SmartDialog from '$components/presentational/SmartDialog.svelte';
-  import taskMapService from '$services/Task/TaskMapService/TaskMapService';
-  import TaskRecurrenceService from '$services/Task/TaskRecurrenceService.svelte';
-  import TaskUtilityService from '$services/Task/TaskUtilityService';
+  import taskMapService from '$services/Task/TaskMap/TaskMap.service';
+  import TaskRecurrenceService from '$services/Task/TaskRecurrence.service.svelte';
+  import TaskUtilityService from '$services/Task/TaskUtility.service';
   import TaskRecurrenceDetails from './TaskRecurrenceDetails.svelte';
 
   let { task, childTaskIds }: { task: DashboardTask; childTaskIds: UUID[] } = $props();

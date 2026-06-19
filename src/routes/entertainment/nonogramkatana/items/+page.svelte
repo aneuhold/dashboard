@@ -6,7 +6,7 @@
   import PageTitle from '$components/PageTitle.svelte';
   import InputBox from '$components/presentational/InputBox/InputBox.svelte';
   import SingletonNonogramKatanaItemDialog from '$components/singletons/dialogs/SingletonNonogramKatanaItemDialog.svelte';
-  import nonogramKatanaItemMapService from '$services/NonogramKatana/NonogramKatanaItemMapService';
+  import nonogramKatanaItemMapService from '$services/NonogramKatana/NonogramKatanaItemMap.service';
   import { userConfig } from '$stores/local/userConfig/userConfig';
   import NonogramKatanaItemRow from './NonogramKatanaItemRow.svelte';
   import { nonogramKatanaItemsPageInfo } from './pageInfo';

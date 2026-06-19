@@ -3,7 +3,7 @@
   import Card, { Content } from '@smui/card';
   import IconButton, { Icon } from '@smui/icon-button';
   import MenuButton, { type MenuButtonItem } from '$components/presentational/MenuButton.svelte';
-  import TaskTagsService from '$services/Task/TaskTagsService';
+  import TaskTagsService from '$services/Task/TaskTags.service';
   import { userConfig } from '$stores/local/userConfig/userConfig';
 
   let {

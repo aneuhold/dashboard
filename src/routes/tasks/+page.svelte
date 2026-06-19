@@ -12,9 +12,9 @@
   import FabButton from '$components/presentational/FabButton/FabButton.svelte';
   import TaskDetails from '$components/Tasks/TaskDetails/TaskDetails.svelte';
   import TaskList from '$components/Tasks/TaskList/TaskList.svelte';
-  import TaskListService from '$services/Task/TaskListService';
-  import taskMapService from '$services/Task/TaskMapService/TaskMapService';
-  import TaskUtilityService from '$services/Task/TaskUtilityService';
+  import TaskListService from '$services/Task/TaskList.service';
+  import taskMapService from '$services/Task/TaskMap/TaskMap.service';
+  import TaskUtilityService from '$services/Task/TaskUtility.service';
   import { userConfig } from '$stores/local/userConfig/userConfig';
   import { tasksPageInfo } from './pageInfo';
 

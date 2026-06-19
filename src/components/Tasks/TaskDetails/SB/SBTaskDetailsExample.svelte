@@ -5,7 +5,7 @@
   import {
     MockTaskAssignment,
     MockTaskSharedWith
-  } from '$services/Task/TaskMapService/TaskMapService.mock';
+  } from '$services/Task/TaskMap/TaskMap.service.mock';
   import MockData from '$testUtils/MockData';
   import TaskDetails from '../TaskDetails.svelte';
 

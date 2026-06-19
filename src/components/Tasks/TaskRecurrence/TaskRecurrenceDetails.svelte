@@ -18,8 +18,8 @@
   import InputBox from '$components/presentational/InputBox/InputBox.svelte';
   import { confirmationDialog } from '$components/singletons/dialogs/SingletonConfirmationDialog/SingletonConfirmationDialog.svelte';
   import WeekdaySegmentedButton from '$components/WeekdaySegmentedButton.svelte';
-  import taskMapService from '$services/Task/TaskMapService/TaskMapService';
-  import TaskRecurrenceService from '$services/Task/TaskRecurrenceService.svelte';
+  import taskMapService from '$services/Task/TaskMap/TaskMap.service';
+  import TaskRecurrenceService from '$services/Task/TaskRecurrence.service.svelte';
   import TaskRecurrenceInfoIcon from './TaskRecurrenceInfoIcon.svelte';
   import TaskRecurrenceUpdateExample from './TaskRecurrenceUpdateExample.svelte';
   import TaskRecurrenceWeekdayOfMonth from './TaskRecurrenceWeekdayOfMonth.svelte';

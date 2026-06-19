@@ -1,7 +1,7 @@
 import type { ProjectDashboardOptions } from '@aneuhold/core-ts-api-lib';
 import type { BaseDocument } from '@aneuhold/core-ts-db-lib';
-import type { DocumentInsertOrUpdateInfo } from '$services/DocumentMapStoreService.svelte';
-import DashboardAPIService from './DashboardAPIService';
+import type { DocumentInsertOrUpdateInfo } from '$services/DocumentMapStore.service.svelte';
+import DashboardAPIService from './DashboardAPI.service';
 
 type ProjectDashboardOptionsKey = keyof NonNullable<ProjectDashboardOptions['insert']>;
 

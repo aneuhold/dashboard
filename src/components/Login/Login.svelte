@@ -9,11 +9,11 @@
   import CircularProgress from '@smui/circular-progress';
   import { onMount } from 'svelte';
   import InputBox from '$components/presentational/InputBox/InputBox.svelte';
-  import googleGISService from '$services/GoogleGISService';
+  import googleGISService from '$services/GoogleGIS.service';
   import { dashboardConfig } from '$stores/local/dashboardConfig';
   import { password } from '$stores/local/password';
   import { LoginState, loginState } from '$stores/session/loginState';
-  import DashboardAPIService from '$util/api/DashboardAPIService';
+  import DashboardAPIService from '$util/api/DashboardAPI.service';
   import LocalData from '$util/LocalData/LocalData';
   import { createLogger } from '$util/logging/logger';
 

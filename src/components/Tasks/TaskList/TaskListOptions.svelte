@@ -8,8 +8,8 @@
   import type { UUID } from 'crypto';
   import ClickableDiv from '$components/presentational/ClickableDiv.svelte';
   import SquareIconButton from '$components/presentational/SquareIconButton.svelte';
-  import taskMapService from '$services/Task/TaskMapService/TaskMapService';
-  import TaskTagsService from '$services/Task/TaskTagsService';
+  import taskMapService from '$services/Task/TaskMap/TaskMap.service';
+  import TaskTagsService from '$services/Task/TaskTags.service';
   import { currentUserId } from '$stores/derived/currentUserId';
   import { userConfig } from '$stores/local/userConfig/userConfig';
   import TaskListFilterDialog from './TaskListFilterDialog.svelte';

@@ -12,7 +12,7 @@
   import Paper, { Content, Title } from '@smui/paper';
   import InputBox from '$components/presentational/InputBox/InputBox.svelte';
   import { snackbar } from '$components/singletons/SingletonSnackbar.svelte';
-  import AdminAPIService from '$util/api/AdminAPIService';
+  import AdminAPIService from '$util/api/AdminAPI.service';
 
   let {
     onCreated,

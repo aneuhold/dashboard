@@ -6,7 +6,7 @@
   import { goto } from '$app/navigation';
   import SyncIndicator from '$components/presentational/SyncIndicator.svelte';
   import GitHubIcon from '$lib/svgs/GitHubIcon.svelte';
-  import googleGISService from '$services/GoogleGISService';
+  import googleGISService from '$services/GoogleGIS.service';
   import { LoginState, loginState } from '$stores/session/loginState';
   import { navDrawerOpen } from '$stores/session/navDrawerOpen';
   import LocalData from '$util/LocalData/LocalData';
