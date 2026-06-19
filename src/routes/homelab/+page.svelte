@@ -9,6 +9,11 @@
   import type { LinkInfo } from '$components/LinkListItem.svelte';
   import PageNotFound from '$components/PageNotFound.svelte';
   import PageTitle from '$components/PageTitle.svelte';
+  import DockerIcon from '$lib/svgs/DockerIcon.svelte';
+  import GrafanaIcon from '$lib/svgs/GrafanaIcon.svelte';
+  import NtopngIcon from '$lib/svgs/NtopngIcon.svelte';
+  import PiHoleIcon from '$lib/svgs/PiHoleIcon.svelte';
+  import UbiquitiIcon from '$lib/svgs/UbiquitiIcon.svelte';
   import { userConfig } from '$stores/local/userConfig/userConfig';
   import { homelabPageInfo } from './pageInfo';
 
@@ -19,7 +24,7 @@
       clickAction: () => {
         window.open('http://pi3-bplus-1.local:3000', '_blank');
       },
-      iconName: 'lan'
+      icon: NtopngIcon
     },
     {
       title: 'Grafana',
@@ -27,7 +32,7 @@
       clickAction: () => {
         window.open('http://pi3-bplus-1.local:3001', '_blank');
       },
-      iconName: 'monitoring'
+      icon: GrafanaIcon
     }
   ];
 
@@ -38,7 +43,7 @@
       clickAction: () => {
         window.open('http://pi3-bplus-1.local:8080', '_blank');
       },
-      iconName: 'dns'
+      icon: PiHoleIcon
     },
     {
       title: 'EdgeRouter X',
@@ -46,7 +51,7 @@
       clickAction: () => {
         window.open('https://192.168.0.2', '_blank');
       },
-      iconName: 'router'
+      icon: UbiquitiIcon
     }
   ];
 
@@ -57,7 +62,7 @@
       clickAction: () => {
         window.open('http://pi3-b-1.local:8088', '_blank');
       },
-      iconName: 'check_circle'
+      icon: DockerIcon
     }
   ];
 </script>
