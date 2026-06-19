@@ -19,8 +19,8 @@ importers:
         specifier: ^3.0.39
         version: 3.0.39
       '@aneuhold/core-ts-db-lib':
-        specifier: ^5.0.9
-        version: 5.0.9
+        specifier: ^5.0.10
+        version: 5.0.10
       '@aneuhold/core-ts-lib':
         specifier: ^2.4.5
         version: 2.4.5
@@ -266,11 +266,14 @@ packages:
   '@aneuhold/core-ts-api-lib@3.0.39':
     resolution: {integrity: sha512-yIv3E0XqIxtCEHq37hRzAvjs174pu0E1TxsjiXXT6n3ZRmEIh6kkpQgJk671xGe7wDrmz11k4CqSmecB7cVb9Q==}
 
-  '@aneuhold/core-ts-db-lib@5.0.9':
-    resolution: {integrity: sha512-5hAwMteB+mK6OQ4OK4AeAl8wXbVbtsDtMyJhuSL+H1R9zMpKXvFamDkcHC4nyrHNzzuxupapPXdYVoCgwvgRUQ==}
+  '@aneuhold/core-ts-db-lib@5.0.10':
+    resolution: {integrity: sha512-0d/ImsmM6POTxz6yp0tDKkoA+9gBoQpY90uqoWg0tYqbfpQZwsoSVzTEJ1a24mZVPG+tQOvbplnC3aCV3ji0ug==}
 
   '@aneuhold/core-ts-lib@2.4.5':
     resolution: {integrity: sha512-w7QRNA+by/4z5fBqyX2+TGKXNaFgY56UB3UUq7pX0r0MF620utYbA6AWVxU72iEjF6ohR72WBozYb71324WsOQ==}
+
+  '@aneuhold/core-ts-lib@2.4.6':
+    resolution: {integrity: sha512-BUh8A0N0ysFcnmivuxz4K3LNF8oUhM/7qKcKFJ8/hthhP02muh6X/UIoAT8jzT8xrMrfMAqqj+cUqzEYUo6/DA==}
 
   '@aneuhold/eslint-config@3.0.1':
     resolution: {integrity: sha512-eg5CkYt62zFpRRiMUdzkQk+6I93RP3rCLOPi1j3ov3Cyqgk4PtAD8hmN5IFaRRGy8shjOIncPqBWBeG23gZmQw==}
@@ -6698,17 +6701,19 @@ snapshots:
 
   '@aneuhold/core-ts-api-lib@3.0.39':
     dependencies:
-      '@aneuhold/core-ts-db-lib': 5.0.9
+      '@aneuhold/core-ts-db-lib': 5.0.10
       '@aneuhold/core-ts-lib': 2.4.5
       bson: 7.3.0
 
-  '@aneuhold/core-ts-db-lib@5.0.9':
+  '@aneuhold/core-ts-db-lib@5.0.10':
     dependencies:
-      '@aneuhold/core-ts-lib': 2.4.5
+      '@aneuhold/core-ts-lib': 2.4.6
       uuid: 13.0.2
       zod: 4.4.3
 
   '@aneuhold/core-ts-lib@2.4.5': {}
+
+  '@aneuhold/core-ts-lib@2.4.6': {}
 
   '@aneuhold/eslint-config@3.0.1(@angular/cli@21.0.3(@types/node@25.5.0))(eslint@10.5.0(jiti@2.7.0))(prettier@3.8.4)(svelte@5.53.0)(typescript@5.9.3)':
     dependencies:
@@ -7960,7 +7965,7 @@ snapshots:
 
   '@npmcli/fs@5.0.0':
     dependencies:
-      semver: 7.8.5
+      semver: 7.7.3
 
   '@npmcli/git@7.0.2':
     dependencies:
@@ -7970,7 +7975,7 @@ snapshots:
       lru-cache: 11.5.1
       npm-pick-manifest: 11.0.3
       proc-log: 6.1.0
-      semver: 7.8.5
+      semver: 7.7.3
       which: 6.0.1
 
   '@npmcli/installed-package-contents@3.0.0':
@@ -7987,7 +7992,7 @@ snapshots:
       hosted-git-info: 9.0.3
       json-parse-even-better-errors: 5.0.0
       proc-log: 6.1.0
-      semver: 7.8.5
+      semver: 7.7.3
       spdx-expression-parse: 4.0.0
 
   '@npmcli/promise-spawn@8.0.3':
@@ -12302,7 +12307,7 @@ snapshots:
       graceful-fs: 4.2.11
       nopt: 9.0.0
       proc-log: 6.1.0
-      semver: 7.8.5
+      semver: 7.7.3
       tar: 7.5.16
       tinyglobby: 0.2.17
       undici: 6.27.0
@@ -12358,7 +12363,7 @@ snapshots:
 
   npm-install-checks@8.0.0:
     dependencies:
-      semver: 7.8.5
+      semver: 7.7.3
 
   npm-normalize-package-bin@4.0.0: {}
 
@@ -12368,7 +12373,7 @@ snapshots:
     dependencies:
       hosted-git-info: 9.0.3
       proc-log: 5.0.0
-      semver: 7.8.5
+      semver: 7.7.3
       validate-npm-package-name: 6.0.2
 
   npm-packlist@10.0.4:
@@ -12381,7 +12386,7 @@ snapshots:
       npm-install-checks: 8.0.0
       npm-normalize-package-bin: 5.0.0
       npm-package-arg: 13.0.1
-      semver: 7.8.5
+      semver: 7.7.3
 
   npm-registry-fetch@19.1.1:
     dependencies:

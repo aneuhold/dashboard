@@ -30,6 +30,8 @@ function createEnabledPagesStore() {
               return settings.config.enabledFeatures.financePage;
             case navInfo.automation.title:
               return settings.config.enabledFeatures.automationPage;
+            case navInfo.homelab.title:
+              return settings.config.enabledFeatures.homelabPage;
             case navInfo.entertainment.title:
             case navInfo.nonogramKatana.title:
               return settings.config.enabledFeatures.entertainmentPage;
