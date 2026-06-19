@@ -47,11 +47,11 @@
   }
 
   function getDisabledSortSettings(settings: DashboardTaskListSortSettings): DashboardTaskSortBy[] {
-    const disabledSettings = new SvelteSet(Object.keys(DashboardTaskSortBy));
+    const disabledSettings = new SvelteSet(Object.values(DashboardTaskSortBy));
     settings.sortList.forEach((sortSetting) => {
       disabledSettings.delete(sortSetting.sortBy);
     });
-    return Array.from(disabledSettings) as DashboardTaskSortBy[];
+    return Array.from(disabledSettings);
   }
 
   function handleEnable(sortBy: DashboardTaskSortBy) {
@@ -114,9 +114,11 @@
 
   $effect(() => {
     if (open !== previousOpen) {
-      currentSettings = JSON.parse(
-        JSON.stringify(initialSettings)
-      ) as DashboardTaskListSortSettings;
+      // structuredClone crashes the browser on Svelte state objects. JSON.stringify
+      // seamlessly handles them, so it is used for the deep clone instead.
+      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+      const clone = JSON.parse(JSON.stringify(initialSettings)) as DashboardTaskListSortSettings;
+      currentSettings = clone;
       currentSortList = currentSettings.sortList;
       disabledSortSettings = getDisabledSortSettings(currentSettings);
     }

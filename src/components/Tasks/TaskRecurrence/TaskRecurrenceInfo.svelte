@@ -71,15 +71,14 @@
       errorInfoDialogContent = 'Tasks must have a start date or due date to be set to recurring.';
       errorInfoDialogOpen = true;
     } else {
-      // Create a clone. This is okay because none of the properties are
-      // special objects, they are all simple JSON values.
-      // The clone is helpful because it makes it so changes across tasks do
-      // not reflect to each other.
-      const defaultRecurrenceInfoClone = JSON.parse(
-        JSON.stringify(defaultRecurrenceInfo)
-      ) as RecurrenceInfo;
+      // Create a clone so that changes across tasks do not reflect to each
+      // other. structuredClone crashes the browser on Svelte state objects.
+      // JSON.stringify seamlessly handles them, so it is used for the deep clone
+      // instead.
+      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+      const clone = JSON.parse(JSON.stringify(defaultRecurrenceInfo)) as RecurrenceInfo;
       taskMapService.updateTaskRecurrenceOrDates(task._id, {
-        newRecurrenceInfo: defaultRecurrenceInfoClone
+        newRecurrenceInfo: clone
       });
       recurringInfoOpen = true;
     }

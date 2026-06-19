@@ -5,13 +5,16 @@
   when a userId query parameter is present.
 -->
 <script lang="ts">
-  import type { UUID } from 'crypto';
+  import { DocumentService } from '@aneuhold/core-ts-db-lib';
   import { page } from '$app/stores';
   import AdminUserDetail from '$components/Admin/AdminUserDetail.svelte';
   import AdminUserList from '$components/Admin/AdminUserList.svelte';
   import { adminUsersPageInfo } from './pageInfo';
 
-  let userId = $derived($page.url.searchParams.get('userId') as UUID | undefined);
+  let userId = $derived.by(() => {
+    const userIdParam = $page.url.searchParams.get('userId');
+    return userIdParam ? DocumentService.toUUID(userIdParam) : undefined;
+  });
 </script>
 
 <svelte:head>

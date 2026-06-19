@@ -1,6 +1,6 @@
-import TaskMapServiceMock from '$services/Task/TaskMapService/TaskMapService.mock';
+import TaskMapServiceMock from '$services/Task/TaskMap/TaskMap.service.mock';
 import UserConfigMock from '$stores/local/userConfig/userConfig.mock';
-import AdminAPIServiceMock from '$util/api/AdminAPIService.mock';
+import AdminAPIServiceMock from '$util/api/AdminAPI.service.mock';
 import TestUsers from './TestUsers';
 
 /**

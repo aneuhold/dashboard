@@ -1,6 +1,5 @@
 <script lang="ts">
-  import { type DashboardTask } from '@aneuhold/core-ts-db-lib';
-  import type { UUID } from 'crypto';
+  import { type DashboardTask, DocumentService } from '@aneuhold/core-ts-db-lib';
   import { untrack } from 'svelte';
   import {
     MockTaskAssignment,
@@ -20,7 +19,7 @@
   } = $props();
 
   let mainTask: DashboardTask | undefined = $state();
-  let taskId = $derived(mainTask ? mainTask._id : ('non-existent-id' as UUID));
+  let taskId = $derived(mainTask ? mainTask._id : DocumentService.generateID());
 
   $effect(() => {
     // Track props to re-run the effect when they change

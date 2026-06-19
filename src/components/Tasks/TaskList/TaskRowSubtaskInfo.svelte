@@ -16,7 +16,9 @@ Info about subtasks within a task row.
   } = $props();
 
   let allChildTasks = $derived(
-    allChildrenIds.map((id) => taskMapService.mapState[id]) as DashboardTask[]
+    allChildrenIds
+      .map((id) => taskMapService.mapState[id])
+      .filter((task): task is DashboardTask => task !== undefined)
   );
   let allCompletedTasks = $derived(allChildTasks.filter((task) => task.completed));
   let allIncompleteTasks = $derived(allChildTasks.filter((task) => !task.completed));

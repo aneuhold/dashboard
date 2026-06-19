@@ -129,7 +129,11 @@ export default class LocalData {
   static setAndGetTaskMap(newTaskMap: DashboardTaskMap): DashboardTaskMap {
     const stringifiedTaskMap = JSON.stringify(newTaskMap);
     this.#storeValue(LocalData.#storedKeyNames.taskMap, stringifiedTaskMap);
-    return JSON.parse(stringifiedTaskMap, DateService.dateReviver) as DashboardTaskMap;
+    const revivedTaskMap: DashboardTaskMap = JSON.parse(
+      stringifiedTaskMap,
+      DateService.dateReviver
+    );
+    return revivedTaskMap;
   }
 
   static get taskMap() {
@@ -141,10 +145,11 @@ export default class LocalData {
   ): DocumentMap<NonogramKatanaItem> {
     const stringifiedItemMap = JSON.stringify(newItemMap);
     this.#storeValue(LocalData.#storedKeyNames.nonogramKatanaItemMap, stringifiedItemMap);
-    return JSON.parse(
+    const revivedItemMap: DocumentMap<NonogramKatanaItem> = JSON.parse(
       stringifiedItemMap,
       DateService.dateReviver
-    ) as DocumentMap<NonogramKatanaItem>;
+    );
+    return revivedItemMap;
   }
 
   static get nonogramKatanaItemMap(): DocumentMap<NonogramKatanaItem> | null {
@@ -158,10 +163,11 @@ export default class LocalData {
   ): DocumentMap<NonogramKatanaUpgrade> {
     const stringifiedUpgradeMap = JSON.stringify(newUpgradeMap);
     this.#storeValue(LocalData.#storedKeyNames.nonogramKatanaUpgradeMap, stringifiedUpgradeMap);
-    return JSON.parse(
+    const revivedUpgradeMap: DocumentMap<NonogramKatanaUpgrade> = JSON.parse(
       stringifiedUpgradeMap,
       DateService.dateReviver
-    ) as DocumentMap<NonogramKatanaUpgrade>;
+    );
+    return revivedUpgradeMap;
   }
 
   static get nonogramKatanaUpgradeMap(): Record<string, NonogramKatanaUpgrade> | null {
@@ -212,9 +218,9 @@ export default class LocalData {
       currentlyStoredValue !== 'undefined' &&
       typeof currentlyStoredValue === 'string'
     ) {
-      const jsonObject: unknown = JSON.parse(currentlyStoredValue, DateService.dateReviver);
+      const jsonObject: ObjectType = JSON.parse(currentlyStoredValue, DateService.dateReviver);
       if (typeof jsonObject === 'object') {
-        return jsonObject as ObjectType;
+        return jsonObject;
       }
     }
     return null;

@@ -22,14 +22,19 @@
 
   // svelte-ignore state_referenced_locally
   let currentSettings = $state(
+    // structuredClone crashes the browser on Svelte state objects. JSON.stringify
+    // seamlessly handles them, so it is used for the deep clone instead.
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     JSON.parse(JSON.stringify(initialSettings)) as DashboardTaskListFilterSettings
   );
   let previousOpen = $state(false);
   $effect(() => {
     if (open !== previousOpen) {
-      currentSettings = JSON.parse(
-        JSON.stringify(initialSettings)
-      ) as DashboardTaskListFilterSettings;
+      // structuredClone crashes the browser on Svelte state objects. JSON.stringify
+      // seamlessly handles them, so it is used for the deep clone instead.
+      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+      const clone = JSON.parse(JSON.stringify(initialSettings)) as DashboardTaskListFilterSettings;
+      currentSettings = clone;
     }
     previousOpen = open;
   });

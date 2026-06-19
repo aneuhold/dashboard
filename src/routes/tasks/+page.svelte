@@ -4,8 +4,7 @@
   A page for main tasks for the current user.
 -->
 <script lang="ts">
-  import { DashboardTaskSchema } from '@aneuhold/core-ts-db-lib';
-  import type { UUID } from 'crypto';
+  import { DashboardTaskSchema, DocumentService } from '@aneuhold/core-ts-db-lib';
   import { goto } from '$app/navigation';
   import { page } from '$app/stores';
   import PageTitle from '$components/PageTitle.svelte';
@@ -21,7 +20,10 @@
   let sortAndFilterResult = $derived(
     TaskListService.getTaskIds(taskMapService.mapState, $userConfig, 'default')
   );
-  let taskId = $derived($page.url.searchParams.get('taskId') as UUID | undefined);
+  let taskId = $derived.by(() => {
+    const taskIdParam = $page.url.searchParams.get('taskId');
+    return taskIdParam ? DocumentService.toUUID(taskIdParam) : undefined;
+  });
 
   function addTask() {
     const newTask = DashboardTaskSchema.parse({ userId: $userConfig.config.userId });

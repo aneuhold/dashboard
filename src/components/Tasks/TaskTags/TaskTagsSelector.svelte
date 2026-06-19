@@ -63,8 +63,7 @@
     checkAndAddNewTag(currentAutoCompleteValue);
   }
 
-  function handleKeyDown(event: CustomEvent | KeyboardEvent) {
-    event = event as KeyboardEvent;
+  function handleKeyDown(event: KeyboardEvent) {
     if (event.key === 'Enter') {
       handleNewSelection();
     }

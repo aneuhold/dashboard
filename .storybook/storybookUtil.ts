@@ -17,13 +17,22 @@
  *
  * @param enumType The enum type to create the argType for.
  */
-export function createEnumArgType(enumType: object): object {
-  return {
-    options: Object.values(enumType).filter((x) => typeof x === 'number'),
-    control: {
-      type: 'radio',
-      labels: Object.values(enumType).filter((x) => typeof x === 'string')
+export function createEnumArgType(enumType: Record<string, string | number>) {
+  const numericValues = Object.values(enumType).filter((value) => typeof value === 'number');
+  const labels: Record<string, string> = {};
+  numericValues.forEach((value) => {
+    const name = enumType[value];
+    if (typeof name === 'string') {
+      labels[value] = name;
     }
+  });
+  const control: { type: 'radio'; labels: Record<string, string> } = {
+    type: 'radio',
+    labels
+  };
+  return {
+    options: numericValues,
+    control
   };
 }
 

@@ -1,5 +1,5 @@
 import { ArchitectureComponentType } from './architectureComponents';
-import type { ArchitectureContext, ArchitectureContextName } from './architectureContextInfo';
+import type { ArchitectureContext } from './architectureContextInfo';
 import architectureContextInfo from './architectureContextInfo';
 
 /**
@@ -11,7 +11,8 @@ export default class ArchitectureInfo {
     if (searchParams.has('context')) {
       const contextString = searchParams.get('context');
       if (contextString && Object.hasOwn(architectureContextInfo, contextString)) {
-        return architectureContextInfo[contextString as ArchitectureContextName];
+        const contextInfo: Record<string, ArchitectureContext> = architectureContextInfo;
+        return contextInfo[contextString];
       }
     }
     return null;
