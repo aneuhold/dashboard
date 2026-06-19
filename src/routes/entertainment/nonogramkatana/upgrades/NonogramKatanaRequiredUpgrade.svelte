@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { NonogramKatanaUpgradeName } from '@aneuhold/core-ts-db-lib';
-  import nonogramKatanaUpgradeMapService from '$services/NonogramKatana/NonogramKatanaUpgradeMapService';
+  import nonogramKatanaUpgradeMapService from '$services/NonogramKatana/NonogramKatanaUpgradeMap.service';
   import { nonogramKatanaUpgradesDisplayInfo } from './nonogramKatanaUpgradesDisplayInfo';
 
   let { upgradeName }: { upgradeName: NonogramKatanaUpgradeName } = $props();

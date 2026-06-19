@@ -1,5 +1,5 @@
 <script lang="ts">
-  import apiActivityService from '$services/ApiActivityService/ApiActivityService.svelte';
+  import apiActivityService from '$services/ApiActivity.service.svelte';
   import SyncIndicator from './SyncIndicator.svelte';
 
   /**

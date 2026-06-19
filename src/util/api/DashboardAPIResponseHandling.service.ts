@@ -1,16 +1,16 @@
 import { type ProjectDashboardOutput } from '@aneuhold/core-ts-api-lib';
 import type { BaseDocument, UserCTO } from '@aneuhold/core-ts-db-lib';
 import { snackbar } from '$components/singletons/SingletonSnackbar.svelte';
-import nonogramKatanaItemMapService from '$services/NonogramKatana/NonogramKatanaItemMapService';
-import nonogramKatanaUpgradeMapService from '$services/NonogramKatana/NonogramKatanaUpgradeMapService';
-import taskMapService from '$services/Task/TaskMapService/TaskMapService';
+import nonogramKatanaItemMapService from '$services/NonogramKatana/NonogramKatanaItemMap.service';
+import nonogramKatanaUpgradeMapService from '$services/NonogramKatana/NonogramKatanaUpgradeMap.service';
+import taskMapService from '$services/Task/TaskMap/TaskMap.service';
 import { translations } from '$stores/local/translations';
 import { userConfig } from '$stores/local/userConfig/userConfig';
 import { createLogger } from '$util/logging/logger';
 
-const log = createLogger('DashboardAPIResponseHandlingService.ts');
-
 export default class DashboardAPIResponseHandlingService {
+  static readonly #log = createLogger('DashboardAPIResponseHandling.service.ts');
+
   /**
    * Processes the final output of a series of API requests.
    *
@@ -28,33 +28,31 @@ export default class DashboardAPIResponseHandlingService {
       });
     }
     if (output.tasks) {
-      taskMapService.setMap(this.convertDocumentArrayToMap(output.tasks));
+      taskMapService.setMap(this.#convertDocumentArrayToMap(output.tasks));
     }
     if (output.nonogramKatanaItems) {
       nonogramKatanaItemMapService.setMap(
-        this.convertDocumentArrayToMap(output.nonogramKatanaItems)
+        this.#convertDocumentArrayToMap(output.nonogramKatanaItems)
       );
     }
     if (output.nonogramKatanaUpgrades) {
       nonogramKatanaUpgradeMapService.setMap(
-        this.convertDocumentArrayToMap(output.nonogramKatanaUpgrades)
+        this.#convertDocumentArrayToMap(output.nonogramKatanaUpgrades)
       );
     }
     // Trigger some extra info if this is the first sync
     if (isFirstInitData && Object.keys(output).length > 0) {
-      log.info('Successfully got initial data');
+      DashboardAPIResponseHandlingService.#log.info('Successfully got initial data');
       snackbar.success('Successfully synced 🎉');
     } else if (isFirstInitData) {
       // If there wasn't any data that came back from the initial sync, then
       // something went wrong.
-      log.error('Error getting initial data', output);
+      DashboardAPIResponseHandlingService.#log.error('Error getting initial data', output);
       snackbar.error('Error syncing');
     }
   }
 
-  private static convertDocumentArrayToMap<T extends BaseDocument>(
-    documents: T[]
-  ): Record<string, T> {
+  static #convertDocumentArrayToMap<T extends BaseDocument>(documents: T[]): Record<string, T> {
     return documents.reduce<Record<string, T>>((map, document) => {
       map[document._id] = document;
       return map;

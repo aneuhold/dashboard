@@ -1,4 +1,4 @@
-import type { NonogramKatanaItemName, NonogramKatanaUpgradeName } from '@aneuhold/core-ts-db-lib';
+import { type NonogramKatanaItemName, NonogramKatanaUpgradeName } from '@aneuhold/core-ts-db-lib';
 import { nonogramKatanaUpgradesDisplayInfo } from './nonogramKatanaUpgradesDisplayInfo';
 
 type NonogramKatanaItemNameToUpgradesMap = {
@@ -10,17 +10,14 @@ type NonogramKatanaItemNameToUpgradesMap = {
  *
  * This is a static constant that doesn't involve user data.
  */
-const nonogramKatanaItemNameToUpgradesMap: NonogramKatanaItemNameToUpgradesMap = Object.entries(
-  nonogramKatanaUpgradesDisplayInfo
-).reduce<NonogramKatanaItemNameToUpgradesMap>((acc, [upgradeName, upgradeInfo]) => {
-  upgradeInfo.requiredItems.forEach((requiredItem) => {
+const nonogramKatanaItemNameToUpgradesMap: NonogramKatanaItemNameToUpgradesMap = {};
+Object.values(NonogramKatanaUpgradeName).forEach((upgradeName) => {
+  nonogramKatanaUpgradesDisplayInfo[upgradeName].requiredItems.forEach((requiredItem) => {
     const itemName = requiredItem.itemName;
-    if (!acc[itemName]) {
-      acc[itemName] = [];
-    }
-    acc[itemName].push(upgradeName as NonogramKatanaUpgradeName);
+    const upgradesForItem = nonogramKatanaItemNameToUpgradesMap[itemName] ?? [];
+    upgradesForItem.push(upgradeName);
+    nonogramKatanaItemNameToUpgradesMap[itemName] = upgradesForItem;
   });
-  return acc;
-}, {});
+});
 
 export default nonogramKatanaItemNameToUpgradesMap;

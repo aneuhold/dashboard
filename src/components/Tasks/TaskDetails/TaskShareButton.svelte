@@ -3,7 +3,7 @@
   import Button, { Icon } from '@smui/button';
   import { goto } from '$app/navigation';
   import { taskSharingDialog } from '$components/singletons/dialogs/SingletonTaskSharingDialog/SingletonTaskSharingDialog.svelte';
-  import TaskUtilityService from '$services/Task/TaskUtilityService';
+  import TaskUtilityService from '$services/Task/TaskUtility.service';
   import { userConfig } from '$stores/local/userConfig/userConfig';
 
   let {

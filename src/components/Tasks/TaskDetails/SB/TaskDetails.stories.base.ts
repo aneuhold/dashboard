@@ -5,7 +5,7 @@ import SbSingletonTaskSharingDialogDecorator from '$components/singletons/dialog
 import {
   MockTaskAssignment,
   MockTaskSharedWith
-} from '$services/Task/TaskMapService/TaskMapService.mock';
+} from '$services/Task/TaskMap/TaskMap.service.mock';
 import { createEnumArgType } from '$storybook/storybookUtil';
 import SBTaskDetailsExample from './SBTaskDetailsExample.svelte';
 

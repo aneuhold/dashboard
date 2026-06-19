@@ -1,13 +1,13 @@
 <script lang="ts">
   import { untrack } from 'svelte';
-  import TaskListService from '$services/Task/TaskListService';
-  import taskMapService from '$services/Task/TaskMapService/TaskMapService';
+  import TaskListService from '$services/Task/TaskList.service';
+  import taskMapService from '$services/Task/TaskMap/TaskMap.service';
   import {
     MockTaskAssignment,
     MockTaskDescription,
     MockTaskSharedWith,
     MockTaskSubTasks
-  } from '$services/Task/TaskMapService/TaskMapService.mock';
+  } from '$services/Task/TaskMap/TaskMap.service.mock';
   import { userConfig } from '$stores/local/userConfig/userConfig';
   import MockData from '$testUtils/MockData';
   import TaskList from '../TaskList.svelte';

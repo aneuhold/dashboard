@@ -20,9 +20,9 @@
   import type { UUID } from 'crypto';
   import ClickableDiv from '$components/presentational/ClickableDiv.svelte';
   import SmartDialog from '$components/presentational/SmartDialog.svelte';
-  import taskMapService from '$services/Task/TaskMapService/TaskMapService';
-  import TaskRecurrenceService from '$services/Task/TaskRecurrenceService.svelte';
-  import TaskUtilityService from '$services/Task/TaskUtilityService';
+  import taskMapService from '$services/Task/TaskMap/TaskMap.service';
+  import TaskRecurrenceService from '$services/Task/TaskRecurrence.service.svelte';
+  import TaskUtilityService from '$services/Task/TaskUtility.service';
   import TaskRecurrenceDetails from './TaskRecurrenceDetails.svelte';
 
   let { task, childTaskIds }: { task: DashboardTask; childTaskIds: UUID[] } = $props();
@@ -71,15 +71,14 @@
       errorInfoDialogContent = 'Tasks must have a start date or due date to be set to recurring.';
       errorInfoDialogOpen = true;
     } else {
-      // Create a clone. This is okay because none of the properties are
-      // special objects, they are all simple JSON values.
-      // The clone is helpful because it makes it so changes across tasks do
-      // not reflect to each other.
-      const defaultRecurrenceInfoClone = JSON.parse(
-        JSON.stringify(defaultRecurrenceInfo)
-      ) as RecurrenceInfo;
+      // Create a clone so that changes across tasks do not reflect to each
+      // other. structuredClone crashes the browser on Svelte state objects.
+      // JSON.stringify seamlessly handles them, so it is used for the deep clone
+      // instead.
+      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+      const clone = JSON.parse(JSON.stringify(defaultRecurrenceInfo)) as RecurrenceInfo;
       taskMapService.updateTaskRecurrenceOrDates(task._id, {
-        newRecurrenceInfo: defaultRecurrenceInfoClone
+        newRecurrenceInfo: clone
       });
       recurringInfoOpen = true;
     }

@@ -95,11 +95,7 @@ const getMinLevel = (): LogLevel => {
 };
 
 const getEnvVar = (name: string): string | undefined => {
-  const nodeProcess = (globalThis as unknown as { process?: unknown }).process as
-    | { env?: Record<string, string | undefined> }
-    | undefined;
-
-  return nodeProcess?.env?.[name];
+  return process.env[name];
 };
 
 const levelToNumber = (level: LogLevel): number => {

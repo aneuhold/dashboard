@@ -13,9 +13,9 @@
   import SingletonTaskAssignmentDialog from '$components/singletons/dialogs/SingletonTaskAssignmentDialog/SingletonTaskAssignmentDialog.svelte';
   import SingletonTaskSharingDialog from '$components/singletons/dialogs/SingletonTaskSharingDialog/SingletonTaskSharingDialog.svelte';
   import SingletonSnackbar from '$components/singletons/SingletonSnackbar.svelte';
-  import nonogramKatanaItemMapService from '$services/NonogramKatana/NonogramKatanaItemMapService';
-  import nonogramKatanaUpgradeMapService from '$services/NonogramKatana/NonogramKatanaUpgradeMapService';
-  import taskMapService from '$services/Task/TaskMapService/TaskMapService';
+  import nonogramKatanaItemMapService from '$services/NonogramKatana/NonogramKatanaItemMap.service';
+  import nonogramKatanaUpgradeMapService from '$services/NonogramKatana/NonogramKatanaUpgradeMap.service';
+  import taskMapService from '$services/Task/TaskMap/TaskMap.service';
   import { appIsVisible } from '$stores/session/appIsVisible';
   import { LoginState, loginState } from '$stores/session/loginState';
   import LocalData from '$util/LocalData/LocalData';

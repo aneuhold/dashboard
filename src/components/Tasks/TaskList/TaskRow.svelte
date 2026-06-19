@@ -17,8 +17,8 @@
   import { confirmationDialog } from '$components/singletons/dialogs/SingletonConfirmationDialog/SingletonConfirmationDialog.svelte';
   import { taskAssignmentDialog } from '$components/singletons/dialogs/SingletonTaskAssignmentDialog/SingletonTaskAssignmentDialog.svelte';
   import { taskSharingDialog } from '$components/singletons/dialogs/SingletonTaskSharingDialog/SingletonTaskSharingDialog.svelte';
-  import taskMapService from '$services/Task/TaskMapService/TaskMapService';
-  import TaskUtilityService from '$services/Task/TaskUtilityService';
+  import taskMapService from '$services/Task/TaskMap/TaskMap.service';
+  import TaskUtilityService from '$services/Task/TaskUtility.service';
   import { currentUserId } from '$stores/derived/currentUserId';
   import { userConfig } from '$stores/local/userConfig/userConfig';
   import TaskCompletedCheckbox from '../TaskCompletedCheckbox.svelte';

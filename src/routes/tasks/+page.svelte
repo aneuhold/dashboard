@@ -4,24 +4,26 @@
   A page for main tasks for the current user.
 -->
 <script lang="ts">
-  import { DashboardTaskSchema } from '@aneuhold/core-ts-db-lib';
-  import type { UUID } from 'crypto';
+  import { DashboardTaskSchema, DocumentService } from '@aneuhold/core-ts-db-lib';
   import { goto } from '$app/navigation';
   import { page } from '$app/stores';
   import PageTitle from '$components/PageTitle.svelte';
   import FabButton from '$components/presentational/FabButton/FabButton.svelte';
   import TaskDetails from '$components/Tasks/TaskDetails/TaskDetails.svelte';
   import TaskList from '$components/Tasks/TaskList/TaskList.svelte';
-  import TaskListService from '$services/Task/TaskListService';
-  import taskMapService from '$services/Task/TaskMapService/TaskMapService';
-  import TaskUtilityService from '$services/Task/TaskUtilityService';
+  import TaskListService from '$services/Task/TaskList.service';
+  import taskMapService from '$services/Task/TaskMap/TaskMap.service';
+  import TaskUtilityService from '$services/Task/TaskUtility.service';
   import { userConfig } from '$stores/local/userConfig/userConfig';
   import { tasksPageInfo } from './pageInfo';
 
   let sortAndFilterResult = $derived(
     TaskListService.getTaskIds(taskMapService.mapState, $userConfig, 'default')
   );
-  let taskId = $derived($page.url.searchParams.get('taskId') as UUID | undefined);
+  let taskId = $derived.by(() => {
+    const taskIdParam = $page.url.searchParams.get('taskId');
+    return taskIdParam ? DocumentService.toUUID(taskIdParam) : undefined;
+  });
 
   function addTask() {
     const newTask = DashboardTaskSchema.parse({ userId: $userConfig.config.userId });

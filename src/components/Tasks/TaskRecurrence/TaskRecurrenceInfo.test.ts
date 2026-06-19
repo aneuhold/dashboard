@@ -8,8 +8,8 @@ import { render, screen } from '@testing-library/svelte';
 import userEvent from '@testing-library/user-event';
 import type { UUID } from 'crypto';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import taskMapService from '$services/Task/TaskMapService/TaskMapService';
-import TaskMapServiceMock from '$services/Task/TaskMapService/TaskMapService.mock';
+import taskMapService from '$services/Task/TaskMap/TaskMap.service';
+import TaskMapServiceMock from '$services/Task/TaskMap/TaskMap.service.mock';
 import TestUsers from '$testUtils/TestUsers';
 import TaskRecurrenceInfo from './TaskRecurrenceInfo.svelte';
 

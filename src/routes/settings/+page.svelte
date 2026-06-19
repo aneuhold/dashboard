@@ -17,7 +17,7 @@
   import TaskDeletionSettings from '$components/Tasks/TaskDeletionSettings.svelte';
   import GlobalTagSettings from '$components/Tasks/TaskTags/GlobalTagSettings.svelte';
   import { userConfig } from '$stores/local/userConfig/userConfig';
-  import DashboardAPIService from '$util/api/DashboardAPIService';
+  import DashboardAPIService from '$util/api/DashboardAPI.service';
   import { settingsPageInfo } from './pageInfo';
 
   let searchingForUser = $state(false);

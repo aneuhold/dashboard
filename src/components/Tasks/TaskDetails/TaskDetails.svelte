@@ -9,11 +9,7 @@
   the task needs to be dynamic.
 -->
 <script lang="ts">
-  import {
-    type DashboardTask,
-    DashboardTaskSchema,
-    DashboardTaskService
-  } from '@aneuhold/core-ts-db-lib';
+  import { DashboardTaskSchema, DashboardTaskService } from '@aneuhold/core-ts-db-lib';
   import Button, { Icon } from '@smui/button';
   import Paper, { Content } from '@smui/paper';
   import type { UUID } from 'crypto';
@@ -22,9 +18,9 @@
   import PageTitle from '$components/PageTitle.svelte';
   import FabButton from '$components/presentational/FabButton/FabButton.svelte';
   import InputBox from '$components/presentational/InputBox/InputBox.svelte';
-  import TaskListService from '$services/Task/TaskListService';
-  import taskMapService from '$services/Task/TaskMapService/TaskMapService';
-  import TaskUtilityService from '$services/Task/TaskUtilityService';
+  import TaskListService from '$services/Task/TaskList.service';
+  import taskMapService from '$services/Task/TaskMap/TaskMap.service';
+  import TaskUtilityService from '$services/Task/TaskUtility.service';
   import { userConfig } from '$stores/local/userConfig/userConfig';
   import TaskCompletedCheckbox from '../TaskCompletedCheckbox.svelte';
   import TaskDateInfo from '../TaskDate/TaskDateInfo.svelte';
@@ -44,12 +40,7 @@
 
   let task = $derived(taskMapService.mapState[taskId]);
   let allChildrenIds = $derived(
-    task
-      ? DashboardTaskService.getChildrenIds(
-          Object.values(taskMapService.mapState) as DashboardTask[],
-          [task._id]
-        )
-      : []
+    task ? DashboardTaskService.getChildrenIds(taskMapService.allDocs, [task._id]) : []
   );
   let sortAndFilterResult = $derived(
     TaskListService.getTaskIdsForTask(taskMapService.mapState, $userConfig, allChildrenIds, task)
@@ -109,8 +100,9 @@
               label="Title"
               inputValue={task.title}
               onBlur={(val) => {
+                if (typeof val !== 'string') return;
                 taskMapService.updateDoc(taskId, (t) => {
-                  t.title = val as string;
+                  t.title = val;
                   return t;
                 });
               }}
@@ -121,8 +113,9 @@
             isTextArea={true}
             inputValue={task.description}
             onBlur={(val) => {
+              if (typeof val !== 'string') return;
               taskMapService.updateDoc(taskId, (t) => {
-                t.description = val as string;
+                t.description = val;
                 return t;
               });
             }}

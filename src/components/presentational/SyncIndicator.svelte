@@ -9,9 +9,7 @@
   import CircularProgress from '@smui/circular-progress';
   import { Icon } from '@smui/icon-button';
   import { fade } from 'svelte/transition';
-  import apiActivityService, {
-    ApiActivityState
-  } from '$services/ApiActivityService/ApiActivityService.svelte';
+  import apiActivityService, { ApiActivityState } from '$services/ApiActivity.service.svelte';
 </script>
 
 <div class="sync-indicator" class:visible={apiActivityService.state !== ApiActivityState.Idle}>

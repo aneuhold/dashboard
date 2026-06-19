@@ -18,8 +18,8 @@
   import InputBox from '$components/presentational/InputBox/InputBox.svelte';
   import { confirmationDialog } from '$components/singletons/dialogs/SingletonConfirmationDialog/SingletonConfirmationDialog.svelte';
   import WeekdaySegmentedButton from '$components/WeekdaySegmentedButton.svelte';
-  import taskMapService from '$services/Task/TaskMapService/TaskMapService';
-  import TaskRecurrenceService from '$services/Task/TaskRecurrenceService.svelte';
+  import taskMapService from '$services/Task/TaskMap/TaskMap.service';
+  import TaskRecurrenceService from '$services/Task/TaskRecurrence.service.svelte';
   import TaskRecurrenceInfoIcon from './TaskRecurrenceInfoIcon.svelte';
   import TaskRecurrenceUpdateExample from './TaskRecurrenceUpdateExample.svelte';
   import TaskRecurrenceWeekdayOfMonth from './TaskRecurrenceWeekdayOfMonth.svelte';
@@ -102,7 +102,8 @@
         setRInfo(newRInfo);
       },
       setWithoutCheck(value?: RecurrenceInfo) {
-        setRInfo(value ?? (JSON.parse(previousRInfoString) as RecurrenceInfo), false);
+        const previousRInfo: RecurrenceInfo = JSON.parse(previousRInfoString);
+        setRInfo(value ?? previousRInfo, false);
       }
     };
   }
@@ -156,10 +157,11 @@
   }
 
   function clearOtherTypes(newRInfo: RecurrenceInfo) {
+    const activeType: string = newRInfo.frequency.type;
     Object.keys(newRInfo.frequency).forEach((key) => {
       // Little hacky, but does the job
-      if (key !== (newRInfo.frequency.type as unknown as string) && key !== 'type') {
-        (newRInfo.frequency as { [key: string]: unknown })[key] = undefined;
+      if (key !== activeType && key !== 'type') {
+        Reflect.set(newRInfo.frequency, key, undefined);
       }
     });
   }

@@ -4,12 +4,11 @@ import { io, Socket } from 'socket.io-client';
 import LocalData from '$util/LocalData/LocalData';
 import { createLogger } from '$util/logging/logger';
 
-const log = createLogger('WebSocketService.ts');
-
 /**
  * A service for handling WebSocket connections used in the application.
  */
 export default class WebSocketService {
+  static readonly #log = createLogger('WebSocket.service.ts');
   static #socket?: Socket<DashboardWebSocketServerToClientEvents, never>;
   static #unsubs: (() => void)[] = [];
 
@@ -25,11 +24,11 @@ export default class WebSocketService {
       });
 
       this.#socket.on('connect', () => {
-        log.info('Connected to WebSocket server');
+        this.#log.info('Connected to WebSocket server');
       });
 
       this.#socket.on('disconnect', () => {
-        log.info('Disconnected from WebSocket server');
+        this.#log.info('Disconnected from WebSocket server');
       });
     }
   }
@@ -57,7 +56,7 @@ export default class WebSocketService {
       this.connect();
     }
     this.#socket?.on('rootPostResult', (data) => {
-      this.reviveDates(data);
+      this.#reviveDates(data);
       callback(data);
     });
     const unsub = () => {
@@ -94,24 +93,28 @@ export default class WebSocketService {
    *
    * @param body the body to revive
    */
-  private static reviveDates(body: unknown) {
-    if (body === null || typeof body !== 'object') {
+  static #reviveDates(body: unknown) {
+    if (!WebSocketService.#isRecord(body)) {
       return;
     }
 
-    const keys = Object.keys(body);
-    if (keys.length === 0) {
-      return;
-    }
-    const bodyAsRecord = body as Record<string, unknown>;
-    for (const key of Object.keys(bodyAsRecord)) {
-      const value = bodyAsRecord[key];
+    for (const key of Object.keys(body)) {
+      const value = body[key];
       const revivedValue = DateService.dateReviver(key, value);
       if (revivedValue !== value) {
-        bodyAsRecord[key] = revivedValue;
+        body[key] = revivedValue;
       } else if (typeof value === 'object') {
-        this.reviveDates(value);
+        this.#reviveDates(value);
       }
     }
+  }
+
+  /**
+   * Type guard narrowing an unknown value to a string-keyed record.
+   *
+   * @param value the value to check
+   */
+  static #isRecord(value: unknown): value is Record<string, unknown> {
+    return value !== null && typeof value === 'object';
   }
 }

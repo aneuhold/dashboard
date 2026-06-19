@@ -14,19 +14,19 @@ import createDashboardPersistToDb, {
 } from '$util/api/dashboardPersistenceUtils';
 import LocalData from '$util/LocalData/LocalData';
 import { createLogger } from '$util/logging/logger';
-import type { UpsertManyInfo } from '../../DocumentMapStoreService.svelte';
-import DocumentMapStoreService from '../../DocumentMapStoreService.svelte';
-import TaskCreationService from '../TaskCreationService';
-import TaskOperationsService from '../TaskOperationsService.svelte';
-import TaskRecurrenceService from '../TaskRecurrenceService.svelte';
-import TaskTagsService from '../TaskTagsService';
-
-const log = createLogger('TaskMapService.ts');
+import type { UpsertManyInfo } from '../../DocumentMapStore.service.svelte';
+import DocumentMapStoreService from '../../DocumentMapStore.service.svelte';
+import TaskCreationService from '../TaskCreation.service';
+import TaskOperationsService from '../TaskOperations.service.svelte';
+import TaskRecurrenceService from '../TaskRecurrence.service.svelte';
+import TaskTagsService from '../TaskTags.service';
 
 /**
  * The main task map service.
  */
 export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
+  static readonly #log = createLogger('TaskMap.service.ts');
+
   constructor() {
     super({
       persistToLocalData: (map) => LocalData.setAndGetTaskMap(map),
@@ -153,7 +153,7 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
   ): void {
     const currentTask = this.mapState[taskId];
     if (!currentTask) {
-      log.error(
+      TaskMapService.#log.error(
         `Cannot update task recurrence for task with ID ${taskId} because it does not exist.`
       );
       return;
@@ -206,7 +206,9 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
   public duplicateTask(taskId: UUID): void {
     const currentTask = this.mapState[taskId];
     if (!currentTask) {
-      log.error(`Cannot duplicate task with ID ${taskId} because it does not exist.`);
+      TaskMapService.#log.error(
+        `Cannot duplicate task with ID ${taskId} because it does not exist.`
+      );
       return;
     }
     const updateInfo = TaskOperationsService.getDuplicateTaskUpdateInfo(
@@ -243,7 +245,7 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
       }
     });
     TaskRecurrenceService.buildTaskRecurrenceSubMapFresh(newMap);
-    this.autoDeleteTasksPostSet(newMap);
+    this.#autoDeleteTasksPostSet(newMap);
   }
 
   /**
@@ -252,11 +254,11 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
    *
    * @param map The task map to check for auto-deletion
    */
-  private autoDeleteTasksPostSet(map: DocumentMap<DashboardTask>) {
+  #autoDeleteTasksPostSet(map: DocumentMap<DashboardTask>) {
     // Check for any tasks that need to be auto-deleted.
     const userCfg = userConfig.get().config;
     if (userCfg.autoTaskDeletionDays < 5 || userCfg.autoTaskDeletionDays > 90) {
-      log.error(
+      TaskMapService.#log.error(
         `User ${userCfg.userId} has an invalid autoTaskDeletionDays value of ${userCfg.autoTaskDeletionDays}.`
       );
       return;
@@ -264,9 +266,9 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
     const dateThreshold = DateService.addDays(new Date(), -userCfg.autoTaskDeletionDays);
     // Only tasks that don't have a parent, aren't recurring,
     // are completed, and are older than the threshold
-    const tasksToDelete = Object.values(map).filter((task) => {
+    const tasksToDelete = Object.values(map).filter((task): task is DashboardTask => {
       return (
-        task &&
+        task !== undefined &&
         task.userId === userCfg.userId &&
         task.completed &&
         !task.parentTaskId &&
@@ -274,10 +276,12 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
         !task.recurrenceInfo &&
         task.lastUpdatedDate < dateThreshold
       );
-    }) as DashboardTask[];
+    });
     const taskIdsToDelete = tasksToDelete.map((task) => task._id);
     if (taskIdsToDelete.length !== 0) {
-      log.info(`Deleting ${taskIdsToDelete.length} tasks due to auto task deletion.`);
+      TaskMapService.#log.info(
+        `Deleting ${taskIdsToDelete.length} tasks due to auto task deletion.`
+      );
       this.deleteManyDocs(taskIdsToDelete);
     }
   }

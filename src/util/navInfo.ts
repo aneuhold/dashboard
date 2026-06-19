@@ -7,6 +7,7 @@ import { devPageInfo } from '$routes/dev/pageInfo';
 import { nonogramKatanaPageInfo } from '$routes/entertainment/nonogramkatana/pageInfo';
 import { entertainmentPageInfo } from '$routes/entertainment/pageInfo';
 import { financePageInfo } from '$routes/finance/pageInfo';
+import { homelabPageInfo } from '$routes/homelab/pageInfo';
 import { homePageInfo } from '$routes/pageInfo';
 import { settingsPageInfo } from '$routes/settings/pageInfo';
 import { tasksPageInfo } from '$routes/tasks/pageInfo';
@@ -46,6 +47,7 @@ const navInfo = {
   devArch: archPageInfo,
   finance: financePageInfo,
   automation: automationPageInfo,
+  homelab: homelabPageInfo,
   tasks: tasksPageInfo,
   entertainment: entertainmentPageInfo,
   nonogramKatana: nonogramKatanaPageInfo,

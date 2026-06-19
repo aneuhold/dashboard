@@ -1,5 +1,5 @@
 import { APIService } from '@aneuhold/core-ts-api-lib';
-import WebSocketService from '$services/WebSocketService';
+import WebSocketService from '$services/WebSocket.service';
 import type { SpyOnFn } from '$testUtils/testUtilTypes';
 import LocalData from '$util/LocalData/LocalData';
 import { createLogger } from '$util/logging/logger';

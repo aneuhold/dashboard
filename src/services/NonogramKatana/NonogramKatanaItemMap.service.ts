@@ -10,13 +10,13 @@ import createDashboardPersistToDb, {
   createDashboardPrepareForSave
 } from '$util/api/dashboardPersistenceUtils';
 import LocalData from '$util/LocalData/LocalData';
-import DocumentMapStoreService from '../DocumentMapStoreService.svelte';
+import DocumentMapStoreService from '../DocumentMapStore.service.svelte';
 
 /**
  * The Nonogram Katana item map service.
  */
 export class NonogramKatanaItemMapService extends DocumentMapStoreService<NonogramKatanaItem> {
-  private nameToIdMap: { [itemName: string]: UUID | undefined } = {};
+  #nameToIdMap: { [itemName: string]: UUID | undefined } = {};
 
   constructor() {
     super({
@@ -27,10 +27,10 @@ export class NonogramKatanaItemMapService extends DocumentMapStoreService<Nonogr
   }
 
   public getItemByName(itemName: NonogramKatanaItemName): NonogramKatanaItem | undefined {
-    if (!this.nameToIdMap[itemName]) {
-      this.createItemNameIdMap(this.mapState);
+    if (!this.#nameToIdMap[itemName]) {
+      this.#createItemNameIdMap(this.mapState);
     }
-    const id = this.nameToIdMap[itemName];
+    const id = this.#nameToIdMap[itemName];
     if (!id) return undefined;
     return this.mapState[id];
   }
@@ -72,14 +72,14 @@ export class NonogramKatanaItemMapService extends DocumentMapStoreService<Nonogr
 
   public override setMap(newMap: DocumentMap<NonogramKatanaItem>): void {
     super.setMap(newMap);
-    this.createItemNameIdMap(newMap);
+    this.#createItemNameIdMap(newMap);
   }
 
-  private createItemNameIdMap(map: DocumentMap<NonogramKatanaItem>): void {
-    this.nameToIdMap = {};
+  #createItemNameIdMap(map: DocumentMap<NonogramKatanaItem>): void {
+    this.#nameToIdMap = {};
     Object.values(map).forEach((item) => {
       if (item) {
-        this.nameToIdMap[item.itemName] = item._id;
+        this.#nameToIdMap[item.itemName] = item._id;
       }
     });
   }

@@ -7,7 +7,7 @@ export default class PasswordHandler {
     const encoder = new TextEncoder();
     const data = encoder.encode(password);
     const hash = await crypto.subtle.digest('SHA-256', data);
-    return PasswordHandler.toHex(hash);
+    return PasswordHandler.#toHex(hash);
   }
 
   static async verifyPassword(password: string): Promise<boolean> {
@@ -15,12 +15,12 @@ export default class PasswordHandler {
     const data = encoder.encode(password);
     const passwordHash = await crypto.subtle.digest('SHA-256', data);
     return (
-      PasswordHandler.toHex(passwordHash) ===
+      PasswordHandler.#toHex(passwordHash) ===
       '94e0f9bc7f5a5225bd141bad5adf9befcc112aef09b88f47a14e20b75a7bbec2'
     );
   }
 
-  private static toHex(buffer: ArrayBuffer) {
+  static #toHex(buffer: ArrayBuffer) {
     return [...new Uint8Array(buffer)].map((b) => b.toString(16).padStart(2, '0')).join('');
   }
 }

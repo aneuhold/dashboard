@@ -4,7 +4,7 @@
   import {
     MockTaskAssignment,
     MockTaskSharedWith
-  } from '$services/Task/TaskMapService/TaskMapService.mock';
+  } from '$services/Task/TaskMap/TaskMap.service.mock';
 
   const { Story } = defineMeta({
     ...sbTaskListMetaBase,

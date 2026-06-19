@@ -7,8 +7,8 @@
   import { type DashboardTask } from '@aneuhold/core-ts-db-lib';
   import Chip, { Set, Text, TrailingAction } from '@smui/chips';
   import Autocomplete from '@smui-extra/autocomplete';
-  import taskMapService from '$services/Task/TaskMapService/TaskMapService';
-  import TaskTagsService from '$services/Task/TaskTagsService';
+  import taskMapService from '$services/Task/TaskMap/TaskMap.service';
+  import TaskTagsService from '$services/Task/TaskTags.service';
   import { currentUserId } from '$stores/derived/currentUserId';
 
   let {
@@ -63,8 +63,7 @@
     checkAndAddNewTag(currentAutoCompleteValue);
   }
 
-  function handleKeyDown(event: CustomEvent | KeyboardEvent) {
-    event = event as KeyboardEvent;
+  function handleKeyDown(event: KeyboardEvent) {
     if (event.key === 'Enter') {
       handleNewSelection();
     }

@@ -8,7 +8,7 @@ import {
   MockTaskDescription,
   MockTaskSharedWith,
   MockTaskSubTasks
-} from '$services/Task/TaskMapService/TaskMapService.mock';
+} from '$services/Task/TaskMap/TaskMap.service.mock';
 import { createEnumArgType } from '$storybook/storybookUtil';
 import SbTaskListExample from './SBTaskListExample.svelte';
 

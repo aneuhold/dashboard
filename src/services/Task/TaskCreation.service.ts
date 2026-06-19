@@ -1,5 +1,5 @@
 import type { DashboardTask, DocumentMap } from '@aneuhold/core-ts-db-lib';
-import TaskRecurrenceService from '$services/Task/TaskRecurrenceService.svelte';
+import TaskRecurrenceService from '$services/Task/TaskRecurrence.service.svelte';
 
 /**
  * A service responsible for handling the business logic of task creation.
@@ -19,10 +19,10 @@ export default class TaskCreationService {
     newTask: DashboardTask,
     currentMap: DocumentMap<DashboardTask>
   ): DashboardTask {
-    return this.prepareTask(newTask, currentMap);
+    return this.#prepareTask(newTask, currentMap);
   }
 
-  private static prepareTask(
+  static #prepareTask(
     newTask: DashboardTask,
     currentMap: DocumentMap<DashboardTask>
   ): DashboardTask {

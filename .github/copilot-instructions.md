@@ -62,7 +62,7 @@ The dashboard app depends on `@aneuhold/core-ts-db-lib`, a schema-first data mod
 
 - **Simple state**: Use Svelte 5 runes (`$state()`, `$derived()`)
 - **Stores** (`src/stores`): For modules that export a real Svelte store using `writable`, `readable`, or `derived` from `svelte/store`
-- **Services** (`src/services`): Singleton classes exported as default instances. Use services for rune-based reactive state (`$state`, `$derived`, `$effect`) and for non-reactive utilities. Name files as `<Name>Service.ts` or `<Name>Service.svelte.ts` if the file uses Svelte runes.
+- **Services** (`src/services`): Singleton classes exported as default instances. Use services for rune-based reactive state (`$state`, `$derived`, `$effect`) and for non-reactive utilities. Name files as `<Name>.service.ts`, or `<Name>.service.svelte.ts` if the file uses Svelte runes, where `<Name>` is PascalCase. The `aneuhold/service-file-structure` lint rule enforces this naming and the file shape.
 
 ### Integrations & Environment
 

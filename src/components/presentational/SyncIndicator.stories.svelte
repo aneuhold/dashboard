@@ -1,6 +1,6 @@
 <script module lang="ts">
   import { defineMeta } from '@storybook/addon-svelte-csf';
-  import apiActivityService from '$services/ApiActivityService/ApiActivityService.svelte';
+  import apiActivityService from '$services/ApiActivity.service.svelte';
   import SBSyncIndicatorExample from './SBSyncIndicatorExample.svelte';
 
   const { Story } = defineMeta({

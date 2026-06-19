@@ -1,9 +1,9 @@
 import { APIService } from '@aneuhold/core-ts-api-lib';
 import { writable } from 'svelte/store';
 import { browser } from '$app/environment';
-import WebSocketService from '$services/WebSocketService';
-import DashboardAPIResponseHandlingService from '$util/api/DashboardAPIResponseHandlingService';
-import DashboardAPIService from '$util/api/DashboardAPIService';
+import WebSocketService from '$services/WebSocket.service';
+import DashboardAPIService from '$util/api/DashboardAPI.service';
+import DashboardAPIResponseHandlingService from '$util/api/DashboardAPIResponseHandling.service';
 import { createLazyModuleGetter } from '$util/createLazyModuleGetter';
 import LocalData from '$util/LocalData/LocalData';
 import { createLogger } from '$util/logging/logger';

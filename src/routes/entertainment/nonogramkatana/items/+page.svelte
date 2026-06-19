@@ -1,33 +1,21 @@
 <script lang="ts">
-  import { type NonogramKatanaItem, NonogramKatanaItemName } from '@aneuhold/core-ts-db-lib';
+  import { NonogramKatanaItemName } from '@aneuhold/core-ts-db-lib';
   import Button from '@smui/button';
   import Paper, { Content } from '@smui/paper';
   import { flip } from 'svelte/animate';
   import PageTitle from '$components/PageTitle.svelte';
   import InputBox from '$components/presentational/InputBox/InputBox.svelte';
   import SingletonNonogramKatanaItemDialog from '$components/singletons/dialogs/SingletonNonogramKatanaItemDialog.svelte';
-  import nonogramKatanaItemMapService from '$services/NonogramKatana/NonogramKatanaItemMapService';
+  import nonogramKatanaItemMapService from '$services/NonogramKatana/NonogramKatanaItemMap.service';
   import { userConfig } from '$stores/local/userConfig/userConfig';
   import NonogramKatanaItemRow from './NonogramKatanaItemRow.svelte';
   import { nonogramKatanaItemsPageInfo } from './pageInfo';
 
   let searchInput = $state('');
   let items = $derived(
-    Object.values(nonogramKatanaItemMapService.mapState)
-      .filter(
-        (item) =>
-          item !== undefined &&
-          item.itemName.toLowerCase().includes(searchInput.toLowerCase().trim())
-      )
-      .sort((a, b) => {
-        if (!a) {
-          return 1;
-        }
-        if (!b) {
-          return -1;
-        }
-        return b.priority - a.priority;
-      }) as NonogramKatanaItem[]
+    nonogramKatanaItemMapService.allDocs
+      .filter((item) => item.itemName.toLowerCase().includes(searchInput.toLowerCase().trim()))
+      .sort((a, b) => b.priority - a.priority)
   );
   let itemsMissing = $derived(
     Object.values(nonogramKatanaItemMapService.mapState).length <

@@ -19,7 +19,7 @@
   import InputBox from '$components/presentational/InputBox/InputBox.svelte';
   import { confirmationDialog } from '$components/singletons/dialogs/SingletonConfirmationDialog/SingletonConfirmationDialog.svelte';
   import { snackbar } from '$components/singletons/SingletonSnackbar.svelte';
-  import AdminAPIService from '$util/api/AdminAPIService';
+  import AdminAPIService from '$util/api/AdminAPI.service';
   import AdminUserConfigInfo from './AdminUserConfigInfo.svelte';
 
   let {

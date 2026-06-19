@@ -14,7 +14,7 @@
   import { flip } from 'svelte/animate';
   import { slide } from 'svelte/transition';
   import TaskRow from '$components/Tasks/TaskList/TaskRow.svelte';
-  import taskMapService from '$services/Task/TaskMapService/TaskMapService';
+  import taskMapService from '$services/Task/TaskMap/TaskMap.service';
   import { currentUserId } from '$stores/derived/currentUserId';
   import { userConfig } from '$stores/local/userConfig/userConfig';
   import TaskListOptions from './TaskListOptions.svelte';

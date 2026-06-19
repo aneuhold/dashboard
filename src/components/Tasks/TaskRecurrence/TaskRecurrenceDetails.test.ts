@@ -10,9 +10,9 @@ import { fireEvent, render, screen } from '@testing-library/svelte';
 import type { UUID } from 'crypto';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { confirmationDialog } from '$components/singletons/dialogs/SingletonConfirmationDialog/SingletonConfirmationDialog.svelte';
-import taskMapService from '$services/Task/TaskMapService/TaskMapService';
-import TaskMapServiceMock from '$services/Task/TaskMapService/TaskMapService.mock';
-import TaskRecurrenceService from '$services/Task/TaskRecurrenceService.svelte';
+import taskMapService from '$services/Task/TaskMap/TaskMap.service';
+import TaskMapServiceMock from '$services/Task/TaskMap/TaskMap.service.mock';
+import TaskRecurrenceService from '$services/Task/TaskRecurrence.service.svelte';
 import TestUsers from '$testUtils/TestUsers';
 import TaskRecurrenceDetails from './TaskRecurrenceDetails.svelte';
 

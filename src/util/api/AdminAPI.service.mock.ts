@@ -17,7 +17,7 @@ import type { UUID } from 'crypto';
  * and tests.
  */
 export default class AdminAPIServiceMock {
-  private users: User[] = [];
+  #users: User[] = [];
 
   constructor() {
     this.reset();
@@ -27,7 +27,7 @@ export default class AdminAPIServiceMock {
    * Resets the mock to a default set of users.
    */
   reset(): void {
-    this.users = [
+    this.#users = [
       UserSchema.parse({
         _id: DocumentService.generateID(),
         userName: 'alice',
@@ -53,7 +53,7 @@ export default class AdminAPIServiceMock {
    * Gets the current list of mock users.
    */
   getUsers(): User[] {
-    return this.users;
+    return this.#users;
   }
 
   /**
@@ -62,14 +62,14 @@ export default class AdminAPIServiceMock {
    * @param index - The index of the user in the mock list.
    */
   getUser(index: number): User {
-    return this.users[index];
+    return this.#users[index];
   }
 
   /**
    * Creates a mock AdminOutput containing all users.
    */
   createUsersResponse(): AdminOutput {
-    return { users: this.users };
+    return { users: this.#users };
   }
 
   /**
@@ -80,8 +80,8 @@ export default class AdminAPIServiceMock {
    */
   createUserDetail(userId?: UUID): AdminOutputUserDetail {
     const user = userId
-      ? (this.users.find((u) => u._id === userId) ?? this.users[0])
-      : this.users[0];
+      ? (this.#users.find((u) => u._id === userId) ?? this.#users[0])
+      : this.#users[0];
 
     return {
       user,

@@ -3,7 +3,7 @@
   import { Actions, Content, Title } from '@smui/dialog';
   import InputBox from '$components/presentational/InputBox/InputBox.svelte';
   import SmartDialog from '$components/presentational/SmartDialog.svelte';
-  import TaskTagsService from '$services/Task/TaskTagsService';
+  import TaskTagsService from '$services/Task/TaskTags.service';
   import { userConfig } from '$stores/local/userConfig/userConfig';
 
   let {

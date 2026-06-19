@@ -1,7 +1,7 @@
 import type { ProjectDashboardOptions } from '@aneuhold/core-ts-api-lib';
 import type { DashboardTask } from '@aneuhold/core-ts-db-lib';
-import type { DocumentInsertOrUpdateInfo } from '$services/DocumentMapStoreService.svelte';
-import DashboardAPIService from './DashboardAPIService';
+import type { DocumentInsertOrUpdateInfo } from '$services/DocumentMapStore.service.svelte';
+import DashboardAPIService from './DashboardAPI.service';
 
 /**
  * The API service for tasks in the dashboard.

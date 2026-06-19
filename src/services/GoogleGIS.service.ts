@@ -6,18 +6,18 @@ import { GOOGLE_CLIENT_ID } from '@aneuhold/core-ts-db-lib';
  * auto-select on logout.
  */
 class GoogleGISService {
-  private loadPromise: Promise<typeof google.accounts> | undefined;
+  #loadPromise: Promise<typeof google.accounts> | undefined;
 
   /**
    * Lazily loads the Google Identity Services SDK and returns the
    * `google.accounts` API.
    */
-  private load(): Promise<typeof google.accounts> {
-    if (this.loadPromise) {
-      return this.loadPromise;
+  #load(): Promise<typeof google.accounts> {
+    if (this.#loadPromise) {
+      return this.#loadPromise;
     }
 
-    this.loadPromise = new Promise((resolve, reject) => {
+    this.#loadPromise = new Promise((resolve, reject) => {
       const script = document.createElement('script');
       script.src = 'https://accounts.google.com/gsi/client';
       script.async = true;
@@ -26,7 +26,7 @@ class GoogleGISService {
       document.head.appendChild(script);
     });
 
-    return this.loadPromise;
+    return this.#loadPromise;
   }
 
   /**
@@ -40,7 +40,7 @@ class GoogleGISService {
     container: HTMLElement,
     onCredential: (response: google.accounts.id.CredentialResponse) => void
   ): Promise<void> {
-    const accounts = await this.load();
+    const accounts = await this.#load();
     accounts.id.initialize({
       client_id: GOOGLE_CLIENT_ID,
       callback: onCredential
@@ -66,4 +66,5 @@ class GoogleGISService {
   }
 }
 
-export default new GoogleGISService();
+const googleGISService = new GoogleGISService();
+export default googleGISService;

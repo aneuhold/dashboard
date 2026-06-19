@@ -2,9 +2,9 @@ import { type DashboardTask, DashboardTaskSchema } from '@aneuhold/core-ts-db-li
 import type { UUID } from 'crypto';
 import { userConfig } from '$stores/local/userConfig/userConfig';
 import TestUsers from '$testUtils/TestUsers';
-import TaskListService from '../TaskListService';
-import TaskTagsService from '../TaskTagsService';
-import taskMapService from './TaskMapService';
+import TaskListService from '../TaskList.service';
+import TaskTagsService from '../TaskTags.service';
+import taskMapService from './TaskMap.service';
 
 type AddTaskInfo = {
   title: string;
@@ -86,17 +86,17 @@ export default class TaskMapServiceMock {
   }
 
   addTask(options: AddTaskInfo): DashboardTask {
-    const task = this.createTask(options);
+    const task = this.#createTask(options);
     taskMapService.addDoc(task);
     return task;
   }
 
   addTasks(options: AddTasksInfo): void {
-    const tasks = this.createTasks(options);
+    const tasks = this.#createTasks(options);
     taskMapService.addManyDocs(tasks);
   }
 
-  private createTasks(options: AddTasksInfo): DashboardTask[] {
+  #createTasks(options: AddTasksInfo): DashboardTask[] {
     const tasks: DashboardTask[] = [];
     for (let i = 0; i < options.numTasks; i++) {
       // Initialize task info with title
@@ -111,14 +111,14 @@ export default class TaskMapServiceMock {
       // Decide on start date
       if (options.includeStartDates || options.includeStartDatesInFuture) {
         if (Math.random() < 0.5) {
-          taskInfo.startDate = this.getRandomDate(30, options.includeStartDatesInFuture ?? false);
+          taskInfo.startDate = this.#getRandomDate(30, options.includeStartDatesInFuture ?? false);
         }
       }
 
       // Decide on due date
       if (options.includeDueDates || options.includeOverDueDates) {
         if (Math.random() < 0.5) {
-          taskInfo.dueDate = this.getRandomDate(30, !options.includeOverDueDates);
+          taskInfo.dueDate = this.#getRandomDate(30, !options.includeOverDueDates);
         }
       }
 
@@ -244,12 +244,12 @@ export default class TaskMapServiceMock {
           break;
       }
 
-      tasks.push(this.createTask(taskInfo));
+      tasks.push(this.#createTask(taskInfo));
     }
     return tasks;
   }
 
-  private createTask(options: AddTaskInfo): DashboardTask {
+  #createTask(options: AddTaskInfo): DashboardTask {
     const task = DashboardTaskSchema.parse({
       userId: this.userId,
       title: options.title,
@@ -309,7 +309,7 @@ export default class TaskMapServiceMock {
     // subtasks setup
     if (options.subtasks) {
       options.subtasks.forEach((subtaskOptions) => {
-        const subtask = this.createTask(subtaskOptions);
+        const subtask = this.#createTask(subtaskOptions);
         subtask.parentTaskId = task._id;
         taskMapService.addDoc(subtask);
       });
@@ -318,7 +318,7 @@ export default class TaskMapServiceMock {
     return task;
   }
 
-  private getRandomDate(days: number, future: boolean): Date {
+  #getRandomDate(days: number, future: boolean): Date {
     const date = new Date();
     const modifier = future ? 1 : -1;
     date.setDate(date.getDate() + modifier * Math.floor(Math.random() * days + 1));

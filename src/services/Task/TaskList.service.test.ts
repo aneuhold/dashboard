@@ -11,7 +11,7 @@ import type { UUID } from 'crypto';
 import { beforeEach, describe, expect, it, type MockInstance, vi } from 'vitest';
 import type { UserConfig } from '$stores/local/userConfig/userConfig';
 import TestUsers from '$testUtils/TestUsers';
-import TaskListService from './TaskListService';
+import TaskListService from './TaskList.service';
 
 describe('TaskListService', () => {
   const userId = TestUsers.currentUserCto._id;

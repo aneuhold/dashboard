@@ -1,7 +1,13 @@
-import svelteConfig from '@aneuhold/eslint-config/src/svelte-config.js';
+import svelteConfig from '@aneuhold/eslint-config/src/configs/svelte-config.ts';
 import storybook from 'eslint-plugin-storybook';
 
 export default [
+  // This config file is excluded from type-aware linting: it imports the shared
+  // config via a `.ts` path (required so jiti resolves the TypeScript source),
+  // which is not part of the app's tsconfig project.
+  {
+    ignores: ['eslint.config.ts']
+  },
   ...svelteConfig,
   ...storybook.configs['flat/recommended'],
   {

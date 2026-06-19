@@ -2,31 +2,31 @@ import type { DashboardTagSettings } from '@aneuhold/core-ts-db-lib';
 import { ArrayService } from '@aneuhold/core-ts-lib';
 import type { UUID } from 'crypto';
 import { type Unsubscriber, type Writable, writable } from 'svelte/store';
-import taskMapService from '$services/Task/TaskMapService/TaskMapService';
+import taskMapService from '$services/Task/TaskMap/TaskMap.service';
 import { userConfig } from '$stores/local/userConfig/userConfig';
 
 /**
  * A service responsible for managing tags for tasks.
  */
 export default class TaskTagsService {
-  private static taskTagsStore: Writable<string[]> | undefined;
-  private static currentTagSettings: DashboardTagSettings = {};
-  private static userId: UUID | undefined;
-  private static userConfigUnsub: undefined | Unsubscriber = undefined;
+  static #taskTagsStore: Writable<string[]> | undefined;
+  static #currentTagSettings: DashboardTagSettings = {};
+  static #userId: UUID | undefined;
+  static #userConfigUnsub: undefined | Unsubscriber = undefined;
   /**
    * This should always be a fresh array, so that it doesn't bind to the
    * current user settings.
    */
-  private static previousUserTagsArray: string[] = [];
+  static #previousUserTagsArray: string[] = [];
 
   /**
    * Gets the store of all tags used by the current user on tasks.
    */
   static getStore(): Writable<string[]> {
-    if (!this.taskTagsStore) {
-      this.taskTagsStore = this.createStore();
+    if (!this.#taskTagsStore) {
+      this.#taskTagsStore = this.#createStore();
     }
-    return this.taskTagsStore;
+    return this.#taskTagsStore;
   }
 
   /**
@@ -36,8 +36,8 @@ export default class TaskTagsService {
    */
   static deleteTag(tag: string) {
     // Setup user settings subscribers if needed.
-    if (!this.taskTagsStore) {
-      this.taskTagsStore = this.createStore();
+    if (!this.#taskTagsStore) {
+      this.#taskTagsStore = this.#createStore();
     }
     // Updating user settings will automatically remove the tag from all
     // tasks.
@@ -68,15 +68,15 @@ export default class TaskTagsService {
    */
   static updateTag(oldTag: string, newTag: string) {
     // Setup user settings subscribers if needed.
-    if (!this.taskTagsStore) {
-      this.taskTagsStore = this.createStore();
+    if (!this.#taskTagsStore) {
+      this.#taskTagsStore = this.#createStore();
     }
     userConfig.update((settings) => {
       settings.config.tagSettings[newTag] = settings.config.tagSettings[oldTag];
       delete settings.config.tagSettings[oldTag];
       return settings;
     });
-    this.updateTagInAllTasks(oldTag, newTag);
+    this.#updateTagInAllTasks(oldTag, newTag);
   }
 
   static addTagForUser(tag: string) {
@@ -92,16 +92,16 @@ export default class TaskTagsService {
   }
 
   static addTagForUserIfNeeded(tag: string) {
-    if (!TaskTagsService.userId) {
+    if (!TaskTagsService.#userId) {
       return;
     }
-    if (!this.currentTagSettings[tag]) {
-      this.currentTagSettings[tag] = {
+    if (!this.#currentTagSettings[tag]) {
+      this.#currentTagSettings[tag] = {
         priority: 0
       };
       // This will trigger the tag store to update as well.
       userConfig.update((settings) => {
-        settings.config.tagSettings = this.currentTagSettings;
+        settings.config.tagSettings = this.#currentTagSettings;
         return settings;
       });
     }
@@ -110,47 +110,47 @@ export default class TaskTagsService {
   /**
    * Creates the task tag store, which also subscribes to the user settings.
    */
-  private static createStore(): Writable<string[]> {
+  static #createStore(): Writable<string[]> {
     const taskTagsStore = writable<string[]>([]);
 
     const updateTaskTags = (newTagSettings: DashboardTagSettings) => {
       const newUserTagsArray = Object.keys(newTagSettings);
       taskTagsStore.set(newUserTagsArray);
-      this.previousUserTagsArray = newUserTagsArray;
-      this.currentTagSettings = newTagSettings;
+      this.#previousUserTagsArray = newUserTagsArray;
+      this.#currentTagSettings = newTagSettings;
     };
 
-    if (!this.userConfigUnsub) {
-      this.userConfigUnsub = userConfig.subscribe((newSettings) => {
-        if (newSettings.config.userId !== this.userId) {
-          this.userId = newSettings.config.userId;
+    if (!this.#userConfigUnsub) {
+      this.#userConfigUnsub = userConfig.subscribe((newSettings) => {
+        if (newSettings.config.userId !== this.#userId) {
+          this.#userId = newSettings.config.userId;
           updateTaskTags(newSettings.config.tagSettings);
           // Return early if the user ID changed.
           return;
         }
         const newTagSettings = newSettings.config.tagSettings;
         const newUserTagsArray = Object.keys(newTagSettings);
-        if (newUserTagsArray.length !== this.previousUserTagsArray.length) {
-          const removedTags = this.getRemovedTags(this.previousUserTagsArray, newUserTagsArray);
+        if (newUserTagsArray.length !== this.#previousUserTagsArray.length) {
+          const removedTags = this.#getRemovedTags(this.#previousUserTagsArray, newUserTagsArray);
           if (removedTags.length > 0) {
-            this.removeTagFromAllTasks(removedTags[0]);
+            this.#removeTagFromAllTasks(removedTags[0]);
           }
           updateTaskTags(newTagSettings);
         } else if (
-          !ArrayService.arraysHaveSamePrimitiveValues(this.previousUserTagsArray, newUserTagsArray)
+          !ArrayService.arraysHaveSamePrimitiveValues(this.#previousUserTagsArray, newUserTagsArray)
         ) {
           updateTaskTags(newTagSettings);
         } else {
           // Always update the current tag settings, just in case a priority
           // changed.
-          this.currentTagSettings = newTagSettings;
+          this.#currentTagSettings = newTagSettings;
         }
       });
     }
     return taskTagsStore;
   }
 
-  private static getRemovedTags(oldTags: string[], newTags: string[]): string[] {
+  static #getRemovedTags(oldTags: string[], newTags: string[]): string[] {
     return oldTags.filter((tag) => !newTags.includes(tag));
   }
 
@@ -160,8 +160,8 @@ export default class TaskTagsService {
    *
    * @param tag The tag name to remove from all tasks for the current user.
    */
-  private static removeTagFromAllTasks(tag: string) {
-    const userId = this.userId;
+  static #removeTagFromAllTasks(tag: string) {
+    const userId = this.#userId;
     if (!userId) {
       return;
     }
@@ -190,8 +190,8 @@ export default class TaskTagsService {
    * @param oldTag The original tag name to update in tasks.
    * @param newTag The new tag name to replace the original in tasks.
    */
-  private static updateTagInAllTasks(oldTag: string, newTag: string) {
-    const userId = this.userId;
+  static #updateTagInAllTasks(oldTag: string, newTag: string) {
+    const userId = this.#userId;
     if (!userId) {
       return;
     }

@@ -14,7 +14,7 @@
   import { onMount } from 'svelte';
   import { goto } from '$app/navigation';
   import PageTitle from '$components/PageTitle.svelte';
-  import AdminAPIService from '$util/api/AdminAPIService';
+  import AdminAPIService from '$util/api/AdminAPI.service';
   import AdminUserCreateForm from './AdminUserCreateForm.svelte';
 
   let {
