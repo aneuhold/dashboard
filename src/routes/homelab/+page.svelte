@@ -41,7 +41,7 @@
       title: 'Pi-hole',
       description: 'DNS filtering and query logs',
       clickAction: () => {
-        window.open('http://pi3-bplus-1.local:8080', '_blank');
+        window.open('http://pi3-bplus-1.local:8080/admin/login', '_blank');
       },
       icon: PiHoleIcon
     },
