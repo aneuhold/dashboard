@@ -10,38 +10,17 @@
   import PageNotFound from '$components/PageNotFound.svelte';
   import PageTitle from '$components/PageTitle.svelte';
   import DockerIcon from '$lib/svgs/DockerIcon.svelte';
-  import GrafanaIcon from '$lib/svgs/GrafanaIcon.svelte';
-  import NtopngIcon from '$lib/svgs/NtopngIcon.svelte';
   import PiHoleIcon from '$lib/svgs/PiHoleIcon.svelte';
   import UbiquitiIcon from '$lib/svgs/UbiquitiIcon.svelte';
   import { userConfig } from '$stores/local/userConfig/userConfig';
   import { homelabPageInfo } from './pageInfo';
-
-  const monitoringLinks: Array<LinkInfo> = [
-    {
-      title: 'ntopng',
-      description: 'Network flow visualization and traffic analysis',
-      clickAction: () => {
-        window.open('http://pi3-bplus-1.local:3000', '_blank');
-      },
-      icon: NtopngIcon
-    },
-    {
-      title: 'Grafana',
-      description: 'Dashboards over router syslog (Loki)',
-      clickAction: () => {
-        window.open('http://pi3-bplus-1.local:3001', '_blank');
-      },
-      icon: GrafanaIcon
-    }
-  ];
 
   const networkLinks: Array<LinkInfo> = [
     {
       title: 'Pi-hole',
       description: 'DNS filtering and query logs',
       clickAction: () => {
-        window.open('http://pi3-bplus-1.local:8080', '_blank');
+        window.open('http://pi3-bplus-1.local:8080/admin/login', '_blank');
       },
       icon: PiHoleIcon
     },
@@ -78,12 +57,6 @@
   <PageTitle title={homelabPageInfo.title} />
 
   <div class="content">
-    <Paper>
-      <Title>Monitoring</Title>
-      <PaperContent>
-        <LinkList links={monitoringLinks} />
-      </PaperContent>
-    </Paper>
     <Paper>
       <Title>Network</Title>
       <PaperContent>
