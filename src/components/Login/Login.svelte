@@ -13,6 +13,7 @@
   import { dashboardConfig } from '$stores/local/dashboardConfig';
   import { password } from '$stores/local/password';
   import { LoginState, loginState } from '$stores/session/loginState';
+  import { sessionExpired } from '$stores/session/sessionExpired';
   import DashboardAPIService from '$util/api/DashboardAPI.service';
   import LocalData from '$util/LocalData/LocalData';
   import { createLogger } from '$util/logging/logger';
@@ -124,6 +125,8 @@
       </Button>
       {#if invalidCredentials}
         <span class="errorMessage"> Invalid username or password </span>
+      {:else if $sessionExpired}
+        <span class="errorMessage"> Your session expired. Please log in again. </span>
       {/if}
     </div>
   </form>
