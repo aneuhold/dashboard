@@ -2,6 +2,7 @@ import { APIService } from '@aneuhold/core-ts-api-lib';
 import { writable } from 'svelte/store';
 import { browser } from '$app/environment';
 import WebSocketService from '$services/WebSocket.service';
+import { sessionExpired } from '$stores/session/sessionExpired';
 import DashboardAPIService from '$util/api/DashboardAPI.service';
 import DashboardAPIResponseHandlingService from '$util/api/DashboardAPIResponseHandling.service';
 import { createLazyModuleGetter } from '$util/createLazyModuleGetter';
@@ -33,6 +34,7 @@ function createLoginStateStore() {
     // Add the Sentry info for the user here
     if (newState === LoginState.LoggedIn) {
       getSentry()?.setUser({ username: LocalData.username });
+      sessionExpired.set(false);
     }
 
     handleLoginStateChangeForWebSocket(newState);
@@ -44,6 +46,16 @@ function createLoginStateStore() {
   APIService.setOnTokensRefreshed((accessToken, refreshTokenString) => {
     LocalData.accessToken = accessToken;
     LocalData.refreshTokenString = refreshTokenString;
+  });
+
+  // When a 401 cannot be recovered, clear the stored tokens and flip to the
+  // login screen so the user is prompted to log in again. Clearing the tokens
+  // prevents the next boot from bouncing back to LoggedIn on a stale token.
+  APIService.setOnAuthExpired(() => {
+    LocalData.accessToken = '';
+    LocalData.refreshTokenString = '';
+    sessionExpired.set(true);
+    setLoginState(LoginState.LoggedOut);
   });
 
   // Determine initial login state based on persisted access token.
