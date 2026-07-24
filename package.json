@@ -36,7 +36,7 @@
     "@aneuhold/core-ts-api-lib": "^3.0.41",
     "@aneuhold/core-ts-db-lib": "^5.0.10",
     "@aneuhold/core-ts-lib": "^2.4.6",
-    "@aneuhold/eslint-config": "^3.0.1",
+    "@aneuhold/eslint-config": "^3.0.2",
     "@aneuhold/local-npm-registry": "^0.2.34",
     "@fontsource/fira-mono": "^5.2.7",
     "@neoconfetti/svelte": "^2.2.2",

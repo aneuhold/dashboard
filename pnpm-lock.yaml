@@ -25,8 +25,8 @@ importers:
         specifier: ^2.4.6
         version: 2.4.6
       '@aneuhold/eslint-config':
-        specifier: ^3.0.1
-        version: 3.0.1(@angular/cli@21.0.3(@types/node@25.5.0))(eslint@10.5.0(jiti@2.7.0))(prettier@3.8.4)(svelte@5.53.0)(typescript@5.9.3)
+        specifier: ^3.0.2
+        version: 3.0.2(@angular/cli@21.0.3(@types/node@25.5.0))(eslint@10.5.0(jiti@2.7.0))(prettier@3.8.4)(svelte@5.53.0)(typescript@5.9.3)
       '@aneuhold/local-npm-registry':
         specifier: ^0.2.34
         version: 0.2.34(encoding@0.1.13)(typanion@3.14.0)
@@ -272,8 +272,8 @@ packages:
   '@aneuhold/core-ts-lib@2.4.6':
     resolution: {integrity: sha512-BUh8A0N0ysFcnmivuxz4K3LNF8oUhM/7qKcKFJ8/hthhP02muh6X/UIoAT8jzT8xrMrfMAqqj+cUqzEYUo6/DA==}
 
-  '@aneuhold/eslint-config@3.0.1':
-    resolution: {integrity: sha512-eg5CkYt62zFpRRiMUdzkQk+6I93RP3rCLOPi1j3ov3Cyqgk4PtAD8hmN5IFaRRGy8shjOIncPqBWBeG23gZmQw==}
+  '@aneuhold/eslint-config@3.0.2':
+    resolution: {integrity: sha512-pKkM6GXZS4gVrH4iJQlyZEO27jPYeDWXGUTiTRfPxuKeIO7xrNsStxgB7Fhj+r/sQtGvYV960ld8ZCPIM5jnLw==}
     peerDependencies:
       eslint: '>= 10.2.1'
       prettier: '>= 3.8.3'
@@ -6730,7 +6730,7 @@ snapshots:
 
   '@aneuhold/core-ts-lib@2.4.6': {}
 
-  '@aneuhold/eslint-config@3.0.1(@angular/cli@21.0.3(@types/node@25.5.0))(eslint@10.5.0(jiti@2.7.0))(prettier@3.8.4)(svelte@5.53.0)(typescript@5.9.3)':
+  '@aneuhold/eslint-config@3.0.2(@angular/cli@21.0.3(@types/node@25.5.0))(eslint@10.5.0(jiti@2.7.0))(prettier@3.8.4)(svelte@5.53.0)(typescript@5.9.3)':
     dependencies:
       '@eslint/js': 10.0.1(eslint@10.5.0(jiti@2.7.0))
       '@next/eslint-plugin-next': 16.2.11
