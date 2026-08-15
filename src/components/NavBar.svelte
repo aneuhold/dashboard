@@ -38,11 +38,12 @@
   <Row>
     <Section>
       <IconButton
-        class="material-icons"
         onclick={() => {
           $navDrawerOpen = true;
-        }}>menu</IconButton
+        }}
       >
+        <Icon class="material-icons">menu</Icon>
+      </IconButton>
       <div class="dashboard-title">
         <Title
           onclick={() => {
@@ -59,7 +60,6 @@
       </div>
 
       <IconButton
-        class="material-icons"
         aria-label="GitHub"
         onclick={() => {
           window.open('https://github.com/aneuhold?tab=repositories', '_blank');
@@ -67,8 +67,8 @@
       >
         <Icon><GitHubIcon size={24} /></Icon>
       </IconButton>
-      <IconButton class="material-icons" aria-label="Log Out" onclick={handleLogOut}>
-        logout
+      <IconButton aria-label="Log Out" onclick={handleLogOut}>
+        <Icon class="material-icons">logout</Icon>
       </IconButton>
     </Section>
   </Row>

@@ -10,7 +10,7 @@
 </script>
 
 <script lang="ts">
-  import IconButton from '@smui/icon-button';
+  import IconButton, { Icon } from '@smui/icon-button';
   import List, { Item, PrimaryText, SecondaryText, Text } from '@smui/list';
   import Paper, { Content as PaperContent, Subtitle, Title } from '@smui/paper';
   import { goto } from '$app/navigation';
@@ -58,12 +58,11 @@
       <div class="arch-context-title">
         {archContext.title}
         <IconButton
-          class="material-icons"
           onclick={() => {
             goto('/dev/arch');
           }}
         >
-          arrow_back
+          <Icon class="material-icons">arrow_back</Icon>
         </IconButton>
       </div>
     </Title>

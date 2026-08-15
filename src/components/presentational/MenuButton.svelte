@@ -13,7 +13,7 @@
   within an SMUI List, as it will cause the menu to be misaligned.
 -->
 <script lang="ts">
-  import IconButton from '@smui/icon-button';
+  import IconButton, { Icon } from '@smui/icon-button';
   import List, { Graphic, Item, Text } from '@smui/list';
   import MenuSurface from '@smui/menu-surface';
 
@@ -38,14 +38,13 @@
 <!--The extra div is required to keep the bounds of the menu contained -->
 <div class={alignCenterVertically ? 'alignCenter' : ''}>
   <IconButton
-    class="material-icons dimmed-color"
     onclick={() => {
       // The goal would be to set this to the inverse of its current state, but because clicking
       // off of the menu closes it, the inverse of it's current state is always true 😂
       menu?.setOpen(!menu.isOpen());
     }}
   >
-    menu
+    <Icon class="material-icons dimmed-color">menu</Icon>
   </IconButton>
   <MenuSurface bind:this={menu} anchorCorner="BOTTOM_RIGHT" data-testid="menu-button-menu">
     <List>
