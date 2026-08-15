@@ -87,7 +87,7 @@
     "rollup-plugin-visualizer": "^7.1.1",
     "smui-theme": "^9.0.3",
     "storybook": "^10.5.8",
-    "svelte": "5.56.9",
+    "svelte": "^5.56.9",
     "svelte-check": "^4.7.6",
     "svelty-picker": "^6.1.6",
     "tslib": "^2.8.1",
@@ -95,8 +95,5 @@
     "vite": "^8.2.1",
     "vite-plugin-node-polyfills": "^0.28.0",
     "vitest": "^4.1.10"
-  },
-  "devDependenciesComments": {
-    "svelte": "Pinned to 5.53.0 because 5.54.0+ introduced a regression where SMUI Select/Option teardown calls querySelector on a null DOM element during Svelte's effect cleanup phase, causing 'Cannot read properties of null (reading querySelector)' errors. Pinned on 2026-03-26."
   }
 }

@@ -178,7 +178,7 @@ importers:
         specifier: ^10.5.8
         version: 10.5.8(@types/react@19.2.3)(prettier@3.9.6)(react@19.2.8)
       svelte:
-        specifier: 5.56.9
+        specifier: ^5.56.9
         version: 5.56.9(@typescript-eslint/types@8.67.0)
       svelte-check:
         specifier: ^4.7.6
