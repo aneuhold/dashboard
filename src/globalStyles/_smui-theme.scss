@@ -7,7 +7,7 @@
 @use 'sass:color';
 
 // Import overall colors
-@use '@material/theme/color-palette';
+@use '@smui/common/theme/color-palette';
 
 $background-color: #000;
 $surface-color: color.adjust(color-palette.$grey-900, $blue: +4);
@@ -20,7 +20,7 @@ $error-color: color-palette.$red-500;
 // Svelte Colors! (Dark Theme)
 // If this is updated, make sure to update the colors in the `manifest.json` file
 // as well.
-@use '@material/theme/index' as theme with (
+@use '@smui/common/theme/index' as theme with (
   $primary: $primary-color,
   $secondary: color.scale(#676778, $whiteness: -10%),
   $surface: $surface-color,
@@ -43,20 +43,20 @@ $error-color: color-palette.$red-500;
 //   mdc-typography--button
 //   mdc-typography--overline
 //   mdc-typography--body1
-@use '@material/typography/mdc-typography';
+@use '@smui/common/typography/mdc-typography';
 @use '@smui/snackbar/style' as smui-snackabar;
 
 // Import the mixins.
-@use '@material/typography/mixins' as typography;
-@use '@material/snackbar/mixins' as snackbar;
-@use '@material/button/mixins' as button;
-@use '@material/icon-button/mixins' as icon-button;
-@use '@material/circular-progress/mixins' as circular-progress;
+@use '@smui/common/typography/mixins' as typography;
+@use '@smui/snackbar/styles/mixins' as snackbar;
+@use '@smui/button/styles/mixins' as button;
+@use '@smui/icon-button/styles/mixins' as icon-button;
+@use '@smui/circular-progress/styles/mixins' as circular-progress;
 
 // Import the colors last. Order matters in this file. This allows usage
 // of vars from MDC
-@use '@material/theme/styles';
-@use '@material/theme/theme-color';
+@use '@smui/common/theme/styles';
+@use '@smui/common/theme/theme-color';
 
 // Customized MDC Components
 .mdc-snackbar.success {

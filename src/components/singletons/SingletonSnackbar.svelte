@@ -1,5 +1,5 @@
 <script lang="ts" module>
-  import IconButton from '@smui/icon-button';
+  import IconButton, { Icon } from '@smui/icon-button';
   import Snackbar, { Actions, Label } from '@smui/snackbar';
   import { writable } from 'svelte/store';
 
@@ -82,7 +82,9 @@
   <Label>{$snackbarSettings.message}</Label>
   <Actions>
     <div class={$snackbarSettings.currentClass === 'error' ? 'light-button' : 'dark-button'}>
-      <IconButton class="material-icons" title="Dismiss">close</IconButton>
+      <IconButton title="Dismiss">
+        <Icon class="material-icons">close</Icon>
+      </IconButton>
     </div>
   </Actions>
 </Snackbar>

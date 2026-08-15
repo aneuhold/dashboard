@@ -12,7 +12,7 @@
 <script lang="ts">
   import Card, { Content as CardContent } from '@smui/card';
   import { Icon } from '@smui/icon-button';
-  import Tooltip, { Wrapper } from '@smui/tooltip';
+  import Tooltip, { Label as TooltipLabel, Wrapper } from '@smui/tooltip';
   import type { Snippet } from 'svelte';
   import MenuButton, { type MenuButtonItem } from '$components/presentational/MenuButton.svelte';
   import type { ArchitectureComponent } from '$util/ArchitectureInfo/architectureComponents';
@@ -86,7 +86,11 @@
                 <Icon class="material-icons dimmed-color small-icon">
                   {ArchitectureInfo.getComponentTypeIconName(archComponentType)}
                 </Icon>
-                <Tooltip>{ArchitectureInfo.getComponentTypeTooltip(archComponentType)}</Tooltip>
+                <Tooltip>
+                  <TooltipLabel>
+                    {ArchitectureInfo.getComponentTypeTooltip(archComponentType)}
+                  </TooltipLabel>
+                </Tooltip>
               </Wrapper>
             </h4>
             {#if categories.length > 0}

@@ -6,7 +6,7 @@
 <script lang="ts">
   import type { User } from '@aneuhold/core-ts-db-lib';
   import CircularProgress from '@smui/circular-progress';
-  import IconButton from '@smui/icon-button';
+  import IconButton, { Icon } from '@smui/icon-button';
   import List, { Graphic, Item, PrimaryText, SecondaryText, Text } from '@smui/list';
   import Paper, { Content } from '@smui/paper';
   import Textfield from '@smui/textfield';
@@ -84,12 +84,8 @@
       label="Search users"
       class="search-field"
     />
-    <IconButton
-      class="material-icons"
-      onclick={() => (showCreateForm = !showCreateForm)}
-      title="Create user"
-    >
-      person_add
+    <IconButton onclick={() => (showCreateForm = !showCreateForm)} title="Create user">
+      <Icon class="material-icons">person_add</Icon>
     </IconButton>
   </div>
 
