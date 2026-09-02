@@ -1,0 +1,12 @@
+# pnpm reads its settings from this file rather than the `pnpm` field of
+# `package.json`.
+
+# pnpm 12 fails an install that silently skipped a build script, so every
+# dependency with one is named here. None of them need theirs: `esbuild`
+# resolves its platform binary through its optional dependencies,
+# `@parcel/watcher` falls back to polling, and `@sentry/cli` fetches its binary
+# on demand.
+allowBuilds:
+  '@parcel/watcher': false
+  '@sentry/cli': false
+  esbuild: false
