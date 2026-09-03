@@ -26,19 +26,19 @@
   "scriptsComments": {
     "theme": "This has the extra parameters for node_modules so it works with pnpm. Otherwise it fails when SASS tries to resolve imports."
   },
-  "packageManager": "pnpm@10.28.0",
+  "packageManager": "pnpm@12.2.1",
   "type": "module",
   "dependencies": {
     "@sentry/sveltekit": "^10.70.0",
     "socket.io-client": "^4.8.3"
   },
   "devDependencies": {
-    "@aneuhold/core-ts-api-lib": "^3.0.43",
-    "@aneuhold/core-ts-db-lib": "^5.0.12",
+    "@aneuhold/core-ts-api-lib": "^3.0.44",
+    "@aneuhold/core-ts-db-lib": "^5.0.13",
     "@aneuhold/core-ts-lib": "^2.4.8",
-    "@aneuhold/eslint-config": "^3.0.2",
+    "@aneuhold/eslint-config": "^3.0.3",
     "@aneuhold/local-npm-registry": "^1.0.1",
-    "@aneuhold/robot-instructions": "^0.1.2",
+    "@aneuhold/robot-instructions": "^0.1.4",
     "@fontsource/fira-mono": "^5.3.0",
     "@neoconfetti/svelte": "^2.2.2",
     "@smui-extra/accordion": "^9.0.2",
