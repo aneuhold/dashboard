@@ -17,7 +17,6 @@ jobs:
       - name: Setup pnpm, Node.js, and install dependencies
         uses: pnpm/setup@v2
         with:
-          runtime: node@lts
           cache: true
 
       # Build has to go before link and check because it creates the .svelte-kit directory
