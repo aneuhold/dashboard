@@ -10,9 +10,9 @@ import {
 } from '@aneuhold/core-ts-db-lib';
 import { DateService } from '@aneuhold/core-ts-lib';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import DashboardAPIService from '$services/DashboardAPIService/DashboardAPI.service';
 import { userConfig } from '$stores/local/userConfig/userConfig';
-import DashboardAPIService from '$util/api/DashboardAPI.service';
-import type { UpsertManyInfo } from '../../DocumentMapStore.service.svelte';
+import type { UpsertManyInfo } from '../../DocumentMapStoreService/types';
 import TaskRecurrenceService from '../TaskRecurrence.service.svelte';
 import TaskTagsService from '../TaskTags.service';
 import taskMapService from './TaskMap.service';

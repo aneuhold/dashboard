@@ -3,6 +3,7 @@ import WebSocketService from '$services/WebSocket.service';
 import type { SpyOnFn } from '$testUtils/testUtilTypes';
 import LocalData from '$util/LocalData/LocalData';
 import { createLogger } from '$util/logging/logger';
+import MockAPIBackend from './MockAPIBackend';
 import MockData from './MockData';
 import TestUsers from './TestUsers';
 
@@ -16,19 +17,14 @@ export default class TestSetup {
    */
   static setupGlobalMocks(spyOnFn: SpyOnFn) {
     // Mock API
-    spyOnFn(APIService, 'callDashboardAPI').mockImplementation((_) => {
-      return Promise.resolve({
-        success: true,
-        errors: [],
-        data: {}
-      });
-    });
+    APIService.setBackend(new MockAPIBackend());
 
     spyOnFn(APIService, 'callAdminAPI').mockImplementation((_) => {
       return Promise.resolve({
         success: true,
         errors: [],
-        data: MockData.adminAPIServiceMock.createUsersResponse()
+        data: MockData.adminAPIServiceMock.createUsersResponse(),
+        statusCode: 200
       });
     });
 

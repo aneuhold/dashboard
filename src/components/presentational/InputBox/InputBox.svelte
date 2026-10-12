@@ -152,7 +152,7 @@
   // Also detect when the onBlurValue is changed outside the component.
   $effect(() => {
     // Because we don't know what kind of value the backend is providing
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+
     if (onBlurValue === null || onBlurValue === undefined) {
       onBlurValue = '';
       previousOnBlurValue = onBlurValue;

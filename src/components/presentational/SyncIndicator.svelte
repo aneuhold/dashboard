@@ -2,8 +2,9 @@
   @component
 
   A small sync indicator that shows the current API activity state.
-  Displays a spinner while syncing, a checkmark on success, and an
-  error icon on failure. Hidden when idle.
+  Displays a spinner while syncing, a checkmark on success, an error icon on
+  failure, a crossed-out cloud while offline, and a cloud while changes wait
+  to be sent. Hidden when idle.
 -->
 <script lang="ts">
   import CircularProgress from '@smui/circular-progress';
@@ -24,6 +25,14 @@
   {:else if apiActivityService.state === ApiActivityState.Error}
     <div transition:fade={{ duration: 500 }}>
       <Icon class="material-icons">error</Icon>
+    </div>
+  {:else if apiActivityService.state === ApiActivityState.Offline}
+    <div transition:fade={{ duration: 500 }}>
+      <Icon class="material-icons">cloud_off</Icon>
+    </div>
+  {:else if apiActivityService.state === ApiActivityState.Pending}
+    <div transition:fade={{ duration: 500 }}>
+      <Icon class="material-icons">cloud_queue</Icon>
     </div>
   {/if}
 </div>

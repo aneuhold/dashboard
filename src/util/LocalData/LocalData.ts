@@ -31,7 +31,6 @@ export default class LocalData {
     translations: `${this.#PREFIX}translations`,
     userConfig: `${this.#PREFIX}userConfig`,
     taskMap: `${this.#PREFIX}taskMap`,
-    currentApiRequest: `${this.#PREFIX}currentApiRequest`,
     apiRequestQueue: `${this.#PREFIX}apiRequestQueue`,
     nonogramKatanaItemMap: `${this.#PREFIX}nonogramKatanaItemMap`,
     nonogramKatanaUpgradeMap: `${this.#PREFIX}nonogramKatanaUpgradeMap`
@@ -174,20 +173,6 @@ export default class LocalData {
     return this.#getStoredObject<Record<string, NonogramKatanaUpgrade>>(
       LocalData.#storedKeyNames.nonogramKatanaUpgradeMap
     );
-  }
-
-  static set currentApiRequest(newApiRequest: ProjectDashboardOptions | undefined) {
-    this.#storeValue(LocalData.#storedKeyNames.currentApiRequest, JSON.stringify(newApiRequest));
-  }
-
-  static get currentApiRequest(): ProjectDashboardOptions | undefined {
-    const result = this.#getStoredObject<ProjectDashboardOptions>(
-      LocalData.#storedKeyNames.currentApiRequest
-    );
-    if (!result) {
-      return undefined;
-    }
-    return result;
   }
 
   static set apiRequestQueue(newRequestQueue: ProjectDashboardOptions[]) {

@@ -6,11 +6,8 @@ import {
 } from '@aneuhold/core-ts-db-lib';
 import type { UUID } from 'crypto';
 import { nonogramKatanaItemsDisplayInfo } from '$routes/entertainment/nonogramkatana/items/nonogramKatanaItemsDisplayInfo';
-import createDashboardPersistToDb, {
-  createDashboardPrepareForSave
-} from '$util/api/dashboardPersistenceUtils';
 import LocalData from '$util/LocalData/LocalData';
-import DocumentMapStoreService from '../DocumentMapStore.service.svelte';
+import DocumentMapStoreService from '../DocumentMapStoreService/DocumentMapStore.service.svelte';
 
 /**
  * The Nonogram Katana item map service.
@@ -20,9 +17,13 @@ export class NonogramKatanaItemMapService extends DocumentMapStoreService<Nonogr
 
   constructor() {
     super({
+      dashboardApiInsertKey: 'nonogramKatanaItems',
       persistToLocalData: (map) => LocalData.setAndGetNonogramKatanaItemMap(map),
-      persistToDb: createDashboardPersistToDb('nonogramKatanaItems'),
-      prepareForSave: createDashboardPrepareForSave('nonogramKatanaItems')
+      handleApiOutput: (output) => {
+        if (output.nonogramKatanaItems) {
+          this.setMap(this.convertDocumentArrayToMap(output.nonogramKatanaItems));
+        }
+      }
     });
   }
 

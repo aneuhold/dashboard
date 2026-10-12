@@ -1,27 +1,16 @@
-import type { ProjectDashboardOptions } from '@aneuhold/core-ts-api-lib';
+import type { ProjectDashboardOptions, ProjectDashboardOutput } from '@aneuhold/core-ts-api-lib';
 import { type BaseDocument, type DocumentMap } from '@aneuhold/core-ts-db-lib';
 import type { UUID } from 'crypto';
 import type { Updater } from 'svelte/store';
+import DashboardAPIService from '$services/DashboardAPIService/DashboardAPI.service';
 import { createLogger } from '$util/logging/logger';
-
-export type DocumentInsertOrUpdateInfo<T extends BaseDocument> = {
-  insert?: T[];
-  update?: T[];
-  delete?: UUID[];
-  get?: ProjectDashboardOptions['get'];
-};
-
-export type UpsertManyInfo<T> = {
-  filter: (currentChild: T) => boolean;
-  mutator: Updater<T>;
-  newDocs: T[];
-};
-
-export interface DocumentMapStoreConfig<T extends BaseDocument> {
-  persistToLocalData: (map: DocumentMap<T>) => void;
-  persistToDb: (updateInfo: DocumentInsertOrUpdateInfo<T>) => void;
-  prepareForSave: (options: ProjectDashboardOptions, info: DocumentInsertOrUpdateInfo<T>) => void;
-}
+import type {
+  DashboardApiDeleteKey,
+  DashboardApiInsertKey,
+  DocumentInsertOrUpdateInfo,
+  DocumentMapStoreConfig,
+  UpsertManyInfo
+} from './types';
 
 /**
  * A service which manages a Svelte reactive store that directly maps to a
@@ -78,7 +67,7 @@ export default class DocumentMapStoreService<T extends BaseDocument> {
       this.addDocWithoutPersist(doc);
     });
     this.#config.persistToLocalData(this.mapState);
-    this.#config.persistToDb({ insert: docs, get });
+    this.#persistToDb({ insert: docs, get });
   }
 
   public updateDoc(docId: UUID, mutator: Updater<T>, get?: ProjectDashboardOptions['get']): void {
@@ -92,32 +81,7 @@ export default class DocumentMapStoreService<T extends BaseDocument> {
   ): void {
     const docsToUpdate = this.#updateManyDocsWithoutPersist(filterOrDocIds, mutator);
     this.#config.persistToLocalData(this.mapState);
-    this.#config.persistToDb({ update: docsToUpdate, get });
-  }
-
-  #updateManyDocsWithoutPersist(
-    filterOrDocIds: ((currentDoc: T) => boolean) | UUID[],
-    mutator: Updater<T>
-  ): T[] {
-    let docsToUpdate: T[] = [];
-    if (Array.isArray(filterOrDocIds)) {
-      // It's an array of doc IDs
-      const docIds = filterOrDocIds;
-      docIds.forEach((docId) => {
-        const currentDoc = this.mapState[docId];
-        if (!currentDoc) {
-          this.#log.error(`Document with ID ${docId} does not exist in the map.`);
-          return;
-        }
-        docsToUpdate.push(mutator(currentDoc));
-      });
-    } else {
-      // It's a filter function
-      const filter = filterOrDocIds;
-      docsToUpdate = this.allDocs.filter(filter);
-      docsToUpdate.forEach(mutator);
-    }
-    return docsToUpdate;
+    this.#persistToDb({ update: docsToUpdate, get });
   }
 
   public deleteDoc(docId: UUID, get?: ProjectDashboardOptions['get']): void {
@@ -133,7 +97,7 @@ export default class DocumentMapStoreService<T extends BaseDocument> {
       delete this.mapState[id];
     });
     this.#config.persistToLocalData(this.mapState);
-    this.#config.persistToDb({ delete: docIds, get });
+    this.#persistToDb({ delete: docIds, get });
   }
 
   public upsertManyDocs(upsertInfo: UpsertManyInfo<T>, get?: ProjectDashboardOptions['get']): void {
@@ -143,7 +107,7 @@ export default class DocumentMapStoreService<T extends BaseDocument> {
     });
     const docsToUpdate = this.#updateManyDocsWithoutPersist(filter, mutator);
     this.#config.persistToLocalData(this.mapState);
-    this.#config.persistToDb({
+    this.#persistToDb({
       insert: newDocs,
       update: docsToUpdate,
       get
@@ -180,7 +144,116 @@ export default class DocumentMapStoreService<T extends BaseDocument> {
       info.delete.forEach((id) => delete this.mapState[id]);
     }
     this.#config.persistToLocalData(this.mapState);
-    this.#config.prepareForSave(apiOptions, info);
+    this.#prepareForSave(apiOptions, info);
     return apiOptions;
+  }
+
+  /**
+   * Applies this map's part of the output of a get request or a WebSocket
+   * push.
+   *
+   * @param output The API output
+   */
+  public handleApiOutput(output: ProjectDashboardOutput): void {
+    this.#config.handleApiOutput(output);
+  }
+
+  /**
+   * Builds a document map keyed by each document's `_id`.
+   *
+   * @param documents The documents to put in the map
+   */
+  protected convertDocumentArrayToMap<TDoc extends BaseDocument>(
+    documents: TDoc[]
+  ): DocumentMap<TDoc> {
+    return documents.reduce<DocumentMap<TDoc>>((map, document) => {
+      map[document._id] = document;
+      return map;
+    }, {});
+  }
+
+  #updateManyDocsWithoutPersist(
+    filterOrDocIds: ((currentDoc: T) => boolean) | UUID[],
+    mutator: Updater<T>
+  ): T[] {
+    let docsToUpdate: T[] = [];
+    if (Array.isArray(filterOrDocIds)) {
+      // It's an array of doc IDs
+      const docIds = filterOrDocIds;
+      docIds.forEach((docId) => {
+        const currentDoc = this.mapState[docId];
+        if (!currentDoc) {
+          this.#log.error(`Document with ID ${docId} does not exist in the map.`);
+          return;
+        }
+        docsToUpdate.push(mutator(currentDoc));
+      });
+    } else {
+      // It's a filter function
+      const filter = filterOrDocIds;
+      docsToUpdate = this.allDocs.filter(filter);
+      docsToUpdate.forEach(mutator);
+    }
+    return docsToUpdate;
+  }
+
+  /**
+   * Sends this document type's insert / update / delete operations to the
+   * dashboard API, along with a get of the whole document type so the map
+   * receives the authoritative server state.
+   *
+   * @param info The operations to send
+   */
+  #persistToDb(info: DocumentInsertOrUpdateInfo<T>): void {
+    const options: ProjectDashboardOptions = {};
+    this.#prepareForSave(options, info);
+    options.get = { ...options.get, [this.#config.dashboardApiInsertKey]: true };
+    DashboardAPIService.queryApi(options);
+  }
+
+  /**
+   * Stages this document type's insert / update / delete operations on an API
+   * options object instead of sending them immediately.
+   *
+   * @param options The API options to stage the operations on
+   * @param info The operations to stage
+   */
+  #prepareForSave(options: ProjectDashboardOptions, info: DocumentInsertOrUpdateInfo<T>): void {
+    const { dashboardApiInsertKey: key } = this.#config;
+    // Each operation is additive in the arrays, so repeated calls don't overwrite each other
+    if (info.insert) {
+      options.insert = {
+        ...options.insert,
+        [key]: [...(options.insert?.[key] ?? []), ...info.insert]
+      };
+    }
+    if (info.update) {
+      options.update = {
+        ...options.update,
+        [key]: [...(options.update?.[key] ?? []), ...info.update]
+      };
+    }
+    if (info.delete) {
+      if (this.#isDeleteKey(key)) {
+        options.delete = {
+          ...options.delete,
+          [key]: [...(options.delete?.[key] ?? []), ...info.delete]
+        };
+      } else {
+        this.#log.error(`The dashboard API cannot delete ${key}.`);
+      }
+    }
+    if (info.get) {
+      options.get = { ...options.get, ...info.get };
+    }
+  }
+
+  /**
+   * Whether the dashboard API can delete documents of the given type.
+   *
+   * @param key The document type's API key
+   */
+  #isDeleteKey(key: DashboardApiInsertKey): key is DashboardApiDeleteKey {
+    return key === 'tasks';
   }
 }

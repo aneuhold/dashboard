@@ -1,4 +1,4 @@
-import type { Translations } from '@aneuhold/core-ts-api-lib';
+import type { ProjectDashboardOutput, Translations } from '@aneuhold/core-ts-api-lib';
 import { writable } from 'svelte/store';
 import { browser } from '$app/environment';
 import LocalData from '$util/LocalData/LocalData';
@@ -7,11 +7,24 @@ function createTranslationsStore() {
   const initialTranslations = (browser ? LocalData.translations : null) ?? {};
   const { subscribe, set } = writable<Translations>(initialTranslations);
 
+  const setTranslations = (newTranslations: Translations) => {
+    set(newTranslations);
+    LocalData.translations = newTranslations;
+  };
+
   return {
     subscribe,
-    set: (newTranslations: Translations) => {
-      set(newTranslations);
-      LocalData.translations = newTranslations;
+    set: setTranslations,
+    /**
+     * Applies the translations in the output of a get request or a WebSocket
+     * push.
+     *
+     * @param output The API output
+     */
+    handleApiOutput: (output: ProjectDashboardOutput) => {
+      if (output.translations) {
+        setTranslations(output.translations);
+      }
     }
   };
 }

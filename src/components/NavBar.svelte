@@ -6,10 +6,12 @@
   import { goto } from '$app/navigation';
   import SyncIndicator from '$components/presentational/SyncIndicator.svelte';
   import GitHubIcon from '$lib/svgs/GitHubIcon.svelte';
+  import DashboardAPIService from '$services/DashboardAPIService/DashboardAPI.service';
   import googleGISService from '$services/GoogleGIS.service';
   import { LoginState, loginState } from '$stores/session/loginState';
   import { navDrawerOpen } from '$stores/session/navDrawerOpen';
   import LocalData from '$util/LocalData/LocalData';
+  import { createLogger } from '$util/logging/logger';
   import NavDrawer from './NavDrawer.svelte';
 
   let {
@@ -18,13 +20,20 @@
     children?: Snippet;
   } = $props();
 
+  const log = createLogger('NavBar.svelte');
+
   let topAppBar: TopAppBar | null = $state(null);
 
   async function handleLogOut() {
-    // Delete refresh token server-side
-    await APIService.logout();
+    // Delete refresh token server-side. Local state is cleared even if this fails.
+    try {
+      await APIService.logout();
+    } catch (error) {
+      log.error('Logout request did not reach the server', error);
+    }
 
     // Clear local state
+    DashboardAPIService.reset();
     LocalData.accessToken = '';
     LocalData.refreshTokenString = '';
     loginState.set(LoginState.LoggedOut);

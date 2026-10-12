@@ -1,35 +1,38 @@
+import type { ProjectDashboardOptions } from '@aneuhold/core-ts-api-lib';
 import { type BaseDocument, type DocumentMap, DocumentService } from '@aneuhold/core-ts-db-lib';
 import { flushSync } from 'svelte';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
-import DocumentMapStoreService, {
-  type DocumentInsertOrUpdateInfo
-} from './DocumentMapStore.service.svelte';
+import { afterEach, beforeEach, describe, expect, it, type MockInstance, vi } from 'vitest';
+import DashboardAPIService from '$services/DashboardAPIService/DashboardAPI.service';
+import DocumentMapStoreService from './DocumentMapStore.service.svelte';
+import type { DashboardApiInsertKey } from './types';
 
 interface TestDoc extends BaseDocument {
   name: string;
   value: number;
 }
 
-const persistToLocalDataMock = vi.fn<(map: DocumentMap<TestDoc>) => void>();
-const persistToDbMock = vi.fn<(updateInfo: DocumentInsertOrUpdateInfo<TestDoc>) => void>();
-const prepareForSaveMock = vi.fn();
-
-function createTestService() {
-  return new DocumentMapStoreService<TestDoc>({
-    persistToLocalData: persistToLocalDataMock,
-    persistToDb: persistToDbMock,
-    prepareForSave: prepareForSaveMock
-  });
-}
-
 describe('DocumentMapStoreService', () => {
   let service: DocumentMapStoreService<TestDoc>;
+  let queryApiSpy: MockInstance<(apiOptions: ProjectDashboardOptions) => void>;
   let doc1: TestDoc;
   let doc2: TestDoc;
 
+  const testKey = 'tasks';
+  const otherKey: DashboardApiInsertKey = 'nonogramKatanaItems';
+
+  const persistToLocalDataMock = vi.fn<(map: DocumentMap<TestDoc>) => void>();
+
+  function createTestService(dashboardApiInsertKey: DashboardApiInsertKey = testKey) {
+    return new DocumentMapStoreService<TestDoc>({
+      dashboardApiInsertKey,
+      persistToLocalData: persistToLocalDataMock,
+      handleApiOutput: vi.fn()
+    });
+  }
+
   beforeEach(() => {
     persistToLocalDataMock.mockClear();
-    persistToDbMock.mockClear();
+    queryApiSpy = vi.spyOn(DashboardAPIService, 'queryApi').mockImplementation(() => undefined);
     service = createTestService();
 
     doc1 = {
@@ -44,6 +47,10 @@ describe('DocumentMapStoreService', () => {
     };
   });
 
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it('should initialize with empty values', () => {
     expect(service.allDocs).toEqual([]);
   });
@@ -51,13 +58,16 @@ describe('DocumentMapStoreService', () => {
   it('should add a document', () => {
     service.addDoc(doc1);
     expect(service.getDoc(doc1._id)).toEqual(doc1);
-    expect(persistToDbMock).toHaveBeenCalledWith({ insert: [doc1] });
+    expect(queryApiSpy).toHaveBeenCalledWith({
+      insert: { [testKey]: [doc1] },
+      get: { [testKey]: true }
+    });
     expect(persistToLocalDataMock).toHaveBeenCalled();
   });
 
   it('should update a document', () => {
     service.addDoc(doc1);
-    persistToDbMock.mockClear();
+    queryApiSpy.mockClear();
     persistToLocalDataMock.mockClear();
 
     service.updateDoc(doc1._id, (doc) => {
@@ -66,9 +76,9 @@ describe('DocumentMapStoreService', () => {
     });
 
     expect(service.getDoc(doc1._id)?.value).toBe(15);
-    expect(persistToDbMock).toHaveBeenCalledWith(
+    expect(queryApiSpy).toHaveBeenCalledWith(
       expect.objectContaining({
-        update: [expect.objectContaining({ value: 15 })]
+        update: { [testKey]: [expect.objectContaining({ value: 15 })] }
       })
     );
     expect(persistToLocalDataMock).toHaveBeenCalled();
@@ -77,7 +87,7 @@ describe('DocumentMapStoreService', () => {
   it('should update many documents', () => {
     service.addDoc(doc1);
     service.addDoc(doc2);
-    persistToDbMock.mockClear();
+    queryApiSpy.mockClear();
 
     service.updateManyDocs(
       (doc) => doc.value > 0,
@@ -89,33 +99,35 @@ describe('DocumentMapStoreService', () => {
 
     expect(service.getDoc(doc1._id)?.value).toBe(20);
     expect(service.getDoc(doc2._id)?.value).toBe(40);
-    expect(persistToDbMock).toHaveBeenCalledWith(
+    expect(queryApiSpy).toHaveBeenCalledWith(
       expect.objectContaining({
-        update: expect.arrayContaining([
-          expect.objectContaining({ _id: doc1._id, value: 20 }),
-          expect.objectContaining({ _id: doc2._id, value: 40 })
-        ])
+        update: {
+          [testKey]: expect.arrayContaining([
+            expect.objectContaining({ _id: doc1._id, value: 20 }),
+            expect.objectContaining({ _id: doc2._id, value: 40 })
+          ])
+        }
       })
     );
   });
 
   it('should delete a document', () => {
     service.addDoc(doc1);
-    persistToDbMock.mockClear();
+    queryApiSpy.mockClear();
 
     service.deleteDoc(doc1._id);
 
     expect(service.getDoc(doc1._id)).toBeUndefined();
-    expect(persistToDbMock).toHaveBeenCalledWith(
+    expect(queryApiSpy).toHaveBeenCalledWith(
       expect.objectContaining({
-        delete: [doc1._id]
+        delete: { [testKey]: [doc1._id] }
       })
     );
   });
 
   it('should upsert many documents', () => {
     service.addDoc(doc1);
-    persistToDbMock.mockClear();
+    queryApiSpy.mockClear();
 
     const doc3: TestDoc = {
       _id: DocumentService.generateID(),
@@ -135,10 +147,10 @@ describe('DocumentMapStoreService', () => {
     expect(service.getDoc(doc1._id)?.value).toBe(99);
     expect(service.getDoc(doc3._id)).toEqual(doc3);
 
-    expect(persistToDbMock).toHaveBeenCalledWith(
+    expect(queryApiSpy).toHaveBeenCalledWith(
       expect.objectContaining({
-        insert: [doc3],
-        update: [expect.objectContaining({ _id: doc1._id, value: 99 })]
+        insert: { [testKey]: [doc3] },
+        update: { [testKey]: [expect.objectContaining({ _id: doc1._id, value: 99 })] }
       })
     );
   });
@@ -152,7 +164,53 @@ describe('DocumentMapStoreService', () => {
     expect(service.allDocs).toHaveLength(2);
     expect(persistToLocalDataMock).toHaveBeenCalled();
     // setMap does NOT persist to DB
-    expect(persistToDbMock).not.toHaveBeenCalled();
+    expect(queryApiSpy).not.toHaveBeenCalled();
+  });
+
+  describe('prepareDocsForSave', () => {
+    it('should stage an insert under the document type key', () => {
+      const options = service.prepareDocsForSave({ insert: [doc1] });
+
+      expect(options.insert?.[testKey]).toEqual([doc1]);
+    });
+
+    it('should append inserts across repeated calls instead of overwriting', () => {
+      const options = service.prepareDocsForSave({ insert: [doc1] });
+      service.prepareDocsForSave({ insert: [doc2] }, options);
+
+      expect(options.insert?.[testKey]).toEqual([doc1, doc2]);
+    });
+
+    it('should append updates across repeated calls', () => {
+      const options = service.prepareDocsForSave({ update: [doc1] });
+      service.prepareDocsForSave({ update: [doc2] }, options);
+
+      expect(options.update?.[testKey]).toEqual([doc1, doc2]);
+    });
+
+    it('should append deletes across repeated calls', () => {
+      const options = service.prepareDocsForSave({ delete: [doc1._id] });
+      service.prepareDocsForSave({ delete: [doc2._id] }, options);
+
+      expect(options.delete?.[testKey]).toEqual([doc1._id, doc2._id]);
+    });
+
+    it('should keep operations for different document types independent', () => {
+      const otherService = createTestService(otherKey);
+
+      const options = service.prepareDocsForSave({ insert: [doc1] });
+      otherService.prepareDocsForSave({ insert: [doc2] }, options);
+
+      expect(options.insert?.[testKey]).toEqual([doc1]);
+      expect(options.insert?.[otherKey]).toEqual([doc2]);
+    });
+
+    it('should merge get options rather than replacing them', () => {
+      const options = service.prepareDocsForSave({ get: { tasks: true } });
+      service.prepareDocsForSave({ get: { userConfig: true } }, options);
+
+      expect(options.get).toEqual({ tasks: true, userConfig: true });
+    });
   });
 
   describe('allDocs $derived reactivity', () => {

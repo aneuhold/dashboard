@@ -11,11 +11,11 @@ import {
 } from '@aneuhold/core-ts-db-lib';
 import { SvelteDate } from 'svelte/reactivity';
 import type { Unsubscriber, Updater } from 'svelte/store';
+import DashboardAPIService from '$services/DashboardAPIService/DashboardAPI.service';
 import { appIsVisible } from '$stores/session/appIsVisible';
 import { timeMinute } from '$stores/session/timeMinute';
-import DashboardAPIService from '$util/api/DashboardAPI.service';
 import { createLogger } from '$util/logging/logger';
-import type { UpsertManyInfo } from '../DocumentMapStore.service.svelte';
+import type { UpsertManyInfo } from '../DocumentMapStoreService/types';
 import TaskOperationsService from './TaskOperations.service.svelte';
 
 type TaskRecurrenceSubMap = { [taskId: string]: Unsubscriber | undefined };

@@ -1,5 +1,5 @@
 <script module lang="ts">
-  import { APIService } from '@aneuhold/core-ts-api-lib';
+  import { APIErrorCode, APIService } from '@aneuhold/core-ts-api-lib';
   import { defineMeta } from '@storybook/addon-svelte-csf';
   import { spyOn } from 'storybook/test';
   import SBAdminUserListExample from './SB/SBAdminUserListExample.svelte';
@@ -18,7 +18,8 @@
     spyOn(APIService, 'callAdminAPI').mockResolvedValue({
       success: true,
       errors: [],
-      data: { users: [] }
+      data: { users: [] },
+      statusCode: 200
     });
   }}
 />
@@ -29,7 +30,9 @@
     spyOn(APIService, 'callAdminAPI').mockResolvedValue({
       success: false,
       errors: ['Connection failed'],
-      data: {}
+      data: {},
+      statusCode: 500,
+      errorCode: APIErrorCode.InternalError
     });
   }}
 />

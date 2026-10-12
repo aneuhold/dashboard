@@ -32,6 +32,8 @@
     <button onclick={() => apiActivityService.setSyncing()}>Set Syncing</button>
     <button onclick={() => apiActivityService.setSuccess()}>Set Success</button>
     <button onclick={() => apiActivityService.setError()}>Set Error</button>
+    <button onclick={() => apiActivityService.setOffline()}>Set Offline</button>
+    <button onclick={() => apiActivityService.setPending()}>Set Pending</button>
     <button onclick={() => apiActivityService.setIdle()}>Set Idle</button>
   </div>
   <div class="button-row">

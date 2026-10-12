@@ -8,12 +8,9 @@ import {
 import type { UUID } from 'crypto';
 import nonogramKatanaItemNameToUpgradesMap from '$routes/entertainment/nonogramkatana/upgrades/nonogramKatanaItemNameToUpgradesMap';
 import { nonogramKatanaUpgradesDisplayInfo } from '$routes/entertainment/nonogramkatana/upgrades/nonogramKatanaUpgradesDisplayInfo';
-import createDashboardPersistToDb, {
-  createDashboardPrepareForSave
-} from '$util/api/dashboardPersistenceUtils';
 import LocalData from '$util/LocalData/LocalData';
 import { createLogger } from '$util/logging/logger';
-import DocumentMapStoreService from '../DocumentMapStore.service.svelte';
+import DocumentMapStoreService from '../DocumentMapStoreService/DocumentMapStore.service.svelte';
 
 /**
  * The Nonogram Katana upgrade map service. This is the document service for
@@ -31,9 +28,13 @@ export class NonogramKatanaUpgradeMapService extends DocumentMapStoreService<Non
 
   constructor() {
     super({
+      dashboardApiInsertKey: 'nonogramKatanaUpgrades',
       persistToLocalData: (map) => LocalData.setAndGetNonogramKatanaUpgradeMap(map),
-      persistToDb: createDashboardPersistToDb('nonogramKatanaUpgrades'),
-      prepareForSave: createDashboardPrepareForSave('nonogramKatanaUpgrades')
+      handleApiOutput: (output) => {
+        if (output.nonogramKatanaUpgrades) {
+          this.setMap(this.convertDocumentArrayToMap(output.nonogramKatanaUpgrades));
+        }
+      }
     });
   }
 
