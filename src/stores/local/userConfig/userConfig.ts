@@ -1,3 +1,4 @@
+import type { ProjectDashboardOutput } from '@aneuhold/core-ts-api-lib';
 import {
   type DashboardUserConfig,
   DashboardUserConfigSchema,
@@ -6,7 +7,7 @@ import {
 } from '@aneuhold/core-ts-db-lib';
 import { type Updater, writable } from 'svelte/store';
 import { browser } from '$app/environment';
-import DashboardAPIService from '$util/api/DashboardAPI.service';
+import DashboardAPIService from '$services/DashboardAPIService/DashboardAPI.service';
 import LocalData from '$util/LocalData/LocalData';
 import { createLogger } from '$util/logging/logger';
 
@@ -80,6 +81,21 @@ function createUserConfigStore() {
      */
     setWithoutPropagation: (newConfig: UserConfig) => {
       updateUserConfig(() => newConfig);
+    },
+    /**
+     * Applies the user config and collaborators in the output of a get
+     * request or a WebSocket push, without updating the backend.
+     *
+     * @param output The API output
+     */
+    handleApiOutput: (output: ProjectDashboardOutput) => {
+      const { userConfig: config, collaborators = [] } = output;
+      if (!config) return;
+      const collaboratorMap: Record<string, UserCTO> = {};
+      collaborators.forEach((userCto) => {
+        collaboratorMap[userCto._id] = userCto;
+      });
+      updateUserConfig(() => ({ config, collaborators: collaboratorMap }));
     },
     /**
      * Simply gets the current config.

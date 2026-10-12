@@ -1,4 +1,9 @@
-import { type AdminInput, type AdminOutput, APIService } from '@aneuhold/core-ts-api-lib';
+import {
+  type AdminInput,
+  type AdminOutput,
+  type APIResponse,
+  APIService
+} from '@aneuhold/core-ts-api-lib';
 import { createLogger } from '$util/logging/logger';
 
 /**
@@ -14,7 +19,13 @@ export default class AdminAPIService {
    * @param input - The admin operations to perform.
    */
   static async query(input: AdminInput): Promise<AdminOutput | null> {
-    const result = await APIService.callAdminAPI(input);
+    let result: APIResponse<AdminOutput>;
+    try {
+      result = await APIService.callAdminAPI(input);
+    } catch (error) {
+      AdminAPIService.#log.error('Admin API request did not reach the server', error);
+      return null;
+    }
     if (result.success) {
       return result.data;
     }

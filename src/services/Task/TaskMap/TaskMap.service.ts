@@ -9,13 +9,10 @@ import { DateService } from '@aneuhold/core-ts-lib';
 import type { UUID } from 'crypto';
 import type { Updater } from 'svelte/store';
 import { userConfig } from '$stores/local/userConfig/userConfig';
-import createDashboardPersistToDb, {
-  createDashboardPrepareForSave
-} from '$util/api/dashboardPersistenceUtils';
 import LocalData from '$util/LocalData/LocalData';
 import { createLogger } from '$util/logging/logger';
-import type { UpsertManyInfo } from '../../DocumentMapStore.service.svelte';
-import DocumentMapStoreService from '../../DocumentMapStore.service.svelte';
+import DocumentMapStoreService from '../../DocumentMapStoreService/DocumentMapStore.service.svelte';
+import type { UpsertManyInfo } from '../../DocumentMapStoreService/types';
 import TaskCreationService from '../TaskCreation.service';
 import TaskOperationsService from '../TaskOperations.service.svelte';
 import TaskRecurrenceService from '../TaskRecurrence.service.svelte';
@@ -29,9 +26,13 @@ export class TaskMapService extends DocumentMapStoreService<DashboardTask> {
 
   constructor() {
     super({
+      dashboardApiInsertKey: 'tasks',
       persistToLocalData: (map) => LocalData.setAndGetTaskMap(map),
-      persistToDb: createDashboardPersistToDb('tasks'),
-      prepareForSave: createDashboardPrepareForSave('tasks')
+      handleApiOutput: (output) => {
+        if (output.tasks) {
+          this.setMap(this.convertDocumentArrayToMap(output.tasks));
+        }
+      }
     });
   }
 

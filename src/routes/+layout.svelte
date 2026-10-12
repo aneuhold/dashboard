@@ -13,6 +13,8 @@
   import SingletonTaskAssignmentDialog from '$components/singletons/dialogs/SingletonTaskAssignmentDialog/SingletonTaskAssignmentDialog.svelte';
   import SingletonTaskSharingDialog from '$components/singletons/dialogs/SingletonTaskSharingDialog/SingletonTaskSharingDialog.svelte';
   import SingletonSnackbar from '$components/singletons/SingletonSnackbar.svelte';
+  import apiResponseHandlingOrder from '$services/DashboardAPIService/apiResponseHandlingOrder';
+  import DashboardAPIService from '$services/DashboardAPIService/DashboardAPI.service';
   import nonogramKatanaItemMapService from '$services/NonogramKatana/NonogramKatanaItemMap.service';
   import nonogramKatanaUpgradeMapService from '$services/NonogramKatana/NonogramKatanaUpgradeMap.service';
   import taskMapService from '$services/Task/TaskMap/TaskMap.service';
@@ -27,6 +29,7 @@
   let mounted = $state(false);
 
   onMount(() => {
+    DashboardAPIService.setApiOutputHandlers(apiResponseHandlingOrder);
     // Initialize services from LocalData. Not sure if this is the best place, but it does solve
     // the loop issue where services depend upon each other and LocalData needs to be loaded first.
     if (LocalData.nonogramKatanaItemMap) {
@@ -46,14 +49,20 @@
     appIsVisible.set(document.visibilityState === 'visible');
   };
 
-  // Global app visibility change listener
+  const handleOnline = () => {
+    DashboardAPIService.skipWaitsAndProcessRequestsNow();
+  };
+
+  // Global app visibility and network listeners
   if (browser) {
     document.addEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('online', handleOnline);
   }
 
   onDestroy(() => {
     if (browser) {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('online', handleOnline);
     }
   });
 </script>

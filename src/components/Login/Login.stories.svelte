@@ -1,5 +1,5 @@
 <script module lang="ts">
-  import { APIService } from '@aneuhold/core-ts-api-lib';
+  import { APIErrorCode, APIService } from '@aneuhold/core-ts-api-lib';
   import { defineMeta } from '@storybook/addon-svelte-csf';
   import { spyOn, userEvent, within } from 'storybook/test';
   import { LoginState, loginState } from '$stores/session/loginState';
@@ -13,7 +13,8 @@
       const spy = spyOn(APIService, 'validateUser').mockResolvedValue({
         success: true,
         errors: [],
-        data: {}
+        data: {},
+        statusCode: 200
       });
       return () => {
         loginState.set(LoginState.LoggedOut);
@@ -56,7 +57,9 @@
     spyOn(APIService, 'validateUser').mockResolvedValue({
       success: false,
       errors: [],
-      data: {}
+      data: {},
+      statusCode: 403,
+      errorCode: APIErrorCode.NoProjectAccess
     });
     spyOn(LocalData, 'username', 'get').mockReturnValue('test');
     spyOn(LocalData, 'password', 'get').mockReturnValue('test');

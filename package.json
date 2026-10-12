@@ -33,12 +33,12 @@
     "socket.io-client": "^4.8.3"
   },
   "devDependencies": {
-    "@aneuhold/core-ts-api-lib": "^3.0.44",
-    "@aneuhold/core-ts-db-lib": "^5.0.13",
-    "@aneuhold/core-ts-lib": "^2.4.8",
+    "@aneuhold/core-ts-api-lib": "^4.0.0",
+    "@aneuhold/core-ts-db-lib": "^5.0.15",
+    "@aneuhold/core-ts-lib": "^2.4.10",
     "@aneuhold/eslint-config": "^3.0.3",
-    "@aneuhold/local-npm-registry": "^1.0.1",
-    "@aneuhold/robot-instructions": "^0.1.4",
+    "@aneuhold/local-npm-registry": "^1.0.3",
+    "@aneuhold/robot-instructions": "^0.4.1",
     "@fontsource/fira-mono": "^5.3.0",
     "@neoconfetti/svelte": "^2.2.2",
     "@smui-extra/accordion": "^9.0.2",

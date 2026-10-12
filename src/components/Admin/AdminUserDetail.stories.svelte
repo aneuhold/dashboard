@@ -14,7 +14,8 @@
       const spy = spyOn(APIService, 'callAdminAPI').mockResolvedValue({
         success: true,
         errors: [],
-        data: adminMock.createUserDetailResponse()
+        data: adminMock.createUserDetailResponse(),
+        statusCode: 200
       });
       return () => spy.mockRestore();
     }
@@ -35,7 +36,8 @@
           ...detail,
           userConfig: undefined
         }
-      }
+      },
+      statusCode: 200
     });
   }}
 />

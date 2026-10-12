@@ -1,10 +1,9 @@
 import { APIService } from '@aneuhold/core-ts-api-lib';
 import { writable } from 'svelte/store';
 import { browser } from '$app/environment';
+import DashboardAPIService from '$services/DashboardAPIService/DashboardAPI.service';
 import WebSocketService from '$services/WebSocket.service';
 import { sessionExpired } from '$stores/session/sessionExpired';
-import DashboardAPIService from '$util/api/DashboardAPI.service';
-import DashboardAPIResponseHandlingService from '$util/api/DashboardAPIResponseHandling.service';
 import { createLazyModuleGetter } from '$util/createLazyModuleGetter';
 import LocalData from '$util/LocalData/LocalData';
 import { createLogger } from '$util/logging/logger';
@@ -58,6 +57,12 @@ function createLoginStateStore() {
     setLoginState(LoginState.LoggedOut);
   });
 
+  // Load the persisted request queue before the initial data fetch, so the
+  // stored writes are sent ahead of it.
+  if (browser) {
+    DashboardAPIService.hydrate();
+  }
+
   // Determine initial login state based on persisted access token.
   if (browser && LocalData.accessToken) {
     if (LocalData.accessToken) {
@@ -96,7 +101,7 @@ function createHandleLoginStateChangeForWebSocket(): (newLoginState: LoginState)
       if (!subscribedToWebSocket) {
         WebSocketService.subscribeToRootPostResult((payload) => {
           log.info('Received WebSocket payload:', payload);
-          DashboardAPIResponseHandlingService.processDashboardApiOutput(payload, false);
+          DashboardAPIService.handleApiOutput(payload);
         });
         subscribedToWebSocket = true;
       } else {
