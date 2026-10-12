@@ -2,6 +2,7 @@
   import {
     type APIResponse,
     APIService,
+    type AuthValidateUserInput,
     type AuthValidateUserOutput
   } from '@aneuhold/core-ts-api-lib';
   import { ProjectName } from '@aneuhold/core-ts-db-lib';
@@ -9,12 +10,13 @@
   import CircularProgress from '@smui/circular-progress';
   import { onMount } from 'svelte';
   import InputBox from '$components/presentational/InputBox/InputBox.svelte';
+  import DashboardAPIService from '$services/DashboardAPIService/DashboardAPI.service';
   import googleGISService from '$services/GoogleGIS.service';
   import { dashboardConfig } from '$stores/local/dashboardConfig';
   import { password } from '$stores/local/password';
+  import { userConfig } from '$stores/local/userConfig/userConfig';
   import { LoginState, loginState } from '$stores/session/loginState';
   import { sessionExpired } from '$stores/session/sessionExpired';
-  import DashboardAPIService from '$util/api/DashboardAPI.service';
   import LocalData from '$util/LocalData/LocalData';
   import { createLogger } from '$util/logging/logger';
 
@@ -35,26 +37,36 @@
   });
 
   async function handleGoogleCallback(response: google.accounts.id.CredentialResponse) {
-    $loginState = LoginState.ProcessingCredentials;
-    const result = await APIService.validateUser({
+    await submitCredentials({
       googleCredentialToken: response.credential,
       project: ProjectName.Dashboard
     });
-    handleLoginResult(result);
   }
 
   function handleSubmit(event: MouseEvent) {
     // Prevent the page from refreshing
     event.preventDefault();
 
-    $loginState = LoginState.ProcessingCredentials;
     LocalData.username = typedUserName;
     password.set(typedPassword);
-    APIService.validateUser({
+    void submitCredentials({
       userName: typedUserName,
       password: typedPassword,
       project: ProjectName.Dashboard
-    }).then(handleLoginResult);
+    });
+  }
+
+  async function submitCredentials(input: AuthValidateUserInput) {
+    $loginState = LoginState.ProcessingCredentials;
+    let result: APIResponse<AuthValidateUserOutput>;
+    try {
+      result = await APIService.validateUser(input);
+    } catch (error) {
+      log.error('Login request did not reach the server', error);
+      $loginState = LoginState.LoggedOut;
+      return;
+    }
+    handleLoginResult(result);
   }
 
   function handleLoginResult(validationResponse: APIResponse<AuthValidateUserOutput>) {
@@ -66,6 +78,11 @@
       dashboardConfig.set(validationResponse.data.config.dashboard);
       invalidCredentials = false;
       const { accessToken, refreshTokenString } = validationResponse.data;
+
+      // A different user must not inherit the previous user's queued changes
+      if (validationResponse.data.userInfo.user._id !== userConfig.get().config.userId) {
+        DashboardAPIService.reset();
+      }
 
       // Store tokens for the auto-refresh mechanism
       if (accessToken) {

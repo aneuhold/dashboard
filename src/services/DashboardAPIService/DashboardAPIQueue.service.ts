@@ -173,7 +173,6 @@ class DashboardAPIQueueService {
         if (generation !== this.#generation) return false;
 
         if (!response) {
-          // A timeout or a failed fetch while the device reports online
           if (navigator.onLine) {
             apiActivityService.setPending();
           } else {
