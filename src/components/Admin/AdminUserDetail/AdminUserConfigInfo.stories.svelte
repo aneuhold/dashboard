@@ -14,11 +14,21 @@
 <Story name="With All Sections" args={{ userDetail: fullDetail }} />
 
 <Story
-  name="Without User Config"
+  name="Without Dashboard Config"
   args={{
     userDetail: {
       ...fullDetail,
       userConfig: undefined
+    }
+  }}
+/>
+
+<Story
+  name="Without Workout Config"
+  args={{
+    userDetail: {
+      ...fullDetail,
+      workoutUserConfig: undefined
     }
   }}
 />
