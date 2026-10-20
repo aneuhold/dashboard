@@ -99,7 +99,7 @@
       {
         sync: {
           [user._id]: {
-            workoutUserConfig: { entitlements: { [entitlement]: true } }
+            workoutUserConfig: { entitlements: [entitlement] }
           }
         }
       },
