@@ -5,12 +5,11 @@
   granted, cleared, or synced from RevenueCat.
 -->
 <script lang="ts">
-  import type { AdminInput } from '@aneuhold/core-ts-api-lib';
   import { type User, WorkoutEntitlement, type WorkoutUserConfig } from '@aneuhold/core-ts-db-lib';
   import Button, { Icon, Label } from '@smui/button';
   import Paper, { Content, Title } from '@smui/paper';
   import { confirmationDialog } from '$components/singletons/dialogs/SingletonConfirmationDialog/SingletonConfirmationDialog.svelte';
-  import type { AdminUserDetailUpdater } from './types';
+  import type { AdminUserDetailUpdate, AdminUserDetailUpdater } from './types';
 
   let {
     user,
@@ -33,7 +32,7 @@
    */
   async function updateEntitlement(
     entitlement: WorkoutEntitlement,
-    update: NonNullable<AdminInput['update']>,
+    update: AdminUserDetailUpdate,
     successMessage: string
   ) {
     entitlementSaving = true;
@@ -73,7 +72,7 @@
   function grantEntitlement(entitlement: WorkoutEntitlement) {
     setEntitlementExpiresAt(
       entitlement,
-      new Date('3000-01-01'),
+      new Date(3000, 0, 1),
       `Granted the "${entitlement}" entitlement`
     );
   }

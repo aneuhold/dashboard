@@ -102,7 +102,7 @@ export default class AdminAPIServiceMock {
         entitlements: Object.fromEntries(
           Object.values(WorkoutEntitlement).map((entitlement) => [
             entitlement,
-            { expiresAt: new Date('3000-01-01') }
+            { expiresAt: new Date(3000, 0, 1) }
           ])
         )
       }),
