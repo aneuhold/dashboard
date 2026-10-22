@@ -7,7 +7,9 @@ import {
   DashboardUserConfigSchema,
   DocumentService,
   type User,
-  UserSchema
+  UserSchema,
+  WorkoutEntitlement,
+  WorkoutUserConfigSchema
 } from '@aneuhold/core-ts-db-lib';
 import type { UUID } from 'crypto';
 
@@ -74,7 +76,8 @@ export default class AdminAPIServiceMock {
 
   /**
    * Creates a mock AdminOutputUserDetail for a specific user, with
-   * a generated DashboardUserConfig and document counts.
+   * a generated DashboardUserConfig, a WorkoutUserConfig holding every
+   * entitlement, and document counts.
    *
    * @param userId - The user ID to create detail for. Defaults to the first mock user.
    */
@@ -93,6 +96,15 @@ export default class AdminAPIServiceMock {
           financePage: true,
           adminPage: true
         }
+      }),
+      workoutUserConfig: WorkoutUserConfigSchema.parse({
+        userId: user._id,
+        entitlements: Object.fromEntries(
+          Object.values(WorkoutEntitlement).map((entitlement) => [
+            entitlement,
+            { expiresAt: new Date(3000, 0, 1) }
+          ])
+        )
       }),
       documentCounts: this.createDocumentCounts()
     };

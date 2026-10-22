@@ -7,7 +7,7 @@
 <script lang="ts">
   import { DocumentService } from '@aneuhold/core-ts-db-lib';
   import { page } from '$app/stores';
-  import AdminUserDetail from '$components/Admin/AdminUserDetail.svelte';
+  import AdminUserDetail from '$components/Admin/AdminUserDetail/AdminUserDetail.svelte';
   import AdminUserList from '$components/Admin/AdminUserList.svelte';
   import { adminUsersPageInfo } from './pageInfo';
 

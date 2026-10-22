@@ -1,10 +1,12 @@
 <!--
   @component
 
-  Read-only display of a user's DashboardUserConfig and document counts.
+  Read-only display of a user's DashboardUserConfig, WorkoutUserConfig, and
+  document counts.
 -->
 <script lang="ts">
   import type { AdminOutputUserDetail } from '@aneuhold/core-ts-api-lib';
+  import { WorkoutEntitlement } from '@aneuhold/core-ts-db-lib';
   import Paper, { Content, Title } from '@smui/paper';
 
   let { userDetail }: { userDetail: AdminOutputUserDetail } = $props();
@@ -48,6 +50,24 @@
             <div class="feature-item">{key}: {value ? 'On' : 'Off'}</div>
           {/each}
         </div>
+      </div>
+    </Content>
+  </Paper>
+{/if}
+
+{#if userDetail.workoutUserConfig}
+  <Paper>
+    <Title>Workout User Config</Title>
+    <Content>
+      <div class="info-list">
+        <strong>Entitlements:</strong>
+        {#each Object.values(WorkoutEntitlement) as entitlement (entitlement)}
+          <div class="feature-item">
+            {entitlement}: {userDetail.workoutUserConfig.entitlements[
+              entitlement
+            ]?.expiresAt?.toLocaleDateString() ?? 'Not held'}
+          </div>
+        {/each}
       </div>
     </Content>
   </Paper>

@@ -25,7 +25,7 @@
 <Story name="Default" />
 
 <Story
-  name="Without Config"
+  name="Without Dashboard Config"
   beforeEach={() => {
     const detail = adminMock.createUserDetail();
     spyOn(APIService, 'callAdminAPI').mockResolvedValue({
@@ -35,6 +35,24 @@
         userDetail: {
           ...detail,
           userConfig: undefined
+        }
+      },
+      statusCode: 200
+    });
+  }}
+/>
+
+<Story
+  name="Without Workout Config"
+  beforeEach={() => {
+    const detail = adminMock.createUserDetail();
+    spyOn(APIService, 'callAdminAPI').mockResolvedValue({
+      success: true,
+      errors: [],
+      data: {
+        userDetail: {
+          ...detail,
+          workoutUserConfig: undefined
         }
       },
       statusCode: 200
