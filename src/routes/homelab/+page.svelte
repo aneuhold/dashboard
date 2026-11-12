@@ -10,6 +10,7 @@
   import PageNotFound from '$components/PageNotFound.svelte';
   import PageTitle from '$components/PageTitle.svelte';
   import DockerIcon from '$lib/svgs/DockerIcon.svelte';
+  import GrafanaIcon from '$lib/svgs/GrafanaIcon.svelte';
   import PiHoleIcon from '$lib/svgs/PiHoleIcon.svelte';
   import UbiquitiIcon from '$lib/svgs/UbiquitiIcon.svelte';
   import { userConfig } from '$stores/local/userConfig/userConfig';
@@ -31,6 +32,14 @@
         window.open('https://192.168.0.2', '_blank');
       },
       icon: UbiquitiIcon
+    },
+    {
+      title: 'Home Network Traffic',
+      description: 'Grafana network traffic dashboard',
+      clickAction: () => {
+        window.open('http://pi3-bplus-1.local:3001/d/home-traffic/home-network-traffic', '_blank');
+      },
+      icon: GrafanaIcon
     }
   ];
 
