@@ -37,7 +37,10 @@
       title: 'Home Network Traffic',
       description: 'Grafana network traffic dashboard',
       clickAction: () => {
-        window.open('http://pi3-bplus-1.local:3001/d/home-traffic/home-network-traffic', '_blank');
+        window.open(
+          'http://pi3-bplus-1.local:3001/d/home-network-activity/home-network-activity',
+          '_blank'
+        );
       },
       icon: GrafanaIcon
     }
